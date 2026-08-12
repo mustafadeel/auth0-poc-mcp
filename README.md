@@ -21,6 +21,7 @@ During import, set these settings:
 | `AUTH0_FORMS_TRUST_SECRET` | Session forms | Shared secret for the Forms session JWT. |
 | `FORM_SESSION_FIELD` | Session forms | Hidden Form field receiving the session JWT, normally `session_token`. |
 | `AUTH0_AUDIENCE` | Recommended | API identifier used when Auth0 mints the MCP access token. |
+| `PUBLIC_BASE_URL` | OAuth proxy | Public proxy origin, without a trailing slash. |
 | `FORMS_ORIGIN` | No | Custom domain that hosts the Forms bundle. |
 | `MCP_AUTH` | No | Leave on in production. Set off only for no-session local development. |
 
@@ -55,6 +56,19 @@ The repository also publishes a `master` branch because the legacy Custom Extens
 4. Register that URL in an MCP client. The client must obtain an Auth0 access token for `AUTH0_AUDIENCE`; the extension advertises its protected-resource metadata at `/.well-known/oauth-protected-resource`.
 
 The extension uses a stateless MCP transport because Webtask-style extension runtimes do not guarantee that the same process handles successive requests. It does not support server-initiated notifications or resumable SSE sessions.
+
+## OAuth discovery proxy
+
+Webtask routes are scoped under the extension name, so the platform cannot serve the standard OAuth protected-resource metadata URL at `/.well-known/oauth-protected-resource/mcp`. MCP clients that require automatic OAuth discovery need an external proxy or custom domain.
+
+`oauth-proxy/` contains a Cloudflare Worker that provides that public origin. It serves standard protected-resource metadata at `/.well-known/oauth-protected-resource/mcp` and forwards `/mcp` to the extension.
+
+1. Edit `oauth-proxy/wrangler.toml` with the installed extension's MCP URL and your Auth0 issuer, then deploy it with `npx wrangler deploy`.
+2. Use the deployed Worker origin as `PUBLIC_BASE_URL`, for example `https://forms-mcp.example.com`.
+3. Create or configure the Auth0 API identifier as `https://forms-mcp.example.com/mcp`, then set `AUTH0_AUDIENCE` to that exact value.
+4. Connect MCP Inspector to `https://forms-mcp.example.com/mcp`, not the Webtask URL.
+
+The Worker does not hold Auth0 credentials. It forwards the client's Bearer token to the extension and rewrites the Bearer challenge so clients discover metadata on the proxy origin.
 
 ## Local development
 

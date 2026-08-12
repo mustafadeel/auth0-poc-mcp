@@ -1,0 +1,7 @@
+name = "auth0-forms-mcp-oauth-proxy"
+main = "worker.mjs"
+compatibility_date = "2025-03-01"
+
+[vars]
+UPSTREAM_MCP_URL = "https://devex.ca.webtask.run/auth0-forms-mcp/mcp"
+AUTH0_ISSUER = "https://devex.ca.auth0.com/"
