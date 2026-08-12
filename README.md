@@ -8,6 +8,7 @@ This repository packages the MCP server from `auth0-agent-components/examples/po
 - `src/webtask.ts` is the Webtask handler expected by the extension runtime.
 - `src/app.ts` adapts the POC server to a stateless Streamable HTTP MCP transport.
 - `dist/package.zip`, created by `npm run build`, is the file to import into the Custom Extension workflow.
+- `index.js` and `build/bundle.js` support the legacy repository loader that fetches those paths from the `master` branch.
 
 ## Configure the extension
 
@@ -43,6 +44,8 @@ npm run build
 ```
 
 The importer artifact is `dist/package.zip`. It contains the bundled `extension.js` and a runtime-only `package.json`; neither references the sibling checkout once imported.
+
+The repository also publishes a `master` branch because the legacy Custom Extension loader fetches `index.js` and `build/bundle.js` from that branch. Do not remove the generated `build/bundle.js` file.
 
 ## Import and connect
 

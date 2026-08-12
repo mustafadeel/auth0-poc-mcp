@@ -1,1 +1,2 @@
 dist/extension.js -whitespace
+build/bundle.js -whitespace
