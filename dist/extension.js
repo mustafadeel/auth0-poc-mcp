@@ -88454,7 +88454,8 @@ function mcpUrl(config3, req) {
   return `${extensionBaseUrl(config3, req)}/mcp`;
 }
 function protectedResourceMetadataUrl(config3, req) {
-  return `${extensionBaseUrl(config3, req)}${protectedResourceMetadataPath}`;
+  const endpoint = new URL(mcpUrl(config3, req));
+  return `${endpoint.origin}${protectedResourceMetadataPath}${endpoint.pathname}`;
 }
 function createForms(config3) {
   return [
@@ -88474,7 +88475,7 @@ async function createMcpServer(config3) {
   if (config3.sessionField && !config3.trustSecret) {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.2.0" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.2.1" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config3.formsOrigin,
     assumeUiSupport: true,
