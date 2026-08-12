@@ -30,39 +30,12 @@ function installWebApiGlobals(): void {
 
   if (!globals.Event) globals.Event = WebtaskEvent;
 
-  if (!globals.atob) {
-    globals.atob = (value: string) => Buffer.from(value, "base64").toString("latin1");
-  }
-
-  if (!globals.btoa) {
-    globals.btoa = (value: string) => Buffer.from(value, "latin1").toString("base64");
-  }
-
-  const currentCrypto = globals.crypto as { subtle?: unknown } | undefined;
-  if (!currentCrypto?.subtle) {
-    const nodeCrypto = require("crypto") as { webcrypto?: unknown };
-    if (nodeCrypto.webcrypto) globals.crypto = nodeCrypto.webcrypto;
-  }
-
-  if (!globals.AbortController || !globals.AbortSignal) {
+  if (!globals.AbortController) {
     const abortController = require("abort-controller") as {
       AbortController: unknown;
       AbortSignal: unknown;
     };
     Object.assign(globals, abortController);
-  }
-
-  const AbortControllerConstructor = globals.AbortController as
-    | (new () => { abort: () => void; signal: unknown })
-    | undefined;
-  const AbortSignalConstructor = globals.AbortSignal as { timeout?: (milliseconds: number) => unknown } | undefined;
-  if (AbortControllerConstructor && AbortSignalConstructor && !AbortSignalConstructor.timeout) {
-    AbortSignalConstructor.timeout = (milliseconds) => {
-      const controller = new AbortControllerConstructor();
-      const timer = setTimeout(() => controller.abort(), milliseconds);
-      if (typeof timer === "object" && "unref" in timer) timer.unref();
-      return controller.signal;
-    };
   }
 
   if (globals.fetch) return;

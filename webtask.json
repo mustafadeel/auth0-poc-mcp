@@ -1,13 +1,14 @@
 {
   "title": "Auth0 Forms MCP",
   "name": "auth0-forms-mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "mustafadeel",
   "repository": "https://github.com/mustafadeel/auth0-poc-mcp",
   "keywords": ["auth0", "extension", "mcp", "forms"],
   "useHashName": false,
   "description": "Expose an Auth0 Form as an MCP App over Streamable HTTP.",
   "type": "application",
+  "runtime": "node22",
   "category": "end_user",
   "initialUrlPath": "/",
   "auth0": {

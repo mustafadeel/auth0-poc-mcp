@@ -5,6 +5,7 @@ This repository packages the MCP server from `auth0-agent-components/examples/po
 ## What is in the package
 
 - `package.json` contains the `auth0-extension` manifest that the Custom Extension importer reads.
+- `webtask.json` selects the Node 22 Webtask runtime used by the extension deployment.
 - `src/webtask.ts` is the Webtask handler expected by the extension runtime.
 - `src/app.ts` adapts the POC server to a stateless Streamable HTTP MCP transport.
 - `dist/package.zip`, created by `npm run build`, is the file to import into the Custom Extension workflow.

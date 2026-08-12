@@ -106,7 +106,7 @@ async function createMcpServer(config: ExtensionConfig): Promise<McpServer> {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
 
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.2.1" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.2.2" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config.formsOrigin,
     assumeUiSupport: true,
@@ -262,7 +262,7 @@ export function createExtensionApp(configReader: ConfigReader) {
   });
 
   app.get(extensionRoutes("/health"), (_req, res) => {
-    res.status(200).json({ status: "ok" });
+    res.status(200).json({ status: "ok", runtime: process.version });
   });
 
   app.get(
