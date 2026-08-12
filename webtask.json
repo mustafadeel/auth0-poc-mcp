@@ -5,6 +5,9 @@
   "author": "mustafadeel",
   "repository": "https://github.com/mustafadeel/auth0-poc-mcp",
   "keywords": ["auth0", "extension", "mcp", "forms"],
+  "engines": {
+    "node": ">22.13"
+  },
   "useHashName": false,
   "description": "Expose an Auth0 Form as an MCP App over Streamable HTTP.",
   "type": "application",

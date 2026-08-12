@@ -9,6 +9,8 @@ for (const key of ["name", "version", "description", "author", "keywords"]) {
 }
 assert.equal(packageJson["auth0-extension"].type, "application", "extension type must be application");
 assert.equal(packageJson["auth0-extension"].initialUrlPath, "/", "extension must expose a landing route");
+assert.deepEqual(webtaskJson.engines, packageJson.engines, "package.json and webtask.json must declare the same Node runtime");
+assert.equal(packageJson["auth0-extension"].nodeTarget, webtaskJson.nodeTarget, "package.json and webtask.json must target the same Node runtime");
 assert.deepEqual(
   packageJson["auth0-extension"].secrets,
   webtaskJson.secrets,
