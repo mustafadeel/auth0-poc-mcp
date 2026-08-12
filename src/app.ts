@@ -143,6 +143,24 @@ function toAuth0Domain(value: string): string {
   }
 }
 
+function inspectProtectedHeader(token: string) {
+  const protectedHeader = token.split(".", 1)[0] ?? "";
+  const isBase64Url = /^[A-Za-z0-9_-]+$/.test(protectedHeader);
+
+  if (!isBase64Url) {
+    return { base64Url: false, json: false };
+  }
+
+  try {
+    const base64 = protectedHeader.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = `${base64}${"=".repeat((4 - (base64.length % 4)) % 4)}`;
+    const value: unknown = JSON.parse(Buffer.from(padded, "base64").toString("utf8"));
+    return { base64Url: true, json: typeof value === "object" && value !== null && !Array.isArray(value) };
+  } catch {
+    return { base64Url: true, json: false };
+  }
+}
+
 function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifier {
   const client = new ApiClient({ domain: toAuth0Domain(domain), audience });
 
@@ -156,6 +174,8 @@ function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifi
           fingerprint: createHash("sha256").update(token).digest("hex").slice(0, 12),
           length: token.length,
           segments: token.split(".").length,
+          protectedHeader: inspectProtectedHeader(token),
+          containsWhitespace: /\s/.test(token),
         });
         console.error("[auth0-forms-mcp] access token verification failed", error);
         throw new InvalidTokenError("invalid access token");

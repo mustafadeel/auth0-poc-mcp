@@ -89149,6 +89149,22 @@ function toAuth0Domain(value) {
     return value.replace(/^https?:\/\//, "").replace(/\/$/, "");
   }
 }
+function inspectProtectedHeader(token) {
+  var _a18;
+  const protectedHeader = (_a18 = token.split(".", 1)[0]) != null ? _a18 : "";
+  const isBase64Url = /^[A-Za-z0-9_-]+$/.test(protectedHeader);
+  if (!isBase64Url) {
+    return { base64Url: false, json: false };
+  }
+  try {
+    const base644 = protectedHeader.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = `${base644}${"=".repeat((4 - base644.length % 4) % 4)}`;
+    const value = JSON.parse(Buffer.from(padded, "base64").toString("utf8"));
+    return { base64Url: true, json: typeof value === "object" && value !== null && !Array.isArray(value) };
+  } catch {
+    return { base64Url: true, json: false };
+  }
+}
 function createAuth0Verifier(domain2, audience) {
   const client = new ApiClient({ domain: toAuth0Domain(domain2), audience });
   return {
@@ -89161,7 +89177,9 @@ function createAuth0Verifier(domain2, audience) {
         console.error("[auth0-forms-mcp] rejected access token", {
           fingerprint: (0, import_node_crypto.createHash)("sha256").update(token).digest("hex").slice(0, 12),
           length: token.length,
-          segments: token.split(".").length
+          segments: token.split(".").length,
+          protectedHeader: inspectProtectedHeader(token),
+          containsWhitespace: /\s/.test(token)
         });
         console.error("[auth0-forms-mcp] access token verification failed", error41);
         throw new InvalidTokenError("invalid access token");
