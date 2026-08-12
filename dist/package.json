@@ -1,6 +1,6 @@
 {
   "name": "auth0-forms-mcp-extension",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
   "main": "index.js",
   "keywords": [

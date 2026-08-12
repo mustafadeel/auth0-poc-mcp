@@ -1,7 +1,7 @@
 {
   "title": "Auth0 Forms MCP",
   "name": "auth0-forms-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "mustafadeel",
   "repository": "https://github.com/mustafadeel/auth0-poc-mcp",
   "keywords": ["auth0", "extension", "mcp", "forms"],
