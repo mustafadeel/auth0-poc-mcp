@@ -71,6 +71,11 @@ function readContextValue(context: WebtaskContext, key: string): string | undefi
 }
 
 const handler = (context: WebtaskContext, req: Parameters<ExtensionApp>[0], res: Parameters<ExtensionApp>[1]) => {
+  if (req.header("x-auth0-mcp-debug") === "1") {
+    res.setHeader("x-auth0-mcp-debug-url", encodeURIComponent(req.url));
+    res.setHeader("x-auth0-mcp-debug-original-url", encodeURIComponent(req.originalUrl));
+    res.setHeader("x-auth0-mcp-debug-base-url", encodeURIComponent(req.baseUrl));
+  }
   const createExtensionApp = loadCreateExtensionApp();
   const app = createExtensionApp((key) => readContextValue(context, key));
   app(req, res);
