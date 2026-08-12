@@ -88444,11 +88444,6 @@ function extensionBaseUrl(config3, req) {
   const host = (_c2 = req.header("x-forwarded-host")) != null ? _c2 : req.get("host");
   if (!host) throw new Error("Unable to determine the public extension URL.");
   const pathname = req.originalUrl.split("?", 1)[0];
-  const canonicalMetadataPrefix = `${protectedResourceMetadataPath}/`;
-  if (pathname.startsWith(canonicalMetadataPrefix) && pathname.endsWith("/mcp")) {
-    const resourcePath = pathname.slice(protectedResourceMetadataPath.length, -"/mcp".length);
-    return `${protocol}://${host}${resourcePath}`;
-  }
   const routeSuffix = ["/mcp", "/health", "/.well-known/oauth-protected-resource"].find(
     (suffix) => pathname.endsWith(suffix)
   );
@@ -88459,8 +88454,7 @@ function mcpUrl(config3, req) {
   return `${extensionBaseUrl(config3, req)}/mcp`;
 }
 function protectedResourceMetadataUrl(config3, req) {
-  const endpoint = new URL(mcpUrl(config3, req));
-  return `${endpoint.origin}${protectedResourceMetadataPath}${endpoint.pathname}`;
+  return `${extensionBaseUrl(config3, req)}${protectedResourceMetadataPath}`;
 }
 function createForms(config3) {
   return [
@@ -88480,7 +88474,7 @@ async function createMcpServer(config3) {
   if (config3.sessionField && !config3.trustSecret) {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.9" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.10" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config3.formsOrigin,
     assumeUiSupport: true,
@@ -88555,20 +88549,17 @@ function createExtensionApp(configReader) {
   app.get(extensionRoutes("/health"), (_req, res) => {
     res.status(200).json({ status: "ok" });
   });
-  app.get(
-    [...extensionRoutes(protectedResourceMetadataPath), `${protectedResourceMetadataPath}/:extensionName/mcp`],
-    (req, res, next) => {
-      try {
-        const config3 = getExtensionConfig(configReader);
-        if (!config3.mcpAuthEnabled) return res.status(404).end();
-        const issuer = config3.tenantOrigin.endsWith("/") ? config3.tenantOrigin : `${config3.tenantOrigin}/`;
-        const metadata = new ProtectedResourceMetadataBuilder(mcpUrl(configReader, req), [issuer]).withResourceName("Auth0 Forms MCP").build();
-        return res.json(metadata);
-      } catch (error41) {
-        return next(error41);
-      }
+  app.get(extensionRoutes(protectedResourceMetadataPath), (req, res, next) => {
+    try {
+      const config3 = getExtensionConfig(configReader);
+      if (!config3.mcpAuthEnabled) return res.status(404).end();
+      const issuer = config3.tenantOrigin.endsWith("/") ? config3.tenantOrigin : `${config3.tenantOrigin}/`;
+      const metadata = new ProtectedResourceMetadataBuilder(mcpUrl(configReader, req), [issuer]).withResourceName("Auth0 Forms MCP").build();
+      return res.json(metadata);
+    } catch (error41) {
+      return next(error41);
     }
-  );
+  });
   app.all(extensionRoutes("/mcp"), async (req, res, next) => {
     try {
       const config3 = getExtensionConfig(configReader);
