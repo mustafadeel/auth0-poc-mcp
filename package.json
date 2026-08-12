@@ -1,6 +1,6 @@
 {
   "name": "auth0-forms-mcp-extension",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": true,
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "scripts": {
     "clean": "rimraf dist .extension-build build/bundle.js",
     "validate": "node scripts/validate-manifest.mjs",
-    "build:extension": "esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js",
+    "build:extension": "esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --external:edge --external:superagent-proxy --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js",
     "package": "node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
-    "build": "rimraf dist .extension-build build/bundle.js && node scripts/validate-manifest.mjs && esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js && node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
+    "build": "rimraf dist .extension-build build/bundle.js && node scripts/validate-manifest.mjs && esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --external:edge --external:superagent-proxy --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js && node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
     "dev": "tsx watch src/local.ts",
     "start": "tsx src/local.ts",
     "typecheck": "tsc --noEmit"
@@ -29,12 +29,13 @@
     "category": "end_user",
     "initialUrlPath": "/",
     "auth0": {
-      "createClient": false
+      "createClient": true,
+      "scopes": "read:resource_servers create:resource_servers"
     },
     "secrets": {
       "AUTH0_TENANT_ORIGIN": {
-        "description": "Canonical Auth0 tenant origin that issues MCP access tokens, for example https://tenant.us.auth0.com.",
-        "required": true
+        "description": "Optional canonical Auth0 tenant origin override. Defaults to the tenant domain supplied to this extension.",
+        "required": false
       },
       "FORM_ID": {
         "description": "Auth0 Form identifier exposed by this MCP server, for example ap_abc123.",
@@ -45,7 +46,7 @@
         "required": false
       },
       "AUTH0_AUDIENCE": {
-        "description": "Audience of access tokens accepted by the MCP endpoint. When using the OAuth proxy, set this to the proxy URL plus /mcp.",
+        "description": "Optional external MCP audience override. By default the extension provisions and uses its installed MCP endpoint URL.",
         "required": false
       },
       "PUBLIC_BASE_URL": {
@@ -91,6 +92,7 @@
   "dependencies": {
     "@auth0/agent-components": "file:../auth0-agent-components/packages/agent-components",
     "@auth0/auth0-api-js": "^1.6.1",
+    "auth0-extension-express-tools": "2.1.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "abort-controller": "^3.0.0",
     "express": "^4.21.0",

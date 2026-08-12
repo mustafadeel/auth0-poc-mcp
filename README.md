@@ -17,16 +17,27 @@ During import, set these settings:
 
 | Setting | Required | Purpose |
 | --- | --- | --- |
-| `AUTH0_TENANT_ORIGIN` | Yes | Canonical tenant issuer, such as `https://tenant.us.auth0.com`. |
+| `AUTH0_TENANT_ORIGIN` | No | Optional canonical tenant issuer override; defaults to the tenant supplied by the extension runtime. |
 | `FORM_ID` | Yes | The Auth0 Form ID to expose. |
 | `AUTH0_FORMS_TRUST_SECRET` | Session forms | Shared secret for the Forms session JWT. |
 | `FORM_SESSION_FIELD` | Session forms | Hidden Form field receiving the session JWT, normally `session_token`. |
-| `AUTH0_AUDIENCE` | Recommended | API identifier used when Auth0 mints the MCP access token. |
+| `AUTH0_AUDIENCE` | External endpoint only | Optional audience override for an OAuth proxy or custom endpoint. |
 | `PUBLIC_BASE_URL` | OAuth proxy | Public proxy origin, without a trailing slash. |
 | `FORMS_ORIGIN` | No | Custom domain that hosts the Forms bundle. |
 | `MCP_AUTH` | No | Leave on in production. Set off only for no-session local development. |
 
 `FORM_DESCRIPTION` and `FORM_NAME` control the model-facing tool description and tool name.
+
+## Provision the tenant API
+
+The extension requests an extension-owned Management API client with only `read:resource_servers` and `create:resource_servers`. It reads the tenant domain from the runtime and creates or reuses an Auth0 API whose identifier is the exact installed MCP URL.
+
+1. Perform a full Custom Extension update or reinstall after importing version `0.3.0` so Auth0 creates the managed client and grants its declared scopes.
+2. Open the extension landing page and select **Sign in and provision**.
+3. Complete the tenant-admin login. The landing page creates or reuses the required API audience, then shows its status.
+4. Connect the MCP client to the displayed MCP endpoint.
+
+Provisioning is available only through the Dashboard-admin login flow. Public MCP, health, and discovery routes never modify tenant configuration. `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_DOMAIN`, and `EXTENSION_SECRET` are runtime-managed values; do not add them to extension settings or log them.
 
 ## Build an importable package
 
@@ -53,23 +64,20 @@ The repository also publishes a `master` branch because the legacy Custom Extens
 
 1. Import `dist/package.zip` into the same Custom Extension workflow that accepts the Delegated Administration Extension package format.
 2. Enter the configuration values above.
-3. Open the installed extension. Its landing page displays the exact MCP endpoint URL.
-4. Register that URL in an MCP client. The client must obtain an Auth0 access token for `AUTH0_AUDIENCE`; the extension advertises its protected-resource metadata at `/.well-known/oauth-protected-resource`.
+3. Open the installed extension and complete **Sign in and provision** once.
+4. Register the displayed MCP URL in an MCP client. The extension advertises its protected-resource metadata at `/.well-known/oauth-protected-resource`.
 
 The extension uses a stateless MCP transport because Webtask-style extension runtimes do not guarantee that the same process handles successive requests. It does not support server-initiated notifications or resumable SSE sessions.
 
-## OAuth discovery proxy
+## OAuth discovery companion
 
-Webtask routes are scoped under the extension name, so the platform cannot serve the standard OAuth protected-resource metadata URL at `/.well-known/oauth-protected-resource/mcp`. MCP clients that require automatic OAuth discovery need an external proxy or custom domain.
+Webtask routes are scoped under the extension name, so the platform cannot serve the host-root OAuth protected-resource metadata URL. Use the companion Custom Extension at `https://github.com/mustafadeel/auth0-ext-wellknown`; it stays in the same Auth0 tenant and does not require an external proxy.
 
-`oauth-proxy/` contains a Cloudflare Worker that provides that public origin. It serves standard protected-resource metadata at `/.well-known/oauth-protected-resource/mcp` and forwards `/mcp` to the extension.
+1. Import `auth0-ext-wellknown` into the same tenant as a second Custom Extension. Keep its name as `.well-known` and `useHashName` as `false`.
+2. Set `MCP_RESOURCE_URL` to the displayed MCP URL, `AUTH0_TENANT_ORIGIN` to the canonical tenant issuer, and optionally set `RESOURCE_NAME`.
+3. Connect the client to the MCP URL from this extension, never the companion extension URL.
 
-1. Edit `oauth-proxy/wrangler.toml` with the installed extension's MCP URL and your Auth0 issuer, then deploy it with `npx wrangler deploy`.
-2. Use the deployed Worker origin as `PUBLIC_BASE_URL`, for example `https://forms-mcp.example.com`.
-3. Create or configure the Auth0 API identifier as `https://forms-mcp.example.com/mcp`, then set `AUTH0_AUDIENCE` to that exact value.
-4. Connect MCP Inspector to `https://forms-mcp.example.com/mcp`, not the Webtask URL.
-
-The Worker does not hold Auth0 credentials. It forwards the client's Bearer token to the extension and rewrites the Bearer challenge so clients discover metadata on the proxy origin.
+For an intentionally external proxy or custom domain, set `PUBLIC_BASE_URL` and `AUTH0_AUDIENCE` to the proxy's exact `/mcp` URL before provisioning.
 
 ## Local development
 

@@ -1,6 +1,6 @@
 {
   "name": "auth0-forms-mcp-extension",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
   "main": "index.js",
   "keywords": [
@@ -22,12 +22,13 @@
     "category": "end_user",
     "initialUrlPath": "/",
     "auth0": {
-      "createClient": false
+      "createClient": true,
+      "scopes": "read:resource_servers create:resource_servers"
     },
     "secrets": {
       "AUTH0_TENANT_ORIGIN": {
-        "description": "Canonical Auth0 tenant origin that issues MCP access tokens, for example https://tenant.us.auth0.com.",
-        "required": true
+        "description": "Optional canonical Auth0 tenant origin override. Defaults to the tenant domain supplied to this extension.",
+        "required": false
       },
       "FORM_ID": {
         "description": "Auth0 Form identifier exposed by this MCP server, for example ap_abc123.",
@@ -38,7 +39,7 @@
         "required": false
       },
       "AUTH0_AUDIENCE": {
-        "description": "Audience of access tokens accepted by the MCP endpoint. When using the OAuth proxy, set this to the proxy URL plus /mcp.",
+        "description": "Optional external MCP audience override. By default the extension provisions and uses its installed MCP endpoint URL.",
         "required": false
       },
       "PUBLIC_BASE_URL": {

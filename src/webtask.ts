@@ -72,7 +72,7 @@ function readContextValue(context: WebtaskContext, key: string): string | undefi
 
 const handler = (context: WebtaskContext, req: Parameters<ExtensionApp>[0], res: Parameters<ExtensionApp>[1]) => {
   const createExtensionApp = loadCreateExtensionApp();
-  const app = createExtensionApp((key) => readContextValue(context, key));
+  const app = createExtensionApp((key) => readContextValue(context, key), req);
   app(req, res);
 };
 
