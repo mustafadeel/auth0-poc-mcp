@@ -88471,7 +88471,7 @@ async function createMcpServer(config3) {
   if (config3.sessionField && !config3.trustSecret) {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.7" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.8" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config3.formsOrigin,
     assumeUiSupport: true,
@@ -88640,12 +88640,6 @@ function readContextValue(context, key) {
   return void 0;
 }
 var handler = (context, req, res) => {
-  var _a18, _b7;
-  if (req.headers["x-auth0-mcp-debug"] === "1") {
-    res.setHeader("x-auth0-mcp-debug-url", encodeURIComponent(req.url));
-    res.setHeader("x-auth0-mcp-debug-original-url", encodeURIComponent((_a18 = req.originalUrl) != null ? _a18 : ""));
-    res.setHeader("x-auth0-mcp-debug-base-url", encodeURIComponent((_b7 = req.baseUrl) != null ? _b7 : ""));
-  }
   const createExtensionApp2 = loadCreateExtensionApp();
   const app = createExtensionApp2((key) => readContextValue(context, key));
   app(req, res);
