@@ -88471,7 +88471,7 @@ async function createMcpServer(config3) {
   if (config3.sessionField && !config3.trustSecret) {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.3" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.4" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config3.formsOrigin,
     assumeUiSupport: true,
@@ -88533,8 +88533,16 @@ function escapeHtml(value) {
     return entities[character];
   });
 }
+function stripExtensionPathPrefix(req, _res, next) {
+  const routeSuffixes = ["/.well-known/oauth-protected-resource", "/health", "/mcp"];
+  const suffix = routeSuffixes.find((candidate) => req.path.endsWith(candidate));
+  const prefix = suffix ? req.path.slice(0, -suffix.length) : /^\/[^/]+\/?$/.test(req.path) ? req.path.replace(/\/$/, "") : "";
+  if (/^\/[^/]+$/.test(prefix)) req.url = req.url.slice(prefix.length) || "/";
+  next();
+}
 function createExtensionApp(configReader) {
   const app = (0, import_express.default)();
+  app.use(stripExtensionPathPrefix);
   app.use(import_express.default.json());
   app.get("/", (req, res) => {
     const endpoint = mcpUrl(configReader, req);
