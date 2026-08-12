@@ -10,7 +10,6 @@
   "type": "application",
   "category": "end_user",
   "initialUrlPath": "/",
-  "nodeTarget": "10",
   "auth0": {
     "createClient": false
   },

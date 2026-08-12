@@ -5,10 +5,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __typeError = (msg) => {
-  throw TypeError(msg);
-};
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __esm = (fn2, res) => function __init() {
   return fn2 && (res = (0, fn2[__getOwnPropNames(fn2)[0]])(fn2 = 0)), res;
 };
@@ -35,12 +31,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
-var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
-var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
-var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 
 // node_modules/depd/index.js
 var require_depd = __commonJS({
@@ -18609,7 +18599,7 @@ var require_route = __commonJS({
       }
       return Boolean(this.methods[name]);
     };
-    Route.prototype._options = function _options3() {
+    Route.prototype._options = function _options() {
       var methods2 = Object.keys(this.methods);
       if (this.methods.get && !this.methods.head) {
         methods2.push("head");
@@ -23753,15 +23743,13 @@ var require_express2 = __commonJS({
 // ../auth0-agent-components/node_modules/zod/v4/core/core.js
 // @__NO_SIDE_EFFECTS__
 function $constructor(name, initializer5, params) {
-  var _a19;
   function init(inst, def) {
-    var _a21, _b8;
-    var _a20;
+    var _a2;
     Object.defineProperty(inst, "_zod", {
-      value: (_a21 = inst._zod) != null ? _a21 : {},
+      value: inst._zod ?? {},
       enumerable: false
     });
-    (_b8 = (_a20 = inst._zod).traits) != null ? _b8 : _a20.traits = /* @__PURE__ */ new Set();
+    (_a2 = inst._zod).traits ?? (_a2.traits = /* @__PURE__ */ new Set());
     inst._zod.traits.add(name);
     initializer5(inst, def);
     for (const k3 in _2.prototype) {
@@ -23771,16 +23759,15 @@ function $constructor(name, initializer5, params) {
     inst._zod.constr = _2;
     inst._zod.def = def;
   }
-  const Parent = (_a19 = params == null ? void 0 : params.Parent) != null ? _a19 : Object;
+  const Parent = params?.Parent ?? Object;
   class Definition extends Parent {
   }
   Object.defineProperty(Definition, "name", { value: name });
   function _2(def) {
-    var _a21;
-    var _a20;
-    const inst = (params == null ? void 0 : params.Parent) ? new Definition() : this;
+    var _a2;
+    const inst = params?.Parent ? new Definition() : this;
     init(inst, def);
-    (_a21 = (_a20 = inst._zod).deferred) != null ? _a21 : _a20.deferred = [];
+    (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
     for (const fn2 of inst._zod.deferred) {
       fn2();
     }
@@ -23789,10 +23776,9 @@ function $constructor(name, initializer5, params) {
   Object.defineProperty(_2, "init", { value: init });
   Object.defineProperty(_2, Symbol.hasInstance, {
     value: (inst) => {
-      var _a20, _b8;
-      if ((params == null ? void 0 : params.Parent) && inst instanceof params.Parent)
+      if (params?.Parent && inst instanceof params.Parent)
         return true;
-      return (_b8 = (_a20 = inst == null ? void 0 : inst._zod) == null ? void 0 : _a20.traits) == null ? void 0 : _b8.has(name);
+      return inst?._zod?.traits?.has(name);
     }
   });
   Object.defineProperty(_2, "name", { value: name });
@@ -23958,7 +23944,7 @@ function assignProp(target, prop, value) {
 function getElementAtPath(obj, path) {
   if (!path)
     return obj;
-  return path.reduce((acc, key) => acc == null ? void 0 : acc[key], obj);
+  return path.reduce((acc, key) => acc?.[key], obj);
 }
 function promiseAllObject(promisesObj) {
   const keys = Object.keys(promisesObj);
@@ -24012,8 +23998,8 @@ function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 function clone(inst, def, params) {
-  const cl2 = new inst._zod.constr(def != null ? def : inst._zod.def);
-  if (!def || (params == null ? void 0 : params.parent))
+  const cl2 = new inst._zod.constr(def ?? inst._zod.def);
+  if (!def || params?.parent)
     cl2._zod.parent = inst;
   return cl2;
 }
@@ -24023,8 +24009,8 @@ function normalizeParams(_params) {
     return {};
   if (typeof params === "string")
     return { error: () => params };
-  if ((params == null ? void 0 : params.message) !== void 0) {
-    if ((params == null ? void 0 : params.error) !== void 0)
+  if (params?.message !== void 0) {
+    if (params?.error !== void 0)
       throw new Error("Cannot specify both `message` and `error` params");
     params.error = params.message;
   }
@@ -24037,31 +24023,31 @@ function createTransparentProxy(getter) {
   let target;
   return new Proxy({}, {
     get(_2, prop, receiver) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.get(target, prop, receiver);
     },
     set(_2, prop, value, receiver) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.set(target, prop, value, receiver);
     },
     has(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.has(target, prop);
     },
     deleteProperty(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.deleteProperty(target, prop);
     },
     ownKeys(_2) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.ownKeys(target);
     },
     getOwnPropertyDescriptor(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.getOwnPropertyDescriptor(target, prop);
     },
     defineProperty(_2, prop, descriptor) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.defineProperty(target, prop, descriptor);
     }
   });
@@ -24201,35 +24187,32 @@ function required(Class3, schema, mask) {
   });
 }
 function aborted(x, startIndex = 0) {
-  var _a19;
   for (let i = startIndex; i < x.issues.length; i++) {
-    if (((_a19 = x.issues[i]) == null ? void 0 : _a19.continue) !== true)
+    if (x.issues[i]?.continue !== true)
       return true;
   }
   return false;
 }
 function prefixIssues(path, issues) {
   return issues.map((iss) => {
-    var _a20;
-    var _a19;
-    (_a20 = (_a19 = iss).path) != null ? _a20 : _a19.path = [];
+    var _a2;
+    (_a2 = iss).path ?? (_a2.path = []);
     iss.path.unshift(path);
     return iss;
   });
 }
 function unwrapMessage(message2) {
-  return typeof message2 === "string" ? message2 : message2 == null ? void 0 : message2.message;
+  return typeof message2 === "string" ? message2 : message2?.message;
 }
 function finalizeIssue(iss, ctx, config3) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2;
-  const full = { ...iss, path: (_a19 = iss.path) != null ? _a19 : [] };
+  const full = { ...iss, path: iss.path ?? [] };
   if (!iss.message) {
-    const message2 = (_k2 = (_j = (_h2 = (_f2 = unwrapMessage((_d2 = (_c2 = (_b8 = iss.inst) == null ? void 0 : _b8._zod.def) == null ? void 0 : _c2.error) == null ? void 0 : _d2.call(_c2, iss))) != null ? _f2 : unwrapMessage((_e2 = ctx == null ? void 0 : ctx.error) == null ? void 0 : _e2.call(ctx, iss))) != null ? _h2 : unwrapMessage((_g2 = config3.customError) == null ? void 0 : _g2.call(config3, iss))) != null ? _j : unwrapMessage((_i2 = config3.localeError) == null ? void 0 : _i2.call(config3, iss))) != null ? _k2 : "Invalid input";
+    const message2 = unwrapMessage(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage(ctx?.error?.(iss)) ?? unwrapMessage(config3.customError?.(iss)) ?? unwrapMessage(config3.localeError?.(iss)) ?? "Invalid input";
     full.message = message2;
   }
   delete full.inst;
   delete full.continue;
-  if (!(ctx == null ? void 0 : ctx.reportInput)) {
+  if (!ctx?.reportInput) {
     delete full.input;
   }
   return full;
@@ -24273,8 +24256,7 @@ var init_util = __esm({
     captureStackTrace = Error.captureStackTrace ? Error.captureStackTrace : (..._args) => {
     };
     allowsEval = cached(() => {
-      var _a19;
-      if (typeof navigator !== "undefined" && ((_a19 = navigator == null ? void 0 : navigator.userAgent) == null ? void 0 : _a19.includes("Cloudflare"))) {
+      if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) {
         return false;
       }
       try {
@@ -24405,8 +24387,7 @@ function treeifyError(error41, _mapper) {
   };
   const result = { errors: [] };
   const processError = (error42, path = []) => {
-    var _a20, _b9, _c2, _d2;
-    var _a19, _b8;
+    var _a2, _b2;
     for (const issue3 of error42.issues) {
       if (issue3.code === "invalid_union" && issue3.errors.length) {
         issue3.errors.map((issues) => processError({ issues }, issue3.path));
@@ -24426,12 +24407,12 @@ function treeifyError(error41, _mapper) {
           const el2 = fullpath[i];
           const terminal = i === fullpath.length - 1;
           if (typeof el2 === "string") {
-            (_a20 = curr.properties) != null ? _a20 : curr.properties = {};
-            (_b9 = (_a19 = curr.properties)[el2]) != null ? _b9 : _a19[el2] = { errors: [] };
+            curr.properties ?? (curr.properties = {});
+            (_a2 = curr.properties)[el2] ?? (_a2[el2] = { errors: [] });
             curr = curr.properties[el2];
           } else {
-            (_c2 = curr.items) != null ? _c2 : curr.items = [];
-            (_d2 = (_b8 = curr.items)[el2]) != null ? _d2 : _b8[el2] = { errors: [] };
+            curr.items ?? (curr.items = []);
+            (_b2 = curr.items)[el2] ?? (_b2[el2] = { errors: [] });
             curr = curr.items[el2];
           }
           if (terminal) {
@@ -24463,12 +24444,11 @@ function toDotPath(path) {
   return segs.join("");
 }
 function prettifyError(error41) {
-  var _a19;
   const lines = [];
   const issues = [...error41.issues].sort((a, b2) => a.path.length - b2.path.length);
   for (const issue3 of issues) {
     lines.push(`\u2716 ${issue3.message}`);
-    if ((_a19 = issue3.path) == null ? void 0 : _a19.length)
+    if (issue3.path?.length)
       lines.push(`  \u2192 at ${toDotPath(issue3.path)}`);
   }
   return lines.join("\n");
@@ -24513,29 +24493,27 @@ var init_parse = __esm({
     init_errors();
     init_util();
     _parse = (_Err) => (schema, value, _ctx, _params) => {
-      var _a19;
       const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
       const result = schema._zod.run({ value, issues: [] }, ctx);
       if (result instanceof Promise) {
         throw new $ZodAsyncError();
       }
       if (result.issues.length) {
-        const e2 = new ((_a19 = _params == null ? void 0 : _params.Err) != null ? _a19 : _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
-        captureStackTrace(e2, _params == null ? void 0 : _params.callee);
+        const e2 = new (_params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
+        captureStackTrace(e2, _params?.callee);
         throw e2;
       }
       return result.value;
     };
     parse = /* @__PURE__ */ _parse($ZodRealError);
     _parseAsync = (_Err) => async (schema, value, _ctx, params) => {
-      var _a19;
       const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
       let result = schema._zod.run({ value, issues: [] }, ctx);
       if (result instanceof Promise)
         result = await result;
       if (result.issues.length) {
-        const e2 = new ((_a19 = params == null ? void 0 : params.Err) != null ? _a19 : _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
-        captureStackTrace(e2, params == null ? void 0 : params.callee);
+        const e2 = new (params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())));
+        captureStackTrace(e2, params?.callee);
         throw e2;
       }
       return result.value;
@@ -24549,7 +24527,7 @@ var init_parse = __esm({
       }
       return result.issues.length ? {
         success: false,
-        error: new (_Err != null ? _Err : $ZodError)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
+        error: new (_Err ?? $ZodError)(result.issues.map((iss) => finalizeIssue(iss, ctx, config())))
       } : { success: true, data: result.value };
     };
     safeParse = /* @__PURE__ */ _safeParse($ZodRealError);
@@ -24671,8 +24649,7 @@ var init_regexes = __esm({
     dateSource = `(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))`;
     date = /* @__PURE__ */ new RegExp(`^${dateSource}$`);
     string = (params) => {
-      var _a19, _b8;
-      const regex = params ? `[\\s\\S]{${(_a19 = params == null ? void 0 : params.minimum) != null ? _a19 : 0},${(_b8 = params == null ? void 0 : params.maximum) != null ? _b8 : ""}}` : `[\\s\\S]*`;
+      const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
       return new RegExp(`^${regex}$`);
     };
     bigint = /^\d+n?$/;
@@ -24699,11 +24676,10 @@ var init_checks = __esm({
     init_regexes();
     init_util();
     $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
-      var _a20, _b8;
-      var _a19;
-      (_a20 = inst._zod) != null ? _a20 : inst._zod = {};
+      var _a2;
+      inst._zod ?? (inst._zod = {});
       inst._zod.def = def;
-      (_b8 = (_a19 = inst._zod).onattach) != null ? _b8 : _a19.onattach = [];
+      (_a2 = inst._zod).onattach ?? (_a2.onattach = []);
     });
     numericOriginMap = {
       number: "number",
@@ -24714,9 +24690,8 @@ var init_checks = __esm({
       $ZodCheck.init(inst, def);
       const origin = numericOriginMap[typeof def.value];
       inst._zod.onattach.push((inst2) => {
-        var _a19;
         const bag = inst2._zod.bag;
-        const curr = (_a19 = def.inclusive ? bag.maximum : bag.exclusiveMaximum) != null ? _a19 : Number.POSITIVE_INFINITY;
+        const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
         if (def.value < curr) {
           if (def.inclusive)
             bag.maximum = def.value;
@@ -24743,9 +24718,8 @@ var init_checks = __esm({
       $ZodCheck.init(inst, def);
       const origin = numericOriginMap[typeof def.value];
       inst._zod.onattach.push((inst2) => {
-        var _a19;
         const bag = inst2._zod.bag;
-        const curr = (_a19 = def.inclusive ? bag.minimum : bag.exclusiveMinimum) != null ? _a19 : Number.NEGATIVE_INFINITY;
+        const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
         if (def.value > curr) {
           if (def.inclusive)
             bag.minimum = def.value;
@@ -24771,9 +24745,8 @@ var init_checks = __esm({
     $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", (inst, def) => {
       $ZodCheck.init(inst, def);
       inst._zod.onattach.push((inst2) => {
-        var _a20;
-        var _a19;
-        (_a20 = (_a19 = inst2._zod.bag).multipleOf) != null ? _a20 : _a19.multipleOf = def.value;
+        var _a2;
+        (_a2 = inst2._zod.bag).multipleOf ?? (_a2.multipleOf = def.value);
       });
       inst._zod.check = (payload) => {
         if (typeof payload.value !== typeof def.value)
@@ -24792,10 +24765,9 @@ var init_checks = __esm({
       };
     });
     $ZodCheckNumberFormat = /* @__PURE__ */ $constructor("$ZodCheckNumberFormat", (inst, def) => {
-      var _a19;
       $ZodCheck.init(inst, def);
       def.format = def.format || "float64";
-      const isInt = (_a19 = def.format) == null ? void 0 : _a19.includes("int");
+      const isInt = def.format?.includes("int");
       const origin = isInt ? "int" : "number";
       const [minimum, maximum] = NUMBER_FORMAT_RANGES[def.format];
       inst._zod.onattach.push((inst2) => {
@@ -24900,16 +24872,14 @@ var init_checks = __esm({
       };
     });
     $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.size !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
-        var _a21;
-        const curr = (_a21 = inst2._zod.bag.maximum) != null ? _a21 : Number.POSITIVE_INFINITY;
+        const curr = inst2._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
         if (def.maximum < curr)
           inst2._zod.bag.maximum = def.maximum;
       });
@@ -24929,16 +24899,14 @@ var init_checks = __esm({
       };
     });
     $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.size !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
-        var _a21;
-        const curr = (_a21 = inst2._zod.bag.minimum) != null ? _a21 : Number.NEGATIVE_INFINITY;
+        const curr = inst2._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
         if (def.minimum > curr)
           inst2._zod.bag.minimum = def.minimum;
       });
@@ -24958,13 +24926,12 @@ var init_checks = __esm({
       };
     });
     $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.size !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
         const bag = inst2._zod.bag;
         bag.minimum = def.size;
@@ -24989,16 +24956,14 @@ var init_checks = __esm({
       };
     });
     $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.length !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
-        var _a21;
-        const curr = (_a21 = inst2._zod.bag.maximum) != null ? _a21 : Number.POSITIVE_INFINITY;
+        const curr = inst2._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
         if (def.maximum < curr)
           inst2._zod.bag.maximum = def.maximum;
       });
@@ -25020,16 +24985,14 @@ var init_checks = __esm({
       };
     });
     $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.length !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
-        var _a21;
-        const curr = (_a21 = inst2._zod.bag.minimum) != null ? _a21 : Number.NEGATIVE_INFINITY;
+        const curr = inst2._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
         if (def.minimum > curr)
           inst2._zod.bag.minimum = def.minimum;
       });
@@ -25051,13 +25014,12 @@ var init_checks = __esm({
       };
     });
     $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
-      var _a20;
-      var _a19;
+      var _a2;
       $ZodCheck.init(inst, def);
-      (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+      (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
         const val = payload.value;
         return !nullish(val) && val.length !== void 0;
-      };
+      });
       inst._zod.onattach.push((inst2) => {
         const bag = inst2._zod.bag;
         bag.minimum = def.length;
@@ -25083,20 +25045,18 @@ var init_checks = __esm({
       };
     });
     $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
-      var _a20, _b9;
-      var _a19, _b8;
+      var _a2, _b2;
       $ZodCheck.init(inst, def);
       inst._zod.onattach.push((inst2) => {
-        var _a21;
         const bag = inst2._zod.bag;
         bag.format = def.format;
         if (def.pattern) {
-          (_a21 = bag.patterns) != null ? _a21 : bag.patterns = /* @__PURE__ */ new Set();
+          bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
           bag.patterns.add(def.pattern);
         }
       });
       if (def.pattern)
-        (_a20 = (_a19 = inst._zod).check) != null ? _a20 : _a19.check = (payload) => {
+        (_a2 = inst._zod).check ?? (_a2.check = (payload) => {
           def.pattern.lastIndex = 0;
           if (def.pattern.test(payload.value))
             return;
@@ -25109,10 +25069,10 @@ var init_checks = __esm({
             inst,
             continue: !def.abort
           });
-        };
+        });
       else
-        (_b9 = (_b8 = inst._zod).check) != null ? _b9 : _b8.check = () => {
-        };
+        (_b2 = inst._zod).check ?? (_b2.check = () => {
+        });
     });
     $ZodCheckRegex = /* @__PURE__ */ $constructor("$ZodCheckRegex", (inst, def) => {
       $ZodCheckStringFormat.init(inst, def);
@@ -25132,13 +25092,11 @@ var init_checks = __esm({
       };
     });
     $ZodCheckLowerCase = /* @__PURE__ */ $constructor("$ZodCheckLowerCase", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = lowercase;
+      def.pattern ?? (def.pattern = lowercase);
       $ZodCheckStringFormat.init(inst, def);
     });
     $ZodCheckUpperCase = /* @__PURE__ */ $constructor("$ZodCheckUpperCase", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = uppercase;
+      def.pattern ?? (def.pattern = uppercase);
       $ZodCheckStringFormat.init(inst, def);
     });
     $ZodCheckIncludes = /* @__PURE__ */ $constructor("$ZodCheckIncludes", (inst, def) => {
@@ -25147,9 +25105,8 @@ var init_checks = __esm({
       const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position}}${escapedRegex}` : escapedRegex);
       def.pattern = pattern;
       inst._zod.onattach.push((inst2) => {
-        var _a19;
         const bag = inst2._zod.bag;
-        (_a19 = bag.patterns) != null ? _a19 : bag.patterns = /* @__PURE__ */ new Set();
+        bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
         bag.patterns.add(pattern);
       });
       inst._zod.check = (payload) => {
@@ -25167,14 +25124,12 @@ var init_checks = __esm({
       };
     });
     $ZodCheckStartsWith = /* @__PURE__ */ $constructor("$ZodCheckStartsWith", (inst, def) => {
-      var _a19;
       $ZodCheck.init(inst, def);
       const pattern = new RegExp(`^${escapeRegex(def.prefix)}.*`);
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = pattern;
+      def.pattern ?? (def.pattern = pattern);
       inst._zod.onattach.push((inst2) => {
-        var _a20;
         const bag = inst2._zod.bag;
-        (_a20 = bag.patterns) != null ? _a20 : bag.patterns = /* @__PURE__ */ new Set();
+        bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
         bag.patterns.add(pattern);
       });
       inst._zod.check = (payload) => {
@@ -25192,14 +25147,12 @@ var init_checks = __esm({
       };
     });
     $ZodCheckEndsWith = /* @__PURE__ */ $constructor("$ZodCheckEndsWith", (inst, def) => {
-      var _a19;
       $ZodCheck.init(inst, def);
       const pattern = new RegExp(`.*${escapeRegex(def.suffix)}$`);
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = pattern;
+      def.pattern ?? (def.pattern = pattern);
       inst._zod.onattach.push((inst2) => {
-        var _a20;
         const bag = inst2._zod.bag;
-        (_a20 = bag.patterns) != null ? _a20 : bag.patterns = /* @__PURE__ */ new Set();
+        bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
         bag.patterns.add(pattern);
       });
       inst._zod.check = (payload) => {
@@ -25287,10 +25240,9 @@ var init_doc = __esm({
         }
       }
       compile() {
-        var _a19;
         const F2 = Function;
-        const args = this == null ? void 0 : this.args;
-        const content2 = (_a19 = this == null ? void 0 : this.content) != null ? _a19 : [``];
+        const args = this?.args;
+        const content2 = this?.content ?? [``];
         const lines = [...content2.map((x) => `  ${x}`)];
         return new F2(...args, lines.join("\n"));
       }
@@ -25339,7 +25291,7 @@ function isValidJWT2(token, algorithm = null) {
     if (!header)
       return false;
     const parsedHeader = JSON.parse(atob(header));
-    if ("typ" in parsedHeader && (parsedHeader == null ? void 0 : parsedHeader.typ) !== "JWT")
+    if ("typ" in parsedHeader && parsedHeader?.typ !== "JWT")
       return false;
     if (!parsedHeader.alg)
       return false;
@@ -25525,14 +25477,13 @@ function handleReadonlyResult(payload) {
   return payload;
 }
 function handleRefineResult(result, payload, input, inst) {
-  var _a19;
   if (!result) {
     const _iss = {
       code: "custom",
       input,
       inst,
       // incorporates params.error into issue reporting
-      path: [...(_a19 = inst._zod.def.path) != null ? _a19 : []],
+      path: [...inst._zod.def.path ?? []],
       // incorporates params.error into issue reporting
       continue: !inst._zod.def.abort
       // params: inst._zod.def.params,
@@ -25554,13 +25505,12 @@ var init_schemas = __esm({
     init_versions();
     init_util();
     $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
-      var _a20, _b8, _c2;
-      var _a19;
-      inst != null ? inst : inst = {};
+      var _a2;
+      inst ?? (inst = {});
       inst._zod.def = def;
       inst._zod.bag = inst._zod.bag || {};
       inst._zod.version = version;
-      const checks = [...(_a20 = inst._zod.def.checks) != null ? _a20 : []];
+      const checks = [...inst._zod.def.checks ?? []];
       if (inst._zod.traits.has("$ZodCheck")) {
         checks.unshift(inst);
       }
@@ -25570,8 +25520,8 @@ var init_schemas = __esm({
         }
       }
       if (checks.length === 0) {
-        (_b8 = (_a19 = inst._zod).deferred) != null ? _b8 : _a19.deferred = [];
-        (_c2 = inst._zod.deferred) == null ? void 0 : _c2.push(() => {
+        (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
+        inst._zod.deferred?.push(() => {
           inst._zod.run = inst._zod.parse;
         });
       } else {
@@ -25588,11 +25538,11 @@ var init_schemas = __esm({
             }
             const currLen = payload.issues.length;
             const _2 = ch2._zod.check(payload);
-            if (_2 instanceof Promise && (ctx == null ? void 0 : ctx.async) === false) {
+            if (_2 instanceof Promise && ctx?.async === false) {
               throw new $ZodAsyncError();
             }
             if (asyncResult || _2 instanceof Promise) {
-              asyncResult = (asyncResult != null ? asyncResult : Promise.resolve()).then(async () => {
+              asyncResult = (asyncResult ?? Promise.resolve()).then(async () => {
                 await _2;
                 const nextLen = payload.issues.length;
                 if (nextLen === currLen)
@@ -25627,15 +25577,11 @@ var init_schemas = __esm({
       }
       inst["~standard"] = {
         validate: (value) => {
-          var _a21;
           try {
             const r2 = safeParse(inst, value);
-            return r2.success ? { value: r2.data } : { issues: (_a21 = r2.error) == null ? void 0 : _a21.issues };
+            return r2.success ? { value: r2.data } : { issues: r2.error?.issues };
           } catch (_2) {
-            return safeParseAsync(inst, value).then((r2) => {
-              var _a22;
-              return r2.success ? { value: r2.data } : { issues: (_a22 = r2.error) == null ? void 0 : _a22.issues };
-            });
+            return safeParseAsync(inst, value).then((r2) => r2.success ? { value: r2.data } : { issues: r2.error?.issues });
           }
         },
         vendor: "zod",
@@ -25643,9 +25589,8 @@ var init_schemas = __esm({
       };
     });
     $ZodString = /* @__PURE__ */ $constructor("$ZodString", (inst, def) => {
-      var _a19, _b8, _c2;
       $ZodType.init(inst, def);
-      inst._zod.pattern = (_c2 = [...(_b8 = (_a19 = inst == null ? void 0 : inst._zod.bag) == null ? void 0 : _a19.patterns) != null ? _b8 : []].pop()) != null ? _c2 : string(inst._zod.bag);
+      inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string(inst._zod.bag);
       inst._zod.parse = (payload, _2) => {
         if (def.coerce)
           try {
@@ -25668,12 +25613,10 @@ var init_schemas = __esm({
       $ZodString.init(inst, def);
     });
     $ZodGUID = /* @__PURE__ */ $constructor("$ZodGUID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = guid;
+      def.pattern ?? (def.pattern = guid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodUUID = /* @__PURE__ */ $constructor("$ZodUUID", (inst, def) => {
-      var _a19, _b8;
       if (def.version) {
         const versionMap = {
           v1: 1,
@@ -25688,14 +25631,13 @@ var init_schemas = __esm({
         const v3 = versionMap[def.version];
         if (v3 === void 0)
           throw new Error(`Invalid UUID version: "${def.version}"`);
-        (_a19 = def.pattern) != null ? _a19 : def.pattern = uuid(v3);
+        def.pattern ?? (def.pattern = uuid(v3));
       } else
-        (_b8 = def.pattern) != null ? _b8 : def.pattern = uuid();
+        def.pattern ?? (def.pattern = uuid());
       $ZodStringFormat.init(inst, def);
     });
     $ZodEmail = /* @__PURE__ */ $constructor("$ZodEmail", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = email;
+      def.pattern ?? (def.pattern = email);
       $ZodStringFormat.init(inst, def);
     });
     $ZodURL = /* @__PURE__ */ $constructor("$ZodURL", (inst, def) => {
@@ -25751,63 +25693,51 @@ var init_schemas = __esm({
       };
     });
     $ZodEmoji = /* @__PURE__ */ $constructor("$ZodEmoji", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = emoji();
+      def.pattern ?? (def.pattern = emoji());
       $ZodStringFormat.init(inst, def);
     });
     $ZodNanoID = /* @__PURE__ */ $constructor("$ZodNanoID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = nanoid;
+      def.pattern ?? (def.pattern = nanoid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodCUID = /* @__PURE__ */ $constructor("$ZodCUID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = cuid;
+      def.pattern ?? (def.pattern = cuid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodCUID2 = /* @__PURE__ */ $constructor("$ZodCUID2", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = cuid2;
+      def.pattern ?? (def.pattern = cuid2);
       $ZodStringFormat.init(inst, def);
     });
     $ZodULID = /* @__PURE__ */ $constructor("$ZodULID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = ulid;
+      def.pattern ?? (def.pattern = ulid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodXID = /* @__PURE__ */ $constructor("$ZodXID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = xid;
+      def.pattern ?? (def.pattern = xid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodKSUID = /* @__PURE__ */ $constructor("$ZodKSUID", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = ksuid;
+      def.pattern ?? (def.pattern = ksuid);
       $ZodStringFormat.init(inst, def);
     });
     $ZodISODateTime = /* @__PURE__ */ $constructor("$ZodISODateTime", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = datetime(def);
+      def.pattern ?? (def.pattern = datetime(def));
       $ZodStringFormat.init(inst, def);
     });
     $ZodISODate = /* @__PURE__ */ $constructor("$ZodISODate", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = date;
+      def.pattern ?? (def.pattern = date);
       $ZodStringFormat.init(inst, def);
     });
     $ZodISOTime = /* @__PURE__ */ $constructor("$ZodISOTime", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = time(def);
+      def.pattern ?? (def.pattern = time(def));
       $ZodStringFormat.init(inst, def);
     });
     $ZodISODuration = /* @__PURE__ */ $constructor("$ZodISODuration", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = duration;
+      def.pattern ?? (def.pattern = duration);
       $ZodStringFormat.init(inst, def);
     });
     $ZodIPv4 = /* @__PURE__ */ $constructor("$ZodIPv4", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = ipv4;
+      def.pattern ?? (def.pattern = ipv4);
       $ZodStringFormat.init(inst, def);
       inst._zod.onattach.push((inst2) => {
         const bag = inst2._zod.bag;
@@ -25815,8 +25745,7 @@ var init_schemas = __esm({
       });
     });
     $ZodIPv6 = /* @__PURE__ */ $constructor("$ZodIPv6", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = ipv6;
+      def.pattern ?? (def.pattern = ipv6);
       $ZodStringFormat.init(inst, def);
       inst._zod.onattach.push((inst2) => {
         const bag = inst2._zod.bag;
@@ -25837,13 +25766,11 @@ var init_schemas = __esm({
       };
     });
     $ZodCIDRv4 = /* @__PURE__ */ $constructor("$ZodCIDRv4", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = cidrv4;
+      def.pattern ?? (def.pattern = cidrv4);
       $ZodStringFormat.init(inst, def);
     });
     $ZodCIDRv6 = /* @__PURE__ */ $constructor("$ZodCIDRv6", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = cidrv6;
+      def.pattern ?? (def.pattern = cidrv6);
       $ZodStringFormat.init(inst, def);
       inst._zod.check = (payload) => {
         const [address, prefix] = payload.value.split("/");
@@ -25868,8 +25795,7 @@ var init_schemas = __esm({
       };
     });
     $ZodBase64 = /* @__PURE__ */ $constructor("$ZodBase64", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = base64;
+      def.pattern ?? (def.pattern = base64);
       $ZodStringFormat.init(inst, def);
       inst._zod.onattach.push((inst2) => {
         inst2._zod.bag.contentEncoding = "base64";
@@ -25887,8 +25813,7 @@ var init_schemas = __esm({
       };
     });
     $ZodBase64URL = /* @__PURE__ */ $constructor("$ZodBase64URL", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = base64url;
+      def.pattern ?? (def.pattern = base64url);
       $ZodStringFormat.init(inst, def);
       inst._zod.onattach.push((inst2) => {
         inst2._zod.bag.contentEncoding = "base64url";
@@ -25906,8 +25831,7 @@ var init_schemas = __esm({
       };
     });
     $ZodE164 = /* @__PURE__ */ $constructor("$ZodE164", (inst, def) => {
-      var _a19;
-      (_a19 = def.pattern) != null ? _a19 : def.pattern = e164;
+      def.pattern ?? (def.pattern = e164);
       $ZodStringFormat.init(inst, def);
     });
     $ZodJWT = /* @__PURE__ */ $constructor("$ZodJWT", (inst, def) => {
@@ -25939,9 +25863,8 @@ var init_schemas = __esm({
       };
     });
     $ZodNumber = /* @__PURE__ */ $constructor("$ZodNumber", (inst, def) => {
-      var _a19;
       $ZodType.init(inst, def);
-      inst._zod.pattern = (_a19 = inst._zod.bag.pattern) != null ? _a19 : number;
+      inst._zod.pattern = inst._zod.bag.pattern ?? number;
       inst._zod.parse = (payload, _ctx) => {
         if (def.coerce)
           try {
@@ -26174,13 +26097,12 @@ var init_schemas = __esm({
         };
       });
       defineLazy(inst._zod, "propValues", () => {
-        var _a19;
         const shape = def.shape;
         const propValues = {};
         for (const key in shape) {
           const field = shape[key]._zod;
           if (field.values) {
-            (_a19 = propValues[key]) != null ? _a19 : propValues[key] = /* @__PURE__ */ new Set();
+            propValues[key] ?? (propValues[key] = /* @__PURE__ */ new Set());
             for (const v3 of field.values)
               propValues[key].add(v3);
           }
@@ -26250,7 +26172,7 @@ var init_schemas = __esm({
       const catchall = def.catchall;
       let value;
       inst._zod.parse = (payload, ctx) => {
-        value != null ? value : value = _normalized.value;
+        value ?? (value = _normalized.value);
         const input = payload.value;
         if (!isObject4(input)) {
           payload.issues.push({
@@ -26262,7 +26184,7 @@ var init_schemas = __esm({
           return payload;
         }
         const proms = [];
-        if (jit && fastEnabled && (ctx == null ? void 0 : ctx.async) === false && ctx.jitless !== true) {
+        if (jit && fastEnabled && ctx?.async === false && ctx.jitless !== true) {
           if (!fastpass)
             fastpass = generateFastpass(def.shape);
           payload = fastpass(payload, ctx);
@@ -26405,7 +26327,7 @@ var init_schemas = __esm({
           });
           return payload;
         }
-        const opt = disc.value.get(input == null ? void 0 : input[def.discriminator]);
+        const opt = disc.value.get(input?.[def.discriminator]);
         if (opt) {
           return opt._zod.run(payload, ctx);
         }
@@ -26543,7 +26465,7 @@ var init_schemas = __esm({
           let unrecognized;
           for (const key in input) {
             if (!values.has(key)) {
-              unrecognized = unrecognized != null ? unrecognized : [];
+              unrecognized = unrecognized ?? [];
               unrecognized.push(key);
             }
           }
@@ -26998,8 +26920,7 @@ var init_ar = __esm({
         set: { unit: "\u0639\u0646\u0635\u0631", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27052,7 +26973,6 @@ var init_ar = __esm({
         template_literal: "\u0645\u062F\u062E\u0644"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0645\u062F\u062E\u0644\u0627\u062A \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644\u0629: \u064A\u0641\u062A\u0631\u0636 \u0625\u062F\u062E\u0627\u0644 ${issue3.expected}\u060C \u0648\u0644\u0643\u0646 \u062A\u0645 \u0625\u062F\u062E\u0627\u0644 ${parsedType5(issue3.input)}`;
@@ -27064,8 +26984,8 @@ var init_ar = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return ` \u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${(_a19 = issue3.origin) != null ? _a19 : "\u0627\u0644\u0642\u064A\u0645\u0629"} ${adj} ${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0639\u0646\u0635\u0631"}`;
-            return `\u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${(_c2 = issue3.origin) != null ? _c2 : "\u0627\u0644\u0642\u064A\u0645\u0629"} ${adj} ${issue3.maximum.toString()}`;
+              return ` \u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${issue3.origin ?? "\u0627\u0644\u0642\u064A\u0645\u0629"} ${adj} ${issue3.maximum.toString()} ${sizing.unit ?? "\u0639\u0646\u0635\u0631"}`;
+            return `\u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${issue3.origin ?? "\u0627\u0644\u0642\u064A\u0645\u0629"} ${adj} ${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -27085,7 +27005,7 @@ var init_ar = __esm({
               return `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u062A\u0636\u0645\u0651\u064E\u0646 "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0637\u0627\u0628\u0642 \u0627\u0644\u0646\u0645\u0637 ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644`;
+            return `${Nouns[_issue.format] ?? issue3.format} \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644`;
           }
           case "not_multiple_of":
             return `\u0631\u0642\u0645 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u0645\u0646 \u0645\u0636\u0627\u0639\u0641\u0627\u062A ${issue3.divisor}`;
@@ -27123,8 +27043,7 @@ var init_az = __esm({
         set: { unit: "element", verb: "olmal\u0131d\u0131r" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27177,7 +27096,6 @@ var init_az = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Yanl\u0131\u015F d\u0259y\u0259r: g\xF6zl\u0259nil\u0259n ${issue3.expected}, daxil olan ${parsedType5(issue3.input)}`;
@@ -27189,8 +27107,8 @@ var init_az = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${(_a19 = issue3.origin) != null ? _a19 : "d\u0259y\u0259r"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "element"}`;
-            return `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${(_c2 = issue3.origin) != null ? _c2 : "d\u0259y\u0259r"} ${adj}${issue3.maximum.toString()}`;
+              return `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${issue3.origin ?? "d\u0259y\u0259r"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "element"}`;
+            return `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${issue3.origin ?? "d\u0259y\u0259r"} ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -27209,7 +27127,7 @@ var init_az = __esm({
               return `Yanl\u0131\u015F m\u0259tn: "${_issue.includes}" daxil olmal\u0131d\u0131r`;
             if (_issue.format === "regex")
               return `Yanl\u0131\u015F m\u0259tn: ${_issue.pattern} \u015Fablonuna uy\u011Fun olmal\u0131d\u0131r`;
-            return `Yanl\u0131\u015F ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Yanl\u0131\u015F ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Yanl\u0131\u015F \u0259d\u0259d: ${issue3.divisor} il\u0259 b\xF6l\xFCn\u0259 bil\u0259n olmal\u0131d\u0131r`;
@@ -27290,8 +27208,7 @@ var init_be = __esm({
         }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27344,7 +27261,6 @@ var init_be = __esm({
         template_literal: "\u0443\u0432\u043E\u0434"
       };
       return (issue3) => {
-        var _a19, _b8, _c2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u045E\u0432\u043E\u0434: \u0447\u0430\u043A\u0430\u045E\u0441\u044F ${issue3.expected}, \u0430\u0442\u0440\u044B\u043C\u0430\u043D\u0430 ${parsedType5(issue3.input)}`;
@@ -27358,9 +27274,9 @@ var init_be = __esm({
             if (sizing) {
               const maxValue = Number(issue3.maximum);
               const unit = getBelarusianPlural(maxValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
-              return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${(_a19 = issue3.origin) != null ? _a19 : "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 ${sizing.verb} ${adj}${issue3.maximum.toString()} ${unit}`;
+              return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 ${sizing.verb} ${adj}${issue3.maximum.toString()} ${unit}`;
             }
-            return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${(_b8 = issue3.origin) != null ? _b8 : "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 \u0431\u044B\u0446\u044C ${adj}${issue3.maximum.toString()}`;
+            return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 \u0431\u044B\u0446\u044C ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -27382,7 +27298,7 @@ var init_be = __esm({
               return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0437\u043C\u044F\u0448\u0447\u0430\u0446\u044C "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0430\u0434\u043F\u0430\u0432\u044F\u0434\u0430\u0446\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${_issue.pattern}`;
-            return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B ${(_c2 = Nouns[_issue.format]) != null ? _c2 : issue3.format}`;
+            return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u043B\u0456\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0431\u044B\u0446\u044C \u043A\u0440\u0430\u0442\u043D\u044B\u043C ${issue3.divisor}`;
@@ -27420,8 +27336,7 @@ var init_ca = __esm({
         set: { unit: "elements", verb: "contenir" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27474,7 +27389,6 @@ var init_ca = __esm({
         template_literal: "entrada"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Tipus inv\xE0lid: s'esperava ${issue3.expected}, s'ha rebut ${parsedType5(issue3.input)}`;
@@ -27487,8 +27401,8 @@ var init_ca = __esm({
             const adj = issue3.inclusive ? "com a m\xE0xim" : "menys de";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Massa gran: s'esperava que ${(_a19 = issue3.origin) != null ? _a19 : "el valor"} contingu\xE9s ${adj} ${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elements"}`;
-            return `Massa gran: s'esperava que ${(_c2 = issue3.origin) != null ? _c2 : "el valor"} fos ${adj} ${issue3.maximum.toString()}`;
+              return `Massa gran: s'esperava que ${issue3.origin ?? "el valor"} contingu\xE9s ${adj} ${issue3.maximum.toString()} ${sizing.unit ?? "elements"}`;
+            return `Massa gran: s'esperava que ${issue3.origin ?? "el valor"} fos ${adj} ${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? "com a m\xEDnim" : "m\xE9s de";
@@ -27509,7 +27423,7 @@ var init_ca = __esm({
               return `Format inv\xE0lid: ha d'incloure "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Format inv\xE0lid: ha de coincidir amb el patr\xF3 ${_issue.pattern}`;
-            return `Format inv\xE0lid per a ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Format inv\xE0lid per a ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `N\xFAmero inv\xE0lid: ha de ser m\xFAltiple de ${issue3.divisor}`;
@@ -27548,8 +27462,7 @@ var init_cs = __esm({
         set: { unit: "prvk\u016F", verb: "m\xEDt" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27620,7 +27533,6 @@ var init_cs = __esm({
         template_literal: "vstup"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
         switch (issue3.code) {
           case "invalid_type":
             return `Neplatn\xFD vstup: o\u010Dek\xE1v\xE1no ${issue3.expected}, obdr\u017Eeno ${parsedType5(issue3.input)}`;
@@ -27632,17 +27544,17 @@ var init_cs = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${(_a19 = issue3.origin) != null ? _a19 : "hodnota"} mus\xED m\xEDt ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "prvk\u016F"}`;
+              return `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${issue3.origin ?? "hodnota"} mus\xED m\xEDt ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "prvk\u016F"}`;
             }
-            return `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${(_c2 = issue3.origin) != null ? _c2 : "hodnota"} mus\xED b\xFDt ${adj}${issue3.maximum.toString()}`;
+            return `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${issue3.origin ?? "hodnota"} mus\xED b\xFDt ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${(_d2 = issue3.origin) != null ? _d2 : "hodnota"} mus\xED m\xEDt ${adj}${issue3.minimum.toString()} ${(_e2 = sizing.unit) != null ? _e2 : "prvk\u016F"}`;
+              return `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${issue3.origin ?? "hodnota"} mus\xED m\xEDt ${adj}${issue3.minimum.toString()} ${sizing.unit ?? "prvk\u016F"}`;
             }
-            return `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${(_f2 = issue3.origin) != null ? _f2 : "hodnota"} mus\xED b\xFDt ${adj}${issue3.minimum.toString()}`;
+            return `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${issue3.origin ?? "hodnota"} mus\xED b\xFDt ${adj}${issue3.minimum.toString()}`;
           }
           case "invalid_format": {
             const _issue = issue3;
@@ -27654,7 +27566,7 @@ var init_cs = __esm({
               return `Neplatn\xFD \u0159et\u011Bzec: mus\xED obsahovat "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Neplatn\xFD \u0159et\u011Bzec: mus\xED odpov\xEDdat vzoru ${_issue.pattern}`;
-            return `Neplatn\xFD form\xE1t ${(_g2 = Nouns[_issue.format]) != null ? _g2 : issue3.format}`;
+            return `Neplatn\xFD form\xE1t ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Neplatn\xE9 \u010D\xEDslo: mus\xED b\xFDt n\xE1sobkem ${issue3.divisor}`;
@@ -27692,8 +27604,7 @@ var init_de = __esm({
         set: { unit: "Elemente", verb: "zu haben" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -27746,7 +27657,6 @@ var init_de = __esm({
         template_literal: "Eingabe"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Ung\xFCltige Eingabe: erwartet ${issue3.expected}, erhalten ${parsedType5(issue3.input)}`;
@@ -27758,8 +27668,8 @@ var init_de = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Zu gro\xDF: erwartet, dass ${(_a19 = issue3.origin) != null ? _a19 : "Wert"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "Elemente"} hat`;
-            return `Zu gro\xDF: erwartet, dass ${(_c2 = issue3.origin) != null ? _c2 : "Wert"} ${adj}${issue3.maximum.toString()} ist`;
+              return `Zu gro\xDF: erwartet, dass ${issue3.origin ?? "Wert"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "Elemente"} hat`;
+            return `Zu gro\xDF: erwartet, dass ${issue3.origin ?? "Wert"} ${adj}${issue3.maximum.toString()} ist`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -27779,7 +27689,7 @@ var init_de = __esm({
               return `Ung\xFCltiger String: muss "${_issue.includes}" enthalten`;
             if (_issue.format === "regex")
               return `Ung\xFCltiger String: muss dem Muster ${_issue.pattern} entsprechen`;
-            return `Ung\xFCltig: ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Ung\xFCltig: ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Ung\xFCltige Zahl: muss ein Vielfaches von ${issue3.divisor} sein`;
@@ -27837,8 +27747,7 @@ var init_en = __esm({
         set: { unit: "items", verb: "to have" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const Nouns = {
         regex: "input",
@@ -27871,7 +27780,6 @@ var init_en = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Invalid input: expected ${issue3.expected}, received ${parsedType(issue3.input)}`;
@@ -27883,8 +27791,8 @@ var init_en = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Too big: expected ${(_a19 = issue3.origin) != null ? _a19 : "value"} to have ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elements"}`;
-            return `Too big: expected ${(_c2 = issue3.origin) != null ? _c2 : "value"} to be ${adj}${issue3.maximum.toString()}`;
+              return `Too big: expected ${issue3.origin ?? "value"} to have ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elements"}`;
+            return `Too big: expected ${issue3.origin ?? "value"} to be ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -27905,7 +27813,7 @@ var init_en = __esm({
               return `Invalid string: must include "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Invalid string: must match pattern ${_issue.pattern}`;
-            return `Invalid ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Invalid ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Invalid number: must be a multiple of ${issue3.divisor}`;
@@ -27963,8 +27871,7 @@ var init_eo = __esm({
         set: { unit: "elementojn", verb: "havi" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const Nouns = {
         regex: "enigo",
@@ -27997,7 +27904,6 @@ var init_eo = __esm({
         template_literal: "enigo"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Nevalida enigo: atendi\u011Dis ${issue3.expected}, ricevi\u011Dis ${parsedType2(issue3.input)}`;
@@ -28009,8 +27915,8 @@ var init_eo = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Tro granda: atendi\u011Dis ke ${(_a19 = issue3.origin) != null ? _a19 : "valoro"} havu ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementojn"}`;
-            return `Tro granda: atendi\u011Dis ke ${(_c2 = issue3.origin) != null ? _c2 : "valoro"} havu ${adj}${issue3.maximum.toString()}`;
+              return `Tro granda: atendi\u011Dis ke ${issue3.origin ?? "valoro"} havu ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementojn"}`;
+            return `Tro granda: atendi\u011Dis ke ${issue3.origin ?? "valoro"} havu ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28030,7 +27936,7 @@ var init_eo = __esm({
               return `Nevalida karaktraro: devas inkluzivi "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Nevalida karaktraro: devas kongrui kun la modelo ${_issue.pattern}`;
-            return `Nevalida ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Nevalida ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Nevalida nombro: devas esti oblo de ${issue3.divisor}`;
@@ -28068,8 +27974,7 @@ var init_es = __esm({
         set: { unit: "elementos", verb: "tener" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28122,7 +28027,6 @@ var init_es = __esm({
         template_literal: "entrada"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Entrada inv\xE1lida: se esperaba ${issue3.expected}, recibido ${parsedType5(issue3.input)}`;
@@ -28135,8 +28039,8 @@ var init_es = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Demasiado grande: se esperaba que ${(_a19 = issue3.origin) != null ? _a19 : "valor"} tuviera ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementos"}`;
-            return `Demasiado grande: se esperaba que ${(_c2 = issue3.origin) != null ? _c2 : "valor"} fuera ${adj}${issue3.maximum.toString()}`;
+              return `Demasiado grande: se esperaba que ${issue3.origin ?? "valor"} tuviera ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+            return `Demasiado grande: se esperaba que ${issue3.origin ?? "valor"} fuera ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28156,7 +28060,7 @@ var init_es = __esm({
               return `Cadena inv\xE1lida: debe incluir "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Cadena inv\xE1lida: debe coincidir con el patr\xF3n ${_issue.pattern}`;
-            return `Inv\xE1lido ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Inv\xE1lido ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `N\xFAmero inv\xE1lido: debe ser m\xFAltiplo de ${issue3.divisor}`;
@@ -28194,8 +28098,7 @@ var init_fa = __esm({
         set: { unit: "\u0622\u06CC\u062A\u0645", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28248,7 +28151,6 @@ var init_fa = __esm({
         template_literal: "\u0648\u0631\u0648\u062F\u06CC"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0648\u0631\u0648\u062F\u06CC \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0645\u06CC\u200C\u0628\u0627\u06CC\u0633\u062A ${issue3.expected} \u0645\u06CC\u200C\u0628\u0648\u062F\u060C ${parsedType5(issue3.input)} \u062F\u0631\u06CC\u0627\u0641\u062A \u0634\u062F`;
@@ -28261,9 +28163,9 @@ var init_fa = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${(_a19 = issue3.origin) != null ? _a19 : "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0639\u0646\u0635\u0631"} \u0628\u0627\u0634\u062F`;
+              return `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${issue3.origin ?? "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0639\u0646\u0635\u0631"} \u0628\u0627\u0634\u062F`;
             }
-            return `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${(_c2 = issue3.origin) != null ? _c2 : "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} \u0628\u0627\u0634\u062F`;
+            return `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${issue3.origin ?? "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} \u0628\u0627\u0634\u062F`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28287,7 +28189,7 @@ var init_fa = __esm({
             if (_issue.format === "regex") {
               return `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 \u0627\u0644\u06AF\u0648\u06CC ${_issue.pattern} \u0645\u0637\u0627\u0628\u0642\u062A \u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F`;
             }
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} \u0646\u0627\u0645\u0639\u062A\u0628\u0631`;
+            return `${Nouns[_issue.format] ?? issue3.format} \u0646\u0627\u0645\u0639\u062A\u0628\u0631`;
           }
           case "not_multiple_of":
             return `\u0639\u062F\u062F \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0645\u0636\u0631\u0628 ${issue3.divisor} \u0628\u0627\u0634\u062F`;
@@ -28329,8 +28231,7 @@ var init_fi = __esm({
         date: { unit: "", subject: "p\xE4iv\xE4m\xE4\xE4r\xE4n" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28383,7 +28284,6 @@ var init_fi = __esm({
         template_literal: "templaattimerkkijono"
       };
       return (issue3) => {
-        var _a19;
         switch (issue3.code) {
           case "invalid_type":
             return `Virheellinen tyyppi: odotettiin ${issue3.expected}, oli ${parsedType5(issue3.input)}`;
@@ -28418,7 +28318,7 @@ var init_fi = __esm({
             if (_issue.format === "regex") {
               return `Virheellinen sy\xF6te: t\xE4ytyy vastata s\xE4\xE4nn\xF6llist\xE4 lauseketta ${_issue.pattern}`;
             }
-            return `Virheellinen ${(_a19 = Nouns[_issue.format]) != null ? _a19 : issue3.format}`;
+            return `Virheellinen ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Virheellinen luku: t\xE4ytyy olla luvun ${issue3.divisor} monikerta`;
@@ -28456,8 +28356,7 @@ var init_fr = __esm({
         set: { unit: "\xE9l\xE9ments", verb: "avoir" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28510,7 +28409,6 @@ var init_fr = __esm({
         template_literal: "entr\xE9e"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Entr\xE9e invalide : ${issue3.expected} attendu, ${parsedType5(issue3.input)} re\xE7u`;
@@ -28522,8 +28420,8 @@ var init_fr = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Trop grand : ${(_a19 = issue3.origin) != null ? _a19 : "valeur"} doit ${sizing.verb} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\xE9l\xE9ment(s)"}`;
-            return `Trop grand : ${(_c2 = issue3.origin) != null ? _c2 : "valeur"} doit \xEAtre ${adj}${issue3.maximum.toString()}`;
+              return `Trop grand : ${issue3.origin ?? "valeur"} doit ${sizing.verb} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\xE9l\xE9ment(s)"}`;
+            return `Trop grand : ${issue3.origin ?? "valeur"} doit \xEAtre ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28543,7 +28441,7 @@ var init_fr = __esm({
               return `Cha\xEEne invalide : doit inclure "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Cha\xEEne invalide : doit correspondre au mod\xE8le ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} invalide`;
+            return `${Nouns[_issue.format] ?? issue3.format} invalide`;
           }
           case "not_multiple_of":
             return `Nombre invalide : doit \xEAtre un multiple de ${issue3.divisor}`;
@@ -28581,8 +28479,7 @@ var init_fr_CA = __esm({
         set: { unit: "\xE9l\xE9ments", verb: "avoir" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28635,7 +28532,6 @@ var init_fr_CA = __esm({
         template_literal: "entr\xE9e"
       };
       return (issue3) => {
-        var _a19, _b8, _c2;
         switch (issue3.code) {
           case "invalid_type":
             return `Entr\xE9e invalide : attendu ${issue3.expected}, re\xE7u ${parsedType5(issue3.input)}`;
@@ -28647,8 +28543,8 @@ var init_fr_CA = __esm({
             const adj = issue3.inclusive ? "\u2264" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Trop grand : attendu que ${(_a19 = issue3.origin) != null ? _a19 : "la valeur"} ait ${adj}${issue3.maximum.toString()} ${sizing.unit}`;
-            return `Trop grand : attendu que ${(_b8 = issue3.origin) != null ? _b8 : "la valeur"} soit ${adj}${issue3.maximum.toString()}`;
+              return `Trop grand : attendu que ${issue3.origin ?? "la valeur"} ait ${adj}${issue3.maximum.toString()} ${sizing.unit}`;
+            return `Trop grand : attendu que ${issue3.origin ?? "la valeur"} soit ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? "\u2265" : ">";
@@ -28669,7 +28565,7 @@ var init_fr_CA = __esm({
               return `Cha\xEEne invalide : doit inclure "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Cha\xEEne invalide : doit correspondre au motif ${_issue.pattern}`;
-            return `${(_c2 = Nouns[_issue.format]) != null ? _c2 : issue3.format} invalide`;
+            return `${Nouns[_issue.format] ?? issue3.format} invalide`;
           }
           case "not_multiple_of":
             return `Nombre invalide : doit \xEAtre un multiple de ${issue3.divisor}`;
@@ -28707,8 +28603,7 @@ var init_he = __esm({
         set: { unit: "\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD", verb: "\u05DC\u05DB\u05DC\u05D5\u05DC" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28761,7 +28656,6 @@ var init_he = __esm({
         template_literal: "\u05E7\u05DC\u05D8"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u05E7\u05DC\u05D8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF: \u05E6\u05E8\u05D9\u05DA ${issue3.expected}, \u05D4\u05EA\u05E7\u05D1\u05DC ${parsedType5(issue3.input)}`;
@@ -28774,8 +28668,8 @@ var init_he = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${(_a19 = issue3.origin) != null ? _a19 : "value"} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elements"}`;
-            return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${(_c2 = issue3.origin) != null ? _c2 : "value"} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${adj}${issue3.maximum.toString()}`;
+              return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${issue3.origin ?? "value"} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elements"}`;
+            return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${issue3.origin ?? "value"} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28795,7 +28689,7 @@ var init_he = __esm({
               return `\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05DC\u05D0 \u05EA\u05E7\u05D9\u05E0\u05D4: \u05D7\u05D9\u05D9\u05D1\u05EA \u05DC\u05DB\u05DC\u05D5\u05DC "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05DC\u05D0 \u05EA\u05E7\u05D9\u05E0\u05D4: \u05D7\u05D9\u05D9\u05D1\u05EA \u05DC\u05D4\u05EA\u05D0\u05D9\u05DD \u05DC\u05EA\u05D1\u05E0\u05D9\u05EA ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF`;
+            return `${Nouns[_issue.format] ?? issue3.format} \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF`;
           }
           case "not_multiple_of":
             return `\u05DE\u05E1\u05E4\u05E8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF: \u05D7\u05D9\u05D9\u05D1 \u05DC\u05D4\u05D9\u05D5\u05EA \u05DE\u05DB\u05E4\u05DC\u05D4 \u05E9\u05DC ${issue3.divisor}`;
@@ -28833,8 +28727,7 @@ var init_hu = __esm({
         set: { unit: "elem", verb: "legyen" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -28887,7 +28780,6 @@ var init_hu = __esm({
         template_literal: "bemenet"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\xC9rv\xE9nytelen bemenet: a v\xE1rt \xE9rt\xE9k ${issue3.expected}, a kapott \xE9rt\xE9k ${parsedType5(issue3.input)}`;
@@ -28900,8 +28792,8 @@ var init_hu = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `T\xFAl nagy: ${(_a19 = issue3.origin) != null ? _a19 : "\xE9rt\xE9k"} m\xE9rete t\xFAl nagy ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elem"}`;
-            return `T\xFAl nagy: a bemeneti \xE9rt\xE9k ${(_c2 = issue3.origin) != null ? _c2 : "\xE9rt\xE9k"} t\xFAl nagy: ${adj}${issue3.maximum.toString()}`;
+              return `T\xFAl nagy: ${issue3.origin ?? "\xE9rt\xE9k"} m\xE9rete t\xFAl nagy ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elem"}`;
+            return `T\xFAl nagy: a bemeneti \xE9rt\xE9k ${issue3.origin ?? "\xE9rt\xE9k"} t\xFAl nagy: ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -28921,7 +28813,7 @@ var init_hu = __esm({
               return `\xC9rv\xE9nytelen string: "${_issue.includes}" \xE9rt\xE9ket kell tartalmaznia`;
             if (_issue.format === "regex")
               return `\xC9rv\xE9nytelen string: ${_issue.pattern} mint\xE1nak kell megfelelnie`;
-            return `\xC9rv\xE9nytelen ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\xC9rv\xE9nytelen ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\xC9rv\xE9nytelen sz\xE1m: ${issue3.divisor} t\xF6bbsz\xF6r\xF6s\xE9nek kell lennie`;
@@ -28959,8 +28851,7 @@ var init_id = __esm({
         set: { unit: "item", verb: "memiliki" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29013,7 +28904,6 @@ var init_id = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Input tidak valid: diharapkan ${issue3.expected}, diterima ${parsedType5(issue3.input)}`;
@@ -29025,8 +28915,8 @@ var init_id = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Terlalu besar: diharapkan ${(_a19 = issue3.origin) != null ? _a19 : "value"} memiliki ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elemen"}`;
-            return `Terlalu besar: diharapkan ${(_c2 = issue3.origin) != null ? _c2 : "value"} menjadi ${adj}${issue3.maximum.toString()}`;
+              return `Terlalu besar: diharapkan ${issue3.origin ?? "value"} memiliki ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+            return `Terlalu besar: diharapkan ${issue3.origin ?? "value"} menjadi ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29046,7 +28936,7 @@ var init_id = __esm({
               return `String tidak valid: harus menyertakan "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `String tidak valid: harus sesuai pola ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} tidak valid`;
+            return `${Nouns[_issue.format] ?? issue3.format} tidak valid`;
           }
           case "not_multiple_of":
             return `Angka tidak valid: harus kelipatan dari ${issue3.divisor}`;
@@ -29084,8 +28974,7 @@ var init_it = __esm({
         set: { unit: "elementi", verb: "avere" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29138,7 +29027,6 @@ var init_it = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Input non valido: atteso ${issue3.expected}, ricevuto ${parsedType5(issue3.input)}`;
@@ -29151,8 +29039,8 @@ var init_it = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Troppo grande: ${(_a19 = issue3.origin) != null ? _a19 : "valore"} deve avere ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementi"}`;
-            return `Troppo grande: ${(_c2 = issue3.origin) != null ? _c2 : "valore"} deve essere ${adj}${issue3.maximum.toString()}`;
+              return `Troppo grande: ${issue3.origin ?? "valore"} deve avere ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementi"}`;
+            return `Troppo grande: ${issue3.origin ?? "valore"} deve essere ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29172,7 +29060,7 @@ var init_it = __esm({
               return `Stringa non valida: deve includere "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Stringa non valida: deve corrispondere al pattern ${_issue.pattern}`;
-            return `Invalid ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Invalid ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Numero non valido: deve essere un multiplo di ${issue3.divisor}`;
@@ -29210,8 +29098,7 @@ var init_ja = __esm({
         set: { unit: "\u8981\u7D20", verb: "\u3067\u3042\u308B" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29264,7 +29151,6 @@ var init_ja = __esm({
         template_literal: "\u5165\u529B\u5024"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u7121\u52B9\u306A\u5165\u529B: ${issue3.expected}\u304C\u671F\u5F85\u3055\u308C\u307E\u3057\u305F\u304C\u3001${parsedType5(issue3.input)}\u304C\u5165\u529B\u3055\u308C\u307E\u3057\u305F`;
@@ -29276,8 +29162,8 @@ var init_ja = __esm({
             const adj = issue3.inclusive ? "\u4EE5\u4E0B\u3067\u3042\u308B" : "\u3088\u308A\u5C0F\u3055\u3044";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u5927\u304D\u3059\u304E\u308B\u5024: ${(_a19 = issue3.origin) != null ? _a19 : "\u5024"}\u306F${issue3.maximum.toString()}${(_b8 = sizing.unit) != null ? _b8 : "\u8981\u7D20"}${adj}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
-            return `\u5927\u304D\u3059\u304E\u308B\u5024: ${(_c2 = issue3.origin) != null ? _c2 : "\u5024"}\u306F${issue3.maximum.toString()}${adj}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
+              return `\u5927\u304D\u3059\u304E\u308B\u5024: ${issue3.origin ?? "\u5024"}\u306F${issue3.maximum.toString()}${sizing.unit ?? "\u8981\u7D20"}${adj}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
+            return `\u5927\u304D\u3059\u304E\u308B\u5024: ${issue3.origin ?? "\u5024"}\u306F${issue3.maximum.toString()}${adj}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? "\u4EE5\u4E0A\u3067\u3042\u308B" : "\u3088\u308A\u5927\u304D\u3044";
@@ -29296,7 +29182,7 @@ var init_ja = __esm({
               return `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${_issue.includes}"\u3092\u542B\u3080\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
             if (_issue.format === "regex")
               return `\u7121\u52B9\u306A\u6587\u5B57\u5217: \u30D1\u30BF\u30FC\u30F3${_issue.pattern}\u306B\u4E00\u81F4\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
-            return `\u7121\u52B9\u306A${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u7121\u52B9\u306A${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u7121\u52B9\u306A\u6570\u5024: ${issue3.divisor}\u306E\u500D\u6570\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
@@ -29334,8 +29220,7 @@ var init_kh = __esm({
         set: { unit: "\u1792\u17B6\u178F\u17BB", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29388,7 +29273,6 @@ var init_kh = __esm({
         template_literal: "\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${issue3.expected} \u1794\u17C9\u17BB\u1793\u17D2\u178F\u17C2\u1791\u1791\u17BD\u179B\u1794\u17B6\u1793 ${parsedType5(issue3.input)}`;
@@ -29400,8 +29284,8 @@ var init_kh = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${(_a19 = issue3.origin) != null ? _a19 : "\u178F\u1798\u17D2\u179B\u17C3"} ${adj} ${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u1792\u17B6\u178F\u17BB"}`;
-            return `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${(_c2 = issue3.origin) != null ? _c2 : "\u178F\u1798\u17D2\u179B\u17C3"} ${adj} ${issue3.maximum.toString()}`;
+              return `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${issue3.origin ?? "\u178F\u1798\u17D2\u179B\u17C3"} ${adj} ${issue3.maximum.toString()} ${sizing.unit ?? "\u1792\u17B6\u178F\u17BB"}`;
+            return `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${issue3.origin ?? "\u178F\u1798\u17D2\u179B\u17C3"} ${adj} ${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29422,7 +29306,7 @@ var init_kh = __esm({
               return `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1798\u17B6\u1793 "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u178F\u17C2\u1795\u17D2\u1782\u17BC\u1795\u17D2\u1782\u1784\u1793\u17B9\u1784\u1791\u1798\u17D2\u179A\u1784\u17CB\u178A\u17C2\u179B\u1794\u17B6\u1793\u1780\u17C6\u178E\u178F\u17CB ${_issue.pattern}`;
-            return `\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u179B\u17C1\u1781\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u178F\u17C2\u1787\u17B6\u1796\u17A0\u17BB\u1782\u17BB\u178E\u1793\u17C3 ${issue3.divisor}`;
@@ -29460,8 +29344,7 @@ var init_ko = __esm({
         set: { unit: "\uAC1C", verb: "to have" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29514,7 +29397,6 @@ var init_ko = __esm({
         template_literal: "\uC785\uB825"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
         switch (issue3.code) {
           case "invalid_type":
             return `\uC798\uBABB\uB41C \uC785\uB825: \uC608\uC0C1 \uD0C0\uC785\uC740 ${issue3.expected}, \uBC1B\uC740 \uD0C0\uC785\uC740 ${parsedType5(issue3.input)}\uC785\uB2C8\uB2E4`;
@@ -29526,20 +29408,20 @@ var init_ko = __esm({
             const adj = issue3.inclusive ? "\uC774\uD558" : "\uBBF8\uB9CC";
             const suffix = adj === "\uBBF8\uB9CC" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4";
             const sizing = getSizing(issue3.origin);
-            const unit = (_a19 = sizing == null ? void 0 : sizing.unit) != null ? _a19 : "\uC694\uC18C";
+            const unit = sizing?.unit ?? "\uC694\uC18C";
             if (sizing)
-              return `${(_b8 = issue3.origin) != null ? _b8 : "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${issue3.maximum.toString()}${unit} ${adj}${suffix}`;
-            return `${(_c2 = issue3.origin) != null ? _c2 : "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${issue3.maximum.toString()} ${adj}${suffix}`;
+              return `${issue3.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${issue3.maximum.toString()}${unit} ${adj}${suffix}`;
+            return `${issue3.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${issue3.maximum.toString()} ${adj}${suffix}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? "\uC774\uC0C1" : "\uCD08\uACFC";
             const suffix = adj === "\uC774\uC0C1" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4";
             const sizing = getSizing(issue3.origin);
-            const unit = (_d2 = sizing == null ? void 0 : sizing.unit) != null ? _d2 : "\uC694\uC18C";
+            const unit = sizing?.unit ?? "\uC694\uC18C";
             if (sizing) {
-              return `${(_e2 = issue3.origin) != null ? _e2 : "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${issue3.minimum.toString()}${unit} ${adj}${suffix}`;
+              return `${issue3.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${issue3.minimum.toString()}${unit} ${adj}${suffix}`;
             }
-            return `${(_f2 = issue3.origin) != null ? _f2 : "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${issue3.minimum.toString()} ${adj}${suffix}`;
+            return `${issue3.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${issue3.minimum.toString()} ${adj}${suffix}`;
           }
           case "invalid_format": {
             const _issue = issue3;
@@ -29552,7 +29434,7 @@ var init_ko = __esm({
               return `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${_issue.includes}"\uC744(\uB97C) \uD3EC\uD568\uD574\uC57C \uD569\uB2C8\uB2E4`;
             if (_issue.format === "regex")
               return `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: \uC815\uADDC\uC2DD ${_issue.pattern} \uD328\uD134\uACFC \uC77C\uCE58\uD574\uC57C \uD569\uB2C8\uB2E4`;
-            return `\uC798\uBABB\uB41C ${(_g2 = Nouns[_issue.format]) != null ? _g2 : issue3.format}`;
+            return `\uC798\uBABB\uB41C ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\uC798\uBABB\uB41C \uC22B\uC790: ${issue3.divisor}\uC758 \uBC30\uC218\uC5EC\uC57C \uD569\uB2C8\uB2E4`;
@@ -29590,8 +29472,7 @@ var init_mk = __esm({
         set: { unit: "\u0441\u0442\u0430\u0432\u043A\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29644,7 +29525,6 @@ var init_mk = __esm({
         template_literal: "\u0432\u043D\u0435\u0441"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0413\u0440\u0435\u0448\u0435\u043D \u0432\u043D\u0435\u0441: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${issue3.expected}, \u043F\u0440\u0438\u043C\u0435\u043D\u043E ${parsedType5(issue3.input)}`;
@@ -29657,8 +29537,8 @@ var init_mk = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${(_a19 = issue3.origin) != null ? _a19 : "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0438\u043C\u0430 ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438"}`;
-            return `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${(_c2 = issue3.origin) != null ? _c2 : "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0431\u0438\u0434\u0435 ${adj}${issue3.maximum.toString()}`;
+              return `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${issue3.origin ?? "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0438\u043C\u0430 ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438"}`;
+            return `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${issue3.origin ?? "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0431\u0438\u0434\u0435 ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29679,7 +29559,7 @@ var init_mk = __esm({
               return `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0432\u043A\u043B\u0443\u0447\u0443\u0432\u0430 "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u043E\u0434\u0433\u043E\u0430\u0440\u0430 \u043D\u0430 \u043F\u0430\u0442\u0435\u0440\u043D\u043E\u0442 ${_issue.pattern}`;
-            return `Invalid ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Invalid ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u0413\u0440\u0435\u0448\u0435\u043D \u0431\u0440\u043E\u0458: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0431\u0438\u0434\u0435 \u0434\u0435\u043B\u0438\u0432 \u0441\u043E ${issue3.divisor}`;
@@ -29717,8 +29597,7 @@ var init_ms = __esm({
         set: { unit: "elemen", verb: "mempunyai" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29771,7 +29650,6 @@ var init_ms = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Input tidak sah: dijangka ${issue3.expected}, diterima ${parsedType5(issue3.input)}`;
@@ -29783,8 +29661,8 @@ var init_ms = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Terlalu besar: dijangka ${(_a19 = issue3.origin) != null ? _a19 : "nilai"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elemen"}`;
-            return `Terlalu besar: dijangka ${(_c2 = issue3.origin) != null ? _c2 : "nilai"} adalah ${adj}${issue3.maximum.toString()}`;
+              return `Terlalu besar: dijangka ${issue3.origin ?? "nilai"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elemen"}`;
+            return `Terlalu besar: dijangka ${issue3.origin ?? "nilai"} adalah ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29804,7 +29682,7 @@ var init_ms = __esm({
               return `String tidak sah: mesti mengandungi "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `String tidak sah: mesti sepadan dengan corak ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} tidak sah`;
+            return `${Nouns[_issue.format] ?? issue3.format} tidak sah`;
           }
           case "not_multiple_of":
             return `Nombor tidak sah: perlu gandaan ${issue3.divisor}`;
@@ -29842,8 +29720,7 @@ var init_nl = __esm({
         set: { unit: "elementen" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -29896,7 +29773,6 @@ var init_nl = __esm({
         template_literal: "invoer"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Ongeldige invoer: verwacht ${issue3.expected}, ontving ${parsedType5(issue3.input)}`;
@@ -29908,8 +29784,8 @@ var init_nl = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Te lang: verwacht dat ${(_a19 = issue3.origin) != null ? _a19 : "waarde"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementen"} bevat`;
-            return `Te lang: verwacht dat ${(_c2 = issue3.origin) != null ? _c2 : "waarde"} ${adj}${issue3.maximum.toString()} is`;
+              return `Te lang: verwacht dat ${issue3.origin ?? "waarde"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementen"} bevat`;
+            return `Te lang: verwacht dat ${issue3.origin ?? "waarde"} ${adj}${issue3.maximum.toString()} is`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -29930,7 +29806,7 @@ var init_nl = __esm({
               return `Ongeldige tekst: moet "${_issue.includes}" bevatten`;
             if (_issue.format === "regex")
               return `Ongeldige tekst: moet overeenkomen met patroon ${_issue.pattern}`;
-            return `Ongeldig: ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Ongeldig: ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Ongeldig getal: moet een veelvoud van ${issue3.divisor} zijn`;
@@ -29968,8 +29844,7 @@ var init_no = __esm({
         set: { unit: "elementer", verb: "\xE5 inneholde" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30022,7 +29897,6 @@ var init_no = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Ugyldig input: forventet ${issue3.expected}, fikk ${parsedType5(issue3.input)}`;
@@ -30034,8 +29908,8 @@ var init_no = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `For stor(t): forventet ${(_a19 = issue3.origin) != null ? _a19 : "value"} til \xE5 ha ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementer"}`;
-            return `For stor(t): forventet ${(_c2 = issue3.origin) != null ? _c2 : "value"} til \xE5 ha ${adj}${issue3.maximum.toString()}`;
+              return `For stor(t): forventet ${issue3.origin ?? "value"} til \xE5 ha ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementer"}`;
+            return `For stor(t): forventet ${issue3.origin ?? "value"} til \xE5 ha ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30055,7 +29929,7 @@ var init_no = __esm({
               return `Ugyldig streng: m\xE5 inneholde "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Ugyldig streng: m\xE5 matche m\xF8nsteret ${_issue.pattern}`;
-            return `Ugyldig ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Ugyldig ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Ugyldig tall: m\xE5 v\xE6re et multiplum av ${issue3.divisor}`;
@@ -30093,8 +29967,7 @@ var init_ota = __esm({
         set: { unit: "unsur", verb: "olmal\u0131d\u0131r" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30147,7 +30020,6 @@ var init_ota = __esm({
         template_literal: "giren"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `F\xE2sit giren: umulan ${issue3.expected}, al\u0131nan ${parsedType5(issue3.input)}`;
@@ -30160,8 +30032,8 @@ var init_ota = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Fazla b\xFCy\xFCk: ${(_a19 = issue3.origin) != null ? _a19 : "value"}, ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elements"} sahip olmal\u0131yd\u0131.`;
-            return `Fazla b\xFCy\xFCk: ${(_c2 = issue3.origin) != null ? _c2 : "value"}, ${adj}${issue3.maximum.toString()} olmal\u0131yd\u0131.`;
+              return `Fazla b\xFCy\xFCk: ${issue3.origin ?? "value"}, ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elements"} sahip olmal\u0131yd\u0131.`;
+            return `Fazla b\xFCy\xFCk: ${issue3.origin ?? "value"}, ${adj}${issue3.maximum.toString()} olmal\u0131yd\u0131.`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30181,7 +30053,7 @@ var init_ota = __esm({
               return `F\xE2sit metin: "${_issue.includes}" ihtiv\xE2 etmeli.`;
             if (_issue.format === "regex")
               return `F\xE2sit metin: ${_issue.pattern} nak\u015F\u0131na uymal\u0131.`;
-            return `F\xE2sit ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `F\xE2sit ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `F\xE2sit say\u0131: ${issue3.divisor} kat\u0131 olmal\u0131yd\u0131.`;
@@ -30219,8 +30091,7 @@ var init_ps = __esm({
         set: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30273,7 +30144,6 @@ var init_ps = __esm({
         template_literal: "\u0648\u0631\u0648\u062F\u064A"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0646\u0627\u0633\u0645 \u0648\u0631\u0648\u062F\u064A: \u0628\u0627\u06CC\u062F ${issue3.expected} \u0648\u0627\u06CC, \u0645\u06AB\u0631 ${parsedType5(issue3.input)} \u062A\u0631\u0644\u0627\u0633\u0647 \u0634\u0648`;
@@ -30286,9 +30156,9 @@ var init_ps = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${(_a19 = issue3.origin) != null ? _a19 : "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0639\u0646\u0635\u0631\u0648\u0646\u0647"} \u0648\u0644\u0631\u064A`;
+              return `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${issue3.origin ?? "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0639\u0646\u0635\u0631\u0648\u0646\u0647"} \u0648\u0644\u0631\u064A`;
             }
-            return `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${(_c2 = issue3.origin) != null ? _c2 : "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} \u0648\u064A`;
+            return `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${issue3.origin ?? "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${adj}${issue3.maximum.toString()} \u0648\u064A`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30312,7 +30182,7 @@ var init_ps = __esm({
             if (_issue.format === "regex") {
               return `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F ${_issue.pattern} \u0633\u0631\u0647 \u0645\u0637\u0627\u0628\u0642\u062A \u0648\u0644\u0631\u064A`;
             }
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} \u0646\u0627\u0633\u0645 \u062F\u06CC`;
+            return `${Nouns[_issue.format] ?? issue3.format} \u0646\u0627\u0633\u0645 \u062F\u06CC`;
           }
           case "not_multiple_of":
             return `\u0646\u0627\u0633\u0645 \u0639\u062F\u062F: \u0628\u0627\u06CC\u062F \u062F ${issue3.divisor} \u0645\u0636\u0631\u0628 \u0648\u064A`;
@@ -30350,8 +30220,7 @@ var init_pl = __esm({
         set: { unit: "element\xF3w", verb: "mie\u0107" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30404,7 +30273,6 @@ var init_pl = __esm({
         template_literal: "wej\u015Bcie"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
         switch (issue3.code) {
           case "invalid_type":
             return `Nieprawid\u0142owe dane wej\u015Bciowe: oczekiwano ${issue3.expected}, otrzymano ${parsedType5(issue3.input)}`;
@@ -30416,17 +30284,17 @@ var init_pl = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `Za du\u017Ca warto\u015B\u0107: oczekiwano, \u017Ce ${(_a19 = issue3.origin) != null ? _a19 : "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "element\xF3w"}`;
+              return `Za du\u017Ca warto\u015B\u0107: oczekiwano, \u017Ce ${issue3.origin ?? "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "element\xF3w"}`;
             }
-            return `Zbyt du\u017C(y/a/e): oczekiwano, \u017Ce ${(_c2 = issue3.origin) != null ? _c2 : "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${adj}${issue3.maximum.toString()}`;
+            return `Zbyt du\u017C(y/a/e): oczekiwano, \u017Ce ${issue3.origin ?? "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `Za ma\u0142a warto\u015B\u0107: oczekiwano, \u017Ce ${(_d2 = issue3.origin) != null ? _d2 : "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${adj}${issue3.minimum.toString()} ${(_e2 = sizing.unit) != null ? _e2 : "element\xF3w"}`;
+              return `Za ma\u0142a warto\u015B\u0107: oczekiwano, \u017Ce ${issue3.origin ?? "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${adj}${issue3.minimum.toString()} ${sizing.unit ?? "element\xF3w"}`;
             }
-            return `Zbyt ma\u0142(y/a/e): oczekiwano, \u017Ce ${(_f2 = issue3.origin) != null ? _f2 : "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${adj}${issue3.minimum.toString()}`;
+            return `Zbyt ma\u0142(y/a/e): oczekiwano, \u017Ce ${issue3.origin ?? "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${adj}${issue3.minimum.toString()}`;
           }
           case "invalid_format": {
             const _issue = issue3;
@@ -30438,7 +30306,7 @@ var init_pl = __esm({
               return `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi zawiera\u0107 "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi odpowiada\u0107 wzorcowi ${_issue.pattern}`;
-            return `Nieprawid\u0142ow(y/a/e) ${(_g2 = Nouns[_issue.format]) != null ? _g2 : issue3.format}`;
+            return `Nieprawid\u0142ow(y/a/e) ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Nieprawid\u0142owa liczba: musi by\u0107 wielokrotno\u015Bci\u0105 ${issue3.divisor}`;
@@ -30476,8 +30344,7 @@ var init_pt = __esm({
         set: { unit: "itens", verb: "ter" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30530,7 +30397,6 @@ var init_pt = __esm({
         template_literal: "entrada"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Tipo inv\xE1lido: esperado ${issue3.expected}, recebido ${parsedType5(issue3.input)}`;
@@ -30542,8 +30408,8 @@ var init_pt = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Muito grande: esperado que ${(_a19 = issue3.origin) != null ? _a19 : "valor"} tivesse ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementos"}`;
-            return `Muito grande: esperado que ${(_c2 = issue3.origin) != null ? _c2 : "valor"} fosse ${adj}${issue3.maximum.toString()}`;
+              return `Muito grande: esperado que ${issue3.origin ?? "valor"} tivesse ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementos"}`;
+            return `Muito grande: esperado que ${issue3.origin ?? "valor"} fosse ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30563,7 +30429,7 @@ var init_pt = __esm({
               return `Texto inv\xE1lido: deve incluir "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Texto inv\xE1lido: deve corresponder ao padr\xE3o ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} inv\xE1lido`;
+            return `${Nouns[_issue.format] ?? issue3.format} inv\xE1lido`;
           }
           case "not_multiple_of":
             return `N\xFAmero inv\xE1lido: deve ser m\xFAltiplo de ${issue3.divisor}`;
@@ -30644,8 +30510,7 @@ var init_ru = __esm({
         }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30698,7 +30563,6 @@ var init_ru = __esm({
         template_literal: "\u0432\u0432\u043E\u0434"
       };
       return (issue3) => {
-        var _a19, _b8, _c2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u0432\u0432\u043E\u0434: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C ${issue3.expected}, \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E ${parsedType5(issue3.input)}`;
@@ -30712,9 +30576,9 @@ var init_ru = __esm({
             if (sizing) {
               const maxValue = Number(issue3.maximum);
               const unit = getRussianPlural(maxValue, sizing.unit.one, sizing.unit.few, sizing.unit.many);
-              return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${(_a19 = issue3.origin) != null ? _a19 : "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 \u0438\u043C\u0435\u0442\u044C ${adj}${issue3.maximum.toString()} ${unit}`;
+              return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 \u0438\u043C\u0435\u0442\u044C ${adj}${issue3.maximum.toString()} ${unit}`;
             }
-            return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${(_b8 = issue3.origin) != null ? _b8 : "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 ${adj}${issue3.maximum.toString()}`;
+            return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30736,7 +30600,7 @@ var init_ru = __esm({
               return `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${_issue.pattern}`;
-            return `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 ${(_c2 = Nouns[_issue.format]) != null ? _c2 : issue3.format}`;
+            return `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u041D\u0435\u0432\u0435\u0440\u043D\u043E\u0435 \u0447\u0438\u0441\u043B\u043E: \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u043A\u0440\u0430\u0442\u043D\u044B\u043C ${issue3.divisor}`;
@@ -30774,8 +30638,7 @@ var init_sl = __esm({
         set: { unit: "elementov", verb: "imeti" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30828,7 +30691,6 @@ var init_sl = __esm({
         template_literal: "vnos"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Neveljaven vnos: pri\u010Dakovano ${issue3.expected}, prejeto ${parsedType5(issue3.input)}`;
@@ -30840,8 +30702,8 @@ var init_sl = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Preveliko: pri\u010Dakovano, da bo ${(_a19 = issue3.origin) != null ? _a19 : "vrednost"} imelo ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elementov"}`;
-            return `Preveliko: pri\u010Dakovano, da bo ${(_c2 = issue3.origin) != null ? _c2 : "vrednost"} ${adj}${issue3.maximum.toString()}`;
+              return `Preveliko: pri\u010Dakovano, da bo ${issue3.origin ?? "vrednost"} imelo ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elementov"}`;
+            return `Preveliko: pri\u010Dakovano, da bo ${issue3.origin ?? "vrednost"} ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -30862,7 +30724,7 @@ var init_sl = __esm({
               return `Neveljaven niz: mora vsebovati "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Neveljaven niz: mora ustrezati vzorcu ${_issue.pattern}`;
-            return `Neveljaven ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Neveljaven ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Neveljavno \u0161tevilo: mora biti ve\u010Dkratnik ${issue3.divisor}`;
@@ -30900,8 +30762,7 @@ var init_sv = __esm({
         set: { unit: "objekt", verb: "att inneh\xE5lla" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -30954,7 +30815,6 @@ var init_sv = __esm({
         template_literal: "mall-literal"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2;
         switch (issue3.code) {
           case "invalid_type":
             return `Ogiltig inmatning: f\xF6rv\xE4ntat ${issue3.expected}, fick ${parsedType5(issue3.input)}`;
@@ -30966,17 +30826,17 @@ var init_sv = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `F\xF6r stor(t): f\xF6rv\xE4ntade ${(_a19 = issue3.origin) != null ? _a19 : "v\xE4rdet"} att ha ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "element"}`;
+              return `F\xF6r stor(t): f\xF6rv\xE4ntade ${issue3.origin ?? "v\xE4rdet"} att ha ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "element"}`;
             }
-            return `F\xF6r stor(t): f\xF6rv\xE4ntat ${(_c2 = issue3.origin) != null ? _c2 : "v\xE4rdet"} att ha ${adj}${issue3.maximum.toString()}`;
+            return `F\xF6r stor(t): f\xF6rv\xE4ntat ${issue3.origin ?? "v\xE4rdet"} att ha ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `F\xF6r lite(t): f\xF6rv\xE4ntade ${(_d2 = issue3.origin) != null ? _d2 : "v\xE4rdet"} att ha ${adj}${issue3.minimum.toString()} ${sizing.unit}`;
+              return `F\xF6r lite(t): f\xF6rv\xE4ntade ${issue3.origin ?? "v\xE4rdet"} att ha ${adj}${issue3.minimum.toString()} ${sizing.unit}`;
             }
-            return `F\xF6r lite(t): f\xF6rv\xE4ntade ${(_e2 = issue3.origin) != null ? _e2 : "v\xE4rdet"} att ha ${adj}${issue3.minimum.toString()}`;
+            return `F\xF6r lite(t): f\xF6rv\xE4ntade ${issue3.origin ?? "v\xE4rdet"} att ha ${adj}${issue3.minimum.toString()}`;
           }
           case "invalid_format": {
             const _issue = issue3;
@@ -30989,18 +30849,18 @@ var init_sv = __esm({
               return `Ogiltig str\xE4ng: m\xE5ste inneh\xE5lla "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Ogiltig str\xE4ng: m\xE5ste matcha m\xF6nstret "${_issue.pattern}"`;
-            return `Ogiltig(t) ${(_f2 = Nouns[_issue.format]) != null ? _f2 : issue3.format}`;
+            return `Ogiltig(t) ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Ogiltigt tal: m\xE5ste vara en multipel av ${issue3.divisor}`;
           case "unrecognized_keys":
             return `${issue3.keys.length > 1 ? "Ok\xE4nda nycklar" : "Ok\xE4nd nyckel"}: ${joinValues(issue3.keys, ", ")}`;
           case "invalid_key":
-            return `Ogiltig nyckel i ${(_g2 = issue3.origin) != null ? _g2 : "v\xE4rdet"}`;
+            return `Ogiltig nyckel i ${issue3.origin ?? "v\xE4rdet"}`;
           case "invalid_union":
             return "Ogiltig input";
           case "invalid_element":
-            return `Ogiltigt v\xE4rde i ${(_h2 = issue3.origin) != null ? _h2 : "v\xE4rdet"}`;
+            return `Ogiltigt v\xE4rde i ${issue3.origin ?? "v\xE4rdet"}`;
           default:
             return `Ogiltig input`;
         }
@@ -31027,8 +30887,7 @@ var init_ta = __esm({
         set: { unit: "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31081,7 +30940,6 @@ var init_ta = __esm({
         template_literal: "input"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B89\u0BB3\u0BCD\u0BB3\u0BC0\u0B9F\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${issue3.expected}, \u0BAA\u0BC6\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${parsedType5(issue3.input)}`;
@@ -31093,9 +30951,9 @@ var init_ta = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing) {
-              return `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${(_a19 = issue3.origin) != null ? _a19 : "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD"} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
+              return `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${issue3.origin ?? "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD"} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
             }
-            return `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${(_c2 = issue3.origin) != null ? _c2 : "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${adj}${issue3.maximum.toString()} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
+            return `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${issue3.origin ?? "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${adj}${issue3.maximum.toString()} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31115,7 +30973,7 @@ var init_ta = __esm({
               return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${_issue.includes}" \u0B90 \u0B89\u0BB3\u0BCD\u0BB3\u0B9F\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
             if (_issue.format === "regex")
               return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: ${_issue.pattern} \u0BAE\u0BC1\u0BB1\u0BC8\u0BAA\u0BBE\u0B9F\u0BCD\u0B9F\u0BC1\u0B9F\u0BA9\u0BCD \u0BAA\u0BCA\u0BB0\u0BC1\u0BA8\u0BCD\u0BA4 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
-            return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B8E\u0BA3\u0BCD: ${issue3.divisor} \u0B87\u0BA9\u0BCD \u0BAA\u0BB2\u0BAE\u0BBE\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
@@ -31153,8 +31011,7 @@ var init_th = __esm({
         set: { unit: "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31207,7 +31064,6 @@ var init_th = __esm({
         template_literal: "\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E17\u0E35\u0E48\u0E1B\u0E49\u0E2D\u0E19"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E04\u0E27\u0E23\u0E40\u0E1B\u0E47\u0E19 ${issue3.expected} \u0E41\u0E15\u0E48\u0E44\u0E14\u0E49\u0E23\u0E31\u0E1A ${parsedType5(issue3.input)}`;
@@ -31219,8 +31075,8 @@ var init_th = __esm({
             const adj = issue3.inclusive ? "\u0E44\u0E21\u0E48\u0E40\u0E01\u0E34\u0E19" : "\u0E19\u0E49\u0E2D\u0E22\u0E01\u0E27\u0E48\u0E32";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${(_a19 = issue3.origin) != null ? _a19 : "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${adj} ${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23"}`;
-            return `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${(_c2 = issue3.origin) != null ? _c2 : "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${adj} ${issue3.maximum.toString()}`;
+              return `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${issue3.origin ?? "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${adj} ${issue3.maximum.toString()} ${sizing.unit ?? "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23"}`;
+            return `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${issue3.origin ?? "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${adj} ${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? "\u0E2D\u0E22\u0E48\u0E32\u0E07\u0E19\u0E49\u0E2D\u0E22" : "\u0E21\u0E32\u0E01\u0E01\u0E27\u0E48\u0E32";
@@ -31241,7 +31097,7 @@ var init_th = __esm({
               return `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 "${_issue.includes}" \u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21`;
             if (_issue.format === "regex")
               return `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E15\u0E49\u0E2D\u0E07\u0E15\u0E23\u0E07\u0E01\u0E31\u0E1A\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E17\u0E35\u0E48\u0E01\u0E33\u0E2B\u0E19\u0E14 ${_issue.pattern}`;
-            return `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E15\u0E49\u0E2D\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E08\u0E33\u0E19\u0E27\u0E19\u0E17\u0E35\u0E48\u0E2B\u0E32\u0E23\u0E14\u0E49\u0E27\u0E22 ${issue3.divisor} \u0E44\u0E14\u0E49\u0E25\u0E07\u0E15\u0E31\u0E27`;
@@ -31299,8 +31155,7 @@ var init_tr = __esm({
         set: { unit: "\xF6\u011Fe", verb: "olmal\u0131" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const Nouns = {
         regex: "girdi",
@@ -31333,7 +31188,6 @@ var init_tr = __esm({
         template_literal: "\u015Eablon dizesi"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `Ge\xE7ersiz de\u011Fer: beklenen ${issue3.expected}, al\u0131nan ${parsedType3(issue3.input)}`;
@@ -31345,8 +31199,8 @@ var init_tr = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\xC7ok b\xFCy\xFCk: beklenen ${(_a19 = issue3.origin) != null ? _a19 : "de\u011Fer"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\xF6\u011Fe"}`;
-            return `\xC7ok b\xFCy\xFCk: beklenen ${(_c2 = issue3.origin) != null ? _c2 : "de\u011Fer"} ${adj}${issue3.maximum.toString()}`;
+              return `\xC7ok b\xFCy\xFCk: beklenen ${issue3.origin ?? "de\u011Fer"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\xF6\u011Fe"}`;
+            return `\xC7ok b\xFCy\xFCk: beklenen ${issue3.origin ?? "de\u011Fer"} ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31365,7 +31219,7 @@ var init_tr = __esm({
               return `Ge\xE7ersiz metin: "${_issue.includes}" i\xE7ermeli`;
             if (_issue.format === "regex")
               return `Ge\xE7ersiz metin: ${_issue.pattern} desenine uymal\u0131`;
-            return `Ge\xE7ersiz ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `Ge\xE7ersiz ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `Ge\xE7ersiz say\u0131: ${issue3.divisor} ile tam b\xF6l\xFCnebilmeli`;
@@ -31403,8 +31257,7 @@ var init_ua = __esm({
         set: { unit: "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31457,7 +31310,6 @@ var init_ua = __esm({
         template_literal: "\u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0456 \u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F ${issue3.expected}, \u043E\u0442\u0440\u0438\u043C\u0430\u043D\u043E ${parsedType5(issue3.input)}`;
@@ -31470,8 +31322,8 @@ var init_ua = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${(_a19 = issue3.origin) != null ? _a19 : "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432"}`;
-            return `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${(_c2 = issue3.origin) != null ? _c2 : "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} \u0431\u0443\u0434\u0435 ${adj}${issue3.maximum.toString()}`;
+              return `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432"}`;
+            return `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${issue3.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} \u0431\u0443\u0434\u0435 ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31491,7 +31343,7 @@ var init_ua = __esm({
               return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u043C\u0456\u0441\u0442\u0438\u0442\u0438 "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u0442\u0438 \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${_issue.pattern}`;
-            return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0435 \u0447\u0438\u0441\u043B\u043E: \u043F\u043E\u0432\u0438\u043D\u043D\u043E \u0431\u0443\u0442\u0438 \u043A\u0440\u0430\u0442\u043D\u0438\u043C ${issue3.divisor}`;
@@ -31529,8 +31381,7 @@ var init_ur = __esm({
         set: { unit: "\u0622\u0626\u0679\u0645\u0632", verb: "\u06C1\u0648\u0646\u0627" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31583,7 +31434,6 @@ var init_ur = __esm({
         template_literal: "\u0627\u0646 \u067E\u0679"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u063A\u0644\u0637 \u0627\u0646 \u067E\u0679: ${issue3.expected} \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627\u060C ${parsedType5(issue3.input)} \u0645\u0648\u0635\u0648\u0644 \u06C1\u0648\u0627`;
@@ -31595,8 +31445,8 @@ var init_ur = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u0628\u06C1\u062A \u0628\u0691\u0627: ${(_a19 = issue3.origin) != null ? _a19 : "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u06D2 ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u0639\u0646\u0627\u0635\u0631"} \u06C1\u0648\u0646\u06D2 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u06D2`;
-            return `\u0628\u06C1\u062A \u0628\u0691\u0627: ${(_c2 = issue3.origin) != null ? _c2 : "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u0627 ${adj}${issue3.maximum.toString()} \u06C1\u0648\u0646\u0627 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627`;
+              return `\u0628\u06C1\u062A \u0628\u0691\u0627: ${issue3.origin ?? "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u06D2 ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u0639\u0646\u0627\u0635\u0631"} \u06C1\u0648\u0646\u06D2 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u06D2`;
+            return `\u0628\u06C1\u062A \u0628\u0691\u0627: ${issue3.origin ?? "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u0627 ${adj}${issue3.maximum.toString()} \u06C1\u0648\u0646\u0627 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31617,7 +31467,7 @@ var init_ur = __esm({
               return `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${_issue.includes}" \u0634\u0627\u0645\u0644 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2`;
             if (_issue.format === "regex")
               return `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: \u067E\u06CC\u0679\u0631\u0646 ${_issue.pattern} \u0633\u06D2 \u0645\u06CC\u0686 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2`;
-            return `\u063A\u0644\u0637 ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u063A\u0644\u0637 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u063A\u0644\u0637 \u0646\u0645\u0628\u0631: ${issue3.divisor} \u06A9\u0627 \u0645\u0636\u0627\u0639\u0641 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2`;
@@ -31655,8 +31505,7 @@ var init_vi = __esm({
         set: { unit: "ph\u1EA7n t\u1EED", verb: "c\xF3" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31709,7 +31558,6 @@ var init_vi = __esm({
         template_literal: "\u0111\u1EA7u v\xE0o"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u0110\u1EA7u v\xE0o kh\xF4ng h\u1EE3p l\u1EC7: mong \u0111\u1EE3i ${issue3.expected}, nh\u1EADn \u0111\u01B0\u1EE3c ${parsedType5(issue3.input)}`;
@@ -31721,8 +31569,8 @@ var init_vi = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${(_a19 = issue3.origin) != null ? _a19 : "gi\xE1 tr\u1ECB"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "ph\u1EA7n t\u1EED"}`;
-            return `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${(_c2 = issue3.origin) != null ? _c2 : "gi\xE1 tr\u1ECB"} ${adj}${issue3.maximum.toString()}`;
+              return `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${issue3.origin ?? "gi\xE1 tr\u1ECB"} ${sizing.verb} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "ph\u1EA7n t\u1EED"}`;
+            return `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${issue3.origin ?? "gi\xE1 tr\u1ECB"} ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31742,7 +31590,7 @@ var init_vi = __esm({
               return `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i bao g\u1ED3m "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i kh\u1EDBp v\u1EDBi m\u1EABu ${_issue.pattern}`;
-            return `${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format} kh\xF4ng h\u1EE3p l\u1EC7`;
+            return `${Nouns[_issue.format] ?? issue3.format} kh\xF4ng h\u1EE3p l\u1EC7`;
           }
           case "not_multiple_of":
             return `S\u1ED1 kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i l\xE0 b\u1ED9i s\u1ED1 c\u1EE7a ${issue3.divisor}`;
@@ -31780,8 +31628,7 @@ var init_zh_CN = __esm({
         set: { unit: "\u9879", verb: "\u5305\u542B" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31834,7 +31681,6 @@ var init_zh_CN = __esm({
         template_literal: "\u8F93\u5165"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u65E0\u6548\u8F93\u5165\uFF1A\u671F\u671B ${issue3.expected}\uFF0C\u5B9E\u9645\u63A5\u6536 ${parsedType5(issue3.input)}`;
@@ -31846,8 +31692,8 @@ var init_zh_CN = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${(_a19 = issue3.origin) != null ? _a19 : "\u503C"} ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u4E2A\u5143\u7D20"}`;
-            return `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${(_c2 = issue3.origin) != null ? _c2 : "\u503C"} ${adj}${issue3.maximum.toString()}`;
+              return `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${issue3.origin ?? "\u503C"} ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u4E2A\u5143\u7D20"}`;
+            return `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${issue3.origin ?? "\u503C"} ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31867,7 +31713,7 @@ var init_zh_CN = __esm({
               return `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u5305\u542B "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u6EE1\u8DB3\u6B63\u5219\u8868\u8FBE\u5F0F ${_issue.pattern}`;
-            return `\u65E0\u6548${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u65E0\u6548${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u65E0\u6548\u6570\u5B57\uFF1A\u5FC5\u987B\u662F ${issue3.divisor} \u7684\u500D\u6570`;
@@ -31905,8 +31751,7 @@ var init_zh_TW = __esm({
         set: { unit: "\u9805\u76EE", verb: "\u64C1\u6709" }
       };
       function getSizing(origin) {
-        var _a19;
-        return (_a19 = Sizable[origin]) != null ? _a19 : null;
+        return Sizable[origin] ?? null;
       }
       const parsedType5 = (data) => {
         const t = typeof data;
@@ -31959,7 +31804,6 @@ var init_zh_TW = __esm({
         template_literal: "\u8F38\u5165"
       };
       return (issue3) => {
-        var _a19, _b8, _c2, _d2;
         switch (issue3.code) {
           case "invalid_type":
             return `\u7121\u6548\u7684\u8F38\u5165\u503C\uFF1A\u9810\u671F\u70BA ${issue3.expected}\uFF0C\u4F46\u6536\u5230 ${parsedType5(issue3.input)}`;
@@ -31971,8 +31815,8 @@ var init_zh_TW = __esm({
             const adj = issue3.inclusive ? "<=" : "<";
             const sizing = getSizing(issue3.origin);
             if (sizing)
-              return `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${(_a19 = issue3.origin) != null ? _a19 : "\u503C"} \u61C9\u70BA ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "\u500B\u5143\u7D20"}`;
-            return `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${(_c2 = issue3.origin) != null ? _c2 : "\u503C"} \u61C9\u70BA ${adj}${issue3.maximum.toString()}`;
+              return `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${issue3.origin ?? "\u503C"} \u61C9\u70BA ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "\u500B\u5143\u7D20"}`;
+            return `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${issue3.origin ?? "\u503C"} \u61C9\u70BA ${adj}${issue3.maximum.toString()}`;
           }
           case "too_small": {
             const adj = issue3.inclusive ? ">=" : ">";
@@ -31993,7 +31837,7 @@ var init_zh_TW = __esm({
               return `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u5305\u542B "${_issue.includes}"`;
             if (_issue.format === "regex")
               return `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u7B26\u5408\u683C\u5F0F ${_issue.pattern}`;
-            return `\u7121\u6548\u7684 ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+            return `\u7121\u6548\u7684 ${Nouns[_issue.format] ?? issue3.format}`;
           }
           case "not_multiple_of":
             return `\u7121\u6548\u7684\u6578\u5B57\uFF1A\u5FC5\u9808\u70BA ${issue3.divisor} \u7684\u500D\u6578`;
@@ -32139,10 +31983,9 @@ var init_registries = __esm({
         return this;
       }
       get(schema) {
-        var _a19;
         const p2 = schema._zod.parent;
         if (p2) {
-          const pm2 = { ...(_a19 = this.get(p2)) != null ? _a19 : {} };
+          const pm2 = { ...this.get(p2) ?? {} };
           delete pm2.id;
           return { ...pm2, ...this._map.get(schema) };
         }
@@ -32917,9 +32760,8 @@ function _promise(Class3, innerType) {
   });
 }
 function _custom(Class3, fn2, _params) {
-  var _a19;
   const norm = normalizeParams(_params);
-  (_a19 = norm.abort) != null ? _a19 : norm.abort = true;
+  norm.abort ?? (norm.abort = true);
   const schema = new Class3({
     type: "custom",
     check: "custom",
@@ -32938,20 +32780,19 @@ function _refine(Class3, fn2, _params) {
   return schema;
 }
 function _stringbool(Classes, _params) {
-  var _a19, _b8, _c2, _d2, _e2, _f2;
   const params = normalizeParams(_params);
-  let truthyArray = (_a19 = params.truthy) != null ? _a19 : ["true", "1", "yes", "on", "y", "enabled"];
-  let falsyArray = (_b8 = params.falsy) != null ? _b8 : ["false", "0", "no", "off", "n", "disabled"];
+  let truthyArray = params.truthy ?? ["true", "1", "yes", "on", "y", "enabled"];
+  let falsyArray = params.falsy ?? ["false", "0", "no", "off", "n", "disabled"];
   if (params.case !== "sensitive") {
     truthyArray = truthyArray.map((v3) => typeof v3 === "string" ? v3.toLowerCase() : v3);
     falsyArray = falsyArray.map((v3) => typeof v3 === "string" ? v3.toLowerCase() : v3);
   }
   const truthySet = new Set(truthyArray);
   const falsySet = new Set(falsyArray);
-  const _Pipe = (_c2 = Classes.Pipe) != null ? _c2 : $ZodPipe;
-  const _Boolean = (_d2 = Classes.Boolean) != null ? _d2 : $ZodBoolean;
-  const _String = (_e2 = Classes.String) != null ? _e2 : $ZodString;
-  const _Transform = (_f2 = Classes.Transform) != null ? _f2 : $ZodTransform;
+  const _Pipe = Classes.Pipe ?? $ZodPipe;
+  const _Boolean = Classes.Boolean ?? $ZodBoolean;
+  const _String = Classes.String ?? $ZodString;
+  const _Transform = Classes.Transform ?? $ZodTransform;
   const tx = new _Transform({
     type: "transform",
     transform: (input, payload) => {
@@ -33026,11 +32867,10 @@ var init_api = __esm({
 
 // ../auth0-agent-components/node_modules/zod/v4/core/function.js
 function _function(params) {
-  var _a19, _b8;
   return new $ZodFunction({
     type: "function",
-    input: Array.isArray(params == null ? void 0 : params.input) ? _tuple($ZodTuple, params == null ? void 0 : params.input) : (_a19 = params == null ? void 0 : params.input) != null ? _a19 : _array($ZodArray, _unknown($ZodUnknown)),
-    output: (_b8 = params == null ? void 0 : params.output) != null ? _b8 : _unknown($ZodUnknown)
+    input: Array.isArray(params?.input) ? _tuple($ZodTuple, params?.input) : params?.input ?? _array($ZodArray, _unknown($ZodUnknown)),
+    output: params?.output ?? _unknown($ZodUnknown)
   });
 }
 var $ZodFunction;
@@ -33116,7 +32956,7 @@ function toJSONSchema(input, _params) {
     const schemas = {};
     const external = {
       registry: input,
-      uri: _params == null ? void 0 : _params.uri,
+      uri: _params?.uri,
       defs
     };
     for (const entry of input._idmap.entries()) {
@@ -33139,7 +32979,7 @@ function toJSONSchema(input, _params) {
   return gen.emit(input, _params);
 }
 function isTransforming(_schema, _ctx) {
-  const ctx = _ctx != null ? _ctx : { seen: /* @__PURE__ */ new Set() };
+  const ctx = _ctx ?? { seen: /* @__PURE__ */ new Set() };
   if (ctx.seen.has(_schema))
     return false;
   ctx.seen.add(_schema);
@@ -33244,19 +33084,17 @@ var init_to_json_schema = __esm({
     init_util();
     JSONSchemaGenerator = class {
       constructor(params) {
-        var _a19, _b8, _c2, _d2, _e2;
         this.counter = 0;
-        this.metadataRegistry = (_a19 = params == null ? void 0 : params.metadata) != null ? _a19 : globalRegistry;
-        this.target = (_b8 = params == null ? void 0 : params.target) != null ? _b8 : "draft-2020-12";
-        this.unrepresentable = (_c2 = params == null ? void 0 : params.unrepresentable) != null ? _c2 : "throw";
-        this.override = (_d2 = params == null ? void 0 : params.override) != null ? _d2 : (() => {
+        this.metadataRegistry = params?.metadata ?? globalRegistry;
+        this.target = params?.target ?? "draft-2020-12";
+        this.unrepresentable = params?.unrepresentable ?? "throw";
+        this.override = params?.override ?? (() => {
         });
-        this.io = (_e2 = params == null ? void 0 : params.io) != null ? _e2 : "output";
+        this.io = params?.io ?? "output";
         this.seen = /* @__PURE__ */ new Map();
       }
       process(schema, _params = { path: [], schemaPath: [] }) {
-        var _a20, _b8, _c2, _d2, _e2;
-        var _a19;
+        var _a2;
         const def = schema._zod.def;
         const formatMap = {
           guid: "uuid",
@@ -33277,7 +33115,7 @@ var init_to_json_schema = __esm({
         }
         const result = { schema: {}, count: 1, cycle: void 0, path: _params.path };
         this.seen.set(schema, result);
-        const overrideSchema = (_b8 = (_a20 = schema._zod).toJSONSchema) == null ? void 0 : _b8.call(_a20);
+        const overrideSchema = schema._zod.toJSONSchema?.();
         if (overrideSchema) {
           result.schema = overrideSchema;
         } else {
@@ -33303,7 +33141,7 @@ var init_to_json_schema = __esm({
                 if (typeof maximum === "number")
                   json3.maxLength = maximum;
                 if (format) {
-                  json3.format = (_c2 = formatMap[format]) != null ? _c2 : format;
+                  json3.format = formatMap[format] ?? format;
                   if (json3.format === "")
                     delete json3.format;
                 }
@@ -33440,7 +33278,7 @@ var init_to_json_schema = __esm({
                 if (requiredKeys.size > 0) {
                   json3.required = Array.from(requiredKeys);
                 }
-                if (((_d2 = def.catchall) == null ? void 0 : _d2._zod.def.type) === "never") {
+                if (def.catchall?._zod.def.type === "never") {
                   json3.additionalProperties = false;
                 } else if (!def.catchall) {
                   if (this.io === "output")
@@ -33718,33 +33556,31 @@ var init_to_json_schema = __esm({
           delete result.schema.default;
         }
         if (this.io === "input" && result.schema._prefault)
-          (_e2 = (_a19 = result.schema).default) != null ? _e2 : _a19.default = result.schema._prefault;
+          (_a2 = result.schema).default ?? (_a2.default = result.schema._prefault);
         delete result.schema._prefault;
         const _result = this.seen.get(schema);
         return _result.schema;
       }
       emit(schema, _params) {
-        var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j;
         const params = {
-          cycles: (_a19 = _params == null ? void 0 : _params.cycles) != null ? _a19 : "ref",
-          reused: (_b8 = _params == null ? void 0 : _params.reused) != null ? _b8 : "inline",
+          cycles: _params?.cycles ?? "ref",
+          reused: _params?.reused ?? "inline",
           // unrepresentable: _params?.unrepresentable ?? "throw",
           // uri: _params?.uri ?? ((id) => `${id}`),
-          external: (_c2 = _params == null ? void 0 : _params.external) != null ? _c2 : void 0
+          external: _params?.external ?? void 0
         };
         const root = this.seen.get(schema);
         if (!root)
           throw new Error("Unprocessed schema. This is a bug in Zod.");
         const makeURI = (entry) => {
-          var _a20, _b9, _c3, _d3, _e3;
           const defsSegment = this.target === "draft-2020-12" ? "$defs" : "definitions";
           if (params.external) {
-            const externalId = (_a20 = params.external.registry.get(entry[0])) == null ? void 0 : _a20.id;
-            const uriGenerator = (_b9 = params.external.uri) != null ? _b9 : ((id3) => id3);
+            const externalId = params.external.registry.get(entry[0])?.id;
+            const uriGenerator = params.external.uri ?? ((id3) => id3);
             if (externalId) {
               return { ref: uriGenerator(externalId) };
             }
-            const id2 = (_d3 = (_c3 = entry[1].defId) != null ? _c3 : entry[1].schema.id) != null ? _d3 : `schema${this.counter++}`;
+            const id2 = entry[1].defId ?? entry[1].schema.id ?? `schema${this.counter++}`;
             entry[1].defId = id2;
             return { defId: id2, ref: `${uriGenerator("__shared")}#/${defsSegment}/${id2}` };
           }
@@ -33753,7 +33589,7 @@ var init_to_json_schema = __esm({
           }
           const uriPrefix = `#`;
           const defUriPrefix = `${uriPrefix}/${defsSegment}/`;
-          const defId = (_e3 = entry[1].schema.id) != null ? _e3 : `__schema${this.counter++}`;
+          const defId = entry[1].schema.id ?? `__schema${this.counter++}`;
           return { defId, ref: defUriPrefix + defId };
         };
         const extractToDef = (entry) => {
@@ -33775,7 +33611,7 @@ var init_to_json_schema = __esm({
           for (const entry of this.seen.entries()) {
             const seen = entry[1];
             if (seen.cycle) {
-              throw new Error(`Cycle detected: #/${(_d2 = seen.cycle) == null ? void 0 : _d2.join("/")}/<root>
+              throw new Error(`Cycle detected: #/${seen.cycle?.join("/")}/<root>
 
 Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.`);
             }
@@ -33788,13 +33624,13 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
             continue;
           }
           if (params.external) {
-            const ext = (_e2 = params.external.registry.get(entry[0])) == null ? void 0 : _e2.id;
+            const ext = params.external.registry.get(entry[0])?.id;
             if (schema !== entry[0] && ext) {
               extractToDef(entry);
               continue;
             }
           }
-          const id2 = (_f2 = this.metadataRegistry.get(entry[0])) == null ? void 0 : _f2.id;
+          const id2 = this.metadataRegistry.get(entry[0])?.id;
           if (id2) {
             extractToDef(entry);
             continue;
@@ -33811,10 +33647,9 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
           }
         }
         const flattenRef = (zodSchema, params2) => {
-          var _a20, _b9, _c3;
           const seen = this.seen.get(zodSchema);
-          const schema2 = (_a20 = seen.def) != null ? _a20 : seen.schema;
-          const _cached2 = { ...schema2 };
+          const schema2 = seen.def ?? seen.schema;
+          const _cached = { ...schema2 };
           if (seen.ref === null) {
             return;
           }
@@ -33824,18 +33659,18 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
             flattenRef(ref, params2);
             const refSchema = this.seen.get(ref).schema;
             if (refSchema.$ref && params2.target === "draft-7") {
-              schema2.allOf = (_b9 = schema2.allOf) != null ? _b9 : [];
+              schema2.allOf = schema2.allOf ?? [];
               schema2.allOf.push(refSchema);
             } else {
               Object.assign(schema2, refSchema);
-              Object.assign(schema2, _cached2);
+              Object.assign(schema2, _cached);
             }
           }
           if (!seen.isParent)
             this.override({
               zodSchema,
               jsonSchema: schema2,
-              path: (_c3 = seen.path) != null ? _c3 : []
+              path: seen.path ?? []
             });
         };
         for (const entry of [...this.seen.entries()].reverse()) {
@@ -33849,14 +33684,14 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
         } else {
           console.warn(`Invalid target: ${this.target}`);
         }
-        if ((_g2 = params.external) == null ? void 0 : _g2.uri) {
-          const id2 = (_h2 = params.external.registry.get(schema)) == null ? void 0 : _h2.id;
+        if (params.external?.uri) {
+          const id2 = params.external.registry.get(schema)?.id;
           if (!id2)
             throw new Error("Schema is missing an `id` property");
           result.$id = params.external.uri(id2);
         }
         Object.assign(result, root.def);
-        const defs = (_j = (_i2 = params.external) == null ? void 0 : _i2.defs) != null ? _j : {};
+        const defs = params.external?.defs ?? {};
         for (const entry of this.seen.entries()) {
           const seen = entry[1];
           if (seen.def && seen.defId) {
@@ -34622,7 +34457,7 @@ function check(fn2) {
   return ch2;
 }
 function custom2(fn2, _params) {
-  return _custom(ZodCustom, fn2 != null ? fn2 : (() => true), _params);
+  return _custom(ZodCustom, fn2 ?? (() => true), _params);
 }
 function refine(fn2, _params = {}) {
   return _refine(ZodCustom, fn2, _params);
@@ -34630,17 +34465,16 @@ function refine(fn2, _params = {}) {
 function superRefine(fn2) {
   const ch2 = check((payload) => {
     payload.addIssue = (issue3) => {
-      var _a19, _b8, _c2, _d2;
       if (typeof issue3 === "string") {
         payload.issues.push(util_exports.issue(issue3, payload.value, ch2._zod.def));
       } else {
         const _issue = issue3;
         if (_issue.fatal)
           _issue.continue = false;
-        (_a19 = _issue.code) != null ? _a19 : _issue.code = "custom";
-        (_b8 = _issue.input) != null ? _b8 : _issue.input = payload.value;
-        (_c2 = _issue.inst) != null ? _c2 : _issue.inst = ch2;
-        (_d2 = _issue.continue) != null ? _d2 : _issue.continue = !ch2._zod.def.abort;
+        _issue.code ?? (_issue.code = "custom");
+        _issue.input ?? (_issue.input = payload.value);
+        _issue.inst ?? (_issue.inst = ch2);
+        _issue.continue ?? (_issue.continue = !ch2._zod.def.abort);
         payload.issues.push(util_exports.issue(_issue));
       }
     };
@@ -34683,12 +34517,11 @@ var init_schemas2 = __esm({
       inst.def = def;
       Object.defineProperty(inst, "_def", { value: def });
       inst.check = (...checks) => {
-        var _a19;
         return inst.clone(
           {
             ...def,
             checks: [
-              ...(_a19 = def.checks) != null ? _a19 : [],
+              ...def.checks ?? [],
               ...checks.map((ch2) => typeof ch2 === "function" ? { _zod: { check: ch2, def: { check: "custom" }, onattach: [] } } : ch2)
             ]
           }
@@ -34729,8 +34562,7 @@ var init_schemas2 = __esm({
       };
       Object.defineProperty(inst, "description", {
         get() {
-          var _a19;
-          return (_a19 = globalRegistry.get(inst)) == null ? void 0 : _a19.description;
+          return globalRegistry.get(inst)?.description;
         },
         configurable: true
       });
@@ -34747,13 +34579,12 @@ var init_schemas2 = __esm({
       return inst;
     });
     _ZodString = /* @__PURE__ */ $constructor("_ZodString", (inst, def) => {
-      var _a19, _b8, _c2;
       $ZodString.init(inst, def);
       ZodType2.init(inst, def);
       const bag = inst._zod.bag;
-      inst.format = (_a19 = bag.format) != null ? _a19 : null;
-      inst.minLength = (_b8 = bag.minimum) != null ? _b8 : null;
-      inst.maxLength = (_c2 = bag.maximum) != null ? _c2 : null;
+      inst.format = bag.format ?? null;
+      inst.minLength = bag.minimum ?? null;
+      inst.maxLength = bag.maximum ?? null;
       inst.regex = (...args) => inst.check(_regex(...args));
       inst.includes = (...args) => inst.check(_includes(...args));
       inst.startsWith = (...args) => inst.check(_startsWith(...args));
@@ -34885,7 +34716,6 @@ var init_schemas2 = __esm({
       ZodStringFormat.init(inst, def);
     });
     ZodNumber2 = /* @__PURE__ */ $constructor("ZodNumber", (inst, def) => {
-      var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
       $ZodNumber.init(inst, def);
       ZodType2.init(inst, def);
       inst.gt = (value, params) => inst.check(_gt(value, params));
@@ -34904,11 +34734,11 @@ var init_schemas2 = __esm({
       inst.step = (value, params) => inst.check(_multipleOf(value, params));
       inst.finite = () => inst;
       const bag = inst._zod.bag;
-      inst.minValue = (_c2 = Math.max((_a19 = bag.minimum) != null ? _a19 : Number.NEGATIVE_INFINITY, (_b8 = bag.exclusiveMinimum) != null ? _b8 : Number.NEGATIVE_INFINITY)) != null ? _c2 : null;
-      inst.maxValue = (_f2 = Math.min((_d2 = bag.maximum) != null ? _d2 : Number.POSITIVE_INFINITY, (_e2 = bag.exclusiveMaximum) != null ? _e2 : Number.POSITIVE_INFINITY)) != null ? _f2 : null;
-      inst.isInt = ((_g2 = bag.format) != null ? _g2 : "").includes("int") || Number.isSafeInteger((_h2 = bag.multipleOf) != null ? _h2 : 0.5);
+      inst.minValue = Math.max(bag.minimum ?? Number.NEGATIVE_INFINITY, bag.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null;
+      inst.maxValue = Math.min(bag.maximum ?? Number.POSITIVE_INFINITY, bag.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null;
+      inst.isInt = (bag.format ?? "").includes("int") || Number.isSafeInteger(bag.multipleOf ?? 0.5);
       inst.isFinite = true;
-      inst.format = (_i2 = bag.format) != null ? _i2 : null;
+      inst.format = bag.format ?? null;
     });
     ZodNumberFormat = /* @__PURE__ */ $constructor("ZodNumberFormat", (inst, def) => {
       $ZodNumberFormat.init(inst, def);
@@ -34919,7 +34749,6 @@ var init_schemas2 = __esm({
       ZodType2.init(inst, def);
     });
     ZodBigInt2 = /* @__PURE__ */ $constructor("ZodBigInt", (inst, def) => {
-      var _a19, _b8, _c2;
       $ZodBigInt.init(inst, def);
       ZodType2.init(inst, def);
       inst.gte = (value, params) => inst.check(_gte(value, params));
@@ -34936,9 +34765,9 @@ var init_schemas2 = __esm({
       inst.nonnegative = (params) => inst.check(_gte(BigInt(0), params));
       inst.multipleOf = (value, params) => inst.check(_multipleOf(value, params));
       const bag = inst._zod.bag;
-      inst.minValue = (_a19 = bag.minimum) != null ? _a19 : null;
-      inst.maxValue = (_b8 = bag.maximum) != null ? _b8 : null;
-      inst.format = (_c2 = bag.format) != null ? _c2 : null;
+      inst.minValue = bag.minimum ?? null;
+      inst.maxValue = bag.maximum ?? null;
+      inst.format = bag.format ?? null;
     });
     ZodBigIntFormat = /* @__PURE__ */ $constructor("ZodBigIntFormat", (inst, def) => {
       $ZodBigIntFormat.init(inst, def);
@@ -35113,17 +34942,16 @@ var init_schemas2 = __esm({
       ZodType2.init(inst, def);
       inst._zod.parse = (payload, _ctx) => {
         payload.addIssue = (issue3) => {
-          var _a19, _b8, _c2, _d2;
           if (typeof issue3 === "string") {
             payload.issues.push(util_exports.issue(issue3, payload.value, def));
           } else {
             const _issue = issue3;
             if (_issue.fatal)
               _issue.continue = false;
-            (_a19 = _issue.code) != null ? _a19 : _issue.code = "custom";
-            (_b8 = _issue.input) != null ? _b8 : _issue.input = payload.value;
-            (_c2 = _issue.inst) != null ? _c2 : _issue.inst = inst;
-            (_d2 = _issue.continue) != null ? _d2 : _issue.continue = true;
+            _issue.code ?? (_issue.code = "custom");
+            _issue.input ?? (_issue.input = payload.value);
+            _issue.inst ?? (_issue.inst = inst);
+            _issue.continue ?? (_issue.continue = true);
             payload.issues.push(util_exports.issue(_issue));
           }
         };
@@ -35564,12 +35392,12 @@ var require_code = __commonJS({
         return item === "" || item === '""';
       }
       get str() {
-        var _a19;
-        return (_a19 = this._str) !== null && _a19 !== void 0 ? _a19 : this._str = this._items.reduce((s, c2) => `${s}${c2}`, "");
+        var _a2;
+        return (_a2 = this._str) !== null && _a2 !== void 0 ? _a2 : this._str = this._items.reduce((s, c2) => `${s}${c2}`, "");
       }
       get names() {
-        var _a19;
-        return (_a19 = this._names) !== null && _a19 !== void 0 ? _a19 : this._names = this._items.reduce((names, c2) => {
+        var _a2;
+        return (_a2 = this._names) !== null && _a2 !== void 0 ? _a2 : this._names = this._items.reduce((names, c2) => {
           if (c2 instanceof Name)
             names[c2.str] = (names[c2.str] || 0) + 1;
           return names;
@@ -35715,8 +35543,8 @@ var require_scope = __commonJS({
         return `${prefix}${ng2.index++}`;
       }
       _nameGroup(prefix) {
-        var _a19, _b8;
-        if (((_b8 = (_a19 = this._parent) === null || _a19 === void 0 ? void 0 : _a19._prefixes) === null || _b8 === void 0 ? void 0 : _b8.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
+        var _a2, _b2;
+        if (((_b2 = (_a2 = this._parent) === null || _a2 === void 0 ? void 0 : _a2._prefixes) === null || _b2 === void 0 ? void 0 : _b2.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
           throw new Error(`CodeGen: prefix "${prefix}" is not allowed in this scope`);
         }
         return this._names[prefix] = { prefix, index: 0 };
@@ -35749,12 +35577,12 @@ var require_scope = __commonJS({
         return new ValueScopeName(prefix, this._newName(prefix));
       }
       value(nameOrPrefix, value) {
-        var _a19;
+        var _a2;
         if (value.ref === void 0)
           throw new Error("CodeGen: ref must be passed in value");
         const name = this.toName(nameOrPrefix);
         const { prefix } = name;
-        const valueKey = (_a19 = value.key) !== null && _a19 !== void 0 ? _a19 : value.ref;
+        const valueKey = (_a2 = value.key) !== null && _a2 !== void 0 ? _a2 : value.ref;
         let vs2 = this._values[prefix];
         if (vs2) {
           const _name = vs2.get(valueKey);
@@ -36072,8 +35900,8 @@ var require_codegen = __commonJS({
         return this;
       }
       optimizeNames(names, constants2) {
-        var _a19;
-        this.else = (_a19 = this.else) === null || _a19 === void 0 ? void 0 : _a19.optimizeNames(names, constants2);
+        var _a2;
+        this.else = (_a2 = this.else) === null || _a2 === void 0 ? void 0 : _a2.optimizeNames(names, constants2);
         if (!(super.optimizeNames(names, constants2) || this.else))
           return;
         this.condition = optimizeExpr(this.condition, names, constants2);
@@ -36177,17 +36005,17 @@ var require_codegen = __commonJS({
         return code;
       }
       optimizeNodes() {
-        var _a19, _b8;
+        var _a2, _b2;
         super.optimizeNodes();
-        (_a19 = this.catch) === null || _a19 === void 0 ? void 0 : _a19.optimizeNodes();
-        (_b8 = this.finally) === null || _b8 === void 0 ? void 0 : _b8.optimizeNodes();
+        (_a2 = this.catch) === null || _a2 === void 0 ? void 0 : _a2.optimizeNodes();
+        (_b2 = this.finally) === null || _b2 === void 0 ? void 0 : _b2.optimizeNodes();
         return this;
       }
       optimizeNames(names, constants2) {
-        var _a19, _b8;
+        var _a2, _b2;
         super.optimizeNames(names, constants2);
-        (_a19 = this.catch) === null || _a19 === void 0 ? void 0 : _a19.optimizeNames(names, constants2);
-        (_b8 = this.finally) === null || _b8 === void 0 ? void 0 : _b8.optimizeNames(names, constants2);
+        (_a2 = this.catch) === null || _a2 === void 0 ? void 0 : _a2.optimizeNames(names, constants2);
+        (_b2 = this.finally) === null || _b2 === void 0 ? void 0 : _b2.optimizeNames(names, constants2);
         return this;
       }
       get names() {
@@ -36966,8 +36794,8 @@ var require_applicability = __commonJS({
     }
     exports2.shouldUseGroup = shouldUseGroup;
     function shouldUseRule(schema, rule) {
-      var _a19;
-      return schema[rule.keyword] !== void 0 || ((_a19 = rule.definition.implements) === null || _a19 === void 0 ? void 0 : _a19.some((kwd) => schema[kwd] !== void 0));
+      var _a2;
+      return schema[rule.keyword] !== void 0 || ((_a2 = rule.definition.implements) === null || _a2 === void 0 ? void 0 : _a2.some((kwd) => schema[kwd] !== void 0));
     }
     exports2.shouldUseRule = shouldUseRule;
   }
@@ -37355,14 +37183,14 @@ var require_keyword = __commonJS({
     }
     exports2.macroKeywordCode = macroKeywordCode;
     function funcKeywordCode(cxt, def) {
-      var _a19;
+      var _a2;
       const { gen, keyword, schema, parentSchema, $data, it: it2 } = cxt;
       checkAsyncKeyword(it2, def);
       const validate = !$data && def.compile ? def.compile.call(it2.self, schema, parentSchema, it2) : def.validate;
       const validateRef = useKeyword(gen, keyword, validate);
       const valid = gen.let("valid");
       cxt.block$data(valid, validateKeyword);
-      cxt.ok((_a19 = def.valid) !== null && _a19 !== void 0 ? _a19 : valid);
+      cxt.ok((_a2 = def.valid) !== null && _a2 !== void 0 ? _a2 : valid);
       function validateKeyword() {
         if (def.errors === false) {
           assignValid();
@@ -37393,8 +37221,8 @@ var require_keyword = __commonJS({
         gen.assign(valid, (0, codegen_1._)`${_await}${(0, code_1.callValidateCode)(cxt, validateRef, passCxt, passSchema)}`, def.modifying);
       }
       function reportErrs(errors) {
-        var _a20;
-        gen.if((0, codegen_1.not)((_a20 = def.valid) !== null && _a20 !== void 0 ? _a20 : valid), errors);
+        var _a3;
+        gen.if((0, codegen_1.not)((_a3 = def.valid) !== null && _a3 !== void 0 ? _a3 : valid), errors);
       }
     }
     exports2.funcKeywordCode = funcKeywordCode;
@@ -38362,7 +38190,7 @@ var require_compile = __commonJS({
     var validate_1 = require_validate();
     var SchemaEnv = class {
       constructor(env) {
-        var _a19;
+        var _a2;
         this.refs = {};
         this.dynamicAnchors = {};
         let schema;
@@ -38371,7 +38199,7 @@ var require_compile = __commonJS({
         this.schema = env.schema;
         this.schemaId = env.schemaId;
         this.root = env.root || this;
-        this.baseId = (_a19 = env.baseId) !== null && _a19 !== void 0 ? _a19 : (0, resolve_1.normalizeId)(schema === null || schema === void 0 ? void 0 : schema[env.schemaId || "$id"]);
+        this.baseId = (_a2 = env.baseId) !== null && _a2 !== void 0 ? _a2 : (0, resolve_1.normalizeId)(schema === null || schema === void 0 ? void 0 : schema[env.schemaId || "$id"]);
         this.schemaPath = env.schemaPath;
         this.localRefs = env.localRefs;
         this.meta = env.meta;
@@ -38467,14 +38295,14 @@ var require_compile = __commonJS({
     }
     exports2.compileSchema = compileSchema;
     function resolveRef(root, baseId, ref) {
-      var _a19;
+      var _a2;
       ref = (0, resolve_1.resolveUrl)(this.opts.uriResolver, baseId, ref);
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
       let _sch = resolve.call(this, root, ref);
       if (_sch === void 0) {
-        const schema = (_a19 = root.localRefs) === null || _a19 === void 0 ? void 0 : _a19[ref];
+        const schema = (_a2 = root.localRefs) === null || _a2 === void 0 ? void 0 : _a2[ref];
         const { schemaId } = this.opts;
         if (schema)
           _sch = new SchemaEnv({ schema, schemaId, root, baseId });
@@ -38543,8 +38371,8 @@ var require_compile = __commonJS({
       "definitions"
     ]);
     function getJsonPointer(parsedRef, { baseId, schema, root }) {
-      var _a19;
-      if (((_a19 = parsedRef.fragment) === null || _a19 === void 0 ? void 0 : _a19[0]) !== "/")
+      var _a2;
+      if (((_a2 = parsedRef.fragment) === null || _a2 === void 0 ? void 0 : _a2[0]) !== "/")
         return;
       for (const part of parsedRef.fragment.slice(1).split("/")) {
         if (typeof schema === "boolean")
@@ -39518,11 +39346,11 @@ var require_core = __commonJS({
     };
     var MAX_EXPRESSION = 200;
     function requiredOptions(o) {
-      var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _j, _k2, _l2, _m2, _o2, _p2, _q, _r2, _s2, _t2, _u2, _v2, _w, _x, _y2, _z, _0;
+      var _a2, _b2, _c2, _d2, _e2, _f2, _g2, _h2, _j, _k2, _l2, _m2, _o2, _p2, _q, _r2, _s2, _t2, _u2, _v2, _w, _x, _y2, _z, _0;
       const s = o.strict;
-      const _optz = (_a19 = o.code) === null || _a19 === void 0 ? void 0 : _a19.optimize;
+      const _optz = (_a2 = o.code) === null || _a2 === void 0 ? void 0 : _a2.optimize;
       const optimize = _optz === true || _optz === void 0 ? 1 : _optz || 0;
-      const regExp = (_c2 = (_b8 = o.code) === null || _b8 === void 0 ? void 0 : _b8.regExp) !== null && _c2 !== void 0 ? _c2 : defaultRegExp;
+      const regExp = (_c2 = (_b2 = o.code) === null || _b2 === void 0 ? void 0 : _b2.regExp) !== null && _c2 !== void 0 ? _c2 : defaultRegExp;
       const uriResolver = (_d2 = o.uriResolver) !== null && _d2 !== void 0 ? _d2 : uri_1.default;
       return {
         strictSchema: (_f2 = (_e2 = o.strictSchema) !== null && _e2 !== void 0 ? _e2 : s) !== null && _f2 !== void 0 ? _f2 : true,
@@ -39994,7 +39822,7 @@ var require_core = __commonJS({
       }
     }
     function addRule(keyword, definition, dataType) {
-      var _a19;
+      var _a2;
       const post = definition === null || definition === void 0 ? void 0 : definition.post;
       if (dataType && post)
         throw new Error('keyword with "post" flag cannot have "type"');
@@ -40020,7 +39848,7 @@ var require_core = __commonJS({
       else
         ruleGroup.rules.push(rule);
       RULES.all[keyword] = rule;
-      (_a19 = definition.implements) === null || _a19 === void 0 ? void 0 : _a19.forEach((kwd) => this.addKeyword(kwd));
+      (_a2 = definition.implements) === null || _a2 === void 0 ? void 0 : _a2.forEach((kwd) => this.addKeyword(kwd));
     }
     function addBeforeRule(ruleGroup, rule, before) {
       const i = ruleGroup.rules.findIndex((_rule) => _rule.keyword === before);
@@ -40154,10 +39982,10 @@ var require_ref2 = __commonJS({
         gen.assign(names_1.default.errors, (0, codegen_1._)`${names_1.default.vErrors}.length`);
       }
       function addEvaluatedFrom(source) {
-        var _a19;
+        var _a2;
         if (!it2.opts.unevaluated)
           return;
-        const schEvaluated = (_a19 = sch === null || sch === void 0 ? void 0 : sch.validate) === null || _a19 === void 0 ? void 0 : _a19.evaluated;
+        const schEvaluated = (_a2 = sch === null || sch === void 0 ? void 0 : sch.validate) === null || _a2 === void 0 ? void 0 : _a2.evaluated;
         if (it2.props !== true) {
           if (schEvaluated && !schEvaluated.dynamicProps) {
             if (schEvaluated.props !== void 0) {
@@ -41808,7 +41636,7 @@ var require_discriminator = __commonJS({
           return _valid;
         }
         function getMapping() {
-          var _a19;
+          var _a2;
           const oneOfMapping = {};
           const topRequired = hasRequired(parentSchema);
           let tagRequired = true;
@@ -41822,7 +41650,7 @@ var require_discriminator = __commonJS({
               if (sch === void 0)
                 throw new ref_error_1.default(it2.opts.uriResolver, it2.baseId, ref);
             }
-            const propSch = (_a19 = sch === null || sch === void 0 ? void 0 : sch.properties) === null || _a19 === void 0 ? void 0 : _a19[tagName];
+            const propSch = (_a2 = sch === null || sch === void 0 ? void 0 : sch.properties) === null || _a2 === void 0 ? void 0 : _a2[tagName];
             if (typeof propSch != "object") {
               throw new Error(`discriminator: oneOf subschemas (or referenced schemas) must have "properties/${tagName}"`);
             }
@@ -42391,9 +42219,9 @@ var require_dist = __commonJS({
       return f3;
     };
     function addFormats(ajv, list, fs2, exportName) {
-      var _a19;
-      var _b8;
-      (_a19 = (_b8 = ajv.opts.code).formats) !== null && _a19 !== void 0 ? _a19 : _b8.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`;
+      var _a2;
+      var _b2;
+      (_a2 = (_b2 = ajv.opts.code).formats) !== null && _a2 !== void 0 ? _a2 : _b2.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`;
       for (const f3 of list)
         ajv.addFormat(f3, fs2[f3]);
     }
@@ -42434,21 +42262,21 @@ var PARAM_DENYLIST = Object.freeze(
 
 // node_modules/@auth0/auth0-api-js/dist/index.js
 var MissingRequiredArgumentError = class extends Error {
+  code = "missing_required_argument_error";
   constructor(argument) {
     super(`The argument '${argument}' is required but was not provided.`);
-    __publicField(this, "code", "missing_required_argument_error");
     this.name = "MissingRequiredArgumentError";
   }
 };
 var ProtectedResourceMetadataBuilder = class {
+  props;
   /**
    * Constructor for the builder
    * @param resource - The protected resource identifier (REQUIRED)
    * @param authorization_servers - Array of authorization server URLs (REQUIRED)
    */
   constructor(resource, authorization_servers) {
-    __publicField(this, "props");
-    if (!(resource == null ? void 0 : resource.trim())) {
+    if (!resource?.trim()) {
       throw new MissingRequiredArgumentError("resource");
     }
     if (!Array.isArray(authorization_servers) || authorization_servers.length === 0) {
@@ -42550,83 +42378,82 @@ var ProtectedResourceMetadataBuilder = class {
     return this;
   }
 };
-var _resource, _authorization_servers, _jwks_uri, _scopes_supported, _bearer_methods_supported, _resource_signing_alg_values_supported, _resource_documentation, _resource_policy_uri, _resource_tos_uri, _resource_name, _tls_client_certificate_bound_access_tokens, _authorization_details_types_supported, _dpop_signing_alg_values_supported, _dpop_bound_access_tokens_required, _a;
-var ProtectedResourceMetadata = (_a = class {
+var ProtectedResourceMetadata = class {
+  #resource;
+  #authorization_servers;
+  #jwks_uri;
+  #scopes_supported;
+  #bearer_methods_supported;
+  #resource_signing_alg_values_supported;
+  #resource_documentation;
+  #resource_policy_uri;
+  #resource_tos_uri;
+  #resource_name;
+  #tls_client_certificate_bound_access_tokens;
+  #authorization_details_types_supported;
+  #dpop_signing_alg_values_supported;
+  #dpop_bound_access_tokens_required;
   constructor(builder) {
-    __privateAdd(this, _resource);
-    __privateAdd(this, _authorization_servers);
-    __privateAdd(this, _jwks_uri);
-    __privateAdd(this, _scopes_supported);
-    __privateAdd(this, _bearer_methods_supported);
-    __privateAdd(this, _resource_signing_alg_values_supported);
-    __privateAdd(this, _resource_documentation);
-    __privateAdd(this, _resource_policy_uri);
-    __privateAdd(this, _resource_tos_uri);
-    __privateAdd(this, _resource_name);
-    __privateAdd(this, _tls_client_certificate_bound_access_tokens);
-    __privateAdd(this, _authorization_details_types_supported);
-    __privateAdd(this, _dpop_signing_alg_values_supported);
-    __privateAdd(this, _dpop_bound_access_tokens_required);
     const props2 = builder.properties;
-    __privateSet(this, _resource, props2.resource);
-    __privateSet(this, _authorization_servers, [...props2.authorization_servers]);
-    __privateSet(this, _jwks_uri, props2.jwks_uri);
-    __privateSet(this, _scopes_supported, props2.scopes_supported ? [...props2.scopes_supported] : void 0);
-    __privateSet(this, _bearer_methods_supported, props2.bearer_methods_supported ? [...props2.bearer_methods_supported] : void 0);
-    __privateSet(this, _resource_signing_alg_values_supported, props2.resource_signing_alg_values_supported ? [...props2.resource_signing_alg_values_supported] : void 0);
-    __privateSet(this, _resource_documentation, props2.resource_documentation);
-    __privateSet(this, _resource_policy_uri, props2.resource_policy_uri);
-    __privateSet(this, _resource_tos_uri, props2.resource_tos_uri);
-    __privateSet(this, _resource_name, props2.resource_name);
-    __privateSet(this, _tls_client_certificate_bound_access_tokens, props2.tls_client_certificate_bound_access_tokens);
-    __privateSet(this, _authorization_details_types_supported, props2.authorization_details_types_supported ? [...props2.authorization_details_types_supported] : void 0);
-    __privateSet(this, _dpop_signing_alg_values_supported, props2.dpop_signing_alg_values_supported ? [...props2.dpop_signing_alg_values_supported] : void 0);
-    __privateSet(this, _dpop_bound_access_tokens_required, props2.dpop_bound_access_tokens_required);
+    this.#resource = props2.resource;
+    this.#authorization_servers = [...props2.authorization_servers];
+    this.#jwks_uri = props2.jwks_uri;
+    this.#scopes_supported = props2.scopes_supported ? [...props2.scopes_supported] : void 0;
+    this.#bearer_methods_supported = props2.bearer_methods_supported ? [...props2.bearer_methods_supported] : void 0;
+    this.#resource_signing_alg_values_supported = props2.resource_signing_alg_values_supported ? [...props2.resource_signing_alg_values_supported] : void 0;
+    this.#resource_documentation = props2.resource_documentation;
+    this.#resource_policy_uri = props2.resource_policy_uri;
+    this.#resource_tos_uri = props2.resource_tos_uri;
+    this.#resource_name = props2.resource_name;
+    this.#tls_client_certificate_bound_access_tokens = props2.tls_client_certificate_bound_access_tokens;
+    this.#authorization_details_types_supported = props2.authorization_details_types_supported ? [...props2.authorization_details_types_supported] : void 0;
+    this.#dpop_signing_alg_values_supported = props2.dpop_signing_alg_values_supported ? [...props2.dpop_signing_alg_values_supported] : void 0;
+    this.#dpop_bound_access_tokens_required = props2.dpop_bound_access_tokens_required;
   }
   /**
    * Convert to JSON representation
    */
   toJSON() {
     return {
-      resource: __privateGet(this, _resource),
-      authorization_servers: [...__privateGet(this, _authorization_servers)],
-      ...__privateGet(this, _jwks_uri) !== void 0 && { jwks_uri: __privateGet(this, _jwks_uri) },
-      ...__privateGet(this, _scopes_supported) !== void 0 && {
-        scopes_supported: [...__privateGet(this, _scopes_supported)]
+      resource: this.#resource,
+      authorization_servers: [...this.#authorization_servers],
+      ...this.#jwks_uri !== void 0 && { jwks_uri: this.#jwks_uri },
+      ...this.#scopes_supported !== void 0 && {
+        scopes_supported: [...this.#scopes_supported]
       },
-      ...__privateGet(this, _bearer_methods_supported) !== void 0 && {
-        bearer_methods_supported: [...__privateGet(this, _bearer_methods_supported)]
+      ...this.#bearer_methods_supported !== void 0 && {
+        bearer_methods_supported: [...this.#bearer_methods_supported]
       },
-      ...__privateGet(this, _resource_signing_alg_values_supported) !== void 0 && {
-        resource_signing_alg_values_supported: [...__privateGet(this, _resource_signing_alg_values_supported)]
+      ...this.#resource_signing_alg_values_supported !== void 0 && {
+        resource_signing_alg_values_supported: [...this.#resource_signing_alg_values_supported]
       },
-      ...__privateGet(this, _resource_documentation) !== void 0 && {
-        resource_documentation: __privateGet(this, _resource_documentation)
+      ...this.#resource_documentation !== void 0 && {
+        resource_documentation: this.#resource_documentation
       },
-      ...__privateGet(this, _resource_policy_uri) !== void 0 && {
-        resource_policy_uri: __privateGet(this, _resource_policy_uri)
+      ...this.#resource_policy_uri !== void 0 && {
+        resource_policy_uri: this.#resource_policy_uri
       },
-      ...__privateGet(this, _resource_tos_uri) !== void 0 && {
-        resource_tos_uri: __privateGet(this, _resource_tos_uri)
+      ...this.#resource_tos_uri !== void 0 && {
+        resource_tos_uri: this.#resource_tos_uri
       },
-      ...__privateGet(this, _resource_name) !== void 0 && {
-        resource_name: __privateGet(this, _resource_name)
+      ...this.#resource_name !== void 0 && {
+        resource_name: this.#resource_name
       },
-      ...__privateGet(this, _tls_client_certificate_bound_access_tokens) !== void 0 && {
-        tls_client_certificate_bound_access_tokens: __privateGet(this, _tls_client_certificate_bound_access_tokens)
+      ...this.#tls_client_certificate_bound_access_tokens !== void 0 && {
+        tls_client_certificate_bound_access_tokens: this.#tls_client_certificate_bound_access_tokens
       },
-      ...__privateGet(this, _authorization_details_types_supported) !== void 0 && {
-        authorization_details_types_supported: [...__privateGet(this, _authorization_details_types_supported)]
+      ...this.#authorization_details_types_supported !== void 0 && {
+        authorization_details_types_supported: [...this.#authorization_details_types_supported]
       },
-      ...__privateGet(this, _dpop_signing_alg_values_supported) !== void 0 && {
-        dpop_signing_alg_values_supported: [...__privateGet(this, _dpop_signing_alg_values_supported)]
+      ...this.#dpop_signing_alg_values_supported !== void 0 && {
+        dpop_signing_alg_values_supported: [...this.#dpop_signing_alg_values_supported]
       },
-      ...__privateGet(this, _dpop_bound_access_tokens_required) !== void 0 && {
-        dpop_bound_access_tokens_required: __privateGet(this, _dpop_bound_access_tokens_required)
+      ...this.#dpop_bound_access_tokens_required !== void 0 && {
+        dpop_bound_access_tokens_required: this.#dpop_bound_access_tokens_required
       }
     };
   }
-}, _resource = new WeakMap(), _authorization_servers = new WeakMap(), _jwks_uri = new WeakMap(), _scopes_supported = new WeakMap(), _bearer_methods_supported = new WeakMap(), _resource_signing_alg_values_supported = new WeakMap(), _resource_documentation = new WeakMap(), _resource_policy_uri = new WeakMap(), _resource_tos_uri = new WeakMap(), _resource_name = new WeakMap(), _tls_client_certificate_bound_access_tokens = new WeakMap(), _authorization_details_types_supported = new WeakMap(), _dpop_signing_alg_values_supported = new WeakMap(), _dpop_bound_access_tokens_required = new WeakMap(), _a);
+};
 
 // ../auth0-agent-components/node_modules/zod/v3/external.js
 var external_exports = {};
@@ -43218,7 +43045,7 @@ var isAsync = (x) => typeof Promise !== "undefined" && x instanceof Promise;
 var errorUtil;
 (function(errorUtil3) {
   errorUtil3.errToObj = (message2) => typeof message2 === "string" ? { message: message2 } : message2 || {};
-  errorUtil3.toString = (message2) => typeof message2 === "string" ? message2 : message2 == null ? void 0 : message2.message;
+  errorUtil3.toString = (message2) => typeof message2 === "string" ? message2 : message2?.message;
 })(errorUtil || (errorUtil = {}));
 
 // ../auth0-agent-components/node_modules/zod/v3/types.js
@@ -43270,17 +43097,16 @@ function processCreateParams(params) {
   if (errorMap3)
     return { errorMap: errorMap3, description };
   const customMap = (iss, ctx) => {
-    var _a19, _b8;
     const { message: message2 } = params;
     if (iss.code === "invalid_enum_value") {
-      return { message: message2 != null ? message2 : ctx.defaultError };
+      return { message: message2 ?? ctx.defaultError };
     }
     if (typeof ctx.data === "undefined") {
-      return { message: (_a19 = message2 != null ? message2 : required_error) != null ? _a19 : ctx.defaultError };
+      return { message: message2 ?? required_error ?? ctx.defaultError };
     }
     if (iss.code !== "invalid_type")
       return { message: ctx.defaultError };
-    return { message: (_b8 = message2 != null ? message2 : invalid_type_error) != null ? _b8 : ctx.defaultError };
+    return { message: message2 ?? invalid_type_error ?? ctx.defaultError };
   };
   return { errorMap: customMap, description };
 }
@@ -43332,14 +43158,13 @@ var ZodType = class {
     throw result.error;
   }
   safeParse(data, params) {
-    var _a19;
     const ctx = {
       common: {
         issues: [],
-        async: (_a19 = params == null ? void 0 : params.async) != null ? _a19 : false,
-        contextualErrorMap: params == null ? void 0 : params.errorMap
+        async: params?.async ?? false,
+        contextualErrorMap: params?.errorMap
       },
-      path: (params == null ? void 0 : params.path) || [],
+      path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
@@ -43349,7 +43174,6 @@ var ZodType = class {
     return handleResult(ctx, result);
   }
   "~validate"(data) {
-    var _a19, _b8;
     const ctx = {
       common: {
         issues: [],
@@ -43370,7 +43194,7 @@ var ZodType = class {
           issues: ctx.common.issues
         };
       } catch (err) {
-        if ((_b8 = (_a19 = err == null ? void 0 : err.message) == null ? void 0 : _a19.toLowerCase()) == null ? void 0 : _b8.includes("encountered")) {
+        if (err?.message?.toLowerCase()?.includes("encountered")) {
           this["~standard"].async = true;
         }
         ctx.common = {
@@ -43395,10 +43219,10 @@ var ZodType = class {
     const ctx = {
       common: {
         issues: [],
-        contextualErrorMap: params == null ? void 0 : params.errorMap,
+        contextualErrorMap: params?.errorMap,
         async: true
       },
-      path: (params == null ? void 0 : params.path) || [],
+      path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
@@ -43629,7 +43453,7 @@ function isValidJWT(jwt2, alg) {
     const decoded = JSON.parse(atob(base644));
     if (typeof decoded !== "object" || decoded === null)
       return false;
-    if ("typ" in decoded && (decoded == null ? void 0 : decoded.typ) !== "JWT")
+    if ("typ" in decoded && decoded?.typ !== "JWT")
       return false;
     if (!decoded.alg)
       return false;
@@ -44007,7 +43831,6 @@ var ZodString = class _ZodString3 extends ZodType {
     return this._addCheck({ kind: "cidr", ...errorUtil.errToObj(options) });
   }
   datetime(options) {
-    var _a19, _b8;
     if (typeof options === "string") {
       return this._addCheck({
         kind: "datetime",
@@ -44019,10 +43842,10 @@ var ZodString = class _ZodString3 extends ZodType {
     }
     return this._addCheck({
       kind: "datetime",
-      precision: typeof (options == null ? void 0 : options.precision) === "undefined" ? null : options == null ? void 0 : options.precision,
-      offset: (_a19 = options == null ? void 0 : options.offset) != null ? _a19 : false,
-      local: (_b8 = options == null ? void 0 : options.local) != null ? _b8 : false,
-      ...errorUtil.errToObj(options == null ? void 0 : options.message)
+      precision: typeof options?.precision === "undefined" ? null : options?.precision,
+      offset: options?.offset ?? false,
+      local: options?.local ?? false,
+      ...errorUtil.errToObj(options?.message)
     });
   }
   date(message2) {
@@ -44038,8 +43861,8 @@ var ZodString = class _ZodString3 extends ZodType {
     }
     return this._addCheck({
       kind: "time",
-      precision: typeof (options == null ? void 0 : options.precision) === "undefined" ? null : options == null ? void 0 : options.precision,
-      ...errorUtil.errToObj(options == null ? void 0 : options.message)
+      precision: typeof options?.precision === "undefined" ? null : options?.precision,
+      ...errorUtil.errToObj(options?.message)
     });
   }
   duration(message2) {
@@ -44056,8 +43879,8 @@ var ZodString = class _ZodString3 extends ZodType {
     return this._addCheck({
       kind: "includes",
       value,
-      position: options == null ? void 0 : options.position,
-      ...errorUtil.errToObj(options == null ? void 0 : options.message)
+      position: options?.position,
+      ...errorUtil.errToObj(options?.message)
     });
   }
   startsWith(value, message2) {
@@ -44189,11 +44012,10 @@ var ZodString = class _ZodString3 extends ZodType {
   }
 };
 ZodString.create = (params) => {
-  var _a19;
   return new ZodString({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodString,
-    coerce: (_a19 = params == null ? void 0 : params.coerce) != null ? _a19 : false,
+    coerce: params?.coerce ?? false,
     ...processCreateParams(params)
   });
 };
@@ -44433,7 +44255,7 @@ ZodNumber.create = (params) => {
   return new ZodNumber({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodNumber,
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     ...processCreateParams(params)
   });
 };
@@ -44602,11 +44424,10 @@ var ZodBigInt = class _ZodBigInt extends ZodType {
   }
 };
 ZodBigInt.create = (params) => {
-  var _a19;
   return new ZodBigInt({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodBigInt,
-    coerce: (_a19 = params == null ? void 0 : params.coerce) != null ? _a19 : false,
+    coerce: params?.coerce ?? false,
     ...processCreateParams(params)
   });
 };
@@ -44631,7 +44452,7 @@ var ZodBoolean = class extends ZodType {
 ZodBoolean.create = (params) => {
   return new ZodBoolean({
     typeName: ZodFirstPartyTypeKind.ZodBoolean,
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     ...processCreateParams(params)
   });
 };
@@ -44739,7 +44560,7 @@ var ZodDate = class _ZodDate extends ZodType {
 ZodDate.create = (params) => {
   return new ZodDate({
     checks: [],
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     typeName: ZodFirstPartyTypeKind.ZodDate,
     ...processCreateParams(params)
   });
@@ -45113,11 +44934,10 @@ var ZodObject = class _ZodObject extends ZodType {
       unknownKeys: "strict",
       ...message2 !== void 0 ? {
         errorMap: (issue3, ctx) => {
-          var _a19, _b8, _c2, _d2;
-          const defaultError = (_c2 = (_b8 = (_a19 = this._def).errorMap) == null ? void 0 : _b8.call(_a19, issue3, ctx).message) != null ? _c2 : ctx.defaultError;
+          const defaultError = this._def.errorMap?.(issue3, ctx).message ?? ctx.defaultError;
           if (issue3.code === "unrecognized_keys")
             return {
-              message: (_d2 = errorUtil.errToObj(message2).message) != null ? _d2 : defaultError
+              message: errorUtil.errToObj(message2).message ?? defaultError
             };
           return {
             message: defaultError
@@ -46563,21 +46383,19 @@ function cleanParams(params, data) {
 function custom(check4, _params = {}, fatal) {
   if (check4)
     return ZodAny.create().superRefine((data, ctx) => {
-      var _a19, _b8;
       const r2 = check4(data);
       if (r2 instanceof Promise) {
         return r2.then((r3) => {
-          var _a20, _b9;
           if (!r3) {
             const params = cleanParams(_params, data);
-            const _fatal = (_b9 = (_a20 = params.fatal) != null ? _a20 : fatal) != null ? _b9 : true;
+            const _fatal = params.fatal ?? fatal ?? true;
             ctx.addIssue({ code: "custom", ...params, fatal: _fatal });
           }
         });
       }
       if (!r2) {
         const params = cleanParams(_params, data);
-        const _fatal = (_b8 = (_a19 = params.fatal) != null ? _a19 : fatal) != null ? _b8 : true;
+        const _fatal = params.fatal ?? fatal ?? true;
         ctx.addIssue({ code: "custom", ...params, fatal: _fatal });
       }
       return;
@@ -48251,8 +48069,8 @@ var C = "ui/resourceUri";
 var p = "text/html;profile=mcp-app";
 function K3(Z, $2, J2, X2) {
   let V2 = J2._meta, D = V2.ui, L2 = V2[C], W2 = V2;
-  if ((D == null ? void 0 : D.resourceUri) && !L2) W2 = { ...V2, [C]: D.resourceUri };
-  else if (L2 && !(D == null ? void 0 : D.resourceUri)) W2 = { ...V2, ui: { ...D, resourceUri: L2 } };
+  if (D?.resourceUri && !L2) W2 = { ...V2, [C]: D.resourceUri };
+  else if (L2 && !D?.resourceUri) W2 = { ...V2, ui: { ...D, resourceUri: L2 } };
   return Z.registerTool($2, { ...J2, _meta: W2 }, X2);
 }
 function N3(Z, $2, J2, X2, V2) {
@@ -48260,43 +48078,36 @@ function N3(Z, $2, J2, X2, V2) {
 }
 var TQ = "io.modelcontextprotocol/ui";
 function Y3(Z) {
-  var _a19;
   if (!Z) return;
-  return (_a19 = Z.extensions) == null ? void 0 : _a19[TQ];
+  return Z.extensions?.[TQ];
 }
 
 // ../auth0-agent-components/node_modules/@mcp-ui/server/dist/index.mjs
 function h2(e2, t, i) {
-  var _a19;
   function o(s, u2) {
-    var _a20, _b8;
     var l;
     Object.defineProperty(s, "_zod", {
-      value: (_a20 = s._zod) != null ? _a20 : {},
+      value: s._zod ?? {},
       enumerable: false
-    }), (_b8 = (l = s._zod).traits) != null ? _b8 : l.traits = /* @__PURE__ */ new Set(), s._zod.traits.add(e2), t(s, u2);
+    }), (l = s._zod).traits ?? (l.traits = /* @__PURE__ */ new Set()), s._zod.traits.add(e2), t(s, u2);
     for (const d2 in a.prototype)
       d2 in s || Object.defineProperty(s, d2, { value: a.prototype[d2].bind(s) });
     s._zod.constr = a, s._zod.def = u2;
   }
-  const n = (_a19 = i == null ? void 0 : i.Parent) != null ? _a19 : Object;
+  const n = i?.Parent ?? Object;
   class r2 extends n {
   }
   Object.defineProperty(r2, "name", { value: e2 });
   function a(s) {
-    var _a20;
     var u2;
-    const l = (i == null ? void 0 : i.Parent) ? new r2() : this;
-    o(l, s), (_a20 = (u2 = l._zod).deferred) != null ? _a20 : u2.deferred = [];
+    const l = i?.Parent ? new r2() : this;
+    o(l, s), (u2 = l._zod).deferred ?? (u2.deferred = []);
     for (const d2 of l._zod.deferred)
       d2();
     return l;
   }
   return Object.defineProperty(a, "init", { value: o }), Object.defineProperty(a, Symbol.hasInstance, {
-    value: (s) => {
-      var _a20, _b8;
-      return (i == null ? void 0 : i.Parent) && s instanceof i.Parent ? true : (_b8 = (_a20 = s == null ? void 0 : s._zod) == null ? void 0 : _a20.traits) == null ? void 0 : _b8.has(e2);
-    }
+    value: (s) => i?.Parent && s instanceof i.Parent ? true : s?._zod?.traits?.has(e2)
   }), Object.defineProperty(a, "name", { value: e2 }), a;
 }
 var it = class extends Error {
@@ -48377,8 +48188,7 @@ function Xt(e2) {
   return typeof e2 == "object" && e2 !== null && !Array.isArray(e2);
 }
 var op = bi(() => {
-  var _a19;
-  if (typeof navigator < "u" && ((_a19 = navigator == null ? void 0 : navigator.userAgent) == null ? void 0 : _a19.includes("Cloudflare")))
+  if (typeof navigator < "u" && navigator?.userAgent?.includes("Cloudflare"))
     return false;
   try {
     const e2 = Function;
@@ -48401,8 +48211,8 @@ function ct(e2) {
   return e2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 function Te(e2, t, i) {
-  const o = new e2._zod.constr(t != null ? t : e2._zod.def);
-  return (!t || (i == null ? void 0 : i.parent)) && (o._zod.parent = e2), o;
+  const o = new e2._zod.constr(t ?? e2._zod.def);
+  return (!t || i?.parent) && (o._zod.parent = e2), o;
 }
 function k2(e2) {
   const t = e2;
@@ -48410,8 +48220,8 @@ function k2(e2) {
     return {};
   if (typeof t == "string")
     return { error: () => t };
-  if ((t == null ? void 0 : t.message) !== void 0) {
-    if ((t == null ? void 0 : t.error) !== void 0)
+  if (t?.message !== void 0) {
+    if (t?.error !== void 0)
       throw new Error("Cannot specify both `message` and `error` params");
     t.error = t.message;
   }
@@ -48532,22 +48342,20 @@ function nt(e2, t = 0) {
 }
 function Ze(e2, t) {
   return t.map((i) => {
-    var _a19;
     var o;
-    return (_a19 = (o = i).path) != null ? _a19 : o.path = [], i.path.unshift(e2), i;
+    return (o = i).path ?? (o.path = []), i.path.unshift(e2), i;
   });
 }
 function Ft(e2) {
-  return typeof e2 == "string" ? e2 : e2 == null ? void 0 : e2.message;
+  return typeof e2 == "string" ? e2 : e2?.message;
 }
 function we(e2, t, i) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2;
-  const o = { ...e2, path: (_a19 = e2.path) != null ? _a19 : [] };
+  const o = { ...e2, path: e2.path ?? [] };
   if (!e2.message) {
-    const n = (_k2 = (_j = (_h2 = (_f2 = Ft((_d2 = (_c2 = (_b8 = e2.inst) == null ? void 0 : _b8._zod.def) == null ? void 0 : _c2.error) == null ? void 0 : _d2.call(_c2, e2))) != null ? _f2 : Ft((_e2 = t == null ? void 0 : t.error) == null ? void 0 : _e2.call(t, e2))) != null ? _h2 : Ft((_g2 = i.customError) == null ? void 0 : _g2.call(i, e2))) != null ? _j : Ft((_i2 = i.localeError) == null ? void 0 : _i2.call(i, e2))) != null ? _k2 : "Invalid input";
+    const n = Ft(e2.inst?._zod.def?.error?.(e2)) ?? Ft(t?.error?.(e2)) ?? Ft(i.customError?.(e2)) ?? Ft(i.localeError?.(e2)) ?? "Invalid input";
     o.message = n;
   }
-  return delete o.inst, delete o.continue, (t == null ? void 0 : t.reportInput) || delete o.input, o;
+  return delete o.inst, delete o.continue, t?.reportInput || delete o.input, o;
 }
 function Ii(e2) {
   return Array.isArray(e2) ? "array" : typeof e2 == "string" ? "string" : "unknown";
@@ -48561,7 +48369,7 @@ function rt(...e2) {
     inst: o
   } : { ...t };
 }
-var _a2 = (e2, t) => {
+var _a = (e2, t) => {
   e2.name = "$ZodError", Object.defineProperty(e2, "_zod", {
     value: e2._zod,
     enumerable: false
@@ -48576,8 +48384,8 @@ var _a2 = (e2, t) => {
     // configurable: false,
   });
 };
-var ba = h2("$ZodError", _a2);
-var ya = h2("$ZodError", _a2, { Parent: Error });
+var ba = h2("$ZodError", _a);
+var ya = h2("$ZodError", _a, { Parent: Error });
 function gp(e2, t = (i) => i.message) {
   const i = {}, o = [];
   for (const n of e2.issues)
@@ -48608,23 +48416,21 @@ function hp(e2, t) {
   return n(e2), o;
 }
 var vp = (e2) => (t, i, o, n) => {
-  var _a19;
   const r2 = o ? Object.assign(o, { async: false }) : { async: false }, a = t._zod.run({ value: i, issues: [] }, r2);
   if (a instanceof Promise)
     throw new it();
   if (a.issues.length) {
-    const s = new ((_a19 = n == null ? void 0 : n.Err) != null ? _a19 : e2)(a.issues.map((u2) => we(u2, r2, Ie())));
-    throw $a(s, n == null ? void 0 : n.callee), s;
+    const s = new (n?.Err ?? e2)(a.issues.map((u2) => we(u2, r2, Ie())));
+    throw $a(s, n?.callee), s;
   }
   return a.value;
 };
 var $p = (e2) => async (t, i, o, n) => {
-  var _a19;
   const r2 = o ? Object.assign(o, { async: true }) : { async: true };
   let a = t._zod.run({ value: i, issues: [] }, r2);
   if (a instanceof Promise && (a = await a), a.issues.length) {
-    const s = new ((_a19 = n == null ? void 0 : n.Err) != null ? _a19 : e2)(a.issues.map((u2) => we(u2, r2, Ie())));
-    throw $a(s, n == null ? void 0 : n.callee), s;
+    const s = new (n?.Err ?? e2)(a.issues.map((u2) => we(u2, r2, Ie())));
+    throw $a(s, n?.callee), s;
   }
   return a.value;
 };
@@ -48634,7 +48440,7 @@ var ka = (e2) => (t, i, o) => {
     throw new it();
   return r2.issues.length ? {
     success: false,
-    error: new (e2 != null ? e2 : ba)(r2.issues.map((a) => we(a, n, Ie())))
+    error: new (e2 ?? ba)(r2.issues.map((a) => we(a, n, Ie())))
   } : { success: true, data: r2.value };
 };
 var _p = /* @__PURE__ */ ka(ya);
@@ -48685,8 +48491,7 @@ function Lp(e2) {
   return new RegExp(`^${Sa}T(?:${o})$`);
 }
 var Fp = (e2) => {
-  var _a19, _b8;
-  const t = e2 ? `[\\s\\S]{${(_a19 = e2 == null ? void 0 : e2.minimum) != null ? _a19 : 0},${(_b8 = e2 == null ? void 0 : e2.maximum) != null ? _b8 : ""}}` : "[\\s\\S]*";
+  const t = e2 ? `[\\s\\S]{${e2?.minimum ?? 0},${e2?.maximum ?? ""}}` : "[\\s\\S]*";
   return new RegExp(`^${t}$`);
 };
 var Jp = /^\d+$/;
@@ -48696,9 +48501,8 @@ var Kp = /null/i;
 var Vp = /^[^A-Z]*$/;
 var Gp = /^[^a-z]*$/;
 var oe = /* @__PURE__ */ h2("$ZodCheck", (e2, t) => {
-  var _a19, _b8;
   var i;
-  (_a19 = e2._zod) != null ? _a19 : e2._zod = {}, e2._zod.def = t, (_b8 = (i = e2._zod).onattach) != null ? _b8 : i.onattach = [];
+  e2._zod ?? (e2._zod = {}), e2._zod.def = t, (i = e2._zod).onattach ?? (i.onattach = []);
 });
 var za = {
   number: "number",
@@ -48709,8 +48513,7 @@ var Ua = /* @__PURE__ */ h2("$ZodCheckLessThan", (e2, t) => {
   oe.init(e2, t);
   const i = za[typeof t.value];
   e2._zod.onattach.push((o) => {
-    var _a19;
-    const n = o._zod.bag, r2 = (_a19 = t.inclusive ? n.maximum : n.exclusiveMaximum) != null ? _a19 : Number.POSITIVE_INFINITY;
+    const n = o._zod.bag, r2 = (t.inclusive ? n.maximum : n.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
     t.value < r2 && (t.inclusive ? n.maximum = t.value : n.exclusiveMaximum = t.value);
   }), e2._zod.check = (o) => {
     (t.inclusive ? o.value <= t.value : o.value < t.value) || o.issues.push({
@@ -48728,8 +48531,7 @@ var Oa = /* @__PURE__ */ h2("$ZodCheckGreaterThan", (e2, t) => {
   oe.init(e2, t);
   const i = za[typeof t.value];
   e2._zod.onattach.push((o) => {
-    var _a19;
-    const n = o._zod.bag, r2 = (_a19 = t.inclusive ? n.minimum : n.exclusiveMinimum) != null ? _a19 : Number.NEGATIVE_INFINITY;
+    const n = o._zod.bag, r2 = (t.inclusive ? n.minimum : n.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
     t.value > r2 && (t.inclusive ? n.minimum = t.value : n.exclusiveMinimum = t.value);
   }), e2._zod.check = (o) => {
     (t.inclusive ? o.value >= t.value : o.value > t.value) || o.issues.push({
@@ -48745,9 +48547,8 @@ var Oa = /* @__PURE__ */ h2("$ZodCheckGreaterThan", (e2, t) => {
 });
 var Bp = /* @__PURE__ */ h2("$ZodCheckMultipleOf", (e2, t) => {
   oe.init(e2, t), e2._zod.onattach.push((i) => {
-    var _a19;
     var o;
-    (_a19 = (o = i._zod.bag).multipleOf) != null ? _a19 : o.multipleOf = t.value;
+    (o = i._zod.bag).multipleOf ?? (o.multipleOf = t.value);
   }), e2._zod.check = (i) => {
     if (typeof i.value != typeof t.value)
       throw new Error("Cannot mix number and bigint in multiple_of check.");
@@ -48762,9 +48563,8 @@ var Bp = /* @__PURE__ */ h2("$ZodCheckMultipleOf", (e2, t) => {
   };
 });
 var Hp = /* @__PURE__ */ h2("$ZodCheckNumberFormat", (e2, t) => {
-  var _a19;
   oe.init(e2, t), t.format = t.format || "float64";
-  const i = (_a19 = t.format) == null ? void 0 : _a19.includes("int"), o = i ? "int" : "number", [n, r2] = up[t.format];
+  const i = t.format?.includes("int"), o = i ? "int" : "number", [n, r2] = up[t.format];
   e2._zod.onattach.push((a) => {
     const s = a._zod.bag;
     s.format = t.format, s.minimum = n, s.maximum = r2, i && (s.pattern = Jp);
@@ -48824,8 +48624,7 @@ var Xp = /* @__PURE__ */ h2("$ZodCheckMaxLength", (e2, t) => {
     const o = i.value;
     return !yi(o) && o.length !== void 0;
   }, e2._zod.onattach.push((i) => {
-    var _a19;
-    const o = (_a19 = i._zod.bag.maximum) != null ? _a19 : Number.POSITIVE_INFINITY;
+    const o = i._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
     t.maximum < o && (i._zod.bag.maximum = t.maximum);
   }), e2._zod.check = (i) => {
     const o = i.value;
@@ -48848,8 +48647,7 @@ var Yp = /* @__PURE__ */ h2("$ZodCheckMinLength", (e2, t) => {
     const o = i.value;
     return !yi(o) && o.length !== void 0;
   }, e2._zod.onattach.push((i) => {
-    var _a19;
-    const o = (_a19 = i._zod.bag.minimum) != null ? _a19 : Number.NEGATIVE_INFINITY;
+    const o = i._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
     t.minimum > o && (i._zod.bag.minimum = t.minimum);
   }), e2._zod.check = (i) => {
     const o = i.value;
@@ -48889,13 +48687,11 @@ var Qp = /* @__PURE__ */ h2("$ZodCheckLengthEquals", (e2, t) => {
   };
 });
 var dn = /* @__PURE__ */ h2("$ZodCheckStringFormat", (e2, t) => {
-  var _a19;
   var i;
   oe.init(e2, t), e2._zod.onattach.push((o) => {
-    var _a20;
     const n = o._zod.bag;
-    n.format = t.format, t.pattern && ((_a20 = n.patterns) != null ? _a20 : n.patterns = /* @__PURE__ */ new Set(), n.patterns.add(t.pattern));
-  }), (_a19 = (i = e2._zod).check) != null ? _a19 : i.check = (o) => {
+    n.format = t.format, t.pattern && (n.patterns ?? (n.patterns = /* @__PURE__ */ new Set()), n.patterns.add(t.pattern));
+  }), (i = e2._zod).check ?? (i.check = (o) => {
     if (!t.pattern)
       throw new Error("Not implemented.");
     t.pattern.lastIndex = 0, !t.pattern.test(o.value) && o.issues.push({
@@ -48907,7 +48703,7 @@ var dn = /* @__PURE__ */ h2("$ZodCheckStringFormat", (e2, t) => {
       inst: e2,
       continue: !t.abort
     });
-  };
+  });
 });
 var ef = /* @__PURE__ */ h2("$ZodCheckRegex", (e2, t) => {
   dn.init(e2, t), e2._zod.check = (i) => {
@@ -48923,20 +48719,17 @@ var ef = /* @__PURE__ */ h2("$ZodCheckRegex", (e2, t) => {
   };
 });
 var tf = /* @__PURE__ */ h2("$ZodCheckLowerCase", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Vp, dn.init(e2, t);
+  t.pattern ?? (t.pattern = Vp), dn.init(e2, t);
 });
 var nf = /* @__PURE__ */ h2("$ZodCheckUpperCase", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Gp, dn.init(e2, t);
+  t.pattern ?? (t.pattern = Gp), dn.init(e2, t);
 });
 var rf = /* @__PURE__ */ h2("$ZodCheckIncludes", (e2, t) => {
   oe.init(e2, t);
   const i = ct(t.includes), o = new RegExp(typeof t.position == "number" ? `^.{${t.position}}${i}` : i);
   t.pattern = o, e2._zod.onattach.push((n) => {
-    var _a19;
     const r2 = n._zod.bag;
-    (_a19 = r2.patterns) != null ? _a19 : r2.patterns = /* @__PURE__ */ new Set(), r2.patterns.add(o);
+    r2.patterns ?? (r2.patterns = /* @__PURE__ */ new Set()), r2.patterns.add(o);
   }), e2._zod.check = (n) => {
     n.value.includes(t.includes, t.position) || n.issues.push({
       origin: "string",
@@ -48950,13 +48743,11 @@ var rf = /* @__PURE__ */ h2("$ZodCheckIncludes", (e2, t) => {
   };
 });
 var of = /* @__PURE__ */ h2("$ZodCheckStartsWith", (e2, t) => {
-  var _a19;
   oe.init(e2, t);
   const i = new RegExp(`^${ct(t.prefix)}.*`);
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = i, e2._zod.onattach.push((o) => {
-    var _a20;
+  t.pattern ?? (t.pattern = i), e2._zod.onattach.push((o) => {
     const n = o._zod.bag;
-    (_a20 = n.patterns) != null ? _a20 : n.patterns = /* @__PURE__ */ new Set(), n.patterns.add(i);
+    n.patterns ?? (n.patterns = /* @__PURE__ */ new Set()), n.patterns.add(i);
   }), e2._zod.check = (o) => {
     o.value.startsWith(t.prefix) || o.issues.push({
       origin: "string",
@@ -48970,13 +48761,11 @@ var of = /* @__PURE__ */ h2("$ZodCheckStartsWith", (e2, t) => {
   };
 });
 var af = /* @__PURE__ */ h2("$ZodCheckEndsWith", (e2, t) => {
-  var _a19;
   oe.init(e2, t);
   const i = new RegExp(`.*${ct(t.suffix)}$`);
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = i, e2._zod.onattach.push((o) => {
-    var _a20;
+  t.pattern ?? (t.pattern = i), e2._zod.onattach.push((o) => {
     const n = o._zod.bag;
-    (_a20 = n.patterns) != null ? _a20 : n.patterns = /* @__PURE__ */ new Set(), n.patterns.add(i);
+    n.patterns ?? (n.patterns = /* @__PURE__ */ new Set()), n.patterns.add(i);
   }), e2._zod.check = (o) => {
     o.value.endsWith(t.suffix) || o.issues.push({
       origin: "string",
@@ -49012,8 +48801,7 @@ var uf = class {
       this.content.push(a);
   }
   compile() {
-    var _a19;
-    const t = Function, i = this == null ? void 0 : this.args, n = [...((_a19 = this == null ? void 0 : this.content) != null ? _a19 : [""]).map((r2) => `  ${r2}`)];
+    const t = Function, i = this?.args, n = [...(this?.content ?? [""]).map((r2) => `  ${r2}`)];
     return new t(...i, n.join(`
 `));
   }
@@ -49024,16 +48812,15 @@ var lf = {
   patch: 0
 };
 var C2 = /* @__PURE__ */ h2("$ZodType", (e2, t) => {
-  var _a19, _b8, _c2;
   var i;
-  e2 != null ? e2 : e2 = {}, L(e2._zod, "id", () => t.type + "_" + va(10)), e2._zod.def = t, e2._zod.bag = e2._zod.bag || {}, e2._zod.version = lf;
-  const o = [...(_a19 = e2._zod.def.checks) != null ? _a19 : []];
+  e2 ?? (e2 = {}), L(e2._zod, "id", () => t.type + "_" + va(10)), e2._zod.def = t, e2._zod.bag = e2._zod.bag || {}, e2._zod.version = lf;
+  const o = [...e2._zod.def.checks ?? []];
   e2._zod.traits.has("$ZodCheck") && o.unshift(e2);
   for (const n of o)
     for (const r2 of n._zod.onattach)
       r2(e2);
   if (o.length === 0)
-    (_b8 = (i = e2._zod).deferred) != null ? _b8 : i.deferred = [], (_c2 = e2._zod.deferred) == null ? void 0 : _c2.push(() => {
+    (i = e2._zod).deferred ?? (i.deferred = []), e2._zod.deferred?.push(() => {
       e2._zod.run = e2._zod.parse;
     });
   else {
@@ -49046,10 +48833,10 @@ var C2 = /* @__PURE__ */ h2("$ZodType", (e2, t) => {
         } else if (u2)
           continue;
         const p2 = r2.issues.length, g = d2._zod.check(r2);
-        if (g instanceof Promise && (s == null ? void 0 : s.async) === false)
+        if (g instanceof Promise && s?.async === false)
           throw new it();
         if (l || g instanceof Promise)
-          l = (l != null ? l : Promise.resolve()).then(async () => {
+          l = (l ?? Promise.resolve()).then(async () => {
             await g, r2.issues.length !== p2 && (u2 || (u2 = nt(r2, p2)));
           });
         else {
@@ -49072,15 +48859,11 @@ var C2 = /* @__PURE__ */ h2("$ZodType", (e2, t) => {
   }
   e2["~standard"] = {
     validate: (n) => {
-      var _a20;
       try {
         const r2 = _p(e2, n);
-        return r2.success ? { value: r2.data } : { issues: (_a20 = r2.error) == null ? void 0 : _a20.issues };
+        return r2.success ? { value: r2.data } : { issues: r2.error?.issues };
       } catch {
-        return bp(e2, n).then((a) => {
-          var _a21;
-          return a.success ? { value: a.data } : { issues: (_a21 = a.error) == null ? void 0 : _a21.issues };
-        });
+        return bp(e2, n).then((a) => a.success ? { value: a.data } : { issues: a.error?.issues });
       }
     },
     vendor: "zod",
@@ -49088,8 +48871,7 @@ var C2 = /* @__PURE__ */ h2("$ZodType", (e2, t) => {
   };
 });
 var wi = /* @__PURE__ */ h2("$ZodString", (e2, t) => {
-  var _a19, _b8, _c2;
-  C2.init(e2, t), e2._zod.pattern = (_c2 = [...(_b8 = (_a19 = e2 == null ? void 0 : e2._zod.bag) == null ? void 0 : _a19.patterns) != null ? _b8 : []].pop()) != null ? _c2 : Fp(e2._zod.bag), e2._zod.parse = (i, o) => {
+  C2.init(e2, t), e2._zod.pattern = [...e2?._zod.bag?.patterns ?? []].pop() ?? Fp(e2._zod.bag), e2._zod.parse = (i, o) => {
     if (t.coerce)
       try {
         i.value = String(i.value);
@@ -49107,11 +48889,9 @@ var F = /* @__PURE__ */ h2("$ZodStringFormat", (e2, t) => {
   dn.init(e2, t), wi.init(e2, t);
 });
 var cf = /* @__PURE__ */ h2("$ZodGUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Up, F.init(e2, t);
+  t.pattern ?? (t.pattern = Up), F.init(e2, t);
 });
 var df = /* @__PURE__ */ h2("$ZodUUID", (e2, t) => {
-  var _a19, _b8;
   if (t.version) {
     const o = {
       v1: 1,
@@ -49125,14 +48905,13 @@ var df = /* @__PURE__ */ h2("$ZodUUID", (e2, t) => {
     }[t.version];
     if (o === void 0)
       throw new Error(`Invalid UUID version: "${t.version}"`);
-    (_a19 = t.pattern) != null ? _a19 : t.pattern = No(o);
+    t.pattern ?? (t.pattern = No(o));
   } else
-    (_b8 = t.pattern) != null ? _b8 : t.pattern = No();
+    t.pattern ?? (t.pattern = No());
   F.init(e2, t);
 });
 var mf = /* @__PURE__ */ h2("$ZodEmail", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Op, F.init(e2, t);
+  t.pattern ?? (t.pattern = Op), F.init(e2, t);
 });
 var pf = /* @__PURE__ */ h2("$ZodURL", (e2, t) => {
   F.init(e2, t), e2._zod.check = (i) => {
@@ -49168,59 +48947,46 @@ var pf = /* @__PURE__ */ h2("$ZodURL", (e2, t) => {
   };
 });
 var ff = /* @__PURE__ */ h2("$ZodEmoji", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Pp(), F.init(e2, t);
+  t.pattern ?? (t.pattern = Pp()), F.init(e2, t);
 });
 var gf = /* @__PURE__ */ h2("$ZodNanoID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = xp, F.init(e2, t);
+  t.pattern ?? (t.pattern = xp), F.init(e2, t);
 });
 var hf = /* @__PURE__ */ h2("$ZodCUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = yp, F.init(e2, t);
+  t.pattern ?? (t.pattern = yp), F.init(e2, t);
 });
 var vf = /* @__PURE__ */ h2("$ZodCUID2", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = kp, F.init(e2, t);
+  t.pattern ?? (t.pattern = kp), F.init(e2, t);
 });
 var $f = /* @__PURE__ */ h2("$ZodULID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ip, F.init(e2, t);
+  t.pattern ?? (t.pattern = Ip), F.init(e2, t);
 });
 var _f = /* @__PURE__ */ h2("$ZodXID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = wp, F.init(e2, t);
+  t.pattern ?? (t.pattern = wp), F.init(e2, t);
 });
 var bf = /* @__PURE__ */ h2("$ZodKSUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Sp, F.init(e2, t);
+  t.pattern ?? (t.pattern = Sp), F.init(e2, t);
 });
 var yf = /* @__PURE__ */ h2("$ZodISODateTime", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Lp(t), F.init(e2, t), e2._zod.check;
+  t.pattern ?? (t.pattern = Lp(t)), F.init(e2, t), e2._zod.check;
 });
 var kf = /* @__PURE__ */ h2("$ZodISODate", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Cp, F.init(e2, t);
+  t.pattern ?? (t.pattern = Cp), F.init(e2, t);
 });
 var If = /* @__PURE__ */ h2("$ZodISOTime", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Mp(t), F.init(e2, t), e2._zod.check;
+  t.pattern ?? (t.pattern = Mp(t)), F.init(e2, t), e2._zod.check;
 });
 var wf = /* @__PURE__ */ h2("$ZodISODuration", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = zp, F.init(e2, t);
+  t.pattern ?? (t.pattern = zp), F.init(e2, t);
 });
 var Sf = /* @__PURE__ */ h2("$ZodIPv4", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ep, F.init(e2, t), e2._zod.onattach.push((i) => {
+  t.pattern ?? (t.pattern = Ep), F.init(e2, t), e2._zod.onattach.push((i) => {
     const o = i._zod.bag;
     o.format = "ipv4";
   });
 });
 var xf = /* @__PURE__ */ h2("$ZodIPv6", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Np, F.init(e2, t), e2._zod.onattach.push((i) => {
+  t.pattern ?? (t.pattern = Np), F.init(e2, t), e2._zod.onattach.push((i) => {
     const o = i._zod.bag;
     o.format = "ipv6";
   }), e2._zod.check = (i) => {
@@ -49238,12 +49004,10 @@ var xf = /* @__PURE__ */ h2("$ZodIPv6", (e2, t) => {
   };
 });
 var zf = /* @__PURE__ */ h2("$ZodCIDRv4", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Dp, F.init(e2, t);
+  t.pattern ?? (t.pattern = Dp), F.init(e2, t);
 });
 var Uf = /* @__PURE__ */ h2("$ZodCIDRv6", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = jp, F.init(e2, t), e2._zod.check = (i) => {
+  t.pattern ?? (t.pattern = jp), F.init(e2, t), e2._zod.check = (i) => {
     const [o, n] = i.value.split("/");
     try {
       if (!n)
@@ -49277,8 +49041,7 @@ function Za(e2) {
   }
 }
 var Of = /* @__PURE__ */ h2("$ZodBase64", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Tp, F.init(e2, t), e2._zod.onattach.push((i) => {
+  t.pattern ?? (t.pattern = Tp), F.init(e2, t), e2._zod.onattach.push((i) => {
     i._zod.bag.contentEncoding = "base64";
   }), e2._zod.check = (i) => {
     Za(i.value) || i.issues.push({
@@ -49297,8 +49060,7 @@ function Zf(e2) {
   return Za(i);
 }
 var Pf = /* @__PURE__ */ h2("$ZodBase64URL", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = wa, F.init(e2, t), e2._zod.onattach.push((i) => {
+  t.pattern ?? (t.pattern = wa), F.init(e2, t), e2._zod.onattach.push((i) => {
     i._zod.bag.contentEncoding = "base64url";
   }), e2._zod.check = (i) => {
     Zf(i.value) || i.issues.push({
@@ -49311,8 +49073,7 @@ var Pf = /* @__PURE__ */ h2("$ZodBase64URL", (e2, t) => {
   };
 });
 var Ef = /* @__PURE__ */ h2("$ZodE164", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Rp, F.init(e2, t);
+  t.pattern ?? (t.pattern = Rp), F.init(e2, t);
 });
 function Nf(e2, t = null) {
   try {
@@ -49320,7 +49081,7 @@ function Nf(e2, t = null) {
     if (i.length !== 3)
       return false;
     const [o] = i, n = JSON.parse(atob(o));
-    return !("typ" in n && (n == null ? void 0 : n.typ) !== "JWT" || !n.alg || t && (!("alg" in n) || n.alg !== t));
+    return !("typ" in n && n?.typ !== "JWT" || !n.alg || t && (!("alg" in n) || n.alg !== t));
   } catch {
     return false;
   }
@@ -49337,8 +49098,7 @@ var Df = /* @__PURE__ */ h2("$ZodJWT", (e2, t) => {
   };
 });
 var Pa = /* @__PURE__ */ h2("$ZodNumber", (e2, t) => {
-  var _a19;
-  C2.init(e2, t), e2._zod.pattern = (_a19 = e2._zod.bag.pattern) != null ? _a19 : qp, e2._zod.parse = (i, o) => {
+  C2.init(e2, t), e2._zod.pattern = e2._zod.bag.pattern ?? qp, e2._zod.parse = (i, o) => {
     if (t.coerce)
       try {
         i.value = Number(i.value);
@@ -49446,12 +49206,11 @@ var Lf = /* @__PURE__ */ h2("$ZodObject", (e2, t) => {
     };
   });
   L(e2._zod, "propValues", () => {
-    var _a19;
     const p2 = t.shape, g = {};
     for (const _2 in p2) {
       const x = p2[_2]._zod;
       if (x.values) {
-        (_a19 = g[_2]) != null ? _a19 : g[_2] = /* @__PURE__ */ new Set();
+        g[_2] ?? (g[_2] = /* @__PURE__ */ new Set());
         for (const B of x.values)
           g[_2].add(B);
       }
@@ -49509,7 +49268,7 @@ var Lf = /* @__PURE__ */ h2("$ZodObject", (e2, t) => {
   const r2 = Xt, a = !ha.jitless, u2 = a && op.value, { catchall: l } = t;
   let d2;
   e2._zod.parse = (p2, g) => {
-    d2 != null ? d2 : d2 = i.value;
+    d2 ?? (d2 = i.value);
     const _2 = p2.value;
     if (!r2(_2))
       return p2.issues.push({
@@ -49519,7 +49278,7 @@ var Lf = /* @__PURE__ */ h2("$ZodObject", (e2, t) => {
         inst: e2
       }), p2;
     const x = [];
-    if (a && u2 && (g == null ? void 0 : g.async) === false && g.jitless !== true)
+    if (a && u2 && g?.async === false && g.jitless !== true)
       n || (n = o(t.shape)), p2 = n(p2, g);
     else {
       p2.value = {};
@@ -49629,7 +49388,7 @@ var Ff = /* @__PURE__ */ h2("$ZodDiscriminatedUnion", (e2, t) => {
         input: a,
         inst: e2
       }), n;
-    const s = o.value.get(a == null ? void 0 : a[t.discriminator]);
+    const s = o.value.get(a?.[t.discriminator]);
     return s ? s._zod.run(n, r2) : t.unionFallback ? i(n, r2) : (n.issues.push({
       code: "invalid_union",
       errors: [],
@@ -49712,7 +49471,7 @@ var qf = /* @__PURE__ */ h2("$ZodRecord", (e2, t) => {
         }
       let s;
       for (const u2 in n)
-        a.has(u2) || (s = s != null ? s : [], s.push(u2));
+        a.has(u2) || (s = s ?? [], s.push(u2));
       s && s.length > 0 && i.issues.push({
         code: "unrecognized_keys",
         input: n,
@@ -49869,14 +49628,13 @@ var ng = /* @__PURE__ */ h2("$ZodCustom", (e2, t) => {
   };
 });
 function Fo(e2, t, i, o) {
-  var _a19;
   if (!e2) {
     const n = {
       code: "custom",
       input: i,
       inst: o,
       // incorporates params.error into issue reporting
-      path: [...(_a19 = o._zod.def.path) != null ? _a19 : []],
+      path: [...o._zod.def.path ?? []],
       // incorporates params.error into issue reporting
       continue: !o._zod.def.abort
       // params: inst._zod.def.params,
@@ -49901,10 +49659,9 @@ var ig = class {
     return this._map.delete(t), this;
   }
   get(t) {
-    var _a19;
     const i = t._zod.parent;
     if (i) {
-      const o = { ...(_a19 = this.get(i)) != null ? _a19 : {} };
+      const o = { ...this.get(i) ?? {} };
       return delete o.id, { ...o, ...this._map.get(t) };
     }
     return this._map.get(t);
@@ -50334,9 +50091,8 @@ function Vg(e2, t, i) {
   });
 }
 function Gg(e2, t, i) {
-  var _a19;
   const o = k2(i);
-  return (_a19 = o.abort) != null ? _a19 : o.abort = true, new e2({
+  return o.abort ?? (o.abort = true), new e2({
     type: "custom",
     check: "custom",
     fn: t,
@@ -50408,25 +50164,21 @@ var rh = /* @__PURE__ */ vp(mn);
 var oh = /* @__PURE__ */ $p(mn);
 var ah = /* @__PURE__ */ ka(mn);
 var sh = /* @__PURE__ */ Ia(mn);
-var K2 = /* @__PURE__ */ h2("ZodType", (e2, t) => (C2.init(e2, t), e2.def = t, Object.defineProperty(e2, "_def", { value: t }), e2.check = (...i) => {
-  var _a19;
-  return e2.clone(
-    {
-      ...t,
-      checks: [
-        ...(_a19 = t.checks) != null ? _a19 : [],
-        ...i.map((o) => typeof o == "function" ? { _zod: { check: o, def: { check: "custom" }, onattach: [] } } : o)
-      ]
-    }
-    // { parent: true }
-  );
-}, e2.clone = (i, o) => Te(e2, i, o), e2.brand = () => e2, e2.register = (i, o) => (i.add(e2, o), e2), e2.parse = (i, o) => rh(e2, i, o, { callee: e2.parse }), e2.safeParse = (i, o) => ah(e2, i, o), e2.parseAsync = async (i, o) => oh(e2, i, o, { callee: e2.parseAsync }), e2.safeParseAsync = async (i, o) => sh(e2, i, o), e2.spa = e2.safeParseAsync, e2.refine = (i, o) => e2.check(Xh(i, o)), e2.superRefine = (i) => e2.check(Yh(i)), e2.overwrite = (i) => e2.check(dt(i)), e2.optional = () => G(e2), e2.nullable = () => Bo(e2), e2.nullish = () => G(Bo(e2)), e2.nonoptional = (i) => Jh(e2, i), e2.array = () => E2(e2), e2.or = (i) => M2([e2, i]), e2.and = (i) => Si(e2, i), e2.transform = (i) => pi(e2, Fa(i)), e2.default = (i) => Mh(e2, i), e2.prefault = (i) => Fh(e2, i), e2.catch = (i) => Wh(e2, i), e2.pipe = (i) => pi(e2, i), e2.readonly = () => Gh(e2), e2.describe = (i) => {
+var K2 = /* @__PURE__ */ h2("ZodType", (e2, t) => (C2.init(e2, t), e2.def = t, Object.defineProperty(e2, "_def", { value: t }), e2.check = (...i) => e2.clone(
+  {
+    ...t,
+    checks: [
+      ...t.checks ?? [],
+      ...i.map((o) => typeof o == "function" ? { _zod: { check: o, def: { check: "custom" }, onattach: [] } } : o)
+    ]
+  }
+  // { parent: true }
+), e2.clone = (i, o) => Te(e2, i, o), e2.brand = () => e2, e2.register = (i, o) => (i.add(e2, o), e2), e2.parse = (i, o) => rh(e2, i, o, { callee: e2.parse }), e2.safeParse = (i, o) => ah(e2, i, o), e2.parseAsync = async (i, o) => oh(e2, i, o, { callee: e2.parseAsync }), e2.safeParseAsync = async (i, o) => sh(e2, i, o), e2.spa = e2.safeParseAsync, e2.refine = (i, o) => e2.check(Xh(i, o)), e2.superRefine = (i) => e2.check(Yh(i)), e2.overwrite = (i) => e2.check(dt(i)), e2.optional = () => G(e2), e2.nullable = () => Bo(e2), e2.nullish = () => G(Bo(e2)), e2.nonoptional = (i) => Jh(e2, i), e2.array = () => E2(e2), e2.or = (i) => M2([e2, i]), e2.and = (i) => Si(e2, i), e2.transform = (i) => pi(e2, Fa(i)), e2.default = (i) => Mh(e2, i), e2.prefault = (i) => Fh(e2, i), e2.catch = (i) => Wh(e2, i), e2.pipe = (i) => pi(e2, i), e2.readonly = () => Gh(e2), e2.describe = (i) => {
   const o = e2.clone();
   return qt.add(o, { description: i }), o;
 }, Object.defineProperty(e2, "description", {
   get() {
-    var _a19;
-    return (_a19 = qt.get(e2)) == null ? void 0 : _a19.description;
+    return qt.get(e2)?.description;
   },
   configurable: true
 }), e2.meta = (...i) => {
@@ -50436,10 +50188,9 @@ var K2 = /* @__PURE__ */ h2("ZodType", (e2, t) => (C2.init(e2, t), e2.def = t, O
   return qt.add(o, i[0]), o;
 }, e2.isOptional = () => e2.safeParse(void 0).success, e2.isNullable = () => e2.safeParse(null).success, e2));
 var Ta = /* @__PURE__ */ h2("_ZodString", (e2, t) => {
-  var _a19, _b8, _c2;
   wi.init(e2, t), K2.init(e2, t);
   const i = e2._zod.bag;
-  e2.format = (_a19 = i.format) != null ? _a19 : null, e2.minLength = (_b8 = i.minimum) != null ? _b8 : null, e2.maxLength = (_c2 = i.maximum) != null ? _c2 : null, e2.regex = (...o) => e2.check(Ag(...o)), e2.includes = (...o) => e2.check(Mg(...o)), e2.startsWith = (...o) => e2.check(Lg(...o)), e2.endsWith = (...o) => e2.check(Fg(...o)), e2.min = (...o) => e2.check(Yt(...o)), e2.max = (...o) => e2.check(Na(...o)), e2.length = (...o) => e2.check(Da(...o)), e2.nonempty = (...o) => e2.check(Yt(1, ...o)), e2.lowercase = (o) => e2.check(Rg(o)), e2.uppercase = (o) => e2.check(Cg(o)), e2.trim = () => e2.check(qg()), e2.normalize = (...o) => e2.check(Jg(...o)), e2.toLowerCase = () => e2.check(Wg()), e2.toUpperCase = () => e2.check(Kg());
+  e2.format = i.format ?? null, e2.minLength = i.minimum ?? null, e2.maxLength = i.maximum ?? null, e2.regex = (...o) => e2.check(Ag(...o)), e2.includes = (...o) => e2.check(Mg(...o)), e2.startsWith = (...o) => e2.check(Lg(...o)), e2.endsWith = (...o) => e2.check(Fg(...o)), e2.min = (...o) => e2.check(Yt(...o)), e2.max = (...o) => e2.check(Na(...o)), e2.length = (...o) => e2.check(Da(...o)), e2.nonempty = (...o) => e2.check(Yt(1, ...o)), e2.lowercase = (o) => e2.check(Rg(o)), e2.uppercase = (o) => e2.check(Cg(o)), e2.trim = () => e2.check(qg()), e2.normalize = (...o) => e2.check(Jg(...o)), e2.toLowerCase = () => e2.check(Wg()), e2.toUpperCase = () => e2.check(Kg());
 });
 var uh = /* @__PURE__ */ h2("ZodString", (e2, t) => {
   wi.init(e2, t), Ta.init(e2, t), e2.email = (i) => e2.check(ag(lh, i)), e2.url = (i) => e2.check(dg(ch, i)), e2.jwt = (i) => e2.check(xg(Sh, i)), e2.emoji = (i) => e2.check(mg(dh, i)), e2.guid = (i) => e2.check(Jo(Vo, i)), e2.uuid = (i) => e2.check(sg(Wt, i)), e2.uuidv4 = (i) => e2.check(ug(Wt, i)), e2.uuidv6 = (i) => e2.check(lg(Wt, i)), e2.uuidv7 = (i) => e2.check(cg(Wt, i)), e2.nanoid = (i) => e2.check(pg(mh, i)), e2.guid = (i) => e2.check(Jo(Vo, i)), e2.cuid = (i) => e2.check(fg(ph, i)), e2.cuid2 = (i) => e2.check(gg(fh, i)), e2.ulid = (i) => e2.check(hg(gh, i)), e2.base64 = (i) => e2.check(Ig(kh, i)), e2.base64url = (i) => e2.check(wg(Ih, i)), e2.xid = (i) => e2.check(vg(hh, i)), e2.ksuid = (i) => e2.check($g(vh, i)), e2.ipv4 = (i) => e2.check(_g($h, i)), e2.ipv6 = (i) => e2.check(bg(_h, i)), e2.cidrv4 = (i) => e2.check(yg(bh, i)), e2.cidrv6 = (i) => e2.check(kg(yh, i)), e2.e164 = (i) => e2.check(Sg(wh, i)), e2.datetime = (i) => e2.check(ja(i)), e2.date = (i) => e2.check(Yg(i)), e2.time = (i) => e2.check(eh(i)), e2.duration = (i) => e2.check(nh(i));
@@ -50508,10 +50259,9 @@ var Sh = /* @__PURE__ */ h2("ZodJWT", (e2, t) => {
   Df.init(e2, t), V.init(e2, t);
 });
 var Aa = /* @__PURE__ */ h2("ZodNumber", (e2, t) => {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
   Pa.init(e2, t), K2.init(e2, t), e2.gt = (o, n) => e2.check(Wo(o, n)), e2.gte = (o, n) => e2.check(li(o, n)), e2.min = (o, n) => e2.check(li(o, n)), e2.lt = (o, n) => e2.check(qo(o, n)), e2.lte = (o, n) => e2.check(ui(o, n)), e2.max = (o, n) => e2.check(ui(o, n)), e2.int = (o) => e2.check(Go(o)), e2.safe = (o) => e2.check(Go(o)), e2.positive = (o) => e2.check(Wo(0, o)), e2.nonnegative = (o) => e2.check(li(0, o)), e2.negative = (o) => e2.check(qo(0, o)), e2.nonpositive = (o) => e2.check(ui(0, o)), e2.multipleOf = (o, n) => e2.check(Ko(o, n)), e2.step = (o, n) => e2.check(Ko(o, n)), e2.finite = () => e2;
   const i = e2._zod.bag;
-  e2.minValue = (_c2 = Math.max((_a19 = i.minimum) != null ? _a19 : Number.NEGATIVE_INFINITY, (_b8 = i.exclusiveMinimum) != null ? _b8 : Number.NEGATIVE_INFINITY)) != null ? _c2 : null, e2.maxValue = (_f2 = Math.min((_d2 = i.maximum) != null ? _d2 : Number.POSITIVE_INFINITY, (_e2 = i.exclusiveMaximum) != null ? _e2 : Number.POSITIVE_INFINITY)) != null ? _f2 : null, e2.isInt = ((_g2 = i.format) != null ? _g2 : "").includes("int") || Number.isSafeInteger((_h2 = i.multipleOf) != null ? _h2 : 0.5), e2.isFinite = true, e2.format = (_i2 = i.format) != null ? _i2 : null;
+  e2.minValue = Math.max(i.minimum ?? Number.NEGATIVE_INFINITY, i.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null, e2.maxValue = Math.min(i.maximum ?? Number.POSITIVE_INFINITY, i.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null, e2.isInt = (i.format ?? "").includes("int") || Number.isSafeInteger(i.multipleOf ?? 0.5), e2.isFinite = true, e2.format = i.format ?? null;
 });
 function j2(e2) {
   return Pg(Aa, e2);
@@ -50675,12 +50425,11 @@ function I2(e2, t) {
 var Ah = /* @__PURE__ */ h2("ZodTransform", (e2, t) => {
   Vf.init(e2, t), K2.init(e2, t), e2._zod.parse = (i, o) => {
     i.addIssue = (r2) => {
-      var _a19, _b8, _c2, _d2;
       if (typeof r2 == "string")
         i.issues.push(rt(r2, i.value, t));
       else {
         const a = r2;
-        a.fatal && (a.continue = false), (_a19 = a.code) != null ? _a19 : a.code = "custom", (_b8 = a.input) != null ? _b8 : a.input = i.value, (_c2 = a.inst) != null ? _c2 : a.inst = e2, (_d2 = a.continue) != null ? _d2 : a.continue = true, i.issues.push(rt(a));
+        a.fatal && (a.continue = false), a.code ?? (a.code = "custom"), a.input ?? (a.input = i.value), a.inst ?? (a.inst = e2), a.continue ?? (a.continue = true), i.issues.push(rt(a));
       }
     };
     const n = t.transform(i.value, i);
@@ -50786,19 +50535,18 @@ function Bh(e2, t) {
   return i._zod.check = e2, i;
 }
 function Hh(e2, t) {
-  return Gg(Wa, e2 != null ? e2 : (() => true), t);
+  return Gg(Wa, e2 ?? (() => true), t);
 }
 function Xh(e2, t = {}) {
   return Bg(Wa, e2, t);
 }
 function Yh(e2, t) {
   const i = Bh((o) => (o.addIssue = (n) => {
-    var _a19, _b8, _c2, _d2;
     if (typeof n == "string")
       o.issues.push(rt(n, o.value, i._zod.def));
     else {
       const r2 = n;
-      r2.fatal && (r2.continue = false), (_a19 = r2.code) != null ? _a19 : r2.code = "custom", (_b8 = r2.input) != null ? _b8 : r2.input = o.value, (_c2 = r2.inst) != null ? _c2 : r2.inst = i, (_d2 = r2.continue) != null ? _d2 : r2.continue = !i._zod.def.abort, o.issues.push(rt(r2));
+      r2.fatal && (r2.continue = false), r2.code ?? (r2.code = "custom"), r2.input ?? (r2.input = o.value), r2.inst ?? (r2.inst = i), r2.continue ?? (r2.continue = !i._zod.def.abort), o.issues.push(rt(r2));
     }
   }, e2(o.value, o)), t);
   return i;
@@ -52269,7 +52017,6 @@ var fs = {};
 be(fs, { version: () => Zu, util: () => P2, treeifyError: () => Us, toJSONSchema: () => bd, toDotPath: () => Os, safeParseAsync: () => Es, safeParse: () => Ps, safeEncodeAsync: () => k_, safeEncode: () => b_, safeDecodeAsync: () => I_, safeDecode: () => y_, registry: () => or, regexes: () => Re, process: () => T2, prettifyError: () => Zs, parseAsync: () => hi, parse: () => gi, meta: () => Dc, locales: () => rr, isValidJWT: () => tl, isValidBase64URL: () => Yu, isValidBase64: () => Xi, initializeContext: () => Ke, globalRegistry: () => ce, globalConfig: () => en, formatError: () => Ri, flattenError: () => Ai, finalize: () => Ge, extractDefs: () => Ve, encodeAsync: () => $_, encode: () => h_, describe: () => Nc, decodeAsync: () => __, decode: () => v_, createToJSONSchemaMethod: () => Tc, createStandardJSONSchemaMethod: () => ot, config: () => te, clone: () => ge, _xor: () => Ay, _xid: () => hr, _void: () => Ic, _uuidv7: () => cr, _uuidv6: () => lr, _uuidv4: () => ur, _uuid: () => sr, _url: () => kn, _uppercase: () => Sn, _unknown: () => yc, _union: () => Ty, _undefined: () => $c, _ulid: () => gr, _uint64: () => hc, _uint32: () => cc, _tuple: () => My, _trim: () => Pn, _transform: () => Vy, _toUpperCase: () => Nn, _toLowerCase: () => En, _templateLiteral: () => nk, _symbol: () => vc, _superRefine: () => Pc, _success: () => Yy, _stringbool: () => jc, _stringFormat: () => Zt, _string: () => Hl, _startsWith: () => zn, _slugify: () => Dn, _size: () => zt, _set: () => Jy, _safeParseAsync: () => kt, _safeParse: () => yt, _safeEncodeAsync: () => Wi, _safeEncode: () => Ji, _safeDecodeAsync: () => Ki, _safeDecode: () => qi, _regex: () => In, _refine: () => Zc, _record: () => Ly, _readonly: () => tk, _property: () => Zr, _promise: () => rk, _positive: () => xr, _pipe: () => ek, _parseAsync: () => bt, _parse: () => _t, _overwrite: () => ke, _optional: () => Gy, _number: () => rc, _nullable: () => By, _null: () => _c, _normalize: () => Zn, _nonpositive: () => Ur, _nonoptional: () => Xy, _nonnegative: () => Or, _never: () => kc, _negative: () => zr, _nativeEnum: () => Wy, _nanoid: () => mr, _nan: () => xc, _multipleOf: () => We, _minSize: () => ze, _minLength: () => De, _min: () => ie, _mime: () => On, _maxSize: () => Xe, _maxLength: () => Ut, _max: () => de, _map: () => Fy, _mac: () => Yl, _lte: () => de, _lt: () => Se, _lowercase: () => wn, _literal: () => Ky, _length: () => Ot, _lazy: () => ik, _ksuid: () => vr, _jwt: () => Sr, _isoTime: () => nc, _isoDuration: () => ic, _isoDateTime: () => ec, _isoDate: () => tc, _ipv6: () => _r, _ipv4: () => $r, _intersection: () => Cy, _int64: () => gc, _int32: () => lc, _int: () => ac, _includes: () => xn, _guid: () => an, _gte: () => ie, _gt: () => xe, _float64: () => uc, _float32: () => sc, _file: () => Uc, _enum: () => qy, _endsWith: () => Un, _encodeAsync: () => Li, _encode: () => Ci, _emoji: () => dr, _email: () => ar, _e164: () => wr, _discriminatedUnion: () => Ry, _default: () => Hy, _decodeAsync: () => Fi, _decode: () => Mi, _date: () => wc, _custom: () => Oc, _cuid2: () => fr, _cuid: () => pr, _coercedString: () => Xl, _coercedNumber: () => oc, _coercedDate: () => Sc, _coercedBoolean: () => mc, _coercedBigint: () => fc, _cidrv6: () => yr, _cidrv4: () => br, _check: () => Ec, _catch: () => Qy, _boolean: () => dc, _bigint: () => pc, _base64url: () => Ir, _base64: () => kr, _array: () => zc, _any: () => bc, TimePrecision: () => Ql, NEVER: () => gs, JSONSchemaGenerator: () => ak, JSONSchema: () => sk, Doc: () => Ou, $output: () => Vl, $input: () => Gl, $constructor: () => m2, $brand: () => hs, $ZodXor: () => _l, $ZodXID: () => Mu, $ZodVoid: () => ml, $ZodUnknown: () => cl, $ZodUnion: () => yn, $ZodUndefined: () => sl, $ZodUUID: () => Eu, $ZodURL: () => Du, $ZodULID: () => Cu, $ZodType: () => z, $ZodTuple: () => tr, $ZodTransform: () => Ul, $ZodTemplateLiteral: () => Cl, $ZodSymbol: () => al, $ZodSuccess: () => Dl, $ZodStringFormat: () => A2, $ZodString: () => xt, $ZodSet: () => wl, $ZodRegistry: () => Bl, $ZodRecord: () => kl, $ZodRealError: () => ue, $ZodReadonly: () => Rl, $ZodPromise: () => Ll, $ZodPrefault: () => El, $ZodPipe: () => Al, $ZodOptional: () => nr, $ZodObjectJIT: () => $l, $ZodObject: () => vl, $ZodNumberFormat: () => rl, $ZodNumber: () => Yi, $ZodNullable: () => Zl, $ZodNull: () => ul, $ZodNonOptional: () => Nl, $ZodNever: () => dl, $ZodNanoID: () => Tu, $ZodNaN: () => Tl, $ZodMap: () => Il, $ZodMAC: () => Gu, $ZodLiteral: () => xl, $ZodLazy: () => Fl, $ZodKSUID: () => Lu, $ZodJWT: () => nl, $ZodIntersection: () => yl, $ZodISOTime: () => qu, $ZodISODuration: () => Wu, $ZodISODateTime: () => Fu, $ZodISODate: () => Ju, $ZodIPv6: () => Vu, $ZodIPv4: () => Ku, $ZodGUID: () => Pu, $ZodFunction: () => Ml, $ZodFile: () => zl, $ZodExactOptional: () => Ol, $ZodError: () => Ti, $ZodEnum: () => Sl, $ZodEncodeError: () => vn, $ZodEmoji: () => ju, $ZodEmail: () => Nu, $ZodE164: () => el, $ZodDiscriminatedUnion: () => bl, $ZodDefault: () => Pl, $ZodDate: () => pl, $ZodCustomStringFormat: () => il, $ZodCustom: () => Jl, $ZodCodec: () => ir, $ZodCheckUpperCase: () => ku, $ZodCheckStringFormat: () => St, $ZodCheckStartsWith: () => wu, $ZodCheckSizeEquals: () => hu, $ZodCheckRegex: () => bu, $ZodCheckProperty: () => xu, $ZodCheckOverwrite: () => Uu, $ZodCheckNumberFormat: () => mu, $ZodCheckMultipleOf: () => du, $ZodCheckMinSize: () => gu, $ZodCheckMinLength: () => $u, $ZodCheckMimeType: () => zu, $ZodCheckMaxSize: () => fu, $ZodCheckMaxLength: () => vu, $ZodCheckLowerCase: () => yu, $ZodCheckLessThan: () => Bi, $ZodCheckLengthEquals: () => _u, $ZodCheckIncludes: () => Iu, $ZodCheckGreaterThan: () => Hi, $ZodCheckEndsWith: () => Su, $ZodCheckBigIntFormat: () => pu, $ZodCheck: () => J, $ZodCatch: () => jl, $ZodCUID2: () => Ru, $ZodCUID: () => Au, $ZodCIDRv6: () => Hu, $ZodCIDRv4: () => Bu, $ZodBoolean: () => Qi, $ZodBigIntFormat: () => ol, $ZodBigInt: () => er, $ZodBase64URL: () => Qu, $ZodBase64: () => Xu, $ZodAsyncError: () => Ee, $ZodArray: () => fl, $ZodAny: () => ll });
 var gs = Object.freeze({ status: "aborted" });
 function m2(e2, t, i) {
-  var _a19;
   function o(s, u2) {
     if (s._zod || Object.defineProperty(s, "_zod", { value: { def: u2, constr: a, traits: /* @__PURE__ */ new Set() }, enumerable: false }), s._zod.traits.has(e2)) return;
     s._zod.traits.add(e2), t(s, u2);
@@ -52279,22 +52026,18 @@ function m2(e2, t, i) {
       g in s || (s[g] = l[g].bind(s));
     }
   }
-  let n = (_a19 = i == null ? void 0 : i.Parent) != null ? _a19 : Object;
+  let n = i?.Parent ?? Object;
   class r2 extends n {
   }
   Object.defineProperty(r2, "name", { value: e2 });
   function a(s) {
-    var _a20;
     var u2;
-    let l = (i == null ? void 0 : i.Parent) ? new r2() : this;
-    o(l, s), (_a20 = (u2 = l._zod).deferred) != null ? _a20 : u2.deferred = [];
+    let l = i?.Parent ? new r2() : this;
+    o(l, s), (u2 = l._zod).deferred ?? (u2.deferred = []);
     for (let d2 of l._zod.deferred) d2();
     return l;
   }
-  return Object.defineProperty(a, "init", { value: o }), Object.defineProperty(a, Symbol.hasInstance, { value: (s) => {
-    var _a20, _b8;
-    return (i == null ? void 0 : i.Parent) && s instanceof i.Parent ? true : (_b8 = (_a20 = s == null ? void 0 : s._zod) == null ? void 0 : _a20.traits) == null ? void 0 : _b8.has(e2);
-  } }), Object.defineProperty(a, "name", { value: e2 }), a;
+  return Object.defineProperty(a, "init", { value: o }), Object.defineProperty(a, Symbol.hasInstance, { value: (s) => i?.Parent && s instanceof i.Parent ? true : s?._zod?.traits?.has(e2) }), Object.defineProperty(a, "name", { value: e2 }), a;
 }
 var hs = /* @__PURE__ */ Symbol("zod_brand");
 var Ee = class extends Error {
@@ -52355,7 +52098,7 @@ function vs(e2, t) {
   let i = (e2.toString().split(".")[1] || "").length, o = t.toString(), n = (o.split(".")[1] || "").length;
   if (n === 0 && /\d?e-\d?/.test(o)) {
     let u2 = o.match(/\d?e-(\d?)/);
-    (u2 == null ? void 0 : u2[1]) && (n = Number.parseInt(u2[1]));
+    u2?.[1] && (n = Number.parseInt(u2[1]));
   }
   let r2 = i > n ? i : n, a = Number.parseInt(e2.toFixed(r2).replace(".", "")), s = Number.parseInt(t.toFixed(r2).replace(".", ""));
   return a % s / 10 ** r2;
@@ -52388,7 +52131,7 @@ function H$(e2) {
   return ye(e2._zod.def);
 }
 function X$(e2, t) {
-  return t ? t.reduce((i, o) => i == null ? void 0 : i[o], e2) : e2;
+  return t ? t.reduce((i, o) => i?.[o], e2) : e2;
 }
 function Y$(e2) {
   let t = Object.keys(e2), i = t.map((o) => e2[o]);
@@ -52415,8 +52158,7 @@ function Je(e2) {
   return typeof e2 == "object" && e2 !== null && !Array.isArray(e2);
 }
 var _s = $t(() => {
-  var _a19;
-  if (typeof navigator < "u" && ((_a19 = navigator == null ? void 0 : navigator.userAgent) == null ? void 0 : _a19.includes("Cloudflare"))) return false;
+  if (typeof navigator < "u" && navigator?.userAgent?.includes("Cloudflare")) return false;
   try {
     return new Function(""), true;
   } catch {
@@ -52467,15 +52209,15 @@ function _e(e2) {
   return e2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 function ge(e2, t, i) {
-  let o = new e2._zod.constr(t != null ? t : e2._zod.def);
-  return (!t || (i == null ? void 0 : i.parent)) && (o._zod.parent = e2), o;
+  let o = new e2._zod.constr(t ?? e2._zod.def);
+  return (!t || i?.parent) && (o._zod.parent = e2), o;
 }
 function $(e2) {
   let t = e2;
   if (!t) return {};
   if (typeof t == "string") return { error: () => t };
-  if ((t == null ? void 0 : t.message) !== void 0) {
-    if ((t == null ? void 0 : t.error) !== void 0) throw Error("Cannot specify both `message` and `error` params");
+  if (t?.message !== void 0) {
+    if (t?.error !== void 0) throw Error("Cannot specify both `message` and `error` params");
     t.error = t.message;
   }
   return delete t.message, typeof t.error == "string" ? { ...t, error: () => t.error } : t;
@@ -52483,19 +52225,19 @@ function $(e2) {
 function n_(e2) {
   let t;
   return new Proxy({}, { get(i, o, n) {
-    return t != null ? t : t = e2(), Reflect.get(t, o, n);
+    return t ?? (t = e2()), Reflect.get(t, o, n);
   }, set(i, o, n, r2) {
-    return t != null ? t : t = e2(), Reflect.set(t, o, n, r2);
+    return t ?? (t = e2()), Reflect.set(t, o, n, r2);
   }, has(i, o) {
-    return t != null ? t : t = e2(), Reflect.has(t, o);
+    return t ?? (t = e2()), Reflect.has(t, o);
   }, deleteProperty(i, o) {
-    return t != null ? t : t = e2(), Reflect.deleteProperty(t, o);
+    return t ?? (t = e2()), Reflect.deleteProperty(t, o);
   }, ownKeys(i) {
-    return t != null ? t : t = e2(), Reflect.ownKeys(t);
+    return t ?? (t = e2()), Reflect.ownKeys(t);
   }, getOwnPropertyDescriptor(i, o) {
-    return t != null ? t : t = e2(), Reflect.getOwnPropertyDescriptor(t, o);
+    return t ?? (t = e2()), Reflect.getOwnPropertyDescriptor(t, o);
   }, defineProperty(i, o, n) {
-    return t != null ? t : t = e2(), Reflect.defineProperty(t, o, n);
+    return t ?? (t = e2()), Reflect.defineProperty(t, o, n);
   } });
 }
 function w2(e2) {
@@ -52589,29 +52331,26 @@ function l_(e2, t, i) {
   return ge(t, o);
 }
 function Pe(e2, t = 0) {
-  var _a19;
   if (e2.aborted === true) return true;
-  for (let i = t; i < e2.issues.length; i++) if (((_a19 = e2.issues[i]) == null ? void 0 : _a19.continue) !== true) return true;
+  for (let i = t; i < e2.issues.length; i++) if (e2.issues[i]?.continue !== true) return true;
   return false;
 }
 function he(e2, t) {
   return t.map((i) => {
-    var _a19;
     var o;
-    return (_a19 = (o = i).path) != null ? _a19 : o.path = [], i.path.unshift(e2), i;
+    return (o = i).path ?? (o.path = []), i.path.unshift(e2), i;
   });
 }
 function tt(e2) {
-  return typeof e2 == "string" ? e2 : e2 == null ? void 0 : e2.message;
+  return typeof e2 == "string" ? e2 : e2?.message;
 }
 function me(e2, t, i) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2;
-  let o = { ...e2, path: (_a19 = e2.path) != null ? _a19 : [] };
+  let o = { ...e2, path: e2.path ?? [] };
   if (!e2.message) {
-    let n = (_k2 = (_j = (_h2 = (_f2 = tt((_d2 = (_c2 = (_b8 = e2.inst) == null ? void 0 : _b8._zod.def) == null ? void 0 : _c2.error) == null ? void 0 : _d2.call(_c2, e2))) != null ? _f2 : tt((_e2 = t == null ? void 0 : t.error) == null ? void 0 : _e2.call(t, e2))) != null ? _h2 : tt((_g2 = i.customError) == null ? void 0 : _g2.call(i, e2))) != null ? _j : tt((_i2 = i.localeError) == null ? void 0 : _i2.call(i, e2))) != null ? _k2 : "Invalid input";
+    let n = tt(e2.inst?._zod.def?.error?.(e2)) ?? tt(t?.error?.(e2)) ?? tt(i.customError?.(e2)) ?? tt(i.localeError?.(e2)) ?? "Invalid input";
     o.message = n;
   }
-  return delete o.inst, delete o.continue, !(t == null ? void 0 : t.reportInput) && delete o.input, o;
+  return delete o.inst, delete o.continue, !t?.reportInput && delete o.input, o;
 }
 function _n(e2) {
   return e2 instanceof Set ? "set" : e2 instanceof Map ? "map" : e2 instanceof File ? "file" : "unknown";
@@ -52699,7 +52438,6 @@ function Ri(e2, t = (i) => i.message) {
 }
 function Us(e2, t = (i) => i.message) {
   let i = { errors: [] }, o = (n, r2 = []) => {
-    var _a19, _b8, _c2, _d2;
     var a, s;
     for (let u2 of n.issues) if (u2.code === "invalid_union" && u2.errors.length) u2.errors.map((l) => o({ issues: l }, u2.path));
     else if (u2.code === "invalid_key") o({ issues: u2.issues }, u2.path);
@@ -52713,7 +52451,7 @@ function Us(e2, t = (i) => i.message) {
       let d2 = i, p2 = 0;
       for (; p2 < l.length; ) {
         let g = l[p2], _2 = p2 === l.length - 1;
-        typeof g == "string" ? ((_a19 = d2.properties) != null ? _a19 : d2.properties = {}, (_b8 = (a = d2.properties)[g]) != null ? _b8 : a[g] = { errors: [] }, d2 = d2.properties[g]) : ((_c2 = d2.items) != null ? _c2 : d2.items = [], (_d2 = (s = d2.items)[g]) != null ? _d2 : s[g] = { errors: [] }, d2 = d2.items[g]), _2 && d2.errors.push(t(u2)), p2++;
+        typeof g == "string" ? (d2.properties ?? (d2.properties = {}), (a = d2.properties)[g] ?? (a[g] = { errors: [] }), d2 = d2.properties[g]) : (d2.items ?? (d2.items = []), (s = d2.items)[g] ?? (s[g] = { errors: [] }), d2 = d2.items[g]), _2 && d2.errors.push(t(u2)), p2++;
       }
     }
   };
@@ -52725,32 +52463,26 @@ function Os(e2) {
   return t.join("");
 }
 function Zs(e2) {
-  var _a19;
-  let t = [], i = [...e2.issues].sort((o, n) => {
-    var _a20, _b8;
-    return ((_a20 = o.path) != null ? _a20 : []).length - ((_b8 = n.path) != null ? _b8 : []).length;
-  });
-  for (let o of i) t.push(`\u2716 ${o.message}`), ((_a19 = o.path) == null ? void 0 : _a19.length) && t.push(`  \u2192 at ${Os(o.path)}`);
+  let t = [], i = [...e2.issues].sort((o, n) => (o.path ?? []).length - (n.path ?? []).length);
+  for (let o of i) t.push(`\u2716 ${o.message}`), o.path?.length && t.push(`  \u2192 at ${Os(o.path)}`);
   return t.join(`
 `);
 }
 var _t = (e2) => (t, i, o, n) => {
-  var _a19;
   let r2 = o ? Object.assign(o, { async: false }) : { async: false }, a = t._zod.run({ value: i, issues: [] }, r2);
   if (a instanceof Promise) throw new Ee();
   if (a.issues.length) {
-    let s = new ((_a19 = n == null ? void 0 : n.Err) != null ? _a19 : e2)(a.issues.map((u2) => me(u2, r2, te())));
-    throw ji(s, n == null ? void 0 : n.callee), s;
+    let s = new (n?.Err ?? e2)(a.issues.map((u2) => me(u2, r2, te())));
+    throw ji(s, n?.callee), s;
   }
   return a.value;
 };
 var gi = _t(ue);
 var bt = (e2) => async (t, i, o, n) => {
-  var _a19;
   let r2 = o ? Object.assign(o, { async: true }) : { async: true }, a = t._zod.run({ value: i, issues: [] }, r2);
   if (a instanceof Promise && (a = await a), a.issues.length) {
-    let s = new ((_a19 = n == null ? void 0 : n.Err) != null ? _a19 : e2)(a.issues.map((u2) => me(u2, r2, te())));
-    throw ji(s, n == null ? void 0 : n.callee), s;
+    let s = new (n?.Err ?? e2)(a.issues.map((u2) => me(u2, r2, te())));
+    throw ji(s, n?.callee), s;
   }
   return a.value;
 };
@@ -52758,7 +52490,7 @@ var hi = bt(ue);
 var yt = (e2) => (t, i, o) => {
   let n = o ? { ...o, async: false } : { async: false }, r2 = t._zod.run({ value: i, issues: [] }, n);
   if (r2 instanceof Promise) throw new Ee();
-  return r2.issues.length ? { success: false, error: new (e2 != null ? e2 : Ti)(r2.issues.map((a) => me(a, n, te()))) } : { success: true, data: r2.value };
+  return r2.issues.length ? { success: false, error: new (e2 ?? Ti)(r2.issues.map((a) => me(a, n, te()))) } : { success: true, data: r2.value };
 };
 var Ps = yt(ue);
 var kt = (e2) => async (t, i, o) => {
@@ -52822,7 +52554,7 @@ function Js() {
 var qs = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
 var Ws = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
 var Ks = (e2) => {
-  let t = _e(e2 != null ? e2 : ":");
+  let t = _e(e2 ?? ":");
   return new RegExp(`^(?:[0-9A-F]{2}${t}){5}[0-9A-F]{2}$|^(?:[0-9a-f]{2}${t}){5}[0-9a-f]{2}$`);
 };
 var Vs = /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/([0-9]|[1-2][0-9]|3[0-2])$/;
@@ -52847,8 +52579,7 @@ function tu(e2) {
   return new RegExp(`^${Xs}T(?:${o})$`);
 }
 var nu = (e2) => {
-  var _a19, _b8;
-  let t = e2 ? `[\\s\\S]{${(_a19 = e2 == null ? void 0 : e2.minimum) != null ? _a19 : 0},${(_b8 = e2 == null ? void 0 : e2.maximum) != null ? _b8 : ""}}` : "[\\s\\S]*";
+  let t = e2 ? `[\\s\\S]{${e2?.minimum ?? 0},${e2?.maximum ?? ""}}` : "[\\s\\S]*";
   return new RegExp(`^${t}$`);
 };
 var iu = /^-?\d+n?$/;
@@ -52882,17 +52613,15 @@ var G_ = /^[0-9a-fA-F]{128}$/;
 var B_ = It(86, "==");
 var H_ = wt(86);
 var J = m2("$ZodCheck", (e2, t) => {
-  var _a19, _b8;
   var i;
-  (_a19 = e2._zod) != null ? _a19 : e2._zod = {}, e2._zod.def = t, (_b8 = (i = e2._zod).onattach) != null ? _b8 : i.onattach = [];
+  e2._zod ?? (e2._zod = {}), e2._zod.def = t, (i = e2._zod).onattach ?? (i.onattach = []);
 });
 var cu = { number: "number", bigint: "bigint", object: "date" };
 var Bi = m2("$ZodCheckLessThan", (e2, t) => {
   J.init(e2, t);
   let i = cu[typeof t.value];
   e2._zod.onattach.push((o) => {
-    var _a19;
-    let n = o._zod.bag, r2 = (_a19 = t.inclusive ? n.maximum : n.exclusiveMaximum) != null ? _a19 : Number.POSITIVE_INFINITY;
+    let n = o._zod.bag, r2 = (t.inclusive ? n.maximum : n.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
     t.value < r2 && (t.inclusive ? n.maximum = t.value : n.exclusiveMaximum = t.value);
   }), e2._zod.check = (o) => {
     (t.inclusive ? o.value <= t.value : o.value < t.value) || o.issues.push({ origin: i, code: "too_big", maximum: typeof t.value == "object" ? t.value.getTime() : t.value, input: o.value, inclusive: t.inclusive, inst: e2, continue: !t.abort });
@@ -52902,8 +52631,7 @@ var Hi = m2("$ZodCheckGreaterThan", (e2, t) => {
   J.init(e2, t);
   let i = cu[typeof t.value];
   e2._zod.onattach.push((o) => {
-    var _a19;
-    let n = o._zod.bag, r2 = (_a19 = t.inclusive ? n.minimum : n.exclusiveMinimum) != null ? _a19 : Number.NEGATIVE_INFINITY;
+    let n = o._zod.bag, r2 = (t.inclusive ? n.minimum : n.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
     t.value > r2 && (t.inclusive ? n.minimum = t.value : n.exclusiveMinimum = t.value);
   }), e2._zod.check = (o) => {
     (t.inclusive ? o.value >= t.value : o.value > t.value) || o.issues.push({ origin: i, code: "too_small", minimum: typeof t.value == "object" ? t.value.getTime() : t.value, input: o.value, inclusive: t.inclusive, inst: e2, continue: !t.abort });
@@ -52911,18 +52639,16 @@ var Hi = m2("$ZodCheckGreaterThan", (e2, t) => {
 });
 var du = m2("$ZodCheckMultipleOf", (e2, t) => {
   J.init(e2, t), e2._zod.onattach.push((i) => {
-    var _a19;
     var o;
-    (_a19 = (o = i._zod.bag).multipleOf) != null ? _a19 : o.multipleOf = t.value;
+    (o = i._zod.bag).multipleOf ?? (o.multipleOf = t.value);
   }), e2._zod.check = (i) => {
     if (typeof i.value != typeof t.value) throw Error("Cannot mix number and bigint in multiple_of check.");
     (typeof i.value == "bigint" ? i.value % t.value === BigInt(0) : vs(i.value, t.value) === 0) || i.issues.push({ origin: typeof i.value, code: "not_multiple_of", divisor: t.value, input: i.value, inst: e2, continue: !t.abort });
   };
 });
 var mu = m2("$ZodCheckNumberFormat", (e2, t) => {
-  var _a19;
   J.init(e2, t), t.format = t.format || "float64";
-  let i = (_a19 = t.format) == null ? void 0 : _a19.includes("int"), o = i ? "int" : "number", [n, r2] = Is[t.format];
+  let i = t.format?.includes("int"), o = i ? "int" : "number", [n, r2] = Is[t.format];
   e2._zod.onattach.push((a) => {
     let s = a._zod.bag;
     s.format = t.format, s.minimum = n, s.maximum = r2, i && (s.pattern = ru);
@@ -52953,14 +52679,12 @@ var pu = m2("$ZodCheckBigIntFormat", (e2, t) => {
   };
 });
 var fu = m2("$ZodCheckMaxSize", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.size !== void 0;
-  }, e2._zod.onattach.push((o) => {
-    var _a20;
-    let n = (_a20 = o._zod.bag.maximum) != null ? _a20 : Number.POSITIVE_INFINITY;
+  }), e2._zod.onattach.push((o) => {
+    let n = o._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
     t.maximum < n && (o._zod.bag.maximum = t.maximum);
   }), e2._zod.check = (o) => {
     let n = o.value;
@@ -52968,14 +52692,12 @@ var fu = m2("$ZodCheckMaxSize", (e2, t) => {
   };
 });
 var gu = m2("$ZodCheckMinSize", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.size !== void 0;
-  }, e2._zod.onattach.push((o) => {
-    var _a20;
-    let n = (_a20 = o._zod.bag.minimum) != null ? _a20 : Number.NEGATIVE_INFINITY;
+  }), e2._zod.onattach.push((o) => {
+    let n = o._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
     t.minimum > n && (o._zod.bag.minimum = t.minimum);
   }), e2._zod.check = (o) => {
     let n = o.value;
@@ -52983,12 +52705,11 @@ var gu = m2("$ZodCheckMinSize", (e2, t) => {
   };
 });
 var hu = m2("$ZodCheckSizeEquals", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.size !== void 0;
-  }, e2._zod.onattach.push((o) => {
+  }), e2._zod.onattach.push((o) => {
     let n = o._zod.bag;
     n.minimum = t.size, n.maximum = t.size, n.size = t.size;
   }), e2._zod.check = (o) => {
@@ -52999,14 +52720,12 @@ var hu = m2("$ZodCheckSizeEquals", (e2, t) => {
   };
 });
 var vu = m2("$ZodCheckMaxLength", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.length !== void 0;
-  }, e2._zod.onattach.push((o) => {
-    var _a20;
-    let n = (_a20 = o._zod.bag.maximum) != null ? _a20 : Number.POSITIVE_INFINITY;
+  }), e2._zod.onattach.push((o) => {
+    let n = o._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
     t.maximum < n && (o._zod.bag.maximum = t.maximum);
   }), e2._zod.check = (o) => {
     let n = o.value;
@@ -53016,14 +52735,12 @@ var vu = m2("$ZodCheckMaxLength", (e2, t) => {
   };
 });
 var $u = m2("$ZodCheckMinLength", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.length !== void 0;
-  }, e2._zod.onattach.push((o) => {
-    var _a20;
-    let n = (_a20 = o._zod.bag.minimum) != null ? _a20 : Number.NEGATIVE_INFINITY;
+  }), e2._zod.onattach.push((o) => {
+    let n = o._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
     t.minimum > n && (o._zod.bag.minimum = t.minimum);
   }), e2._zod.check = (o) => {
     let n = o.value;
@@ -53033,12 +52750,11 @@ var $u = m2("$ZodCheckMinLength", (e2, t) => {
   };
 });
 var _u = m2("$ZodCheckLengthEquals", (e2, t) => {
-  var _a19;
   var i;
-  J.init(e2, t), (_a19 = (i = e2._zod.def).when) != null ? _a19 : i.when = (o) => {
+  J.init(e2, t), (i = e2._zod.def).when ?? (i.when = (o) => {
     let n = o.value;
     return !Ae(n) && n.length !== void 0;
-  }, e2._zod.onattach.push((o) => {
+  }), e2._zod.onattach.push((o) => {
     let n = o._zod.bag;
     n.minimum = t.length, n.maximum = t.length, n.length = t.length;
   }), e2._zod.check = (o) => {
@@ -53049,16 +52765,14 @@ var _u = m2("$ZodCheckLengthEquals", (e2, t) => {
   };
 });
 var St = m2("$ZodCheckStringFormat", (e2, t) => {
-  var _a19, _b8;
   var i, o;
   J.init(e2, t), e2._zod.onattach.push((n) => {
-    var _a20;
     let r2 = n._zod.bag;
-    r2.format = t.format, t.pattern && ((_a20 = r2.patterns) != null ? _a20 : r2.patterns = /* @__PURE__ */ new Set(), r2.patterns.add(t.pattern));
-  }), t.pattern ? (_a19 = (i = e2._zod).check) != null ? _a19 : i.check = (n) => {
+    r2.format = t.format, t.pattern && (r2.patterns ?? (r2.patterns = /* @__PURE__ */ new Set()), r2.patterns.add(t.pattern));
+  }), t.pattern ? (i = e2._zod).check ?? (i.check = (n) => {
     t.pattern.lastIndex = 0, !t.pattern.test(n.value) && n.issues.push({ origin: "string", code: "invalid_format", format: t.format, input: n.value, ...t.pattern ? { pattern: t.pattern.toString() } : {}, inst: e2, continue: !t.abort });
-  } : (_b8 = (o = e2._zod).check) != null ? _b8 : o.check = () => {
-  };
+  }) : (o = e2._zod).check ?? (o.check = () => {
+  });
 });
 var bu = m2("$ZodCheckRegex", (e2, t) => {
   St.init(e2, t), e2._zod.check = (i) => {
@@ -53066,44 +52780,37 @@ var bu = m2("$ZodCheckRegex", (e2, t) => {
   };
 });
 var yu = m2("$ZodCheckLowerCase", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = uu, St.init(e2, t);
+  t.pattern ?? (t.pattern = uu), St.init(e2, t);
 });
 var ku = m2("$ZodCheckUpperCase", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = lu, St.init(e2, t);
+  t.pattern ?? (t.pattern = lu), St.init(e2, t);
 });
 var Iu = m2("$ZodCheckIncludes", (e2, t) => {
   J.init(e2, t);
   let i = _e(t.includes), o = new RegExp(typeof t.position == "number" ? `^.{${t.position}}${i}` : i);
   t.pattern = o, e2._zod.onattach.push((n) => {
-    var _a19;
     let r2 = n._zod.bag;
-    (_a19 = r2.patterns) != null ? _a19 : r2.patterns = /* @__PURE__ */ new Set(), r2.patterns.add(o);
+    r2.patterns ?? (r2.patterns = /* @__PURE__ */ new Set()), r2.patterns.add(o);
   }), e2._zod.check = (n) => {
     n.value.includes(t.includes, t.position) || n.issues.push({ origin: "string", code: "invalid_format", format: "includes", includes: t.includes, input: n.value, inst: e2, continue: !t.abort });
   };
 });
 var wu = m2("$ZodCheckStartsWith", (e2, t) => {
-  var _a19;
   J.init(e2, t);
   let i = new RegExp(`^${_e(t.prefix)}.*`);
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = i, e2._zod.onattach.push((o) => {
-    var _a20;
+  t.pattern ?? (t.pattern = i), e2._zod.onattach.push((o) => {
     let n = o._zod.bag;
-    (_a20 = n.patterns) != null ? _a20 : n.patterns = /* @__PURE__ */ new Set(), n.patterns.add(i);
+    n.patterns ?? (n.patterns = /* @__PURE__ */ new Set()), n.patterns.add(i);
   }), e2._zod.check = (o) => {
     o.value.startsWith(t.prefix) || o.issues.push({ origin: "string", code: "invalid_format", format: "starts_with", prefix: t.prefix, input: o.value, inst: e2, continue: !t.abort });
   };
 });
 var Su = m2("$ZodCheckEndsWith", (e2, t) => {
-  var _a19;
   J.init(e2, t);
   let i = new RegExp(`.*${_e(t.suffix)}$`);
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = i, e2._zod.onattach.push((o) => {
-    var _a20;
+  t.pattern ?? (t.pattern = i), e2._zod.onattach.push((o) => {
     let n = o._zod.bag;
-    (_a20 = n.patterns) != null ? _a20 : n.patterns = /* @__PURE__ */ new Set(), n.patterns.add(i);
+    n.patterns ?? (n.patterns = /* @__PURE__ */ new Set()), n.patterns.add(i);
   }), e2._zod.check = (o) => {
     o.value.endsWith(t.suffix) || o.issues.push({ origin: "string", code: "invalid_format", format: "ends_with", suffix: t.suffix, input: o.value, inst: e2, continue: !t.abort });
   };
@@ -53149,21 +52856,19 @@ var Ou = class {
     for (let r2 of n) this.content.push(r2);
   }
   compile() {
-    var _a19;
-    let t = Function, i = this == null ? void 0 : this.args, o = [...((_a19 = this == null ? void 0 : this.content) != null ? _a19 : [""]).map((n) => `  ${n}`)];
+    let t = Function, i = this?.args, o = [...(this?.content ?? [""]).map((n) => `  ${n}`)];
     return new t(...i, o.join(`
 `));
   }
 };
 var Zu = { major: 4, minor: 3, patch: 5 };
 var z = m2("$ZodType", (e2, t) => {
-  var _a19, _b8, _c2;
   var i;
-  e2 != null ? e2 : e2 = {}, e2._zod.def = t, e2._zod.bag = e2._zod.bag || {}, e2._zod.version = Zu;
-  let o = [...(_a19 = e2._zod.def.checks) != null ? _a19 : []];
+  e2 ?? (e2 = {}), e2._zod.def = t, e2._zod.bag = e2._zod.bag || {}, e2._zod.version = Zu;
+  let o = [...e2._zod.def.checks ?? []];
   e2._zod.traits.has("$ZodCheck") && o.unshift(e2);
   for (let n of o) for (let r2 of n._zod.onattach) r2(e2);
-  if (o.length === 0) (_b8 = (i = e2._zod).deferred) != null ? _b8 : i.deferred = [], (_c2 = e2._zod.deferred) == null ? void 0 : _c2.push(() => {
+  if (o.length === 0) (i = e2._zod).deferred ?? (i.deferred = []), e2._zod.deferred?.push(() => {
     e2._zod.run = e2._zod.parse;
   });
   else {
@@ -53174,8 +52879,8 @@ var z = m2("$ZodType", (e2, t) => {
           if (!p2._zod.def.when(a)) continue;
         } else if (l) continue;
         let g = a.issues.length, _2 = p2._zod.check(a);
-        if (_2 instanceof Promise && (u2 == null ? void 0 : u2.async) === false) throw new Ee();
-        if (d2 || _2 instanceof Promise) d2 = (d2 != null ? d2 : Promise.resolve()).then(async () => {
+        if (_2 instanceof Promise && u2?.async === false) throw new Ee();
+        if (d2 || _2 instanceof Promise) d2 = (d2 ?? Promise.resolve()).then(async () => {
           await _2, a.issues.length !== g && (l || (l = Pe(a, g)));
         });
         else {
@@ -53208,21 +52913,16 @@ var z = m2("$ZodType", (e2, t) => {
     };
   }
   O2(e2, "~standard", () => ({ validate: (n) => {
-    var _a20;
     try {
       let r2 = Ps(e2, n);
-      return r2.success ? { value: r2.data } : { issues: (_a20 = r2.error) == null ? void 0 : _a20.issues };
+      return r2.success ? { value: r2.data } : { issues: r2.error?.issues };
     } catch {
-      return Es(e2, n).then((a) => {
-        var _a21;
-        return a.success ? { value: a.data } : { issues: (_a21 = a.error) == null ? void 0 : _a21.issues };
-      });
+      return Es(e2, n).then((a) => a.success ? { value: a.data } : { issues: a.error?.issues });
     }
   }, vendor: "zod", version: 1 }));
 });
 var xt = m2("$ZodString", (e2, t) => {
-  var _a19, _b8, _c2;
-  z.init(e2, t), e2._zod.pattern = (_c2 = [...(_b8 = (_a19 = e2 == null ? void 0 : e2._zod.bag) == null ? void 0 : _a19.patterns) != null ? _b8 : []].pop()) != null ? _c2 : nu(e2._zod.bag), e2._zod.parse = (i, o) => {
+  z.init(e2, t), e2._zod.pattern = [...e2?._zod.bag?.patterns ?? []].pop() ?? nu(e2._zod.bag), e2._zod.parse = (i, o) => {
     if (t.coerce) try {
       i.value = String(i.value);
     } catch {
@@ -53234,21 +52934,18 @@ var A2 = m2("$ZodStringFormat", (e2, t) => {
   St.init(e2, t), xt.init(e2, t);
 });
 var Pu = m2("$ZodGUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ms, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ms), A2.init(e2, t);
 });
 var Eu = m2("$ZodUUID", (e2, t) => {
-  var _a19, _b8;
   if (t.version) {
     let i = { v1: 1, v2: 2, v3: 3, v4: 4, v5: 5, v6: 6, v7: 7, v8: 8 }[t.version];
     if (i === void 0) throw Error(`Invalid UUID version: "${t.version}"`);
-    (_a19 = t.pattern) != null ? _a19 : t.pattern = qe(i);
-  } else (_b8 = t.pattern) != null ? _b8 : t.pattern = qe();
+    t.pattern ?? (t.pattern = qe(i));
+  } else t.pattern ?? (t.pattern = qe());
   A2.init(e2, t);
 });
 var Nu = m2("$ZodEmail", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ls, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ls), A2.init(e2, t);
 });
 var Du = m2("$ZodURL", (e2, t) => {
   A2.init(e2, t), e2._zod.check = (i) => {
@@ -53262,56 +52959,43 @@ var Du = m2("$ZodURL", (e2, t) => {
   };
 });
 var ju = m2("$ZodEmoji", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Js(), A2.init(e2, t);
+  t.pattern ?? (t.pattern = Js()), A2.init(e2, t);
 });
 var Tu = m2("$ZodNanoID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Rs, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Rs), A2.init(e2, t);
 });
 var Au = m2("$ZodCUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ns, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ns), A2.init(e2, t);
 });
 var Ru = m2("$ZodCUID2", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ds, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ds), A2.init(e2, t);
 });
 var Cu = m2("$ZodULID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = js, A2.init(e2, t);
+  t.pattern ?? (t.pattern = js), A2.init(e2, t);
 });
 var Mu = m2("$ZodXID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ts, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ts), A2.init(e2, t);
 });
 var Lu = m2("$ZodKSUID", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = As, A2.init(e2, t);
+  t.pattern ?? (t.pattern = As), A2.init(e2, t);
 });
 var Fu = m2("$ZodISODateTime", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = tu(t), A2.init(e2, t);
+  t.pattern ?? (t.pattern = tu(t)), A2.init(e2, t);
 });
 var Ju = m2("$ZodISODate", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ys, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Ys), A2.init(e2, t);
 });
 var qu = m2("$ZodISOTime", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = eu(t), A2.init(e2, t);
+  t.pattern ?? (t.pattern = eu(t)), A2.init(e2, t);
 });
 var Wu = m2("$ZodISODuration", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Cs, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Cs), A2.init(e2, t);
 });
 var Ku = m2("$ZodIPv4", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = qs, A2.init(e2, t), e2._zod.bag.format = "ipv4";
+  t.pattern ?? (t.pattern = qs), A2.init(e2, t), e2._zod.bag.format = "ipv4";
 });
 var Vu = m2("$ZodIPv6", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ws, A2.init(e2, t), e2._zod.bag.format = "ipv6", e2._zod.check = (i) => {
+  t.pattern ?? (t.pattern = Ws), A2.init(e2, t), e2._zod.bag.format = "ipv6", e2._zod.check = (i) => {
     try {
       new URL(`http://[${i.value}]`);
     } catch {
@@ -53320,16 +53004,13 @@ var Vu = m2("$ZodIPv6", (e2, t) => {
   };
 });
 var Gu = m2("$ZodMAC", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Ks(t.delimiter), A2.init(e2, t), e2._zod.bag.format = "mac";
+  t.pattern ?? (t.pattern = Ks(t.delimiter)), A2.init(e2, t), e2._zod.bag.format = "mac";
 });
 var Bu = m2("$ZodCIDRv4", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Vs, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Vs), A2.init(e2, t);
 });
 var Hu = m2("$ZodCIDRv6", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Gs, A2.init(e2, t), e2._zod.check = (i) => {
+  t.pattern ?? (t.pattern = Gs), A2.init(e2, t), e2._zod.check = (i) => {
     let o = i.value.split("/");
     try {
       if (o.length !== 2) throw Error();
@@ -53353,8 +53034,7 @@ function Xi(e2) {
   }
 }
 var Xu = m2("$ZodBase64", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Bs, A2.init(e2, t), e2._zod.bag.contentEncoding = "base64", e2._zod.check = (i) => {
+  t.pattern ?? (t.pattern = Bs), A2.init(e2, t), e2._zod.bag.contentEncoding = "base64", e2._zod.check = (i) => {
     Xi(i.value) || i.issues.push({ code: "invalid_format", format: "base64", input: i.value, inst: e2, continue: !t.abort });
   };
 });
@@ -53364,14 +53044,12 @@ function Yu(e2) {
   return Xi(i);
 }
 var Qu = m2("$ZodBase64URL", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Vi, A2.init(e2, t), e2._zod.bag.contentEncoding = "base64url", e2._zod.check = (i) => {
+  t.pattern ?? (t.pattern = Vi), A2.init(e2, t), e2._zod.bag.contentEncoding = "base64url", e2._zod.check = (i) => {
     Yu(i.value) || i.issues.push({ code: "invalid_format", format: "base64url", input: i.value, inst: e2, continue: !t.abort });
   };
 });
 var el = m2("$ZodE164", (e2, t) => {
-  var _a19;
-  (_a19 = t.pattern) != null ? _a19 : t.pattern = Hs, A2.init(e2, t);
+  t.pattern ?? (t.pattern = Hs), A2.init(e2, t);
 });
 function tl(e2, t = null) {
   try {
@@ -53380,7 +53058,7 @@ function tl(e2, t = null) {
     let [o] = i;
     if (!o) return false;
     let n = JSON.parse(atob(o));
-    return !("typ" in n && (n == null ? void 0 : n.typ) !== "JWT" || !n.alg || t && (!("alg" in n) || n.alg !== t));
+    return !("typ" in n && n?.typ !== "JWT" || !n.alg || t && (!("alg" in n) || n.alg !== t));
   } catch {
     return false;
   }
@@ -53396,8 +53074,7 @@ var il = m2("$ZodCustomStringFormat", (e2, t) => {
   };
 });
 var Yi = m2("$ZodNumber", (e2, t) => {
-  var _a19;
-  z.init(e2, t), e2._zod.pattern = (_a19 = e2._zod.bag.pattern) != null ? _a19 : Gi, e2._zod.parse = (i, o) => {
+  z.init(e2, t), e2._zod.pattern = e2._zod.bag.pattern ?? Gi, e2._zod.parse = (i, o) => {
     if (t.coerce) try {
       i.value = Number(i.value);
     } catch {
@@ -53500,9 +53177,8 @@ function on(e2, t, i, o, n) {
   e2.value === void 0 ? i in o && (t.value[i] = void 0) : t.value[i] = e2.value;
 }
 function gl(e2) {
-  var _a19, _b8, _c2, _d2;
   let t = Object.keys(e2.shape);
-  for (let o of t) if (!((_d2 = (_c2 = (_b8 = (_a19 = e2.shape) == null ? void 0 : _a19[o]) == null ? void 0 : _b8._zod) == null ? void 0 : _c2.traits) == null ? void 0 : _d2.has("$ZodType"))) throw Error(`Invalid element at key "${o}": expected a Zod schema`);
+  for (let o of t) if (!e2.shape?.[o]?._zod?.traits?.has("$ZodType")) throw Error(`Invalid element at key "${o}": expected a Zod schema`);
   let i = ks(e2.shape);
   return { ...e2, keys: t, keySet: new Set(t), numKeys: t.length, optionalKeys: new Set(i) };
 }
@@ -53520,8 +53196,7 @@ function hl(e2, t, i, o, n, r2) {
   return a.length && i.issues.push({ code: "unrecognized_keys", keys: a, input: t, inst: r2 }), e2.length ? Promise.all(e2).then(() => i) : i;
 }
 var vl = m2("$ZodObject", (e2, t) => {
-  var _a19;
-  if (z.init(e2, t), !((_a19 = Object.getOwnPropertyDescriptor(t, "shape")) == null ? void 0 : _a19.get)) {
+  if (z.init(e2, t), !Object.getOwnPropertyDescriptor(t, "shape")?.get) {
     let a = t.shape;
     Object.defineProperty(t, "shape", { get: () => {
       let s = { ...a };
@@ -53530,12 +53205,11 @@ var vl = m2("$ZodObject", (e2, t) => {
   }
   let i = $t(() => gl(t));
   O2(e2._zod, "propValues", () => {
-    var _a20;
     let a = t.shape, s = {};
     for (let u2 in a) {
       let l = a[u2]._zod;
       if (l.values) {
-        (_a20 = s[u2]) != null ? _a20 : s[u2] = /* @__PURE__ */ new Set();
+        s[u2] ?? (s[u2] = /* @__PURE__ */ new Set());
         for (let d2 of l.values) s[u2].add(d2);
       }
     }
@@ -53543,7 +53217,7 @@ var vl = m2("$ZodObject", (e2, t) => {
   });
   let o = Je, n = t.catchall, r2;
   e2._zod.parse = (a, s) => {
-    r2 != null ? r2 : r2 = i.value;
+    r2 ?? (r2 = i.value);
     let u2 = a.value;
     if (!o(u2)) return a.issues.push({ expected: "object", code: "invalid_type", input: u2, inst: e2 }), a;
     a.value = {};
@@ -53558,7 +53232,6 @@ var vl = m2("$ZodObject", (e2, t) => {
 var $l = m2("$ZodObjectJIT", (e2, t) => {
   vl.init(e2, t);
   let i = e2._zod.parse, o = $t(() => gl(t)), n = (p2) => {
-    var _a19, _b8;
     let g = new Ou(["shape", "payload", "ctx"]), _2 = o.value, x = (D) => {
       let Z = fi(D);
       return `shape[${Z}]._zod.run({ value: input[${Z}], issues: [] }, ctx)`;
@@ -53568,7 +53241,7 @@ var $l = m2("$ZodObjectJIT", (e2, t) => {
     for (let D of _2.keys) B[D] = `key_${$e++}`;
     g.write("const newResult = {};");
     for (let D of _2.keys) {
-      let Z = B[D], N = fi(D), Oe = ((_b8 = (_a19 = p2[D]) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.optout) === "optional";
+      let Z = B[D], N = fi(D), Oe = p2[D]?._zod?.optout === "optional";
       g.write(`const ${Z} = ${x(D)};`), Oe ? g.write(`
         if (${Z}.issues.length) {
           if (${N} in input) {
@@ -53610,9 +53283,9 @@ var $l = m2("$ZodObjectJIT", (e2, t) => {
     return (D, Z) => Me(p2, D, Z);
   }, r2, a = Je, s = !en.jitless, u2 = s && _s.value, l = t.catchall, d2;
   e2._zod.parse = (p2, g) => {
-    d2 != null ? d2 : d2 = o.value;
+    d2 ?? (d2 = o.value);
     let _2 = p2.value;
-    return a(_2) ? s && u2 && (g == null ? void 0 : g.async) === false && g.jitless !== true ? (r2 || (r2 = n(t.shape)), p2 = r2(p2, g), l ? hl([], _2, p2, g, d2, e2) : p2) : i(p2, g) : (p2.issues.push({ expected: "object", code: "invalid_type", input: _2, inst: e2 }), p2);
+    return a(_2) ? s && u2 && g?.async === false && g.jitless !== true ? (r2 || (r2 = n(t.shape)), p2 = r2(p2, g), l ? hl([], _2, p2, g, d2, e2) : p2) : i(p2, g) : (p2.issues.push({ expected: "object", code: "invalid_type", input: _2, inst: e2 }), p2);
   };
 });
 function ea(e2, t, i, o) {
@@ -53677,10 +53350,9 @@ var bl = m2("$ZodDiscriminatedUnion", (e2, t) => {
     return n;
   });
   let o = $t(() => {
-    var _a19;
     let n = t.options, r2 = /* @__PURE__ */ new Map();
     for (let a of n) {
-      let s = (_a19 = a._zod.propValues) == null ? void 0 : _a19[t.discriminator];
+      let s = a._zod.propValues?.[t.discriminator];
       if (!s || s.size === 0) throw Error(`Invalid discriminated union option at index "${t.options.indexOf(a)}"`);
       for (let u2 of s) {
         if (r2.has(u2)) throw Error(`Duplicate discriminator value "${String(u2)}"`);
@@ -53692,7 +53364,7 @@ var bl = m2("$ZodDiscriminatedUnion", (e2, t) => {
   e2._zod.parse = (n, r2) => {
     let a = n.value;
     if (!Je(a)) return n.issues.push({ code: "invalid_type", expected: "object", input: a, inst: e2 }), n;
-    let s = o.value.get(a == null ? void 0 : a[t.discriminator]);
+    let s = o.value.get(a?.[t.discriminator]);
     return s ? s._zod.run(n, r2) : t.unionFallback ? i(n, r2) : (n.issues.push({ code: "invalid_union", errors: [], note: "No matching discriminator", discriminator: t.discriminator, input: a, path: [t.discriminator], inst: e2 }), n);
   };
 });
@@ -53729,7 +53401,7 @@ function vi(e2, t) {
 function na(e2, t, i) {
   let o = /* @__PURE__ */ new Map(), n;
   for (let s of t.issues) if (s.code === "unrecognized_keys") {
-    n != null ? n : n = s;
+    n ?? (n = s);
     for (let u2 of s.keys)
       o.has(u2) || o.set(u2, {}), o.get(u2).l = true;
   } else e2.issues.push(s);
@@ -53791,7 +53463,7 @@ var kl = m2("$ZodRecord", (e2, t) => {
         })) : (d2.issues.length && i.issues.push(...he(l, d2.issues)), i.value[l] = d2.value);
       }
       let u2;
-      for (let l in n) s.has(l) || (u2 = u2 != null ? u2 : [], u2.push(l));
+      for (let l in n) s.has(l) || (u2 = u2 ?? [], u2.push(l));
       u2 && u2.length > 0 && i.issues.push({ code: "unrecognized_keys", input: n, inst: e2, keys: u2 });
     } else {
       i.value = {};
@@ -53987,13 +53659,7 @@ function Bt(e2, t, i, o) {
   return e2.issues.length ? (e2.aborted = true, e2) : i._zod.run({ value: t, issues: e2.issues }, o);
 }
 var Rl = m2("$ZodReadonly", (e2, t) => {
-  z.init(e2, t), O2(e2._zod, "propValues", () => t.innerType._zod.propValues), O2(e2._zod, "values", () => t.innerType._zod.values), O2(e2._zod, "optin", () => {
-    var _a19, _b8;
-    return (_b8 = (_a19 = t.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.optin;
-  }), O2(e2._zod, "optout", () => {
-    var _a19, _b8;
-    return (_b8 = (_a19 = t.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.optout;
-  }), e2._zod.parse = (i, o) => {
+  z.init(e2, t), O2(e2._zod, "propValues", () => t.innerType._zod.propValues), O2(e2._zod, "values", () => t.innerType._zod.values), O2(e2._zod, "optin", () => t.innerType?._zod?.optin), O2(e2._zod, "optout", () => t.innerType?._zod?.optout), e2._zod.parse = (i, o) => {
     if (o.direction === "backward") return t.innerType._zod.run(i, o);
     let n = t.innerType._zod.run(i, o);
     return n instanceof Promise ? n.then(ua) : ua(n);
@@ -54013,10 +53679,7 @@ var Cl = m2("$ZodTemplateLiteral", (e2, t) => {
     i.push(n.slice(r2, a));
   } else if (o === null || ys.has(typeof o)) i.push(_e(`${o}`));
   else throw Error(`Invalid template literal part: ${o}`);
-  e2._zod.pattern = new RegExp(`^${i.join("")}$`), e2._zod.parse = (o, n) => {
-    var _a19;
-    return typeof o.value != "string" ? (o.issues.push({ input: o.value, inst: e2, expected: "string", code: "invalid_type" }), o) : (e2._zod.pattern.lastIndex = 0, e2._zod.pattern.test(o.value) || o.issues.push({ input: o.value, inst: e2, code: "invalid_format", format: (_a19 = t.format) != null ? _a19 : "template_literal", pattern: e2._zod.pattern.source }), o);
-  };
+  e2._zod.pattern = new RegExp(`^${i.join("")}$`), e2._zod.parse = (o, n) => typeof o.value != "string" ? (o.issues.push({ input: o.value, inst: e2, expected: "string", code: "invalid_type" }), o) : (e2._zod.pattern.lastIndex = 0, e2._zod.pattern.test(o.value) || o.issues.push({ input: o.value, inst: e2, code: "invalid_format", format: t.format ?? "template_literal", pattern: e2._zod.pattern.source }), o);
 });
 var Ml = m2("$ZodFunction", (e2, t) => (z.init(e2, t), e2._def = t, e2._zod.def = t, e2.implement = (i) => {
   if (typeof i != "function") throw Error("implement() must be called with a function");
@@ -54038,19 +53701,7 @@ var Ll = m2("$ZodPromise", (e2, t) => {
   z.init(e2, t), e2._zod.parse = (i, o) => Promise.resolve(i.value).then((n) => t.innerType._zod.run({ value: n, issues: [] }, o));
 });
 var Fl = m2("$ZodLazy", (e2, t) => {
-  z.init(e2, t), O2(e2._zod, "innerType", () => t.getter()), O2(e2._zod, "pattern", () => {
-    var _a19, _b8;
-    return (_b8 = (_a19 = e2._zod.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.pattern;
-  }), O2(e2._zod, "propValues", () => {
-    var _a19, _b8;
-    return (_b8 = (_a19 = e2._zod.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.propValues;
-  }), O2(e2._zod, "optin", () => {
-    var _a19, _b8, _c2;
-    return (_c2 = (_b8 = (_a19 = e2._zod.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.optin) != null ? _c2 : void 0;
-  }), O2(e2._zod, "optout", () => {
-    var _a19, _b8, _c2;
-    return (_c2 = (_b8 = (_a19 = e2._zod.innerType) == null ? void 0 : _a19._zod) == null ? void 0 : _b8.optout) != null ? _c2 : void 0;
-  }), e2._zod.parse = (i, o) => e2._zod.innerType._zod.run(i, o);
+  z.init(e2, t), O2(e2._zod, "innerType", () => t.getter()), O2(e2._zod, "pattern", () => e2._zod.innerType?._zod?.pattern), O2(e2._zod, "propValues", () => e2._zod.innerType?._zod?.propValues), O2(e2._zod, "optin", () => e2._zod.innerType?._zod?.optin ?? void 0), O2(e2._zod, "optout", () => e2._zod.innerType?._zod?.optout ?? void 0), e2._zod.parse = (i, o) => e2._zod.innerType._zod.run(i, o);
 });
 var Jl = m2("$ZodCustom", (e2, t) => {
   J.init(e2, t), z.init(e2, t), e2._zod.parse = (i, o) => i, e2._zod.check = (i) => {
@@ -54060,9 +53711,8 @@ var Jl = m2("$ZodCustom", (e2, t) => {
   };
 });
 function la(e2, t, i, o) {
-  var _a19;
   if (!e2) {
-    let n = { code: "custom", input: i, inst: o, path: [...(_a19 = o._zod.def.path) != null ? _a19 : []], continue: !o._zod.def.abort };
+    let n = { code: "custom", input: i, inst: o, path: [...o._zod.def.path ?? []], continue: !o._zod.def.abort };
     o._zod.def.params && (n.params = o._zod.def.params), t.issues.push(rn(n));
   }
 }
@@ -54071,22 +53721,20 @@ be(rr, { zhTW: () => Ny, zhCN: () => Py, yo: () => jy, vi: () => Oy, uz: () => z
 var X_ = () => {
   let e2 = { string: { unit: "\u062D\u0631\u0641", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" }, file: { unit: "\u0628\u0627\u064A\u062A", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" }, array: { unit: "\u0639\u0646\u0635\u0631", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" }, set: { unit: "\u0639\u0646\u0635\u0631", verb: "\u0623\u0646 \u064A\u062D\u0648\u064A" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0645\u062F\u062E\u0644", email: "\u0628\u0631\u064A\u062F \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A", url: "\u0631\u0627\u0628\u0637", emoji: "\u0625\u064A\u0645\u0648\u062C\u064A", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u062A\u0627\u0631\u064A\u062E \u0648\u0648\u0642\u062A \u0628\u0645\u0639\u064A\u0627\u0631 ISO", date: "\u062A\u0627\u0631\u064A\u062E \u0628\u0645\u0639\u064A\u0627\u0631 ISO", time: "\u0648\u0642\u062A \u0628\u0645\u0639\u064A\u0627\u0631 ISO", duration: "\u0645\u062F\u0629 \u0628\u0645\u0639\u064A\u0627\u0631 ISO", ipv4: "\u0639\u0646\u0648\u0627\u0646 IPv4", ipv6: "\u0639\u0646\u0648\u0627\u0646 IPv6", cidrv4: "\u0645\u062F\u0649 \u0639\u0646\u0627\u0648\u064A\u0646 \u0628\u0635\u064A\u063A\u0629 IPv4", cidrv6: "\u0645\u062F\u0649 \u0639\u0646\u0627\u0648\u064A\u0646 \u0628\u0635\u064A\u063A\u0629 IPv6", base64: "\u0646\u064E\u0635 \u0628\u062A\u0631\u0645\u064A\u0632 base64-encoded", base64url: "\u0646\u064E\u0635 \u0628\u062A\u0631\u0645\u064A\u0632 base64url-encoded", json_string: "\u0646\u064E\u0635 \u0639\u0644\u0649 \u0647\u064A\u0626\u0629 JSON", e164: "\u0631\u0642\u0645 \u0647\u0627\u062A\u0641 \u0628\u0645\u0639\u064A\u0627\u0631 E.164", jwt: "JWT", template_literal: "\u0645\u062F\u062E\u0644" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0645\u062F\u062E\u0644\u0627\u062A \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644\u0629: \u064A\u0641\u062A\u0631\u0636 \u0625\u062F\u062E\u0627\u0644 instanceof ${n.expected}\u060C \u0648\u0644\u0643\u0646 \u062A\u0645 \u0625\u062F\u062E\u0627\u0644 ${s}` : `\u0645\u062F\u062E\u0644\u0627\u062A \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644\u0629: \u064A\u0641\u062A\u0631\u0636 \u0625\u062F\u062E\u0627\u0644 ${r2}\u060C \u0648\u0644\u0643\u0646 \u062A\u0645 \u0625\u062F\u062E\u0627\u0644 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0645\u062F\u062E\u0644\u0627\u062A \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644\u0629: \u064A\u0641\u062A\u0631\u0636 \u0625\u062F\u062E\u0627\u0644 ${w2(n.values[0])}` : `\u0627\u062E\u062A\u064A\u0627\u0631 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062A\u0648\u0642\u0639 \u0627\u0646\u062A\u0642\u0627\u0621 \u0623\u062D\u062F \u0647\u0630\u0647 \u0627\u0644\u062E\u064A\u0627\u0631\u0627\u062A: ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? ` \u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${(_c2 = n.origin) != null ? _c2 : "\u0627\u0644\u0642\u064A\u0645\u0629"} ${r2} ${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0639\u0646\u0635\u0631"}` : `\u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${(_e2 = n.origin) != null ? _e2 : "\u0627\u0644\u0642\u064A\u0645\u0629"} ${r2} ${n.maximum.toString()}`;
+        return a ? ` \u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${n.origin ?? "\u0627\u0644\u0642\u064A\u0645\u0629"} ${r2} ${n.maximum.toString()} ${a.unit ?? "\u0639\u0646\u0635\u0631"}` : `\u0623\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645: \u064A\u0641\u062A\u0631\u0636 \u0623\u0646 \u062A\u0643\u0648\u0646 ${n.origin ?? "\u0627\u0644\u0642\u064A\u0645\u0629"} ${r2} ${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54094,7 +53742,7 @@ var X_ = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0628\u062F\u0623 \u0628\u0640 "${n.prefix}"` : r2.format === "ends_with" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0646\u062A\u0647\u064A \u0628\u0640 "${r2.suffix}"` : r2.format === "includes" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u062A\u0636\u0645\u0651\u064E\u0646 "${r2.includes}"` : r2.format === "regex" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0637\u0627\u0628\u0642 \u0627\u0644\u0646\u0645\u0637 ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644`;
+        return r2.format === "starts_with" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0628\u062F\u0623 \u0628\u0640 "${n.prefix}"` : r2.format === "ends_with" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0646\u062A\u0647\u064A \u0628\u0640 "${r2.suffix}"` : r2.format === "includes" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u062A\u0636\u0645\u0651\u064E\u0646 "${r2.includes}"` : r2.format === "regex" ? `\u0646\u064E\u0635 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0637\u0627\u0628\u0642 \u0627\u0644\u0646\u0645\u0637 ${r2.pattern}` : `${i[r2.format] ?? n.format} \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644`;
       }
       case "not_multiple_of":
         return `\u0631\u0642\u0645 \u063A\u064A\u0631 \u0645\u0642\u0628\u0648\u0644: \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u0645\u0646 \u0645\u0636\u0627\u0639\u0641\u0627\u062A ${n.divisor}`;
@@ -54117,22 +53765,20 @@ function Y_() {
 var Q_ = () => {
   let e2 = { string: { unit: "simvol", verb: "olmal\u0131d\u0131r" }, file: { unit: "bayt", verb: "olmal\u0131d\u0131r" }, array: { unit: "element", verb: "olmal\u0131d\u0131r" }, set: { unit: "element", verb: "olmal\u0131d\u0131r" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "email address", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO datetime", date: "ISO date", time: "ISO time", duration: "ISO duration", ipv4: "IPv4 address", ipv6: "IPv6 address", cidrv4: "IPv4 range", cidrv6: "IPv6 range", base64: "base64-encoded string", base64url: "base64url-encoded string", json_string: "JSON string", e164: "E.164 number", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Yanl\u0131\u015F d\u0259y\u0259r: g\xF6zl\u0259nil\u0259n instanceof ${n.expected}, daxil olan ${s}` : `Yanl\u0131\u015F d\u0259y\u0259r: g\xF6zl\u0259nil\u0259n ${r2}, daxil olan ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Yanl\u0131\u015F d\u0259y\u0259r: g\xF6zl\u0259nil\u0259n ${w2(n.values[0])}` : `Yanl\u0131\u015F se\xE7im: a\u015Fa\u011F\u0131dak\u0131lardan biri olmal\u0131d\u0131r: ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${(_c2 = n.origin) != null ? _c2 : "d\u0259y\u0259r"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "element"}` : `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${(_e2 = n.origin) != null ? _e2 : "d\u0259y\u0259r"} ${r2}${n.maximum.toString()}`;
+        return a ? `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${n.origin ?? "d\u0259y\u0259r"} ${r2}${n.maximum.toString()} ${a.unit ?? "element"}` : `\xC7ox b\xF6y\xFCk: g\xF6zl\u0259nil\u0259n ${n.origin ?? "d\u0259y\u0259r"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54140,7 +53786,7 @@ var Q_ = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Yanl\u0131\u015F m\u0259tn: "${r2.prefix}" il\u0259 ba\u015Flamal\u0131d\u0131r` : r2.format === "ends_with" ? `Yanl\u0131\u015F m\u0259tn: "${r2.suffix}" il\u0259 bitm\u0259lidir` : r2.format === "includes" ? `Yanl\u0131\u015F m\u0259tn: "${r2.includes}" daxil olmal\u0131d\u0131r` : r2.format === "regex" ? `Yanl\u0131\u015F m\u0259tn: ${r2.pattern} \u015Fablonuna uy\u011Fun olmal\u0131d\u0131r` : `Yanl\u0131\u015F ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Yanl\u0131\u015F m\u0259tn: "${r2.prefix}" il\u0259 ba\u015Flamal\u0131d\u0131r` : r2.format === "ends_with" ? `Yanl\u0131\u015F m\u0259tn: "${r2.suffix}" il\u0259 bitm\u0259lidir` : r2.format === "includes" ? `Yanl\u0131\u015F m\u0259tn: "${r2.includes}" daxil olmal\u0131d\u0131r` : r2.format === "regex" ? `Yanl\u0131\u015F m\u0259tn: ${r2.pattern} \u015Fablonuna uy\u011Fun olmal\u0131d\u0131r` : `Yanl\u0131\u015F ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Yanl\u0131\u015F \u0259d\u0259d: ${n.divisor} il\u0259 b\xF6l\xFCn\u0259 bil\u0259n olmal\u0131d\u0131r`;
@@ -54167,15 +53813,13 @@ function ca(e2, t, i, o) {
 var tb = () => {
   let e2 = { string: { unit: { one: "\u0441\u0456\u043C\u0432\u0430\u043B", few: "\u0441\u0456\u043C\u0432\u0430\u043B\u044B", many: "\u0441\u0456\u043C\u0432\u0430\u043B\u0430\u045E" }, verb: "\u043C\u0435\u0446\u044C" }, array: { unit: { one: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442", few: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B", many: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430\u045E" }, verb: "\u043C\u0435\u0446\u044C" }, set: { unit: { one: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442", few: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B", many: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430\u045E" }, verb: "\u043C\u0435\u0446\u044C" }, file: { unit: { one: "\u0431\u0430\u0439\u0442", few: "\u0431\u0430\u0439\u0442\u044B", many: "\u0431\u0430\u0439\u0442\u0430\u045E" }, verb: "\u043C\u0435\u0446\u044C" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0443\u0432\u043E\u0434", email: "email \u0430\u0434\u0440\u0430\u0441", url: "URL", emoji: "\u044D\u043C\u043E\u0434\u0437\u0456", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0434\u0430\u0442\u0430 \u0456 \u0447\u0430\u0441", date: "ISO \u0434\u0430\u0442\u0430", time: "ISO \u0447\u0430\u0441", duration: "ISO \u043F\u0440\u0430\u0446\u044F\u0433\u043B\u0430\u0441\u0446\u044C", ipv4: "IPv4 \u0430\u0434\u0440\u0430\u0441", ipv6: "IPv6 \u0430\u0434\u0440\u0430\u0441", cidrv4: "IPv4 \u0434\u044B\u044F\u043F\u0430\u0437\u043E\u043D", cidrv6: "IPv6 \u0434\u044B\u044F\u043F\u0430\u0437\u043E\u043D", base64: "\u0440\u0430\u0434\u043E\u043A \u0443 \u0444\u0430\u0440\u043C\u0430\u0446\u0435 base64", base64url: "\u0440\u0430\u0434\u043E\u043A \u0443 \u0444\u0430\u0440\u043C\u0430\u0446\u0435 base64url", json_string: "JSON \u0440\u0430\u0434\u043E\u043A", e164: "\u043D\u0443\u043C\u0430\u0440 E.164", jwt: "JWT", template_literal: "\u0443\u0432\u043E\u0434" }, o = { nan: "NaN", number: "\u043B\u0456\u043A", array: "\u043C\u0430\u0441\u0456\u045E" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u045E\u0432\u043E\u0434: \u0447\u0430\u043A\u0430\u045E\u0441\u044F instanceof ${n.expected}, \u0430\u0442\u0440\u044B\u043C\u0430\u043D\u0430 ${s}` : `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u045E\u0432\u043E\u0434: \u0447\u0430\u043A\u0430\u045E\u0441\u044F ${r2}, \u0430\u0442\u0440\u044B\u043C\u0430\u043D\u0430 ${s}`;
       }
       case "invalid_value":
@@ -54184,9 +53828,9 @@ var tb = () => {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
         if (a) {
           let s = Number(n.maximum), u2 = ca(s, a.unit.one, a.unit.few, a.unit.many);
-          return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${(_c2 = n.origin) != null ? _c2 : "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 ${a.verb} ${r2}${n.maximum.toString()} ${u2}`;
+          return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 ${a.verb} ${r2}${n.maximum.toString()} ${u2}`;
         }
-        return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${(_d2 = n.origin) != null ? _d2 : "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 \u0431\u044B\u0446\u044C ${r2}${n.maximum.toString()}`;
+        return `\u0417\u0430\u043D\u0430\u0434\u0442\u0430 \u0432\u044F\u043B\u0456\u043A\u0456: \u0447\u0430\u043A\u0430\u043B\u0430\u0441\u044F, \u0448\u0442\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u044D\u043D\u043D\u0435"} \u043F\u0430\u0432\u0456\u043D\u043D\u0430 \u0431\u044B\u0446\u044C ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54198,7 +53842,7 @@ var tb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u043F\u0430\u0447\u044B\u043D\u0430\u0446\u0446\u0430 \u0437 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0437\u0430\u043A\u0430\u043D\u0447\u0432\u0430\u0446\u0446\u0430 \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0437\u043C\u044F\u0448\u0447\u0430\u0446\u044C "${r2.includes}"` : r2.format === "regex" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0430\u0434\u043F\u0430\u0432\u044F\u0434\u0430\u0446\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B ${(_e2 = i[r2.format]) != null ? _e2 : n.format}`;
+        return r2.format === "starts_with" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u043F\u0430\u0447\u044B\u043D\u0430\u0446\u0446\u0430 \u0437 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0437\u0430\u043A\u0430\u043D\u0447\u0432\u0430\u0446\u0446\u0430 \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0437\u043C\u044F\u0448\u0447\u0430\u0446\u044C "${r2.includes}"` : r2.format === "regex" ? `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u0440\u0430\u0434\u043E\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0430\u0434\u043F\u0430\u0432\u044F\u0434\u0430\u0446\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u041D\u044F\u043F\u0440\u0430\u0432\u0456\u043B\u044C\u043D\u044B \u043B\u0456\u043A: \u043F\u0430\u0432\u0456\u043D\u0435\u043D \u0431\u044B\u0446\u044C \u043A\u0440\u0430\u0442\u043D\u044B\u043C ${n.divisor}`;
@@ -54221,22 +53865,20 @@ function nb() {
 var ib = () => {
   let e2 = { string: { unit: "\u0441\u0438\u043C\u0432\u043E\u043B\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" }, file: { unit: "\u0431\u0430\u0439\u0442\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" }, array: { unit: "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" }, set: { unit: "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0430", verb: "\u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0432\u0445\u043E\u0434", email: "\u0438\u043C\u0435\u0439\u043B \u0430\u0434\u0440\u0435\u0441", url: "URL", emoji: "\u0435\u043C\u043E\u0434\u0436\u0438", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0432\u0440\u0435\u043C\u0435", date: "ISO \u0434\u0430\u0442\u0430", time: "ISO \u0432\u0440\u0435\u043C\u0435", duration: "ISO \u043F\u0440\u043E\u0434\u044A\u043B\u0436\u0438\u0442\u0435\u043B\u043D\u043E\u0441\u0442", ipv4: "IPv4 \u0430\u0434\u0440\u0435\u0441", ipv6: "IPv6 \u0430\u0434\u0440\u0435\u0441", cidrv4: "IPv4 \u0434\u0438\u0430\u043F\u0430\u0437\u043E\u043D", cidrv6: "IPv6 \u0434\u0438\u0430\u043F\u0430\u0437\u043E\u043D", base64: "base64-\u043A\u043E\u0434\u0438\u0440\u0430\u043D \u043D\u0438\u0437", base64url: "base64url-\u043A\u043E\u0434\u0438\u0440\u0430\u043D \u043D\u0438\u0437", json_string: "JSON \u043D\u0438\u0437", e164: "E.164 \u043D\u043E\u043C\u0435\u0440", jwt: "JWT", template_literal: "\u0432\u0445\u043E\u0434" }, o = { nan: "NaN", number: "\u0447\u0438\u0441\u043B\u043E", array: "\u043C\u0430\u0441\u0438\u0432" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D \u0432\u0445\u043E\u0434: \u043E\u0447\u0430\u043A\u0432\u0430\u043D instanceof ${n.expected}, \u043F\u043E\u043B\u0443\u0447\u0435\u043D ${s}` : `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D \u0432\u0445\u043E\u0434: \u043E\u0447\u0430\u043A\u0432\u0430\u043D ${r2}, \u043F\u043E\u043B\u0443\u0447\u0435\u043D ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D \u0432\u0445\u043E\u0434: \u043E\u0447\u0430\u043A\u0432\u0430\u043D ${w2(n.values[0])}` : `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u0430 \u043E\u043F\u0446\u0438\u044F: \u043E\u0447\u0430\u043A\u0432\u0430\u043D\u043E \u0435\u0434\u043D\u043E \u043E\u0442 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u0422\u0432\u044A\u0440\u0434\u0435 \u0433\u043E\u043B\u044F\u043C\u043E: \u043E\u0447\u0430\u043A\u0432\u0430 \u0441\u0435 ${(_c2 = n.origin) != null ? _c2 : "\u0441\u0442\u043E\u0439\u043D\u043E\u0441\u0442"} \u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430 ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0430"}` : `\u0422\u0432\u044A\u0440\u0434\u0435 \u0433\u043E\u043B\u044F\u043C\u043E: \u043E\u0447\u0430\u043A\u0432\u0430 \u0441\u0435 ${(_e2 = n.origin) != null ? _e2 : "\u0441\u0442\u043E\u0439\u043D\u043E\u0441\u0442"} \u0434\u0430 \u0431\u044A\u0434\u0435 ${r2}${n.maximum.toString()}`;
+        return a ? `\u0422\u0432\u044A\u0440\u0434\u0435 \u0433\u043E\u043B\u044F\u043C\u043E: \u043E\u0447\u0430\u043A\u0432\u0430 \u0441\u0435 ${n.origin ?? "\u0441\u0442\u043E\u0439\u043D\u043E\u0441\u0442"} \u0434\u0430 \u0441\u044A\u0434\u044A\u0440\u0436\u0430 ${r2}${n.maximum.toString()} ${a.unit ?? "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0430"}` : `\u0422\u0432\u044A\u0440\u0434\u0435 \u0433\u043E\u043B\u044F\u043C\u043E: \u043E\u0447\u0430\u043A\u0432\u0430 \u0441\u0435 ${n.origin ?? "\u0441\u0442\u043E\u0439\u043D\u043E\u0441\u0442"} \u0434\u0430 \u0431\u044A\u0434\u0435 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54249,7 +53891,7 @@ var ib = () => {
         if (r2.format === "includes") return `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D \u043D\u0438\u0437: \u0442\u0440\u044F\u0431\u0432\u0430 \u0434\u0430 \u0432\u043A\u043B\u044E\u0447\u0432\u0430 "${r2.includes}"`;
         if (r2.format === "regex") return `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D \u043D\u0438\u0437: \u0442\u0440\u044F\u0431\u0432\u0430 \u0434\u0430 \u0441\u044A\u0432\u043F\u0430\u0434\u0430 \u0441 ${r2.pattern}`;
         let a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u0435\u043D";
-        return r2.format === "emoji" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "datetime" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "date" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u0430"), r2.format === "time" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "duration" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u0430"), `${a} ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "emoji" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "datetime" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "date" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u0430"), r2.format === "time" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E"), r2.format === "duration" && (a = "\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u0430"), `${a} ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u041D\u0435\u0432\u0430\u043B\u0438\u0434\u043D\u043E \u0447\u0438\u0441\u043B\u043E: \u0442\u0440\u044F\u0431\u0432\u0430 \u0434\u0430 \u0431\u044A\u0434\u0435 \u043A\u0440\u0430\u0442\u043D\u043E \u043D\u0430 ${n.divisor}`;
@@ -54272,22 +53914,20 @@ function rb() {
 var ob = () => {
   let e2 = { string: { unit: "car\xE0cters", verb: "contenir" }, file: { unit: "bytes", verb: "contenir" }, array: { unit: "elements", verb: "contenir" }, set: { unit: "elements", verb: "contenir" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "entrada", email: "adre\xE7a electr\xF2nica", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "data i hora ISO", date: "data ISO", time: "hora ISO", duration: "durada ISO", ipv4: "adre\xE7a IPv4", ipv6: "adre\xE7a IPv6", cidrv4: "rang IPv4", cidrv6: "rang IPv6", base64: "cadena codificada en base64", base64url: "cadena codificada en base64url", json_string: "cadena JSON", e164: "n\xFAmero E.164", jwt: "JWT", template_literal: "entrada" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Tipus inv\xE0lid: s'esperava instanceof ${n.expected}, s'ha rebut ${s}` : `Tipus inv\xE0lid: s'esperava ${r2}, s'ha rebut ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Valor inv\xE0lid: s'esperava ${w2(n.values[0])}` : `Opci\xF3 inv\xE0lida: s'esperava una de ${v2(n.values, " o ")}`;
       case "too_big": {
         let r2 = n.inclusive ? "com a m\xE0xim" : "menys de", a = t(n.origin);
-        return a ? `Massa gran: s'esperava que ${(_c2 = n.origin) != null ? _c2 : "el valor"} contingu\xE9s ${r2} ${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elements"}` : `Massa gran: s'esperava que ${(_e2 = n.origin) != null ? _e2 : "el valor"} fos ${r2} ${n.maximum.toString()}`;
+        return a ? `Massa gran: s'esperava que ${n.origin ?? "el valor"} contingu\xE9s ${r2} ${n.maximum.toString()} ${a.unit ?? "elements"}` : `Massa gran: s'esperava que ${n.origin ?? "el valor"} fos ${r2} ${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? "com a m\xEDnim" : "m\xE9s de", a = t(n.origin);
@@ -54295,7 +53935,7 @@ var ob = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Format inv\xE0lid: ha de comen\xE7ar amb "${r2.prefix}"` : r2.format === "ends_with" ? `Format inv\xE0lid: ha d'acabar amb "${r2.suffix}"` : r2.format === "includes" ? `Format inv\xE0lid: ha d'incloure "${r2.includes}"` : r2.format === "regex" ? `Format inv\xE0lid: ha de coincidir amb el patr\xF3 ${r2.pattern}` : `Format inv\xE0lid per a ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Format inv\xE0lid: ha de comen\xE7ar amb "${r2.prefix}"` : r2.format === "ends_with" ? `Format inv\xE0lid: ha d'acabar amb "${r2.suffix}"` : r2.format === "includes" ? `Format inv\xE0lid: ha d'incloure "${r2.includes}"` : r2.format === "regex" ? `Format inv\xE0lid: ha de coincidir amb el patr\xF3 ${r2.pattern}` : `Format inv\xE0lid per a ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `N\xFAmero inv\xE0lid: ha de ser m\xFAltiple de ${n.divisor}`;
@@ -54318,30 +53958,28 @@ function ab() {
 var sb = () => {
   let e2 = { string: { unit: "znak\u016F", verb: "m\xEDt" }, file: { unit: "bajt\u016F", verb: "m\xEDt" }, array: { unit: "prvk\u016F", verb: "m\xEDt" }, set: { unit: "prvk\u016F", verb: "m\xEDt" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "regul\xE1rn\xED v\xFDraz", email: "e-mailov\xE1 adresa", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "datum a \u010Das ve form\xE1tu ISO", date: "datum ve form\xE1tu ISO", time: "\u010Das ve form\xE1tu ISO", duration: "doba trv\xE1n\xED ISO", ipv4: "IPv4 adresa", ipv6: "IPv6 adresa", cidrv4: "rozsah IPv4", cidrv6: "rozsah IPv6", base64: "\u0159et\u011Bzec zak\xF3dovan\xFD ve form\xE1tu base64", base64url: "\u0159et\u011Bzec zak\xF3dovan\xFD ve form\xE1tu base64url", json_string: "\u0159et\u011Bzec ve form\xE1tu JSON", e164: "\u010D\xEDslo E.164", jwt: "JWT", template_literal: "vstup" }, o = { nan: "NaN", number: "\u010D\xEDslo", string: "\u0159et\u011Bzec", function: "funkce", array: "pole" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Neplatn\xFD vstup: o\u010Dek\xE1v\xE1no instanceof ${n.expected}, obdr\u017Eeno ${s}` : `Neplatn\xFD vstup: o\u010Dek\xE1v\xE1no ${r2}, obdr\u017Eeno ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Neplatn\xFD vstup: o\u010Dek\xE1v\xE1no ${w2(n.values[0])}` : `Neplatn\xE1 mo\u017Enost: o\u010Dek\xE1v\xE1na jedna z hodnot ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${(_c2 = n.origin) != null ? _c2 : "hodnota"} mus\xED m\xEDt ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "prvk\u016F"}` : `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${(_e2 = n.origin) != null ? _e2 : "hodnota"} mus\xED b\xFDt ${r2}${n.maximum.toString()}`;
+        return a ? `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${n.origin ?? "hodnota"} mus\xED m\xEDt ${r2}${n.maximum.toString()} ${a.unit ?? "prvk\u016F"}` : `Hodnota je p\u0159\xEDli\u0161 velk\xE1: ${n.origin ?? "hodnota"} mus\xED b\xFDt ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
-        return a ? `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${(_f2 = n.origin) != null ? _f2 : "hodnota"} mus\xED m\xEDt ${r2}${n.minimum.toString()} ${(_g2 = a.unit) != null ? _g2 : "prvk\u016F"}` : `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${(_h2 = n.origin) != null ? _h2 : "hodnota"} mus\xED b\xFDt ${r2}${n.minimum.toString()}`;
+        return a ? `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${n.origin ?? "hodnota"} mus\xED m\xEDt ${r2}${n.minimum.toString()} ${a.unit ?? "prvk\u016F"}` : `Hodnota je p\u0159\xEDli\u0161 mal\xE1: ${n.origin ?? "hodnota"} mus\xED b\xFDt ${r2}${n.minimum.toString()}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED za\u010D\xEDnat na "${r2.prefix}"` : r2.format === "ends_with" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED kon\u010Dit na "${r2.suffix}"` : r2.format === "includes" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED obsahovat "${r2.includes}"` : r2.format === "regex" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED odpov\xEDdat vzoru ${r2.pattern}` : `Neplatn\xFD form\xE1t ${(_i2 = i[r2.format]) != null ? _i2 : n.format}`;
+        return r2.format === "starts_with" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED za\u010D\xEDnat na "${r2.prefix}"` : r2.format === "ends_with" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED kon\u010Dit na "${r2.suffix}"` : r2.format === "includes" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED obsahovat "${r2.includes}"` : r2.format === "regex" ? `Neplatn\xFD \u0159et\u011Bzec: mus\xED odpov\xEDdat vzoru ${r2.pattern}` : `Neplatn\xFD form\xE1t ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Neplatn\xE9 \u010D\xEDslo: mus\xED b\xFDt n\xE1sobkem ${n.divisor}`;
@@ -54364,30 +54002,28 @@ function ub() {
 var lb = () => {
   let e2 = { string: { unit: "tegn", verb: "havde" }, file: { unit: "bytes", verb: "havde" }, array: { unit: "elementer", verb: "indeholdt" }, set: { unit: "elementer", verb: "indeholdt" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "e-mailadresse", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO dato- og klokkesl\xE6t", date: "ISO-dato", time: "ISO-klokkesl\xE6t", duration: "ISO-varighed", ipv4: "IPv4-omr\xE5de", ipv6: "IPv6-omr\xE5de", cidrv4: "IPv4-spektrum", cidrv6: "IPv6-spektrum", base64: "base64-kodet streng", base64url: "base64url-kodet streng", json_string: "JSON-streng", e164: "E.164-nummer", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN", string: "streng", number: "tal", boolean: "boolean", array: "liste", object: "objekt", set: "s\xE6t", file: "fil" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ugyldigt input: forventede instanceof ${n.expected}, fik ${s}` : `Ugyldigt input: forventede ${r2}, fik ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ugyldig v\xE6rdi: forventede ${w2(n.values[0])}` : `Ugyldigt valg: forventede en af f\xF8lgende ${v2(n.values, "|")}`;
       case "too_big": {
-        let r2 = n.inclusive ? "<=" : "<", a = t(n.origin), s = (_c2 = o[n.origin]) != null ? _c2 : n.origin;
-        return a ? `For stor: forventede ${s != null ? s : "value"} ${a.verb} ${r2} ${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementer"}` : `For stor: forventede ${s != null ? s : "value"} havde ${r2} ${n.maximum.toString()}`;
+        let r2 = n.inclusive ? "<=" : "<", a = t(n.origin), s = o[n.origin] ?? n.origin;
+        return a ? `For stor: forventede ${s ?? "value"} ${a.verb} ${r2} ${n.maximum.toString()} ${a.unit ?? "elementer"}` : `For stor: forventede ${s ?? "value"} havde ${r2} ${n.maximum.toString()}`;
       }
       case "too_small": {
-        let r2 = n.inclusive ? ">=" : ">", a = t(n.origin), s = (_e2 = o[n.origin]) != null ? _e2 : n.origin;
+        let r2 = n.inclusive ? ">=" : ">", a = t(n.origin), s = o[n.origin] ?? n.origin;
         return a ? `For lille: forventede ${s} ${a.verb} ${r2} ${n.minimum.toString()} ${a.unit}` : `For lille: forventede ${s} havde ${r2} ${n.minimum.toString()}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ugyldig streng: skal starte med "${r2.prefix}"` : r2.format === "ends_with" ? `Ugyldig streng: skal ende med "${r2.suffix}"` : r2.format === "includes" ? `Ugyldig streng: skal indeholde "${r2.includes}"` : r2.format === "regex" ? `Ugyldig streng: skal matche m\xF8nsteret ${r2.pattern}` : `Ugyldig ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Ugyldig streng: skal starte med "${r2.prefix}"` : r2.format === "ends_with" ? `Ugyldig streng: skal ende med "${r2.suffix}"` : r2.format === "includes" ? `Ugyldig streng: skal indeholde "${r2.includes}"` : r2.format === "regex" ? `Ugyldig streng: skal matche m\xF8nsteret ${r2.pattern}` : `Ugyldig ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ugyldigt tal: skal v\xE6re deleligt med ${n.divisor}`;
@@ -54410,22 +54046,20 @@ function cb() {
 var db = () => {
   let e2 = { string: { unit: "Zeichen", verb: "zu haben" }, file: { unit: "Bytes", verb: "zu haben" }, array: { unit: "Elemente", verb: "zu haben" }, set: { unit: "Elemente", verb: "zu haben" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "Eingabe", email: "E-Mail-Adresse", url: "URL", emoji: "Emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO-Datum und -Uhrzeit", date: "ISO-Datum", time: "ISO-Uhrzeit", duration: "ISO-Dauer", ipv4: "IPv4-Adresse", ipv6: "IPv6-Adresse", cidrv4: "IPv4-Bereich", cidrv6: "IPv6-Bereich", base64: "Base64-codierter String", base64url: "Base64-URL-codierter String", json_string: "JSON-String", e164: "E.164-Nummer", jwt: "JWT", template_literal: "Eingabe" }, o = { nan: "NaN", number: "Zahl", array: "Array" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ung\xFCltige Eingabe: erwartet instanceof ${n.expected}, erhalten ${s}` : `Ung\xFCltige Eingabe: erwartet ${r2}, erhalten ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ung\xFCltige Eingabe: erwartet ${w2(n.values[0])}` : `Ung\xFCltige Option: erwartet eine von ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Zu gro\xDF: erwartet, dass ${(_c2 = n.origin) != null ? _c2 : "Wert"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "Elemente"} hat` : `Zu gro\xDF: erwartet, dass ${(_e2 = n.origin) != null ? _e2 : "Wert"} ${r2}${n.maximum.toString()} ist`;
+        return a ? `Zu gro\xDF: erwartet, dass ${n.origin ?? "Wert"} ${r2}${n.maximum.toString()} ${a.unit ?? "Elemente"} hat` : `Zu gro\xDF: erwartet, dass ${n.origin ?? "Wert"} ${r2}${n.maximum.toString()} ist`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54433,7 +54067,7 @@ var db = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ung\xFCltiger String: muss mit "${r2.prefix}" beginnen` : r2.format === "ends_with" ? `Ung\xFCltiger String: muss mit "${r2.suffix}" enden` : r2.format === "includes" ? `Ung\xFCltiger String: muss "${r2.includes}" enthalten` : r2.format === "regex" ? `Ung\xFCltiger String: muss dem Muster ${r2.pattern} entsprechen` : `Ung\xFCltig: ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Ung\xFCltiger String: muss mit "${r2.prefix}" beginnen` : r2.format === "ends_with" ? `Ung\xFCltiger String: muss mit "${r2.suffix}" enden` : r2.format === "includes" ? `Ung\xFCltiger String: muss "${r2.includes}" enthalten` : r2.format === "regex" ? `Ung\xFCltiger String: muss dem Muster ${r2.pattern} entsprechen` : `Ung\xFCltig: ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ung\xFCltige Zahl: muss ein Vielfaches von ${n.divisor} sein`;
@@ -54456,22 +54090,20 @@ function mb() {
 var pb = () => {
   let e2 = { string: { unit: "characters", verb: "to have" }, file: { unit: "bytes", verb: "to have" }, array: { unit: "items", verb: "to have" }, set: { unit: "items", verb: "to have" }, map: { unit: "entries", verb: "to have" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "email address", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO datetime", date: "ISO date", time: "ISO time", duration: "ISO duration", ipv4: "IPv4 address", ipv6: "IPv6 address", mac: "MAC address", cidrv4: "IPv4 range", cidrv6: "IPv6 range", base64: "base64-encoded string", base64url: "base64url-encoded string", json_string: "JSON string", e164: "E.164 number", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return `Invalid input: expected ${r2}, received ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Invalid input: expected ${w2(n.values[0])}` : `Invalid option: expected one of ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Too big: expected ${(_c2 = n.origin) != null ? _c2 : "value"} to have ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elements"}` : `Too big: expected ${(_e2 = n.origin) != null ? _e2 : "value"} to be ${r2}${n.maximum.toString()}`;
+        return a ? `Too big: expected ${n.origin ?? "value"} to have ${r2}${n.maximum.toString()} ${a.unit ?? "elements"}` : `Too big: expected ${n.origin ?? "value"} to be ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54479,7 +54111,7 @@ var pb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Invalid string: must start with "${r2.prefix}"` : r2.format === "ends_with" ? `Invalid string: must end with "${r2.suffix}"` : r2.format === "includes" ? `Invalid string: must include "${r2.includes}"` : r2.format === "regex" ? `Invalid string: must match pattern ${r2.pattern}` : `Invalid ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Invalid string: must start with "${r2.prefix}"` : r2.format === "ends_with" ? `Invalid string: must end with "${r2.suffix}"` : r2.format === "includes" ? `Invalid string: must include "${r2.includes}"` : r2.format === "regex" ? `Invalid string: must match pattern ${r2.pattern}` : `Invalid ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Invalid number: must be a multiple of ${n.divisor}`;
@@ -54502,22 +54134,20 @@ function ql() {
 var fb = () => {
   let e2 = { string: { unit: "karaktrojn", verb: "havi" }, file: { unit: "bajtojn", verb: "havi" }, array: { unit: "elementojn", verb: "havi" }, set: { unit: "elementojn", verb: "havi" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "enigo", email: "retadreso", url: "URL", emoji: "emo\u011Dio", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO-datotempo", date: "ISO-dato", time: "ISO-tempo", duration: "ISO-da\u016Dro", ipv4: "IPv4-adreso", ipv6: "IPv6-adreso", cidrv4: "IPv4-rango", cidrv6: "IPv6-rango", base64: "64-ume kodita karaktraro", base64url: "URL-64-ume kodita karaktraro", json_string: "JSON-karaktraro", e164: "E.164-nombro", jwt: "JWT", template_literal: "enigo" }, o = { nan: "NaN", number: "nombro", array: "tabelo", null: "senvalora" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Nevalida enigo: atendi\u011Dis instanceof ${n.expected}, ricevi\u011Dis ${s}` : `Nevalida enigo: atendi\u011Dis ${r2}, ricevi\u011Dis ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Nevalida enigo: atendi\u011Dis ${w2(n.values[0])}` : `Nevalida opcio: atendi\u011Dis unu el ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Tro granda: atendi\u011Dis ke ${(_c2 = n.origin) != null ? _c2 : "valoro"} havu ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementojn"}` : `Tro granda: atendi\u011Dis ke ${(_e2 = n.origin) != null ? _e2 : "valoro"} havu ${r2}${n.maximum.toString()}`;
+        return a ? `Tro granda: atendi\u011Dis ke ${n.origin ?? "valoro"} havu ${r2}${n.maximum.toString()} ${a.unit ?? "elementojn"}` : `Tro granda: atendi\u011Dis ke ${n.origin ?? "valoro"} havu ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54525,7 +54155,7 @@ var fb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Nevalida karaktraro: devas komenci\u011Di per "${r2.prefix}"` : r2.format === "ends_with" ? `Nevalida karaktraro: devas fini\u011Di per "${r2.suffix}"` : r2.format === "includes" ? `Nevalida karaktraro: devas inkluzivi "${r2.includes}"` : r2.format === "regex" ? `Nevalida karaktraro: devas kongrui kun la modelo ${r2.pattern}` : `Nevalida ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Nevalida karaktraro: devas komenci\u011Di per "${r2.prefix}"` : r2.format === "ends_with" ? `Nevalida karaktraro: devas fini\u011Di per "${r2.suffix}"` : r2.format === "includes" ? `Nevalida karaktraro: devas inkluzivi "${r2.includes}"` : r2.format === "regex" ? `Nevalida karaktraro: devas kongrui kun la modelo ${r2.pattern}` : `Nevalida ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Nevalida nombro: devas esti oblo de ${n.divisor}`;
@@ -54548,41 +54178,39 @@ function gb() {
 var hb = () => {
   let e2 = { string: { unit: "caracteres", verb: "tener" }, file: { unit: "bytes", verb: "tener" }, array: { unit: "elementos", verb: "tener" }, set: { unit: "elementos", verb: "tener" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "entrada", email: "direcci\xF3n de correo electr\xF3nico", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "fecha y hora ISO", date: "fecha ISO", time: "hora ISO", duration: "duraci\xF3n ISO", ipv4: "direcci\xF3n IPv4", ipv6: "direcci\xF3n IPv6", cidrv4: "rango IPv4", cidrv6: "rango IPv6", base64: "cadena codificada en base64", base64url: "URL codificada en base64", json_string: "cadena JSON", e164: "n\xFAmero E.164", jwt: "JWT", template_literal: "entrada" }, o = { nan: "NaN", string: "texto", number: "n\xFAmero", boolean: "booleano", array: "arreglo", object: "objeto", set: "conjunto", file: "archivo", date: "fecha", bigint: "n\xFAmero grande", symbol: "s\xEDmbolo", undefined: "indefinido", null: "nulo", function: "funci\xF3n", map: "mapa", record: "registro", tuple: "tupla", enum: "enumeraci\xF3n", union: "uni\xF3n", literal: "literal", promise: "promesa", void: "vac\xEDo", never: "nunca", unknown: "desconocido", any: "cualquiera" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Entrada inv\xE1lida: se esperaba instanceof ${n.expected}, recibido ${s}` : `Entrada inv\xE1lida: se esperaba ${r2}, recibido ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Entrada inv\xE1lida: se esperaba ${w2(n.values[0])}` : `Opci\xF3n inv\xE1lida: se esperaba una de ${v2(n.values, "|")}`;
       case "too_big": {
-        let r2 = n.inclusive ? "<=" : "<", a = t(n.origin), s = (_c2 = o[n.origin]) != null ? _c2 : n.origin;
-        return a ? `Demasiado grande: se esperaba que ${s != null ? s : "valor"} tuviera ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementos"}` : `Demasiado grande: se esperaba que ${s != null ? s : "valor"} fuera ${r2}${n.maximum.toString()}`;
+        let r2 = n.inclusive ? "<=" : "<", a = t(n.origin), s = o[n.origin] ?? n.origin;
+        return a ? `Demasiado grande: se esperaba que ${s ?? "valor"} tuviera ${r2}${n.maximum.toString()} ${a.unit ?? "elementos"}` : `Demasiado grande: se esperaba que ${s ?? "valor"} fuera ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
-        let r2 = n.inclusive ? ">=" : ">", a = t(n.origin), s = (_e2 = o[n.origin]) != null ? _e2 : n.origin;
+        let r2 = n.inclusive ? ">=" : ">", a = t(n.origin), s = o[n.origin] ?? n.origin;
         return a ? `Demasiado peque\xF1o: se esperaba que ${s} tuviera ${r2}${n.minimum.toString()} ${a.unit}` : `Demasiado peque\xF1o: se esperaba que ${s} fuera ${r2}${n.minimum.toString()}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Cadena inv\xE1lida: debe comenzar con "${r2.prefix}"` : r2.format === "ends_with" ? `Cadena inv\xE1lida: debe terminar en "${r2.suffix}"` : r2.format === "includes" ? `Cadena inv\xE1lida: debe incluir "${r2.includes}"` : r2.format === "regex" ? `Cadena inv\xE1lida: debe coincidir con el patr\xF3n ${r2.pattern}` : `Inv\xE1lido ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Cadena inv\xE1lida: debe comenzar con "${r2.prefix}"` : r2.format === "ends_with" ? `Cadena inv\xE1lida: debe terminar en "${r2.suffix}"` : r2.format === "includes" ? `Cadena inv\xE1lida: debe incluir "${r2.includes}"` : r2.format === "regex" ? `Cadena inv\xE1lida: debe coincidir con el patr\xF3n ${r2.pattern}` : `Inv\xE1lido ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `N\xFAmero inv\xE1lido: debe ser m\xFAltiplo de ${n.divisor}`;
       case "unrecognized_keys":
         return `Llave${n.keys.length > 1 ? "s" : ""} desconocida${n.keys.length > 1 ? "s" : ""}: ${v2(n.keys, ", ")}`;
       case "invalid_key":
-        return `Llave inv\xE1lida en ${(_g2 = o[n.origin]) != null ? _g2 : n.origin}`;
+        return `Llave inv\xE1lida en ${o[n.origin] ?? n.origin}`;
       case "invalid_union":
         return "Entrada inv\xE1lida";
       case "invalid_element":
-        return `Valor inv\xE1lido en ${(_h2 = o[n.origin]) != null ? _h2 : n.origin}`;
+        return `Valor inv\xE1lido en ${o[n.origin] ?? n.origin}`;
       default:
         return "Entrada inv\xE1lida";
     }
@@ -54594,22 +54222,20 @@ function vb() {
 var $b = () => {
   let e2 = { string: { unit: "\u06A9\u0627\u0631\u0627\u06A9\u062A\u0631", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" }, file: { unit: "\u0628\u0627\u06CC\u062A", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" }, array: { unit: "\u0622\u06CC\u062A\u0645", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" }, set: { unit: "\u0622\u06CC\u062A\u0645", verb: "\u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0648\u0631\u0648\u062F\u06CC", email: "\u0622\u062F\u0631\u0633 \u0627\u06CC\u0645\u06CC\u0644", url: "URL", emoji: "\u0627\u06CC\u0645\u0648\u062C\u06CC", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u062A\u0627\u0631\u06CC\u062E \u0648 \u0632\u0645\u0627\u0646 \u0627\u06CC\u0632\u0648", date: "\u062A\u0627\u0631\u06CC\u062E \u0627\u06CC\u0632\u0648", time: "\u0632\u0645\u0627\u0646 \u0627\u06CC\u0632\u0648", duration: "\u0645\u062F\u062A \u0632\u0645\u0627\u0646 \u0627\u06CC\u0632\u0648", ipv4: "IPv4 \u0622\u062F\u0631\u0633", ipv6: "IPv6 \u0622\u062F\u0631\u0633", cidrv4: "IPv4 \u062F\u0627\u0645\u0646\u0647", cidrv6: "IPv6 \u062F\u0627\u0645\u0646\u0647", base64: "base64-encoded \u0631\u0634\u062A\u0647", base64url: "base64url-encoded \u0631\u0634\u062A\u0647", json_string: "JSON \u0631\u0634\u062A\u0647", e164: "E.164 \u0639\u062F\u062F", jwt: "JWT", template_literal: "\u0648\u0631\u0648\u062F\u06CC" }, o = { nan: "NaN", number: "\u0639\u062F\u062F", array: "\u0622\u0631\u0627\u06CC\u0647" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0648\u0631\u0648\u062F\u06CC \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0645\u06CC\u200C\u0628\u0627\u06CC\u0633\u062A instanceof ${n.expected} \u0645\u06CC\u200C\u0628\u0648\u062F\u060C ${s} \u062F\u0631\u06CC\u0627\u0641\u062A \u0634\u062F` : `\u0648\u0631\u0648\u062F\u06CC \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0645\u06CC\u200C\u0628\u0627\u06CC\u0633\u062A ${r2} \u0645\u06CC\u200C\u0628\u0648\u062F\u060C ${s} \u062F\u0631\u06CC\u0627\u0641\u062A \u0634\u062F`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0648\u0631\u0648\u062F\u06CC \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0645\u06CC\u200C\u0628\u0627\u06CC\u0633\u062A ${w2(n.values[0])} \u0645\u06CC\u200C\u0628\u0648\u062F` : `\u06AF\u0632\u06CC\u0646\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0645\u06CC\u200C\u0628\u0627\u06CC\u0633\u062A \u06CC\u06A9\u06CC \u0627\u0632 ${v2(n.values, "|")} \u0645\u06CC\u200C\u0628\u0648\u062F`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${(_c2 = n.origin) != null ? _c2 : "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0639\u0646\u0635\u0631"} \u0628\u0627\u0634\u062F` : `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${(_e2 = n.origin) != null ? _e2 : "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} \u0628\u0627\u0634\u062F`;
+        return a ? `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${n.origin ?? "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} ${a.unit ?? "\u0639\u0646\u0635\u0631"} \u0628\u0627\u0634\u062F` : `\u062E\u06CC\u0644\u06CC \u0628\u0632\u0631\u06AF: ${n.origin ?? "\u0645\u0642\u062F\u0627\u0631"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} \u0628\u0627\u0634\u062F`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54617,7 +54243,7 @@ var $b = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 "${r2.prefix}" \u0634\u0631\u0648\u0639 \u0634\u0648\u062F` : r2.format === "ends_with" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 "${r2.suffix}" \u062A\u0645\u0627\u0645 \u0634\u0648\u062F` : r2.format === "includes" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0634\u0627\u0645\u0644 "${r2.includes}" \u0628\u0627\u0634\u062F` : r2.format === "regex" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 \u0627\u0644\u06AF\u0648\u06CC ${r2.pattern} \u0645\u0637\u0627\u0628\u0642\u062A \u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} \u0646\u0627\u0645\u0639\u062A\u0628\u0631`;
+        return r2.format === "starts_with" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 "${r2.prefix}" \u0634\u0631\u0648\u0639 \u0634\u0648\u062F` : r2.format === "ends_with" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 "${r2.suffix}" \u062A\u0645\u0627\u0645 \u0634\u0648\u062F` : r2.format === "includes" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0634\u0627\u0645\u0644 "${r2.includes}" \u0628\u0627\u0634\u062F` : r2.format === "regex" ? `\u0631\u0634\u062A\u0647 \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0628\u0627 \u0627\u0644\u06AF\u0648\u06CC ${r2.pattern} \u0645\u0637\u0627\u0628\u0642\u062A \u062F\u0627\u0634\u062A\u0647 \u0628\u0627\u0634\u062F` : `${i[r2.format] ?? n.format} \u0646\u0627\u0645\u0639\u062A\u0628\u0631`;
       }
       case "not_multiple_of":
         return `\u0639\u062F\u062F \u0646\u0627\u0645\u0639\u062A\u0628\u0631: \u0628\u0627\u06CC\u062F \u0645\u0636\u0631\u0628 ${n.divisor} \u0628\u0627\u0634\u062F`;
@@ -54640,15 +54266,13 @@ function _b() {
 var bb = () => {
   let e2 = { string: { unit: "merkki\xE4", subject: "merkkijonon" }, file: { unit: "tavua", subject: "tiedoston" }, array: { unit: "alkiota", subject: "listan" }, set: { unit: "alkiota", subject: "joukon" }, number: { unit: "", subject: "luvun" }, bigint: { unit: "", subject: "suuren kokonaisluvun" }, int: { unit: "", subject: "kokonaisluvun" }, date: { unit: "", subject: "p\xE4iv\xE4m\xE4\xE4r\xE4n" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "s\xE4\xE4nn\xF6llinen lauseke", email: "s\xE4hk\xF6postiosoite", url: "URL-osoite", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO-aikaleima", date: "ISO-p\xE4iv\xE4m\xE4\xE4r\xE4", time: "ISO-aika", duration: "ISO-kesto", ipv4: "IPv4-osoite", ipv6: "IPv6-osoite", cidrv4: "IPv4-alue", cidrv6: "IPv6-alue", base64: "base64-koodattu merkkijono", base64url: "base64url-koodattu merkkijono", json_string: "JSON-merkkijono", e164: "E.164-luku", jwt: "JWT", template_literal: "templaattimerkkijono" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Virheellinen tyyppi: odotettiin instanceof ${n.expected}, oli ${s}` : `Virheellinen tyyppi: odotettiin ${r2}, oli ${s}`;
       }
       case "invalid_value":
@@ -54663,7 +54287,7 @@ var bb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Virheellinen sy\xF6te: t\xE4ytyy alkaa "${r2.prefix}"` : r2.format === "ends_with" ? `Virheellinen sy\xF6te: t\xE4ytyy loppua "${r2.suffix}"` : r2.format === "includes" ? `Virheellinen sy\xF6te: t\xE4ytyy sis\xE4lt\xE4\xE4 "${r2.includes}"` : r2.format === "regex" ? `Virheellinen sy\xF6te: t\xE4ytyy vastata s\xE4\xE4nn\xF6llist\xE4 lauseketta ${r2.pattern}` : `Virheellinen ${(_c2 = i[r2.format]) != null ? _c2 : n.format}`;
+        return r2.format === "starts_with" ? `Virheellinen sy\xF6te: t\xE4ytyy alkaa "${r2.prefix}"` : r2.format === "ends_with" ? `Virheellinen sy\xF6te: t\xE4ytyy loppua "${r2.suffix}"` : r2.format === "includes" ? `Virheellinen sy\xF6te: t\xE4ytyy sis\xE4lt\xE4\xE4 "${r2.includes}"` : r2.format === "regex" ? `Virheellinen sy\xF6te: t\xE4ytyy vastata s\xE4\xE4nn\xF6llist\xE4 lauseketta ${r2.pattern}` : `Virheellinen ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Virheellinen luku: t\xE4ytyy olla luvun ${n.divisor} monikerta`;
@@ -54686,22 +54310,20 @@ function yb() {
 var kb = () => {
   let e2 = { string: { unit: "caract\xE8res", verb: "avoir" }, file: { unit: "octets", verb: "avoir" }, array: { unit: "\xE9l\xE9ments", verb: "avoir" }, set: { unit: "\xE9l\xE9ments", verb: "avoir" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "entr\xE9e", email: "adresse e-mail", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "date et heure ISO", date: "date ISO", time: "heure ISO", duration: "dur\xE9e ISO", ipv4: "adresse IPv4", ipv6: "adresse IPv6", cidrv4: "plage IPv4", cidrv6: "plage IPv6", base64: "cha\xEEne encod\xE9e en base64", base64url: "cha\xEEne encod\xE9e en base64url", json_string: "cha\xEEne JSON", e164: "num\xE9ro E.164", jwt: "JWT", template_literal: "entr\xE9e" }, o = { nan: "NaN", number: "nombre", array: "tableau" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Entr\xE9e invalide : instanceof ${n.expected} attendu, ${s} re\xE7u` : `Entr\xE9e invalide : ${r2} attendu, ${s} re\xE7u`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Entr\xE9e invalide : ${w2(n.values[0])} attendu` : `Option invalide : une valeur parmi ${v2(n.values, "|")} attendue`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Trop grand : ${(_c2 = n.origin) != null ? _c2 : "valeur"} doit ${a.verb} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\xE9l\xE9ment(s)"}` : `Trop grand : ${(_e2 = n.origin) != null ? _e2 : "valeur"} doit \xEAtre ${r2}${n.maximum.toString()}`;
+        return a ? `Trop grand : ${n.origin ?? "valeur"} doit ${a.verb} ${r2}${n.maximum.toString()} ${a.unit ?? "\xE9l\xE9ment(s)"}` : `Trop grand : ${n.origin ?? "valeur"} doit \xEAtre ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54709,7 +54331,7 @@ var kb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Cha\xEEne invalide : doit commencer par "${r2.prefix}"` : r2.format === "ends_with" ? `Cha\xEEne invalide : doit se terminer par "${r2.suffix}"` : r2.format === "includes" ? `Cha\xEEne invalide : doit inclure "${r2.includes}"` : r2.format === "regex" ? `Cha\xEEne invalide : doit correspondre au mod\xE8le ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} invalide`;
+        return r2.format === "starts_with" ? `Cha\xEEne invalide : doit commencer par "${r2.prefix}"` : r2.format === "ends_with" ? `Cha\xEEne invalide : doit se terminer par "${r2.suffix}"` : r2.format === "includes" ? `Cha\xEEne invalide : doit inclure "${r2.includes}"` : r2.format === "regex" ? `Cha\xEEne invalide : doit correspondre au mod\xE8le ${r2.pattern}` : `${i[r2.format] ?? n.format} invalide`;
       }
       case "not_multiple_of":
         return `Nombre invalide : doit \xEAtre un multiple de ${n.divisor}`;
@@ -54732,22 +54354,20 @@ function Ib() {
 var wb = () => {
   let e2 = { string: { unit: "caract\xE8res", verb: "avoir" }, file: { unit: "octets", verb: "avoir" }, array: { unit: "\xE9l\xE9ments", verb: "avoir" }, set: { unit: "\xE9l\xE9ments", verb: "avoir" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "entr\xE9e", email: "adresse courriel", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "date-heure ISO", date: "date ISO", time: "heure ISO", duration: "dur\xE9e ISO", ipv4: "adresse IPv4", ipv6: "adresse IPv6", cidrv4: "plage IPv4", cidrv6: "plage IPv6", base64: "cha\xEEne encod\xE9e en base64", base64url: "cha\xEEne encod\xE9e en base64url", json_string: "cha\xEEne JSON", e164: "num\xE9ro E.164", jwt: "JWT", template_literal: "entr\xE9e" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Entr\xE9e invalide : attendu instanceof ${n.expected}, re\xE7u ${s}` : `Entr\xE9e invalide : attendu ${r2}, re\xE7u ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Entr\xE9e invalide : attendu ${w2(n.values[0])}` : `Option invalide : attendu l'une des valeurs suivantes ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "\u2264" : "<", a = t(n.origin);
-        return a ? `Trop grand : attendu que ${(_c2 = n.origin) != null ? _c2 : "la valeur"} ait ${r2}${n.maximum.toString()} ${a.unit}` : `Trop grand : attendu que ${(_d2 = n.origin) != null ? _d2 : "la valeur"} soit ${r2}${n.maximum.toString()}`;
+        return a ? `Trop grand : attendu que ${n.origin ?? "la valeur"} ait ${r2}${n.maximum.toString()} ${a.unit}` : `Trop grand : attendu que ${n.origin ?? "la valeur"} soit ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? "\u2265" : ">", a = t(n.origin);
@@ -54755,7 +54375,7 @@ var wb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Cha\xEEne invalide : doit commencer par "${r2.prefix}"` : r2.format === "ends_with" ? `Cha\xEEne invalide : doit se terminer par "${r2.suffix}"` : r2.format === "includes" ? `Cha\xEEne invalide : doit inclure "${r2.includes}"` : r2.format === "regex" ? `Cha\xEEne invalide : doit correspondre au motif ${r2.pattern}` : `${(_e2 = i[r2.format]) != null ? _e2 : n.format} invalide`;
+        return r2.format === "starts_with" ? `Cha\xEEne invalide : doit commencer par "${r2.prefix}"` : r2.format === "ends_with" ? `Cha\xEEne invalide : doit se terminer par "${r2.suffix}"` : r2.format === "includes" ? `Cha\xEEne invalide : doit inclure "${r2.includes}"` : r2.format === "regex" ? `Cha\xEEne invalide : doit correspondre au motif ${r2.pattern}` : `${i[r2.format] ?? n.format} invalide`;
       }
       case "not_multiple_of":
         return `Nombre invalide : doit \xEAtre un multiple de ${n.divisor}`;
@@ -54778,19 +54398,12 @@ function Sb() {
 var xb = () => {
   let e2 = { string: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA", gender: "f" }, number: { label: "\u05DE\u05E1\u05E4\u05E8", gender: "m" }, boolean: { label: "\u05E2\u05E8\u05DA \u05D1\u05D5\u05DC\u05D9\u05D0\u05E0\u05D9", gender: "m" }, bigint: { label: "BigInt", gender: "m" }, date: { label: "\u05EA\u05D0\u05E8\u05D9\u05DA", gender: "m" }, array: { label: "\u05DE\u05E2\u05E8\u05DA", gender: "m" }, object: { label: "\u05D0\u05D5\u05D1\u05D9\u05D9\u05E7\u05D8", gender: "m" }, null: { label: "\u05E2\u05E8\u05DA \u05E8\u05D9\u05E7 (null)", gender: "m" }, undefined: { label: "\u05E2\u05E8\u05DA \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8 (undefined)", gender: "m" }, symbol: { label: "\u05E1\u05D9\u05DE\u05D1\u05D5\u05DC (Symbol)", gender: "m" }, function: { label: "\u05E4\u05D5\u05E0\u05E7\u05E6\u05D9\u05D4", gender: "f" }, map: { label: "\u05DE\u05E4\u05D4 (Map)", gender: "f" }, set: { label: "\u05E7\u05D1\u05D5\u05E6\u05D4 (Set)", gender: "f" }, file: { label: "\u05E7\u05D5\u05D1\u05E5", gender: "m" }, promise: { label: "Promise", gender: "m" }, NaN: { label: "NaN", gender: "m" }, unknown: { label: "\u05E2\u05E8\u05DA \u05DC\u05D0 \u05D9\u05D3\u05D5\u05E2", gender: "m" }, value: { label: "\u05E2\u05E8\u05DA", gender: "m" } }, t = { string: { unit: "\u05EA\u05D5\u05D5\u05D9\u05DD", shortLabel: "\u05E7\u05E6\u05E8", longLabel: "\u05D0\u05E8\u05D5\u05DA" }, file: { unit: "\u05D1\u05D9\u05D9\u05D8\u05D9\u05DD", shortLabel: "\u05E7\u05D8\u05DF", longLabel: "\u05D2\u05D3\u05D5\u05DC" }, array: { unit: "\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD", shortLabel: "\u05E7\u05D8\u05DF", longLabel: "\u05D2\u05D3\u05D5\u05DC" }, set: { unit: "\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD", shortLabel: "\u05E7\u05D8\u05DF", longLabel: "\u05D2\u05D3\u05D5\u05DC" }, number: { unit: "", shortLabel: "\u05E7\u05D8\u05DF", longLabel: "\u05D2\u05D3\u05D5\u05DC" } }, i = (l) => l ? e2[l] : void 0, o = (l) => {
     let d2 = i(l);
-    return d2 ? d2.label : l != null ? l : e2.unknown.label;
-  }, n = (l) => `\u05D4${o(l)}`, r2 = (l) => {
-    var _a19, _b8;
-    return ((_b8 = (_a19 = i(l)) == null ? void 0 : _a19.gender) != null ? _b8 : "m") === "f" ? "\u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05D9\u05D5\u05EA" : "\u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA";
-  }, a = (l) => {
-    var _a19;
-    return l ? (_a19 = t[l]) != null ? _a19 : null : null;
-  }, s = { regex: { label: "\u05E7\u05DC\u05D8", gender: "m" }, email: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC", gender: "f" }, url: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA \u05E8\u05E9\u05EA", gender: "f" }, emoji: { label: "\u05D0\u05D9\u05DE\u05D5\u05D2'\u05D9", gender: "m" }, uuid: { label: "UUID", gender: "m" }, nanoid: { label: "nanoid", gender: "m" }, guid: { label: "GUID", gender: "m" }, cuid: { label: "cuid", gender: "m" }, cuid2: { label: "cuid2", gender: "m" }, ulid: { label: "ULID", gender: "m" }, xid: { label: "XID", gender: "m" }, ksuid: { label: "KSUID", gender: "m" }, datetime: { label: "\u05EA\u05D0\u05E8\u05D9\u05DA \u05D5\u05D6\u05DE\u05DF ISO", gender: "m" }, date: { label: "\u05EA\u05D0\u05E8\u05D9\u05DA ISO", gender: "m" }, time: { label: "\u05D6\u05DE\u05DF ISO", gender: "m" }, duration: { label: "\u05DE\u05E9\u05DA \u05D6\u05DE\u05DF ISO", gender: "m" }, ipv4: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA IPv4", gender: "f" }, ipv6: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA IPv6", gender: "f" }, cidrv4: { label: "\u05D8\u05D5\u05D5\u05D7 IPv4", gender: "m" }, cidrv6: { label: "\u05D8\u05D5\u05D5\u05D7 IPv6", gender: "m" }, base64: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D1\u05D1\u05E1\u05D9\u05E1 64", gender: "f" }, base64url: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D1\u05D1\u05E1\u05D9\u05E1 64 \u05DC\u05DB\u05EA\u05D5\u05D1\u05D5\u05EA \u05E8\u05E9\u05EA", gender: "f" }, json_string: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA JSON", gender: "f" }, e164: { label: "\u05DE\u05E1\u05E4\u05E8 E.164", gender: "m" }, jwt: { label: "JWT", gender: "m" }, ends_with: { label: "\u05E7\u05DC\u05D8", gender: "m" }, includes: { label: "\u05E7\u05DC\u05D8", gender: "m" }, lowercase: { label: "\u05E7\u05DC\u05D8", gender: "m" }, starts_with: { label: "\u05E7\u05DC\u05D8", gender: "m" }, uppercase: { label: "\u05E7\u05DC\u05D8", gender: "m" } }, u2 = { nan: "NaN" };
+    return d2 ? d2.label : l ?? e2.unknown.label;
+  }, n = (l) => `\u05D4${o(l)}`, r2 = (l) => (i(l)?.gender ?? "m") === "f" ? "\u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05D9\u05D5\u05EA" : "\u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA", a = (l) => l ? t[l] ?? null : null, s = { regex: { label: "\u05E7\u05DC\u05D8", gender: "m" }, email: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA \u05D0\u05D9\u05DE\u05D9\u05D9\u05DC", gender: "f" }, url: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA \u05E8\u05E9\u05EA", gender: "f" }, emoji: { label: "\u05D0\u05D9\u05DE\u05D5\u05D2'\u05D9", gender: "m" }, uuid: { label: "UUID", gender: "m" }, nanoid: { label: "nanoid", gender: "m" }, guid: { label: "GUID", gender: "m" }, cuid: { label: "cuid", gender: "m" }, cuid2: { label: "cuid2", gender: "m" }, ulid: { label: "ULID", gender: "m" }, xid: { label: "XID", gender: "m" }, ksuid: { label: "KSUID", gender: "m" }, datetime: { label: "\u05EA\u05D0\u05E8\u05D9\u05DA \u05D5\u05D6\u05DE\u05DF ISO", gender: "m" }, date: { label: "\u05EA\u05D0\u05E8\u05D9\u05DA ISO", gender: "m" }, time: { label: "\u05D6\u05DE\u05DF ISO", gender: "m" }, duration: { label: "\u05DE\u05E9\u05DA \u05D6\u05DE\u05DF ISO", gender: "m" }, ipv4: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA IPv4", gender: "f" }, ipv6: { label: "\u05DB\u05EA\u05D5\u05D1\u05EA IPv6", gender: "f" }, cidrv4: { label: "\u05D8\u05D5\u05D5\u05D7 IPv4", gender: "m" }, cidrv6: { label: "\u05D8\u05D5\u05D5\u05D7 IPv6", gender: "m" }, base64: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D1\u05D1\u05E1\u05D9\u05E1 64", gender: "f" }, base64url: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D1\u05D1\u05E1\u05D9\u05E1 64 \u05DC\u05DB\u05EA\u05D5\u05D1\u05D5\u05EA \u05E8\u05E9\u05EA", gender: "f" }, json_string: { label: "\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA JSON", gender: "f" }, e164: { label: "\u05DE\u05E1\u05E4\u05E8 E.164", gender: "m" }, jwt: { label: "JWT", gender: "m" }, ends_with: { label: "\u05E7\u05DC\u05D8", gender: "m" }, includes: { label: "\u05E7\u05DC\u05D8", gender: "m" }, lowercase: { label: "\u05E7\u05DC\u05D8", gender: "m" }, starts_with: { label: "\u05E7\u05DC\u05D8", gender: "m" }, uppercase: { label: "\u05E7\u05DC\u05D8", gender: "m" } }, u2 = { nan: "NaN" };
   return (l) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2, _l2, _m2, _n2, _o2, _p2, _q, _r2, _s2, _t2, _u2;
     switch (l.code) {
       case "invalid_type": {
-        let d2 = l.expected, p2 = (_a19 = u2[d2 != null ? d2 : ""]) != null ? _a19 : o(d2), g = S(l.input), _2 = (_d2 = (_c2 = u2[g]) != null ? _c2 : (_b8 = e2[g]) == null ? void 0 : _b8.label) != null ? _d2 : g;
+        let d2 = l.expected, p2 = u2[d2 ?? ""] ?? o(d2), g = S(l.input), _2 = u2[g] ?? e2[g]?.label ?? g;
         return /^[A-Z]/.test(l.expected) ? `\u05E7\u05DC\u05D8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF: \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA instanceof ${l.expected}, \u05D4\u05EA\u05E7\u05D1\u05DC ${_2}` : `\u05E7\u05DC\u05D8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF: \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${p2}, \u05D4\u05EA\u05E7\u05D1\u05DC ${_2}`;
       }
       case "invalid_value": {
@@ -54801,22 +54414,22 @@ var xb = () => {
         return `\u05E2\u05E8\u05DA \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF: \u05D4\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05DE\u05EA\u05D0\u05D9\u05DE\u05D5\u05EA \u05D4\u05DF ${d2.slice(0, -1).join(", ")} \u05D0\u05D5 ${p2}`;
       }
       case "too_big": {
-        let d2 = a(l.origin), p2 = n((_e2 = l.origin) != null ? _e2 : "value");
-        if (l.origin === "string") return `${(_f2 = d2 == null ? void 0 : d2.longLabel) != null ? _f2 : "\u05D0\u05E8\u05D5\u05DA"} \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05DB\u05D9\u05DC ${l.maximum.toString()} ${(_g2 = d2 == null ? void 0 : d2.unit) != null ? _g2 : ""} ${l.inclusive ? "\u05D0\u05D5 \u05E4\u05D7\u05D5\u05EA" : "\u05DC\u05DB\u05DC \u05D4\u05D9\u05D5\u05EA\u05E8"}`.trim();
+        let d2 = a(l.origin), p2 = n(l.origin ?? "value");
+        if (l.origin === "string") return `${d2?.longLabel ?? "\u05D0\u05E8\u05D5\u05DA"} \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05DB\u05D9\u05DC ${l.maximum.toString()} ${d2?.unit ?? ""} ${l.inclusive ? "\u05D0\u05D5 \u05E4\u05D7\u05D5\u05EA" : "\u05DC\u05DB\u05DC \u05D4\u05D9\u05D5\u05EA\u05E8"}`.trim();
         if (l.origin === "number") {
           let x = l.inclusive ? `\u05E7\u05D8\u05DF \u05D0\u05D5 \u05E9\u05D5\u05D5\u05D4 \u05DC-${l.maximum}` : `\u05E7\u05D8\u05DF \u05DE-${l.maximum}`;
           return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${x}`;
         }
         if (l.origin === "array" || l.origin === "set") {
-          let x = l.origin === "set" ? "\u05E6\u05E8\u05D9\u05DB\u05D4" : "\u05E6\u05E8\u05D9\u05DA", B = l.inclusive ? `${l.maximum} ${(_h2 = d2 == null ? void 0 : d2.unit) != null ? _h2 : ""} \u05D0\u05D5 \u05E4\u05D7\u05D5\u05EA` : `\u05E4\u05D7\u05D5\u05EA \u05DE-${l.maximum} ${(_i2 = d2 == null ? void 0 : d2.unit) != null ? _i2 : ""}`;
+          let x = l.origin === "set" ? "\u05E6\u05E8\u05D9\u05DB\u05D4" : "\u05E6\u05E8\u05D9\u05DA", B = l.inclusive ? `${l.maximum} ${d2?.unit ?? ""} \u05D0\u05D5 \u05E4\u05D7\u05D5\u05EA` : `\u05E4\u05D7\u05D5\u05EA \u05DE-${l.maximum} ${d2?.unit ?? ""}`;
           return `\u05D2\u05D3\u05D5\u05DC \u05DE\u05D3\u05D9: ${p2} ${x} \u05DC\u05D4\u05DB\u05D9\u05DC ${B}`.trim();
         }
-        let g = l.inclusive ? "<=" : "<", _2 = r2((_j = l.origin) != null ? _j : "value");
-        return (d2 == null ? void 0 : d2.unit) ? `${d2.longLabel} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.maximum.toString()} ${d2.unit}` : `${(_k2 = d2 == null ? void 0 : d2.longLabel) != null ? _k2 : "\u05D2\u05D3\u05D5\u05DC"} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.maximum.toString()}`;
+        let g = l.inclusive ? "<=" : "<", _2 = r2(l.origin ?? "value");
+        return d2?.unit ? `${d2.longLabel} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.maximum.toString()} ${d2.unit}` : `${d2?.longLabel ?? "\u05D2\u05D3\u05D5\u05DC"} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.maximum.toString()}`;
       }
       case "too_small": {
-        let d2 = a(l.origin), p2 = n((_l2 = l.origin) != null ? _l2 : "value");
-        if (l.origin === "string") return `${(_m2 = d2 == null ? void 0 : d2.shortLabel) != null ? _m2 : "\u05E7\u05E6\u05E8"} \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05DB\u05D9\u05DC ${l.minimum.toString()} ${(_n2 = d2 == null ? void 0 : d2.unit) != null ? _n2 : ""} ${l.inclusive ? "\u05D0\u05D5 \u05D9\u05D5\u05EA\u05E8" : "\u05DC\u05E4\u05D7\u05D5\u05EA"}`.trim();
+        let d2 = a(l.origin), p2 = n(l.origin ?? "value");
+        if (l.origin === "string") return `${d2?.shortLabel ?? "\u05E7\u05E6\u05E8"} \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DB\u05D4 \u05DC\u05D4\u05DB\u05D9\u05DC ${l.minimum.toString()} ${d2?.unit ?? ""} ${l.inclusive ? "\u05D0\u05D5 \u05D9\u05D5\u05EA\u05E8" : "\u05DC\u05E4\u05D7\u05D5\u05EA"}`.trim();
         if (l.origin === "number") {
           let x = l.inclusive ? `\u05D2\u05D3\u05D5\u05DC \u05D0\u05D5 \u05E9\u05D5\u05D5\u05D4 \u05DC-${l.minimum}` : `\u05D2\u05D3\u05D5\u05DC \u05DE-${l.minimum}`;
           return `\u05E7\u05D8\u05DF \u05DE\u05D3\u05D9: ${p2} \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05D9\u05D5\u05EA ${x}`;
@@ -54827,11 +54440,11 @@ var xb = () => {
             let $e = (l.origin === "set", "\u05DC\u05E4\u05D7\u05D5\u05EA \u05E4\u05E8\u05D9\u05D8 \u05D0\u05D7\u05D3");
             return `\u05E7\u05D8\u05DF \u05DE\u05D3\u05D9: ${p2} ${x} \u05DC\u05D4\u05DB\u05D9\u05DC ${$e}`;
           }
-          let B = l.inclusive ? `${l.minimum} ${(_o2 = d2 == null ? void 0 : d2.unit) != null ? _o2 : ""} \u05D0\u05D5 \u05D9\u05D5\u05EA\u05E8` : `\u05D9\u05D5\u05EA\u05E8 \u05DE-${l.minimum} ${(_p2 = d2 == null ? void 0 : d2.unit) != null ? _p2 : ""}`;
+          let B = l.inclusive ? `${l.minimum} ${d2?.unit ?? ""} \u05D0\u05D5 \u05D9\u05D5\u05EA\u05E8` : `\u05D9\u05D5\u05EA\u05E8 \u05DE-${l.minimum} ${d2?.unit ?? ""}`;
           return `\u05E7\u05D8\u05DF \u05DE\u05D3\u05D9: ${p2} ${x} \u05DC\u05D4\u05DB\u05D9\u05DC ${B}`.trim();
         }
-        let g = l.inclusive ? ">=" : ">", _2 = r2((_q = l.origin) != null ? _q : "value");
-        return (d2 == null ? void 0 : d2.unit) ? `${d2.shortLabel} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.minimum.toString()} ${d2.unit}` : `${(_r2 = d2 == null ? void 0 : d2.shortLabel) != null ? _r2 : "\u05E7\u05D8\u05DF"} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.minimum.toString()}`;
+        let g = l.inclusive ? ">=" : ">", _2 = r2(l.origin ?? "value");
+        return d2?.unit ? `${d2.shortLabel} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.minimum.toString()} ${d2.unit}` : `${d2?.shortLabel ?? "\u05E7\u05D8\u05DF"} \u05DE\u05D3\u05D9: ${p2} ${_2} ${g}${l.minimum.toString()}`;
       }
       case "invalid_format": {
         let d2 = l;
@@ -54839,7 +54452,7 @@ var xb = () => {
         if (d2.format === "ends_with") return `\u05D4\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D7\u05D9\u05D9\u05D1\u05EA \u05DC\u05D4\u05E1\u05EA\u05D9\u05D9\u05DD \u05D1 "${d2.suffix}"`;
         if (d2.format === "includes") return `\u05D4\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D7\u05D9\u05D9\u05D1\u05EA \u05DC\u05DB\u05DC\u05D5\u05DC "${d2.includes}"`;
         if (d2.format === "regex") return `\u05D4\u05DE\u05D7\u05E8\u05D5\u05D6\u05EA \u05D7\u05D9\u05D9\u05D1\u05EA \u05DC\u05D4\u05EA\u05D0\u05D9\u05DD \u05DC\u05EA\u05D1\u05E0\u05D9\u05EA ${d2.pattern}`;
-        let p2 = s[d2.format], g = (_s2 = p2 == null ? void 0 : p2.label) != null ? _s2 : d2.format, _2 = ((_t2 = p2 == null ? void 0 : p2.gender) != null ? _t2 : "m") === "f" ? "\u05EA\u05E7\u05D9\u05E0\u05D4" : "\u05EA\u05E7\u05D9\u05DF";
+        let p2 = s[d2.format], g = p2?.label ?? d2.format, _2 = (p2?.gender ?? "m") === "f" ? "\u05EA\u05E7\u05D9\u05E0\u05D4" : "\u05EA\u05E7\u05D9\u05DF";
         return `${g} \u05DC\u05D0 ${_2}`;
       }
       case "not_multiple_of":
@@ -54851,7 +54464,7 @@ var xb = () => {
       case "invalid_union":
         return "\u05E7\u05DC\u05D8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF";
       case "invalid_element":
-        return `\u05E2\u05E8\u05DA \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF \u05D1${n((_u2 = l.origin) != null ? _u2 : "array")}`;
+        return `\u05E2\u05E8\u05DA \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF \u05D1${n(l.origin ?? "array")}`;
       default:
         return "\u05E7\u05DC\u05D8 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF";
     }
@@ -54863,22 +54476,20 @@ function zb() {
 var Ub = () => {
   let e2 = { string: { unit: "karakter", verb: "legyen" }, file: { unit: "byte", verb: "legyen" }, array: { unit: "elem", verb: "legyen" }, set: { unit: "elem", verb: "legyen" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "bemenet", email: "email c\xEDm", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO id\u0151b\xE9lyeg", date: "ISO d\xE1tum", time: "ISO id\u0151", duration: "ISO id\u0151intervallum", ipv4: "IPv4 c\xEDm", ipv6: "IPv6 c\xEDm", cidrv4: "IPv4 tartom\xE1ny", cidrv6: "IPv6 tartom\xE1ny", base64: "base64-k\xF3dolt string", base64url: "base64url-k\xF3dolt string", json_string: "JSON string", e164: "E.164 sz\xE1m", jwt: "JWT", template_literal: "bemenet" }, o = { nan: "NaN", number: "sz\xE1m", array: "t\xF6mb" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\xC9rv\xE9nytelen bemenet: a v\xE1rt \xE9rt\xE9k instanceof ${n.expected}, a kapott \xE9rt\xE9k ${s}` : `\xC9rv\xE9nytelen bemenet: a v\xE1rt \xE9rt\xE9k ${r2}, a kapott \xE9rt\xE9k ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\xC9rv\xE9nytelen bemenet: a v\xE1rt \xE9rt\xE9k ${w2(n.values[0])}` : `\xC9rv\xE9nytelen opci\xF3: valamelyik \xE9rt\xE9k v\xE1rt ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `T\xFAl nagy: ${(_c2 = n.origin) != null ? _c2 : "\xE9rt\xE9k"} m\xE9rete t\xFAl nagy ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elem"}` : `T\xFAl nagy: a bemeneti \xE9rt\xE9k ${(_e2 = n.origin) != null ? _e2 : "\xE9rt\xE9k"} t\xFAl nagy: ${r2}${n.maximum.toString()}`;
+        return a ? `T\xFAl nagy: ${n.origin ?? "\xE9rt\xE9k"} m\xE9rete t\xFAl nagy ${r2}${n.maximum.toString()} ${a.unit ?? "elem"}` : `T\xFAl nagy: a bemeneti \xE9rt\xE9k ${n.origin ?? "\xE9rt\xE9k"} t\xFAl nagy: ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54886,7 +54497,7 @@ var Ub = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\xC9rv\xE9nytelen string: "${r2.prefix}" \xE9rt\xE9kkel kell kezd\u0151dnie` : r2.format === "ends_with" ? `\xC9rv\xE9nytelen string: "${r2.suffix}" \xE9rt\xE9kkel kell v\xE9gz\u0151dnie` : r2.format === "includes" ? `\xC9rv\xE9nytelen string: "${r2.includes}" \xE9rt\xE9ket kell tartalmaznia` : r2.format === "regex" ? `\xC9rv\xE9nytelen string: ${r2.pattern} mint\xE1nak kell megfelelnie` : `\xC9rv\xE9nytelen ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\xC9rv\xE9nytelen string: "${r2.prefix}" \xE9rt\xE9kkel kell kezd\u0151dnie` : r2.format === "ends_with" ? `\xC9rv\xE9nytelen string: "${r2.suffix}" \xE9rt\xE9kkel kell v\xE9gz\u0151dnie` : r2.format === "includes" ? `\xC9rv\xE9nytelen string: "${r2.includes}" \xE9rt\xE9ket kell tartalmaznia` : r2.format === "regex" ? `\xC9rv\xE9nytelen string: ${r2.pattern} mint\xE1nak kell megfelelnie` : `\xC9rv\xE9nytelen ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\xC9rv\xE9nytelen sz\xE1m: ${n.divisor} t\xF6bbsz\xF6r\xF6s\xE9nek kell lennie`;
@@ -54917,15 +54528,13 @@ function Le(e2) {
 var Zb = () => {
   let e2 = { string: { unit: { one: "\u0576\u0577\u0561\u0576", many: "\u0576\u0577\u0561\u0576\u0576\u0565\u0580" }, verb: "\u0578\u0582\u0576\u0565\u0576\u0561\u056C" }, file: { unit: { one: "\u0562\u0561\u0575\u0569", many: "\u0562\u0561\u0575\u0569\u0565\u0580" }, verb: "\u0578\u0582\u0576\u0565\u0576\u0561\u056C" }, array: { unit: { one: "\u057F\u0561\u0580\u0580", many: "\u057F\u0561\u0580\u0580\u0565\u0580" }, verb: "\u0578\u0582\u0576\u0565\u0576\u0561\u056C" }, set: { unit: { one: "\u057F\u0561\u0580\u0580", many: "\u057F\u0561\u0580\u0580\u0565\u0580" }, verb: "\u0578\u0582\u0576\u0565\u0576\u0561\u056C" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0574\u0578\u0582\u057F\u0584", email: "\u0567\u056C. \u0570\u0561\u057D\u0581\u0565", url: "URL", emoji: "\u0567\u0574\u0578\u057B\u056B", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0561\u0574\u057D\u0561\u0569\u056B\u057E \u0587 \u056A\u0561\u0574", date: "ISO \u0561\u0574\u057D\u0561\u0569\u056B\u057E", time: "ISO \u056A\u0561\u0574", duration: "ISO \u057F\u0587\u0578\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576", ipv4: "IPv4 \u0570\u0561\u057D\u0581\u0565", ipv6: "IPv6 \u0570\u0561\u057D\u0581\u0565", cidrv4: "IPv4 \u0574\u056B\u057B\u0561\u056F\u0561\u0575\u0584", cidrv6: "IPv6 \u0574\u056B\u057B\u0561\u056F\u0561\u0575\u0584", base64: "base64 \u0571\u0587\u0561\u0579\u0561\u0583\u0578\u057E \u057F\u0578\u0572", base64url: "base64url \u0571\u0587\u0561\u0579\u0561\u0583\u0578\u057E \u057F\u0578\u0572", json_string: "JSON \u057F\u0578\u0572", e164: "E.164 \u0570\u0561\u0574\u0561\u0580", jwt: "JWT", template_literal: "\u0574\u0578\u0582\u057F\u0584" }, o = { nan: "NaN", number: "\u0569\u056B\u057E", array: "\u0566\u0561\u0576\u0563\u057E\u0561\u056E" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u054D\u056D\u0561\u056C \u0574\u0578\u0582\u057F\u0584\u0561\u0563\u0580\u0578\u0582\u0574\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567\u0580 instanceof ${n.expected}, \u057D\u057F\u0561\u0581\u057E\u0565\u056C \u0567 ${s}` : `\u054D\u056D\u0561\u056C \u0574\u0578\u0582\u057F\u0584\u0561\u0563\u0580\u0578\u0582\u0574\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567\u0580 ${r2}, \u057D\u057F\u0561\u0581\u057E\u0565\u056C \u0567 ${s}`;
       }
       case "invalid_value":
@@ -54934,9 +54543,9 @@ var Zb = () => {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
         if (a) {
           let s = Number(n.maximum), u2 = da(s, a.unit.one, a.unit.many);
-          return `\u0549\u0561\u0583\u0561\u0566\u0561\u0576\u0581 \u0574\u0565\u056E \u0561\u0580\u056A\u0565\u0584\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567, \u0578\u0580 ${Le((_c2 = n.origin) != null ? _c2 : "\u0561\u0580\u056A\u0565\u0584")} \u056F\u0578\u0582\u0576\u0565\u0576\u0561 ${r2}${n.maximum.toString()} ${u2}`;
+          return `\u0549\u0561\u0583\u0561\u0566\u0561\u0576\u0581 \u0574\u0565\u056E \u0561\u0580\u056A\u0565\u0584\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567, \u0578\u0580 ${Le(n.origin ?? "\u0561\u0580\u056A\u0565\u0584")} \u056F\u0578\u0582\u0576\u0565\u0576\u0561 ${r2}${n.maximum.toString()} ${u2}`;
         }
-        return `\u0549\u0561\u0583\u0561\u0566\u0561\u0576\u0581 \u0574\u0565\u056E \u0561\u0580\u056A\u0565\u0584\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567, \u0578\u0580 ${Le((_d2 = n.origin) != null ? _d2 : "\u0561\u0580\u056A\u0565\u0584")} \u056C\u056B\u0576\u056B ${r2}${n.maximum.toString()}`;
+        return `\u0549\u0561\u0583\u0561\u0566\u0561\u0576\u0581 \u0574\u0565\u056E \u0561\u0580\u056A\u0565\u0584\u2024 \u057D\u057A\u0561\u057D\u057E\u0578\u0582\u0574 \u0567, \u0578\u0580 ${Le(n.origin ?? "\u0561\u0580\u056A\u0565\u0584")} \u056C\u056B\u0576\u056B ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54948,7 +54557,7 @@ var Zb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u057D\u056F\u057D\u057E\u056B "${r2.prefix}"-\u0578\u057E` : r2.format === "ends_with" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u0561\u057E\u0561\u0580\u057F\u057E\u056B "${r2.suffix}"-\u0578\u057E` : r2.format === "includes" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u057A\u0561\u0580\u0578\u0582\u0576\u0561\u056F\u056B "${r2.includes}"` : r2.format === "regex" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u0570\u0561\u0574\u0561\u057A\u0561\u057F\u0561\u057D\u056D\u0561\u0576\u056B ${r2.pattern} \u0571\u0587\u0561\u0579\u0561\u0583\u056B\u0576` : `\u054D\u056D\u0561\u056C ${(_e2 = i[r2.format]) != null ? _e2 : n.format}`;
+        return r2.format === "starts_with" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u057D\u056F\u057D\u057E\u056B "${r2.prefix}"-\u0578\u057E` : r2.format === "ends_with" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u0561\u057E\u0561\u0580\u057F\u057E\u056B "${r2.suffix}"-\u0578\u057E` : r2.format === "includes" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u057A\u0561\u0580\u0578\u0582\u0576\u0561\u056F\u056B "${r2.includes}"` : r2.format === "regex" ? `\u054D\u056D\u0561\u056C \u057F\u0578\u0572\u2024 \u057A\u0565\u057F\u0584 \u0567 \u0570\u0561\u0574\u0561\u057A\u0561\u057F\u0561\u057D\u056D\u0561\u0576\u056B ${r2.pattern} \u0571\u0587\u0561\u0579\u0561\u0583\u056B\u0576` : `\u054D\u056D\u0561\u056C ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u054D\u056D\u0561\u056C \u0569\u056B\u057E\u2024 \u057A\u0565\u057F\u0584 \u0567 \u0562\u0561\u0566\u0574\u0561\u057A\u0561\u057F\u056B\u056F \u056C\u056B\u0576\u056B ${n.divisor}-\u056B`;
@@ -54971,22 +54580,20 @@ function Pb() {
 var Eb = () => {
   let e2 = { string: { unit: "karakter", verb: "memiliki" }, file: { unit: "byte", verb: "memiliki" }, array: { unit: "item", verb: "memiliki" }, set: { unit: "item", verb: "memiliki" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "alamat email", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "tanggal dan waktu format ISO", date: "tanggal format ISO", time: "jam format ISO", duration: "durasi format ISO", ipv4: "alamat IPv4", ipv6: "alamat IPv6", cidrv4: "rentang alamat IPv4", cidrv6: "rentang alamat IPv6", base64: "string dengan enkode base64", base64url: "string dengan enkode base64url", json_string: "string JSON", e164: "angka E.164", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Input tidak valid: diharapkan instanceof ${n.expected}, diterima ${s}` : `Input tidak valid: diharapkan ${r2}, diterima ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Input tidak valid: diharapkan ${w2(n.values[0])}` : `Pilihan tidak valid: diharapkan salah satu dari ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Terlalu besar: diharapkan ${(_c2 = n.origin) != null ? _c2 : "value"} memiliki ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elemen"}` : `Terlalu besar: diharapkan ${(_e2 = n.origin) != null ? _e2 : "value"} menjadi ${r2}${n.maximum.toString()}`;
+        return a ? `Terlalu besar: diharapkan ${n.origin ?? "value"} memiliki ${r2}${n.maximum.toString()} ${a.unit ?? "elemen"}` : `Terlalu besar: diharapkan ${n.origin ?? "value"} menjadi ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -54994,7 +54601,7 @@ var Eb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `String tidak valid: harus dimulai dengan "${r2.prefix}"` : r2.format === "ends_with" ? `String tidak valid: harus berakhir dengan "${r2.suffix}"` : r2.format === "includes" ? `String tidak valid: harus menyertakan "${r2.includes}"` : r2.format === "regex" ? `String tidak valid: harus sesuai pola ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} tidak valid`;
+        return r2.format === "starts_with" ? `String tidak valid: harus dimulai dengan "${r2.prefix}"` : r2.format === "ends_with" ? `String tidak valid: harus berakhir dengan "${r2.suffix}"` : r2.format === "includes" ? `String tidak valid: harus menyertakan "${r2.includes}"` : r2.format === "regex" ? `String tidak valid: harus sesuai pola ${r2.pattern}` : `${i[r2.format] ?? n.format} tidak valid`;
       }
       case "not_multiple_of":
         return `Angka tidak valid: harus kelipatan dari ${n.divisor}`;
@@ -55017,22 +54624,20 @@ function Nb() {
 var Db = () => {
   let e2 = { string: { unit: "stafi", verb: "a\xF0 hafa" }, file: { unit: "b\xE6ti", verb: "a\xF0 hafa" }, array: { unit: "hluti", verb: "a\xF0 hafa" }, set: { unit: "hluti", verb: "a\xF0 hafa" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "gildi", email: "netfang", url: "vefsl\xF3\xF0", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO dagsetning og t\xEDmi", date: "ISO dagsetning", time: "ISO t\xEDmi", duration: "ISO t\xEDmalengd", ipv4: "IPv4 address", ipv6: "IPv6 address", cidrv4: "IPv4 range", cidrv6: "IPv6 range", base64: "base64-encoded strengur", base64url: "base64url-encoded strengur", json_string: "JSON strengur", e164: "E.164 t\xF6lugildi", jwt: "JWT", template_literal: "gildi" }, o = { nan: "NaN", number: "n\xFAmer", array: "fylki" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Rangt gildi: \xDE\xFA sl\xF3st inn ${s} \xFEar sem \xE1 a\xF0 vera instanceof ${n.expected}` : `Rangt gildi: \xDE\xFA sl\xF3st inn ${s} \xFEar sem \xE1 a\xF0 vera ${r2}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Rangt gildi: gert r\xE1\xF0 fyrir ${w2(n.values[0])}` : `\xD3gilt val: m\xE1 vera eitt af eftirfarandi ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Of st\xF3rt: gert er r\xE1\xF0 fyrir a\xF0 ${(_c2 = n.origin) != null ? _c2 : "gildi"} hafi ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "hluti"}` : `Of st\xF3rt: gert er r\xE1\xF0 fyrir a\xF0 ${(_e2 = n.origin) != null ? _e2 : "gildi"} s\xE9 ${r2}${n.maximum.toString()}`;
+        return a ? `Of st\xF3rt: gert er r\xE1\xF0 fyrir a\xF0 ${n.origin ?? "gildi"} hafi ${r2}${n.maximum.toString()} ${a.unit ?? "hluti"}` : `Of st\xF3rt: gert er r\xE1\xF0 fyrir a\xF0 ${n.origin ?? "gildi"} s\xE9 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55040,7 +54645,7 @@ var Db = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\xD3gildur strengur: ver\xF0ur a\xF0 byrja \xE1 "${r2.prefix}"` : r2.format === "ends_with" ? `\xD3gildur strengur: ver\xF0ur a\xF0 enda \xE1 "${r2.suffix}"` : r2.format === "includes" ? `\xD3gildur strengur: ver\xF0ur a\xF0 innihalda "${r2.includes}"` : r2.format === "regex" ? `\xD3gildur strengur: ver\xF0ur a\xF0 fylgja mynstri ${r2.pattern}` : `Rangt ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\xD3gildur strengur: ver\xF0ur a\xF0 byrja \xE1 "${r2.prefix}"` : r2.format === "ends_with" ? `\xD3gildur strengur: ver\xF0ur a\xF0 enda \xE1 "${r2.suffix}"` : r2.format === "includes" ? `\xD3gildur strengur: ver\xF0ur a\xF0 innihalda "${r2.includes}"` : r2.format === "regex" ? `\xD3gildur strengur: ver\xF0ur a\xF0 fylgja mynstri ${r2.pattern}` : `Rangt ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `R\xF6ng tala: ver\xF0ur a\xF0 vera margfeldi af ${n.divisor}`;
@@ -55063,22 +54668,20 @@ function jb() {
 var Tb = () => {
   let e2 = { string: { unit: "caratteri", verb: "avere" }, file: { unit: "byte", verb: "avere" }, array: { unit: "elementi", verb: "avere" }, set: { unit: "elementi", verb: "avere" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "indirizzo email", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "data e ora ISO", date: "data ISO", time: "ora ISO", duration: "durata ISO", ipv4: "indirizzo IPv4", ipv6: "indirizzo IPv6", cidrv4: "intervallo IPv4", cidrv6: "intervallo IPv6", base64: "stringa codificata in base64", base64url: "URL codificata in base64", json_string: "stringa JSON", e164: "numero E.164", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN", number: "numero", array: "vettore" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Input non valido: atteso instanceof ${n.expected}, ricevuto ${s}` : `Input non valido: atteso ${r2}, ricevuto ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Input non valido: atteso ${w2(n.values[0])}` : `Opzione non valida: atteso uno tra ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Troppo grande: ${(_c2 = n.origin) != null ? _c2 : "valore"} deve avere ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementi"}` : `Troppo grande: ${(_e2 = n.origin) != null ? _e2 : "valore"} deve essere ${r2}${n.maximum.toString()}`;
+        return a ? `Troppo grande: ${n.origin ?? "valore"} deve avere ${r2}${n.maximum.toString()} ${a.unit ?? "elementi"}` : `Troppo grande: ${n.origin ?? "valore"} deve essere ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55086,7 +54689,7 @@ var Tb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Stringa non valida: deve iniziare con "${r2.prefix}"` : r2.format === "ends_with" ? `Stringa non valida: deve terminare con "${r2.suffix}"` : r2.format === "includes" ? `Stringa non valida: deve includere "${r2.includes}"` : r2.format === "regex" ? `Stringa non valida: deve corrispondere al pattern ${r2.pattern}` : `Invalid ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Stringa non valida: deve iniziare con "${r2.prefix}"` : r2.format === "ends_with" ? `Stringa non valida: deve terminare con "${r2.suffix}"` : r2.format === "includes" ? `Stringa non valida: deve includere "${r2.includes}"` : r2.format === "regex" ? `Stringa non valida: deve corrispondere al pattern ${r2.pattern}` : `Invalid ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Numero non valido: deve essere un multiplo di ${n.divisor}`;
@@ -55109,22 +54712,20 @@ function Ab() {
 var Rb = () => {
   let e2 = { string: { unit: "\u6587\u5B57", verb: "\u3067\u3042\u308B" }, file: { unit: "\u30D0\u30A4\u30C8", verb: "\u3067\u3042\u308B" }, array: { unit: "\u8981\u7D20", verb: "\u3067\u3042\u308B" }, set: { unit: "\u8981\u7D20", verb: "\u3067\u3042\u308B" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u5165\u529B\u5024", email: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", url: "URL", emoji: "\u7D75\u6587\u5B57", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO\u65E5\u6642", date: "ISO\u65E5\u4ED8", time: "ISO\u6642\u523B", duration: "ISO\u671F\u9593", ipv4: "IPv4\u30A2\u30C9\u30EC\u30B9", ipv6: "IPv6\u30A2\u30C9\u30EC\u30B9", cidrv4: "IPv4\u7BC4\u56F2", cidrv6: "IPv6\u7BC4\u56F2", base64: "base64\u30A8\u30F3\u30B3\u30FC\u30C9\u6587\u5B57\u5217", base64url: "base64url\u30A8\u30F3\u30B3\u30FC\u30C9\u6587\u5B57\u5217", json_string: "JSON\u6587\u5B57\u5217", e164: "E.164\u756A\u53F7", jwt: "JWT", template_literal: "\u5165\u529B\u5024" }, o = { nan: "NaN", number: "\u6570\u5024", array: "\u914D\u5217" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u7121\u52B9\u306A\u5165\u529B: instanceof ${n.expected}\u304C\u671F\u5F85\u3055\u308C\u307E\u3057\u305F\u304C\u3001${s}\u304C\u5165\u529B\u3055\u308C\u307E\u3057\u305F` : `\u7121\u52B9\u306A\u5165\u529B: ${r2}\u304C\u671F\u5F85\u3055\u308C\u307E\u3057\u305F\u304C\u3001${s}\u304C\u5165\u529B\u3055\u308C\u307E\u3057\u305F`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u7121\u52B9\u306A\u5165\u529B: ${w2(n.values[0])}\u304C\u671F\u5F85\u3055\u308C\u307E\u3057\u305F` : `\u7121\u52B9\u306A\u9078\u629E: ${v2(n.values, "\u3001")}\u306E\u3044\u305A\u308C\u304B\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
       case "too_big": {
         let r2 = n.inclusive ? "\u4EE5\u4E0B\u3067\u3042\u308B" : "\u3088\u308A\u5C0F\u3055\u3044", a = t(n.origin);
-        return a ? `\u5927\u304D\u3059\u304E\u308B\u5024: ${(_c2 = n.origin) != null ? _c2 : "\u5024"}\u306F${n.maximum.toString()}${(_d2 = a.unit) != null ? _d2 : "\u8981\u7D20"}${r2}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : `\u5927\u304D\u3059\u304E\u308B\u5024: ${(_e2 = n.origin) != null ? _e2 : "\u5024"}\u306F${n.maximum.toString()}${r2}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
+        return a ? `\u5927\u304D\u3059\u304E\u308B\u5024: ${n.origin ?? "\u5024"}\u306F${n.maximum.toString()}${a.unit ?? "\u8981\u7D20"}${r2}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : `\u5927\u304D\u3059\u304E\u308B\u5024: ${n.origin ?? "\u5024"}\u306F${n.maximum.toString()}${r2}\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
       }
       case "too_small": {
         let r2 = n.inclusive ? "\u4EE5\u4E0A\u3067\u3042\u308B" : "\u3088\u308A\u5927\u304D\u3044", a = t(n.origin);
@@ -55132,7 +54733,7 @@ var Rb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.prefix}"\u3067\u59CB\u307E\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "ends_with" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.suffix}"\u3067\u7D42\u308F\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "includes" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.includes}"\u3092\u542B\u3080\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "regex" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: \u30D1\u30BF\u30FC\u30F3${r2.pattern}\u306B\u4E00\u81F4\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : `\u7121\u52B9\u306A${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.prefix}"\u3067\u59CB\u307E\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "ends_with" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.suffix}"\u3067\u7D42\u308F\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "includes" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: "${r2.includes}"\u3092\u542B\u3080\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : r2.format === "regex" ? `\u7121\u52B9\u306A\u6587\u5B57\u5217: \u30D1\u30BF\u30FC\u30F3${r2.pattern}\u306B\u4E00\u81F4\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059` : `\u7121\u52B9\u306A${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u7121\u52B9\u306A\u6570\u5024: ${n.divisor}\u306E\u500D\u6570\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059`;
@@ -55155,22 +54756,20 @@ function Cb() {
 var Mb = () => {
   let e2 = { string: { unit: "\u10E1\u10D8\u10DB\u10D1\u10DD\u10DA\u10DD", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" }, file: { unit: "\u10D1\u10D0\u10D8\u10E2\u10D8", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" }, array: { unit: "\u10D4\u10DA\u10D4\u10DB\u10D4\u10DC\u10E2\u10D8", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" }, set: { unit: "\u10D4\u10DA\u10D4\u10DB\u10D4\u10DC\u10E2\u10D8", verb: "\u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0", email: "\u10D4\u10DA-\u10E4\u10DD\u10E1\u10E2\u10D8\u10E1 \u10DB\u10D8\u10E1\u10D0\u10DB\u10D0\u10E0\u10D7\u10D8", url: "URL", emoji: "\u10D4\u10DB\u10DD\u10EF\u10D8", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u10D7\u10D0\u10E0\u10D8\u10E6\u10D8-\u10D3\u10E0\u10DD", date: "\u10D7\u10D0\u10E0\u10D8\u10E6\u10D8", time: "\u10D3\u10E0\u10DD", duration: "\u10EE\u10D0\u10DC\u10D2\u10E0\u10EB\u10DA\u10D8\u10D5\u10DD\u10D1\u10D0", ipv4: "IPv4 \u10DB\u10D8\u10E1\u10D0\u10DB\u10D0\u10E0\u10D7\u10D8", ipv6: "IPv6 \u10DB\u10D8\u10E1\u10D0\u10DB\u10D0\u10E0\u10D7\u10D8", cidrv4: "IPv4 \u10D3\u10D8\u10D0\u10DE\u10D0\u10D6\u10DD\u10DC\u10D8", cidrv6: "IPv6 \u10D3\u10D8\u10D0\u10DE\u10D0\u10D6\u10DD\u10DC\u10D8", base64: "base64-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8", base64url: "base64url-\u10D9\u10DD\u10D3\u10D8\u10E0\u10D4\u10D1\u10E3\u10DA\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8", json_string: "JSON \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8", e164: "E.164 \u10DC\u10DD\u10DB\u10D4\u10E0\u10D8", jwt: "JWT", template_literal: "\u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0" }, o = { nan: "NaN", number: "\u10E0\u10D8\u10EA\u10EE\u10D5\u10D8", string: "\u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8", boolean: "\u10D1\u10E3\u10DA\u10D4\u10D0\u10DC\u10D8", function: "\u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D0", array: "\u10DB\u10D0\u10E1\u10D8\u10D5\u10D8" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 instanceof ${n.expected}, \u10DB\u10D8\u10E6\u10D4\u10D1\u10E3\u10DA\u10D8 ${s}` : `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${r2}, \u10DB\u10D8\u10E6\u10D4\u10D1\u10E3\u10DA\u10D8 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E8\u10D4\u10E7\u10D5\u10D0\u10DC\u10D0: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${w2(n.values[0])}` : `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10D5\u10D0\u10E0\u10D8\u10D0\u10DC\u10E2\u10D8: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8\u10D0 \u10D4\u10E0\u10D7-\u10D4\u10E0\u10D7\u10D8 ${v2(n.values, "|")}-\u10D3\u10D0\u10DC`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u10D6\u10D4\u10D3\u10DB\u10D4\u10E2\u10D0\u10D3 \u10D3\u10D8\u10D3\u10D8: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${(_c2 = n.origin) != null ? _c2 : "\u10DB\u10DC\u10D8\u10E8\u10D5\u10DC\u10D4\u10DA\u10DD\u10D1\u10D0"} ${a.verb} ${r2}${n.maximum.toString()} ${a.unit}` : `\u10D6\u10D4\u10D3\u10DB\u10D4\u10E2\u10D0\u10D3 \u10D3\u10D8\u10D3\u10D8: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${(_d2 = n.origin) != null ? _d2 : "\u10DB\u10DC\u10D8\u10E8\u10D5\u10DC\u10D4\u10DA\u10DD\u10D1\u10D0"} \u10D8\u10E7\u10DD\u10E1 ${r2}${n.maximum.toString()}`;
+        return a ? `\u10D6\u10D4\u10D3\u10DB\u10D4\u10E2\u10D0\u10D3 \u10D3\u10D8\u10D3\u10D8: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${n.origin ?? "\u10DB\u10DC\u10D8\u10E8\u10D5\u10DC\u10D4\u10DA\u10DD\u10D1\u10D0"} ${a.verb} ${r2}${n.maximum.toString()} ${a.unit}` : `\u10D6\u10D4\u10D3\u10DB\u10D4\u10E2\u10D0\u10D3 \u10D3\u10D8\u10D3\u10D8: \u10DB\u10DD\u10E1\u10D0\u10DA\u10DD\u10D3\u10DC\u10D4\u10DA\u10D8 ${n.origin ?? "\u10DB\u10DC\u10D8\u10E8\u10D5\u10DC\u10D4\u10DA\u10DD\u10D1\u10D0"} \u10D8\u10E7\u10DD\u10E1 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55178,7 +54777,7 @@ var Mb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10D8\u10EC\u10E7\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${r2.prefix}"-\u10D8\u10D7` : r2.format === "ends_with" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10DB\u10D7\u10D0\u10D5\u10E0\u10D3\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${r2.suffix}"-\u10D8\u10D7` : r2.format === "includes" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1 "${r2.includes}"-\u10E1` : r2.format === "regex" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D4\u10E1\u10D0\u10D1\u10D0\u10DB\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 \u10E8\u10D0\u10D1\u10DA\u10DD\u10DC\u10E1 ${r2.pattern}` : `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 ${(_e2 = i[r2.format]) != null ? _e2 : n.format}`;
+        return r2.format === "starts_with" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10D8\u10EC\u10E7\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${r2.prefix}"-\u10D8\u10D7` : r2.format === "ends_with" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10DB\u10D7\u10D0\u10D5\u10E0\u10D3\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 "${r2.suffix}"-\u10D8\u10D7` : r2.format === "includes" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D8\u10EA\u10D0\u10D5\u10D3\u10D4\u10E1 "${r2.includes}"-\u10E1` : r2.format === "regex" ? `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E1\u10E2\u10E0\u10D8\u10DC\u10D2\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10E8\u10D4\u10D4\u10E1\u10D0\u10D1\u10D0\u10DB\u10D4\u10D1\u10DD\u10D3\u10D4\u10E1 \u10E8\u10D0\u10D1\u10DA\u10DD\u10DC\u10E1 ${r2.pattern}` : `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u10D0\u10E0\u10D0\u10E1\u10EC\u10DD\u10E0\u10D8 \u10E0\u10D8\u10EA\u10EE\u10D5\u10D8: \u10E3\u10DC\u10D3\u10D0 \u10D8\u10E7\u10DD\u10E1 ${n.divisor}-\u10D8\u10E1 \u10EF\u10D4\u10E0\u10D0\u10D3\u10D8`;
@@ -55201,22 +54800,20 @@ function Lb() {
 var Fb = () => {
   let e2 = { string: { unit: "\u178F\u17BD\u17A2\u1780\u17D2\u179F\u179A", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" }, file: { unit: "\u1794\u17C3", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" }, array: { unit: "\u1792\u17B6\u178F\u17BB", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" }, set: { unit: "\u1792\u17B6\u178F\u17BB", verb: "\u1782\u17BD\u179A\u1798\u17B6\u1793" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B", email: "\u17A2\u17B6\u179F\u1799\u178A\u17D2\u178B\u17B6\u1793\u17A2\u17CA\u17B8\u1798\u17C2\u179B", url: "URL", emoji: "\u179F\u1789\u17D2\u1789\u17B6\u17A2\u17B6\u179A\u1798\u17D2\u1798\u178E\u17CD", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u1780\u17B6\u179B\u1794\u179A\u17B7\u1785\u17D2\u1786\u17C1\u1791 \u1793\u17B7\u1784\u1798\u17C9\u17C4\u1784 ISO", date: "\u1780\u17B6\u179B\u1794\u179A\u17B7\u1785\u17D2\u1786\u17C1\u1791 ISO", time: "\u1798\u17C9\u17C4\u1784 ISO", duration: "\u179A\u1799\u17C8\u1796\u17C1\u179B ISO", ipv4: "\u17A2\u17B6\u179F\u1799\u178A\u17D2\u178B\u17B6\u1793 IPv4", ipv6: "\u17A2\u17B6\u179F\u1799\u178A\u17D2\u178B\u17B6\u1793 IPv6", cidrv4: "\u178A\u17C2\u1793\u17A2\u17B6\u179F\u1799\u178A\u17D2\u178B\u17B6\u1793 IPv4", cidrv6: "\u178A\u17C2\u1793\u17A2\u17B6\u179F\u1799\u178A\u17D2\u178B\u17B6\u1793 IPv6", base64: "\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u17A2\u17CA\u17B7\u1780\u17BC\u178A base64", base64url: "\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u17A2\u17CA\u17B7\u1780\u17BC\u178A base64url", json_string: "\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A JSON", e164: "\u179B\u17C1\u1781 E.164", jwt: "JWT", template_literal: "\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B" }, o = { nan: "NaN", number: "\u179B\u17C1\u1781", array: "\u17A2\u17B6\u179A\u17C1 (Array)", null: "\u1782\u17D2\u1798\u17B6\u1793\u178F\u1798\u17D2\u179B\u17C3 (null)" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A instanceof ${n.expected} \u1794\u17C9\u17BB\u1793\u17D2\u178F\u17C2\u1791\u1791\u17BD\u179B\u1794\u17B6\u1793 ${s}` : `\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${r2} \u1794\u17C9\u17BB\u1793\u17D2\u178F\u17C2\u1791\u1791\u17BD\u179B\u1794\u17B6\u1793 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u1791\u17B7\u1793\u17D2\u1793\u1793\u17D0\u1799\u1794\u1789\u17D2\u1785\u17BC\u179B\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${w2(n.values[0])}` : `\u1787\u1798\u17D2\u179A\u17BE\u179F\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1787\u17B6\u1798\u17BD\u1799\u1780\u17D2\u1793\u17BB\u1784\u1785\u17C6\u178E\u17C4\u1798 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${(_c2 = n.origin) != null ? _c2 : "\u178F\u1798\u17D2\u179B\u17C3"} ${r2} ${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u1792\u17B6\u178F\u17BB"}` : `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${(_e2 = n.origin) != null ? _e2 : "\u178F\u1798\u17D2\u179B\u17C3"} ${r2} ${n.maximum.toString()}`;
+        return a ? `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${n.origin ?? "\u178F\u1798\u17D2\u179B\u17C3"} ${r2} ${n.maximum.toString()} ${a.unit ?? "\u1792\u17B6\u178F\u17BB"}` : `\u1792\u17C6\u1796\u17C1\u1780\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1780\u17B6\u179A ${n.origin ?? "\u178F\u1798\u17D2\u179B\u17C3"} ${r2} ${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55224,7 +54821,7 @@ var Fb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1785\u17B6\u1794\u17CB\u1795\u17D2\u178F\u17BE\u1798\u178A\u17C4\u1799 "${r2.prefix}"` : r2.format === "ends_with" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1794\u1789\u17D2\u1785\u1794\u17CB\u178A\u17C4\u1799 "${r2.suffix}"` : r2.format === "includes" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1798\u17B6\u1793 "${r2.includes}"` : r2.format === "regex" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u178F\u17C2\u1795\u17D2\u1782\u17BC\u1795\u17D2\u1782\u1784\u1793\u17B9\u1784\u1791\u1798\u17D2\u179A\u1784\u17CB\u178A\u17C2\u179B\u1794\u17B6\u1793\u1780\u17C6\u178E\u178F\u17CB ${r2.pattern}` : `\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1785\u17B6\u1794\u17CB\u1795\u17D2\u178F\u17BE\u1798\u178A\u17C4\u1799 "${r2.prefix}"` : r2.format === "ends_with" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1794\u1789\u17D2\u1785\u1794\u17CB\u178A\u17C4\u1799 "${r2.suffix}"` : r2.format === "includes" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u1798\u17B6\u1793 "${r2.includes}"` : r2.format === "regex" ? `\u1781\u17D2\u179F\u17C2\u17A2\u1780\u17D2\u179F\u179A\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u178F\u17C2\u1795\u17D2\u1782\u17BC\u1795\u17D2\u1782\u1784\u1793\u17B9\u1784\u1791\u1798\u17D2\u179A\u1784\u17CB\u178A\u17C2\u179B\u1794\u17B6\u1793\u1780\u17C6\u178E\u178F\u17CB ${r2.pattern}` : `\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u179B\u17C1\u1781\u1798\u17B7\u1793\u178F\u17D2\u179A\u17B9\u1798\u178F\u17D2\u179A\u17BC\u179C\u17D6 \u178F\u17D2\u179A\u17BC\u179C\u178F\u17C2\u1787\u17B6\u1796\u17A0\u17BB\u1782\u17BB\u178E\u1793\u17C3 ${n.divisor}`;
@@ -55250,30 +54847,28 @@ function Jb() {
 var qb = () => {
   let e2 = { string: { unit: "\uBB38\uC790", verb: "to have" }, file: { unit: "\uBC14\uC774\uD2B8", verb: "to have" }, array: { unit: "\uAC1C", verb: "to have" }, set: { unit: "\uAC1C", verb: "to have" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\uC785\uB825", email: "\uC774\uBA54\uC77C \uC8FC\uC18C", url: "URL", emoji: "\uC774\uBAA8\uC9C0", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \uB0A0\uC9DC\uC2DC\uAC04", date: "ISO \uB0A0\uC9DC", time: "ISO \uC2DC\uAC04", duration: "ISO \uAE30\uAC04", ipv4: "IPv4 \uC8FC\uC18C", ipv6: "IPv6 \uC8FC\uC18C", cidrv4: "IPv4 \uBC94\uC704", cidrv6: "IPv6 \uBC94\uC704", base64: "base64 \uC778\uCF54\uB529 \uBB38\uC790\uC5F4", base64url: "base64url \uC778\uCF54\uB529 \uBB38\uC790\uC5F4", json_string: "JSON \uBB38\uC790\uC5F4", e164: "E.164 \uBC88\uD638", jwt: "JWT", template_literal: "\uC785\uB825" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\uC798\uBABB\uB41C \uC785\uB825: \uC608\uC0C1 \uD0C0\uC785\uC740 instanceof ${n.expected}, \uBC1B\uC740 \uD0C0\uC785\uC740 ${s}\uC785\uB2C8\uB2E4` : `\uC798\uBABB\uB41C \uC785\uB825: \uC608\uC0C1 \uD0C0\uC785\uC740 ${r2}, \uBC1B\uC740 \uD0C0\uC785\uC740 ${s}\uC785\uB2C8\uB2E4`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\uC798\uBABB\uB41C \uC785\uB825: \uAC12\uC740 ${w2(n.values[0])} \uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4` : `\uC798\uBABB\uB41C \uC635\uC158: ${v2(n.values, "\uB610\uB294 ")} \uC911 \uD558\uB098\uC5EC\uC57C \uD569\uB2C8\uB2E4`;
       case "too_big": {
-        let r2 = n.inclusive ? "\uC774\uD558" : "\uBBF8\uB9CC", a = r2 === "\uBBF8\uB9CC" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4", s = t(n.origin), u2 = (_c2 = s == null ? void 0 : s.unit) != null ? _c2 : "\uC694\uC18C";
-        return s ? `${(_d2 = n.origin) != null ? _d2 : "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${n.maximum.toString()}${u2} ${r2}${a}` : `${(_e2 = n.origin) != null ? _e2 : "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${n.maximum.toString()} ${r2}${a}`;
+        let r2 = n.inclusive ? "\uC774\uD558" : "\uBBF8\uB9CC", a = r2 === "\uBBF8\uB9CC" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4", s = t(n.origin), u2 = s?.unit ?? "\uC694\uC18C";
+        return s ? `${n.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${n.maximum.toString()}${u2} ${r2}${a}` : `${n.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uD07D\uB2C8\uB2E4: ${n.maximum.toString()} ${r2}${a}`;
       }
       case "too_small": {
-        let r2 = n.inclusive ? "\uC774\uC0C1" : "\uCD08\uACFC", a = r2 === "\uC774\uC0C1" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4", s = t(n.origin), u2 = (_f2 = s == null ? void 0 : s.unit) != null ? _f2 : "\uC694\uC18C";
-        return s ? `${(_g2 = n.origin) != null ? _g2 : "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${n.minimum.toString()}${u2} ${r2}${a}` : `${(_h2 = n.origin) != null ? _h2 : "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${n.minimum.toString()} ${r2}${a}`;
+        let r2 = n.inclusive ? "\uC774\uC0C1" : "\uCD08\uACFC", a = r2 === "\uC774\uC0C1" ? "\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4" : "\uC5EC\uC57C \uD569\uB2C8\uB2E4", s = t(n.origin), u2 = s?.unit ?? "\uC694\uC18C";
+        return s ? `${n.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${n.minimum.toString()}${u2} ${r2}${a}` : `${n.origin ?? "\uAC12"}\uC774 \uB108\uBB34 \uC791\uC2B5\uB2C8\uB2E4: ${n.minimum.toString()} ${r2}${a}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.prefix}"(\uC73C)\uB85C \uC2DC\uC791\uD574\uC57C \uD569\uB2C8\uB2E4` : r2.format === "ends_with" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.suffix}"(\uC73C)\uB85C \uB05D\uB098\uC57C \uD569\uB2C8\uB2E4` : r2.format === "includes" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.includes}"\uC744(\uB97C) \uD3EC\uD568\uD574\uC57C \uD569\uB2C8\uB2E4` : r2.format === "regex" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: \uC815\uADDC\uC2DD ${r2.pattern} \uD328\uD134\uACFC \uC77C\uCE58\uD574\uC57C \uD569\uB2C8\uB2E4` : `\uC798\uBABB\uB41C ${(_i2 = i[r2.format]) != null ? _i2 : n.format}`;
+        return r2.format === "starts_with" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.prefix}"(\uC73C)\uB85C \uC2DC\uC791\uD574\uC57C \uD569\uB2C8\uB2E4` : r2.format === "ends_with" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.suffix}"(\uC73C)\uB85C \uB05D\uB098\uC57C \uD569\uB2C8\uB2E4` : r2.format === "includes" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: "${r2.includes}"\uC744(\uB97C) \uD3EC\uD568\uD574\uC57C \uD569\uB2C8\uB2E4` : r2.format === "regex" ? `\uC798\uBABB\uB41C \uBB38\uC790\uC5F4: \uC815\uADDC\uC2DD ${r2.pattern} \uD328\uD134\uACFC \uC77C\uCE58\uD574\uC57C \uD569\uB2C8\uB2E4` : `\uC798\uBABB\uB41C ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\uC798\uBABB\uB41C \uC22B\uC790: ${n.divisor}\uC758 \uBC30\uC218\uC5EC\uC57C \uD569\uB2C8\uB2E4`;
@@ -55301,35 +54896,33 @@ function ma(e2) {
 var Kb = () => {
   let e2 = { string: { unit: { one: "simbolis", few: "simboliai", many: "simboli\u0173" }, verb: { smaller: { inclusive: "turi b\u016Bti ne ilgesn\u0117 kaip", notInclusive: "turi b\u016Bti trumpesn\u0117 kaip" }, bigger: { inclusive: "turi b\u016Bti ne trumpesn\u0117 kaip", notInclusive: "turi b\u016Bti ilgesn\u0117 kaip" } } }, file: { unit: { one: "baitas", few: "baitai", many: "bait\u0173" }, verb: { smaller: { inclusive: "turi b\u016Bti ne didesnis kaip", notInclusive: "turi b\u016Bti ma\u017Eesnis kaip" }, bigger: { inclusive: "turi b\u016Bti ne ma\u017Eesnis kaip", notInclusive: "turi b\u016Bti didesnis kaip" } } }, array: { unit: { one: "element\u0105", few: "elementus", many: "element\u0173" }, verb: { smaller: { inclusive: "turi tur\u0117ti ne daugiau kaip", notInclusive: "turi tur\u0117ti ma\u017Eiau kaip" }, bigger: { inclusive: "turi tur\u0117ti ne ma\u017Eiau kaip", notInclusive: "turi tur\u0117ti daugiau kaip" } } }, set: { unit: { one: "element\u0105", few: "elementus", many: "element\u0173" }, verb: { smaller: { inclusive: "turi tur\u0117ti ne daugiau kaip", notInclusive: "turi tur\u0117ti ma\u017Eiau kaip" }, bigger: { inclusive: "turi tur\u0117ti ne ma\u017Eiau kaip", notInclusive: "turi tur\u0117ti daugiau kaip" } } } };
   function t(n, r2, a, s) {
-    var _a19;
-    let u2 = (_a19 = e2[n]) != null ? _a19 : null;
+    let u2 = e2[n] ?? null;
     return u2 === null ? u2 : { unit: u2.unit[r2], verb: u2.verb[s][a ? "inclusive" : "notInclusive"] };
   }
   let i = { regex: "\u012Fvestis", email: "el. pa\u0161to adresas", url: "URL", emoji: "jaustukas", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO data ir laikas", date: "ISO data", time: "ISO laikas", duration: "ISO trukm\u0117", ipv4: "IPv4 adresas", ipv6: "IPv6 adresas", cidrv4: "IPv4 tinklo prefiksas (CIDR)", cidrv6: "IPv6 tinklo prefiksas (CIDR)", base64: "base64 u\u017Ekoduota eilut\u0117", base64url: "base64url u\u017Ekoduota eilut\u0117", json_string: "JSON eilut\u0117", e164: "E.164 numeris", jwt: "JWT", template_literal: "\u012Fvestis" }, o = { nan: "NaN", number: "skai\u010Dius", bigint: "sveikasis skai\u010Dius", string: "eilut\u0117", boolean: "login\u0117 reik\u0161m\u0117", undefined: "neapibr\u0117\u017Eta reik\u0161m\u0117", function: "funkcija", symbol: "simbolis", array: "masyvas", object: "objektas", null: "nulin\u0117 reik\u0161m\u0117" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2, _l2, _m2, _n2, _o2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Gautas tipas ${s}, o tik\u0117tasi - instanceof ${n.expected}` : `Gautas tipas ${s}, o tik\u0117tasi - ${r2}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Privalo b\u016Bti ${w2(n.values[0])}` : `Privalo b\u016Bti vienas i\u0161 ${v2(n.values, "|")} pasirinkim\u0173`;
       case "too_big": {
-        let r2 = (_c2 = o[n.origin]) != null ? _c2 : n.origin, a = t(n.origin, ma(Number(n.maximum)), (_d2 = n.inclusive) != null ? _d2 : false, "smaller");
-        if (a == null ? void 0 : a.verb) return `${et((_e2 = r2 != null ? r2 : n.origin) != null ? _e2 : "reik\u0161m\u0117")} ${a.verb} ${n.maximum.toString()} ${(_f2 = a.unit) != null ? _f2 : "element\u0173"}`;
+        let r2 = o[n.origin] ?? n.origin, a = t(n.origin, ma(Number(n.maximum)), n.inclusive ?? false, "smaller");
+        if (a?.verb) return `${et(r2 ?? n.origin ?? "reik\u0161m\u0117")} ${a.verb} ${n.maximum.toString()} ${a.unit ?? "element\u0173"}`;
         let s = n.inclusive ? "ne didesnis kaip" : "ma\u017Eesnis kaip";
-        return `${et((_g2 = r2 != null ? r2 : n.origin) != null ? _g2 : "reik\u0161m\u0117")} turi b\u016Bti ${s} ${n.maximum.toString()} ${a == null ? void 0 : a.unit}`;
+        return `${et(r2 ?? n.origin ?? "reik\u0161m\u0117")} turi b\u016Bti ${s} ${n.maximum.toString()} ${a?.unit}`;
       }
       case "too_small": {
-        let r2 = (_h2 = o[n.origin]) != null ? _h2 : n.origin, a = t(n.origin, ma(Number(n.minimum)), (_i2 = n.inclusive) != null ? _i2 : false, "bigger");
-        if (a == null ? void 0 : a.verb) return `${et((_j = r2 != null ? r2 : n.origin) != null ? _j : "reik\u0161m\u0117")} ${a.verb} ${n.minimum.toString()} ${(_k2 = a.unit) != null ? _k2 : "element\u0173"}`;
+        let r2 = o[n.origin] ?? n.origin, a = t(n.origin, ma(Number(n.minimum)), n.inclusive ?? false, "bigger");
+        if (a?.verb) return `${et(r2 ?? n.origin ?? "reik\u0161m\u0117")} ${a.verb} ${n.minimum.toString()} ${a.unit ?? "element\u0173"}`;
         let s = n.inclusive ? "ne ma\u017Eesnis kaip" : "didesnis kaip";
-        return `${et((_l2 = r2 != null ? r2 : n.origin) != null ? _l2 : "reik\u0161m\u0117")} turi b\u016Bti ${s} ${n.minimum.toString()} ${a == null ? void 0 : a.unit}`;
+        return `${et(r2 ?? n.origin ?? "reik\u0161m\u0117")} turi b\u016Bti ${s} ${n.minimum.toString()} ${a?.unit}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Eilut\u0117 privalo prasid\u0117ti "${r2.prefix}"` : r2.format === "ends_with" ? `Eilut\u0117 privalo pasibaigti "${r2.suffix}"` : r2.format === "includes" ? `Eilut\u0117 privalo \u012Ftraukti "${r2.includes}"` : r2.format === "regex" ? `Eilut\u0117 privalo atitikti ${r2.pattern}` : `Neteisingas ${(_m2 = i[r2.format]) != null ? _m2 : n.format}`;
+        return r2.format === "starts_with" ? `Eilut\u0117 privalo prasid\u0117ti "${r2.prefix}"` : r2.format === "ends_with" ? `Eilut\u0117 privalo pasibaigti "${r2.suffix}"` : r2.format === "includes" ? `Eilut\u0117 privalo \u012Ftraukti "${r2.includes}"` : r2.format === "regex" ? `Eilut\u0117 privalo atitikti ${r2.pattern}` : `Neteisingas ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Skai\u010Dius privalo b\u016Bti ${n.divisor} kartotinis.`;
@@ -55340,8 +54933,8 @@ var Kb = () => {
       case "invalid_union":
         return "Klaidinga \u012Fvestis";
       case "invalid_element": {
-        let r2 = (_n2 = o[n.origin]) != null ? _n2 : n.origin;
-        return `${et((_o2 = r2 != null ? r2 : n.origin) != null ? _o2 : "reik\u0161m\u0117")} turi klaiding\u0105 \u012Fvest\u012F`;
+        let r2 = o[n.origin] ?? n.origin;
+        return `${et(r2 ?? n.origin ?? "reik\u0161m\u0117")} turi klaiding\u0105 \u012Fvest\u012F`;
       }
       default:
         return "Klaidinga \u012Fvestis";
@@ -55354,22 +54947,20 @@ function Vb() {
 var Gb = () => {
   let e2 = { string: { unit: "\u0437\u043D\u0430\u0446\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" }, file: { unit: "\u0431\u0430\u0458\u0442\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" }, array: { unit: "\u0441\u0442\u0430\u0432\u043A\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" }, set: { unit: "\u0441\u0442\u0430\u0432\u043A\u0438", verb: "\u0434\u0430 \u0438\u043C\u0430\u0430\u0442" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0432\u043D\u0435\u0441", email: "\u0430\u0434\u0440\u0435\u0441\u0430 \u043D\u0430 \u0435-\u043F\u043E\u0448\u0442\u0430", url: "URL", emoji: "\u0435\u043C\u043E\u045F\u0438", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0434\u0430\u0442\u0443\u043C \u0438 \u0432\u0440\u0435\u043C\u0435", date: "ISO \u0434\u0430\u0442\u0443\u043C", time: "ISO \u0432\u0440\u0435\u043C\u0435", duration: "ISO \u0432\u0440\u0435\u043C\u0435\u0442\u0440\u0430\u0435\u045A\u0435", ipv4: "IPv4 \u0430\u0434\u0440\u0435\u0441\u0430", ipv6: "IPv6 \u0430\u0434\u0440\u0435\u0441\u0430", cidrv4: "IPv4 \u043E\u043F\u0441\u0435\u0433", cidrv6: "IPv6 \u043E\u043F\u0441\u0435\u0433", base64: "base64-\u0435\u043D\u043A\u043E\u0434\u0438\u0440\u0430\u043D\u0430 \u043D\u0438\u0437\u0430", base64url: "base64url-\u0435\u043D\u043A\u043E\u0434\u0438\u0440\u0430\u043D\u0430 \u043D\u0438\u0437\u0430", json_string: "JSON \u043D\u0438\u0437\u0430", e164: "E.164 \u0431\u0440\u043E\u0458", jwt: "JWT", template_literal: "\u0432\u043D\u0435\u0441" }, o = { nan: "NaN", number: "\u0431\u0440\u043E\u0458", array: "\u043D\u0438\u0437\u0430" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0413\u0440\u0435\u0448\u0435\u043D \u0432\u043D\u0435\u0441: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 instanceof ${n.expected}, \u043F\u0440\u0438\u043C\u0435\u043D\u043E ${s}` : `\u0413\u0440\u0435\u0448\u0435\u043D \u0432\u043D\u0435\u0441: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${r2}, \u043F\u0440\u0438\u043C\u0435\u043D\u043E ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Invalid input: expected ${w2(n.values[0])}` : `\u0413\u0440\u0435\u0448\u0430\u043D\u0430 \u043E\u043F\u0446\u0438\u0458\u0430: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 \u0435\u0434\u043D\u0430 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${(_c2 = n.origin) != null ? _c2 : "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0438\u043C\u0430 ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438"}` : `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${(_e2 = n.origin) != null ? _e2 : "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0431\u0438\u0434\u0435 ${r2}${n.maximum.toString()}`;
+        return a ? `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${n.origin ?? "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0438\u043C\u0430 ${r2}${n.maximum.toString()} ${a.unit ?? "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438"}` : `\u041F\u0440\u0435\u043C\u043D\u043E\u0433\u0443 \u0433\u043E\u043B\u0435\u043C: \u0441\u0435 \u043E\u0447\u0435\u043A\u0443\u0432\u0430 ${n.origin ?? "\u0432\u0440\u0435\u0434\u043D\u043E\u0441\u0442\u0430"} \u0434\u0430 \u0431\u0438\u0434\u0435 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55377,7 +54968,7 @@ var Gb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0437\u0430\u043F\u043E\u0447\u043D\u0443\u0432\u0430 \u0441\u043E "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0437\u0430\u0432\u0440\u0448\u0443\u0432\u0430 \u0441\u043E "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0432\u043A\u043B\u0443\u0447\u0443\u0432\u0430 "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u043E\u0434\u0433\u043E\u0430\u0440\u0430 \u043D\u0430 \u043F\u0430\u0442\u0435\u0440\u043D\u043E\u0442 ${r2.pattern}` : `Invalid ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0437\u0430\u043F\u043E\u0447\u043D\u0443\u0432\u0430 \u0441\u043E "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0437\u0430\u0432\u0440\u0448\u0443\u0432\u0430 \u0441\u043E "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0432\u043A\u043B\u0443\u0447\u0443\u0432\u0430 "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u0432\u0430\u0436\u0435\u0447\u043A\u0430 \u043D\u0438\u0437\u0430: \u043C\u043E\u0440\u0430 \u0434\u0430 \u043E\u0434\u0433\u043E\u0430\u0440\u0430 \u043D\u0430 \u043F\u0430\u0442\u0435\u0440\u043D\u043E\u0442 ${r2.pattern}` : `Invalid ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u0413\u0440\u0435\u0448\u0435\u043D \u0431\u0440\u043E\u0458: \u043C\u043E\u0440\u0430 \u0434\u0430 \u0431\u0438\u0434\u0435 \u0434\u0435\u043B\u0438\u0432 \u0441\u043E ${n.divisor}`;
@@ -55400,22 +54991,20 @@ function Bb() {
 var Hb = () => {
   let e2 = { string: { unit: "aksara", verb: "mempunyai" }, file: { unit: "bait", verb: "mempunyai" }, array: { unit: "elemen", verb: "mempunyai" }, set: { unit: "elemen", verb: "mempunyai" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "alamat e-mel", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "tarikh masa ISO", date: "tarikh ISO", time: "masa ISO", duration: "tempoh ISO", ipv4: "alamat IPv4", ipv6: "alamat IPv6", cidrv4: "julat IPv4", cidrv6: "julat IPv6", base64: "string dikodkan base64", base64url: "string dikodkan base64url", json_string: "string JSON", e164: "nombor E.164", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN", number: "nombor" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Input tidak sah: dijangka instanceof ${n.expected}, diterima ${s}` : `Input tidak sah: dijangka ${r2}, diterima ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Input tidak sah: dijangka ${w2(n.values[0])}` : `Pilihan tidak sah: dijangka salah satu daripada ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Terlalu besar: dijangka ${(_c2 = n.origin) != null ? _c2 : "nilai"} ${a.verb} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elemen"}` : `Terlalu besar: dijangka ${(_e2 = n.origin) != null ? _e2 : "nilai"} adalah ${r2}${n.maximum.toString()}`;
+        return a ? `Terlalu besar: dijangka ${n.origin ?? "nilai"} ${a.verb} ${r2}${n.maximum.toString()} ${a.unit ?? "elemen"}` : `Terlalu besar: dijangka ${n.origin ?? "nilai"} adalah ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55423,7 +55012,7 @@ var Hb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `String tidak sah: mesti bermula dengan "${r2.prefix}"` : r2.format === "ends_with" ? `String tidak sah: mesti berakhir dengan "${r2.suffix}"` : r2.format === "includes" ? `String tidak sah: mesti mengandungi "${r2.includes}"` : r2.format === "regex" ? `String tidak sah: mesti sepadan dengan corak ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} tidak sah`;
+        return r2.format === "starts_with" ? `String tidak sah: mesti bermula dengan "${r2.prefix}"` : r2.format === "ends_with" ? `String tidak sah: mesti berakhir dengan "${r2.suffix}"` : r2.format === "includes" ? `String tidak sah: mesti mengandungi "${r2.includes}"` : r2.format === "regex" ? `String tidak sah: mesti sepadan dengan corak ${r2.pattern}` : `${i[r2.format] ?? n.format} tidak sah`;
       }
       case "not_multiple_of":
         return `Nombor tidak sah: perlu gandaan ${n.divisor}`;
@@ -55446,22 +55035,20 @@ function Xb() {
 var Yb = () => {
   let e2 = { string: { unit: "tekens", verb: "heeft" }, file: { unit: "bytes", verb: "heeft" }, array: { unit: "elementen", verb: "heeft" }, set: { unit: "elementen", verb: "heeft" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "invoer", email: "emailadres", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO datum en tijd", date: "ISO datum", time: "ISO tijd", duration: "ISO duur", ipv4: "IPv4-adres", ipv6: "IPv6-adres", cidrv4: "IPv4-bereik", cidrv6: "IPv6-bereik", base64: "base64-gecodeerde tekst", base64url: "base64 URL-gecodeerde tekst", json_string: "JSON string", e164: "E.164-nummer", jwt: "JWT", template_literal: "invoer" }, o = { nan: "NaN", number: "getal" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ongeldige invoer: verwacht instanceof ${n.expected}, ontving ${s}` : `Ongeldige invoer: verwacht ${r2}, ontving ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ongeldige invoer: verwacht ${w2(n.values[0])}` : `Ongeldige optie: verwacht \xE9\xE9n van ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin), s = n.origin === "date" ? "laat" : n.origin === "string" ? "lang" : "groot";
-        return a ? `Te ${s}: verwacht dat ${(_c2 = n.origin) != null ? _c2 : "waarde"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementen"} ${a.verb}` : `Te ${s}: verwacht dat ${(_e2 = n.origin) != null ? _e2 : "waarde"} ${r2}${n.maximum.toString()} is`;
+        return a ? `Te ${s}: verwacht dat ${n.origin ?? "waarde"} ${r2}${n.maximum.toString()} ${a.unit ?? "elementen"} ${a.verb}` : `Te ${s}: verwacht dat ${n.origin ?? "waarde"} ${r2}${n.maximum.toString()} is`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin), s = n.origin === "date" ? "vroeg" : n.origin === "string" ? "kort" : "klein";
@@ -55469,7 +55056,7 @@ var Yb = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ongeldige tekst: moet met "${r2.prefix}" beginnen` : r2.format === "ends_with" ? `Ongeldige tekst: moet op "${r2.suffix}" eindigen` : r2.format === "includes" ? `Ongeldige tekst: moet "${r2.includes}" bevatten` : r2.format === "regex" ? `Ongeldige tekst: moet overeenkomen met patroon ${r2.pattern}` : `Ongeldig: ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Ongeldige tekst: moet met "${r2.prefix}" beginnen` : r2.format === "ends_with" ? `Ongeldige tekst: moet op "${r2.suffix}" eindigen` : r2.format === "includes" ? `Ongeldige tekst: moet "${r2.includes}" bevatten` : r2.format === "regex" ? `Ongeldige tekst: moet overeenkomen met patroon ${r2.pattern}` : `Ongeldig: ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ongeldig getal: moet een veelvoud van ${n.divisor} zijn`;
@@ -55492,22 +55079,20 @@ function Qb() {
 var ey = () => {
   let e2 = { string: { unit: "tegn", verb: "\xE5 ha" }, file: { unit: "bytes", verb: "\xE5 ha" }, array: { unit: "elementer", verb: "\xE5 inneholde" }, set: { unit: "elementer", verb: "\xE5 inneholde" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "input", email: "e-postadresse", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO dato- og klokkeslett", date: "ISO-dato", time: "ISO-klokkeslett", duration: "ISO-varighet", ipv4: "IPv4-omr\xE5de", ipv6: "IPv6-omr\xE5de", cidrv4: "IPv4-spekter", cidrv6: "IPv6-spekter", base64: "base64-enkodet streng", base64url: "base64url-enkodet streng", json_string: "JSON-streng", e164: "E.164-nummer", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN", number: "tall", array: "liste" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ugyldig input: forventet instanceof ${n.expected}, fikk ${s}` : `Ugyldig input: forventet ${r2}, fikk ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ugyldig verdi: forventet ${w2(n.values[0])}` : `Ugyldig valg: forventet en av ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `For stor(t): forventet ${(_c2 = n.origin) != null ? _c2 : "value"} til \xE5 ha ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementer"}` : `For stor(t): forventet ${(_e2 = n.origin) != null ? _e2 : "value"} til \xE5 ha ${r2}${n.maximum.toString()}`;
+        return a ? `For stor(t): forventet ${n.origin ?? "value"} til \xE5 ha ${r2}${n.maximum.toString()} ${a.unit ?? "elementer"}` : `For stor(t): forventet ${n.origin ?? "value"} til \xE5 ha ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55515,7 +55100,7 @@ var ey = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ugyldig streng: m\xE5 starte med "${r2.prefix}"` : r2.format === "ends_with" ? `Ugyldig streng: m\xE5 ende med "${r2.suffix}"` : r2.format === "includes" ? `Ugyldig streng: m\xE5 inneholde "${r2.includes}"` : r2.format === "regex" ? `Ugyldig streng: m\xE5 matche m\xF8nsteret ${r2.pattern}` : `Ugyldig ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Ugyldig streng: m\xE5 starte med "${r2.prefix}"` : r2.format === "ends_with" ? `Ugyldig streng: m\xE5 ende med "${r2.suffix}"` : r2.format === "includes" ? `Ugyldig streng: m\xE5 inneholde "${r2.includes}"` : r2.format === "regex" ? `Ugyldig streng: m\xE5 matche m\xF8nsteret ${r2.pattern}` : `Ugyldig ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ugyldig tall: m\xE5 v\xE6re et multiplum av ${n.divisor}`;
@@ -55538,22 +55123,20 @@ function ty() {
 var ny = () => {
   let e2 = { string: { unit: "harf", verb: "olmal\u0131d\u0131r" }, file: { unit: "bayt", verb: "olmal\u0131d\u0131r" }, array: { unit: "unsur", verb: "olmal\u0131d\u0131r" }, set: { unit: "unsur", verb: "olmal\u0131d\u0131r" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "giren", email: "epostag\xE2h", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO heng\xE2m\u0131", date: "ISO tarihi", time: "ISO zaman\u0131", duration: "ISO m\xFCddeti", ipv4: "IPv4 ni\u015F\xE2n\u0131", ipv6: "IPv6 ni\u015F\xE2n\u0131", cidrv4: "IPv4 menzili", cidrv6: "IPv6 menzili", base64: "base64-\u015Fifreli metin", base64url: "base64url-\u015Fifreli metin", json_string: "JSON metin", e164: "E.164 say\u0131s\u0131", jwt: "JWT", template_literal: "giren" }, o = { nan: "NaN", number: "numara", array: "saf", null: "gayb" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `F\xE2sit giren: umulan instanceof ${n.expected}, al\u0131nan ${s}` : `F\xE2sit giren: umulan ${r2}, al\u0131nan ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `F\xE2sit giren: umulan ${w2(n.values[0])}` : `F\xE2sit tercih: m\xFBteberler ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Fazla b\xFCy\xFCk: ${(_c2 = n.origin) != null ? _c2 : "value"}, ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elements"} sahip olmal\u0131yd\u0131.` : `Fazla b\xFCy\xFCk: ${(_e2 = n.origin) != null ? _e2 : "value"}, ${r2}${n.maximum.toString()} olmal\u0131yd\u0131.`;
+        return a ? `Fazla b\xFCy\xFCk: ${n.origin ?? "value"}, ${r2}${n.maximum.toString()} ${a.unit ?? "elements"} sahip olmal\u0131yd\u0131.` : `Fazla b\xFCy\xFCk: ${n.origin ?? "value"}, ${r2}${n.maximum.toString()} olmal\u0131yd\u0131.`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55561,7 +55144,7 @@ var ny = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `F\xE2sit metin: "${r2.prefix}" ile ba\u015Flamal\u0131.` : r2.format === "ends_with" ? `F\xE2sit metin: "${r2.suffix}" ile bitmeli.` : r2.format === "includes" ? `F\xE2sit metin: "${r2.includes}" ihtiv\xE2 etmeli.` : r2.format === "regex" ? `F\xE2sit metin: ${r2.pattern} nak\u015F\u0131na uymal\u0131.` : `F\xE2sit ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `F\xE2sit metin: "${r2.prefix}" ile ba\u015Flamal\u0131.` : r2.format === "ends_with" ? `F\xE2sit metin: "${r2.suffix}" ile bitmeli.` : r2.format === "includes" ? `F\xE2sit metin: "${r2.includes}" ihtiv\xE2 etmeli.` : r2.format === "regex" ? `F\xE2sit metin: ${r2.pattern} nak\u015F\u0131na uymal\u0131.` : `F\xE2sit ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `F\xE2sit say\u0131: ${n.divisor} kat\u0131 olmal\u0131yd\u0131.`;
@@ -55584,22 +55167,20 @@ function iy() {
 var ry = () => {
   let e2 = { string: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" }, file: { unit: "\u0628\u0627\u06CC\u067C\u0633", verb: "\u0648\u0644\u0631\u064A" }, array: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" }, set: { unit: "\u062A\u0648\u06A9\u064A", verb: "\u0648\u0644\u0631\u064A" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0648\u0631\u0648\u062F\u064A", email: "\u0628\u0631\u06CC\u069A\u0646\u0627\u0644\u06CC\u06A9", url: "\u06CC\u0648 \u0622\u0631 \u0627\u0644", emoji: "\u0627\u06CC\u0645\u0648\u062C\u064A", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u0646\u06CC\u067C\u0647 \u0627\u0648 \u0648\u062E\u062A", date: "\u0646\u06D0\u067C\u0647", time: "\u0648\u062E\u062A", duration: "\u0645\u0648\u062F\u0647", ipv4: "\u062F IPv4 \u067E\u062A\u0647", ipv6: "\u062F IPv6 \u067E\u062A\u0647", cidrv4: "\u062F IPv4 \u0633\u0627\u062D\u0647", cidrv6: "\u062F IPv6 \u0633\u0627\u062D\u0647", base64: "base64-encoded \u0645\u062A\u0646", base64url: "base64url-encoded \u0645\u062A\u0646", json_string: "JSON \u0645\u062A\u0646", e164: "\u062F E.164 \u0634\u0645\u06D0\u0631\u0647", jwt: "JWT", template_literal: "\u0648\u0631\u0648\u062F\u064A" }, o = { nan: "NaN", number: "\u0639\u062F\u062F", array: "\u0627\u0631\u06D0" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0646\u0627\u0633\u0645 \u0648\u0631\u0648\u062F\u064A: \u0628\u0627\u06CC\u062F instanceof ${n.expected} \u0648\u0627\u06CC, \u0645\u06AB\u0631 ${s} \u062A\u0631\u0644\u0627\u0633\u0647 \u0634\u0648` : `\u0646\u0627\u0633\u0645 \u0648\u0631\u0648\u062F\u064A: \u0628\u0627\u06CC\u062F ${r2} \u0648\u0627\u06CC, \u0645\u06AB\u0631 ${s} \u062A\u0631\u0644\u0627\u0633\u0647 \u0634\u0648`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0646\u0627\u0633\u0645 \u0648\u0631\u0648\u062F\u064A: \u0628\u0627\u06CC\u062F ${w2(n.values[0])} \u0648\u0627\u06CC` : `\u0646\u0627\u0633\u0645 \u0627\u0646\u062A\u062E\u0627\u0628: \u0628\u0627\u06CC\u062F \u06CC\u0648 \u0644\u0647 ${v2(n.values, "|")} \u0685\u062E\u0647 \u0648\u0627\u06CC`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${(_c2 = n.origin) != null ? _c2 : "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0639\u0646\u0635\u0631\u0648\u0646\u0647"} \u0648\u0644\u0631\u064A` : `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${(_e2 = n.origin) != null ? _e2 : "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} \u0648\u064A`;
+        return a ? `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${n.origin ?? "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} ${a.unit ?? "\u0639\u0646\u0635\u0631\u0648\u0646\u0647"} \u0648\u0644\u0631\u064A` : `\u0689\u06CC\u0631 \u0644\u0648\u06CC: ${n.origin ?? "\u0627\u0631\u0632\u069A\u062A"} \u0628\u0627\u06CC\u062F ${r2}${n.maximum.toString()} \u0648\u064A`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55607,7 +55188,7 @@ var ry = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F "${r2.prefix}" \u0633\u0631\u0647 \u067E\u06CC\u0644 \u0634\u064A` : r2.format === "ends_with" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F "${r2.suffix}" \u0633\u0631\u0647 \u067E\u0627\u06CC \u062A\u0647 \u0648\u0631\u0633\u064A\u0696\u064A` : r2.format === "includes" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F "${r2.includes}" \u0648\u0644\u0631\u064A` : r2.format === "regex" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F ${r2.pattern} \u0633\u0631\u0647 \u0645\u0637\u0627\u0628\u0642\u062A \u0648\u0644\u0631\u064A` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} \u0646\u0627\u0633\u0645 \u062F\u06CC`;
+        return r2.format === "starts_with" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F "${r2.prefix}" \u0633\u0631\u0647 \u067E\u06CC\u0644 \u0634\u064A` : r2.format === "ends_with" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F "${r2.suffix}" \u0633\u0631\u0647 \u067E\u0627\u06CC \u062A\u0647 \u0648\u0631\u0633\u064A\u0696\u064A` : r2.format === "includes" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F "${r2.includes}" \u0648\u0644\u0631\u064A` : r2.format === "regex" ? `\u0646\u0627\u0633\u0645 \u0645\u062A\u0646: \u0628\u0627\u06CC\u062F \u062F ${r2.pattern} \u0633\u0631\u0647 \u0645\u0637\u0627\u0628\u0642\u062A \u0648\u0644\u0631\u064A` : `${i[r2.format] ?? n.format} \u0646\u0627\u0633\u0645 \u062F\u06CC`;
       }
       case "not_multiple_of":
         return `\u0646\u0627\u0633\u0645 \u0639\u062F\u062F: \u0628\u0627\u06CC\u062F \u062F ${n.divisor} \u0645\u0636\u0631\u0628 \u0648\u064A`;
@@ -55630,30 +55211,28 @@ function oy() {
 var ay = () => {
   let e2 = { string: { unit: "znak\xF3w", verb: "mie\u0107" }, file: { unit: "bajt\xF3w", verb: "mie\u0107" }, array: { unit: "element\xF3w", verb: "mie\u0107" }, set: { unit: "element\xF3w", verb: "mie\u0107" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "wyra\u017Cenie", email: "adres email", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "data i godzina w formacie ISO", date: "data w formacie ISO", time: "godzina w formacie ISO", duration: "czas trwania ISO", ipv4: "adres IPv4", ipv6: "adres IPv6", cidrv4: "zakres IPv4", cidrv6: "zakres IPv6", base64: "ci\u0105g znak\xF3w zakodowany w formacie base64", base64url: "ci\u0105g znak\xF3w zakodowany w formacie base64url", json_string: "ci\u0105g znak\xF3w w formacie JSON", e164: "liczba E.164", jwt: "JWT", template_literal: "wej\u015Bcie" }, o = { nan: "NaN", number: "liczba", array: "tablica" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Nieprawid\u0142owe dane wej\u015Bciowe: oczekiwano instanceof ${n.expected}, otrzymano ${s}` : `Nieprawid\u0142owe dane wej\u015Bciowe: oczekiwano ${r2}, otrzymano ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Nieprawid\u0142owe dane wej\u015Bciowe: oczekiwano ${w2(n.values[0])}` : `Nieprawid\u0142owa opcja: oczekiwano jednej z warto\u015Bci ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Za du\u017Ca warto\u015B\u0107: oczekiwano, \u017Ce ${(_c2 = n.origin) != null ? _c2 : "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "element\xF3w"}` : `Zbyt du\u017C(y/a/e): oczekiwano, \u017Ce ${(_e2 = n.origin) != null ? _e2 : "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${r2}${n.maximum.toString()}`;
+        return a ? `Za du\u017Ca warto\u015B\u0107: oczekiwano, \u017Ce ${n.origin ?? "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${r2}${n.maximum.toString()} ${a.unit ?? "element\xF3w"}` : `Zbyt du\u017C(y/a/e): oczekiwano, \u017Ce ${n.origin ?? "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
-        return a ? `Za ma\u0142a warto\u015B\u0107: oczekiwano, \u017Ce ${(_f2 = n.origin) != null ? _f2 : "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${r2}${n.minimum.toString()} ${(_g2 = a.unit) != null ? _g2 : "element\xF3w"}` : `Zbyt ma\u0142(y/a/e): oczekiwano, \u017Ce ${(_h2 = n.origin) != null ? _h2 : "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${r2}${n.minimum.toString()}`;
+        return a ? `Za ma\u0142a warto\u015B\u0107: oczekiwano, \u017Ce ${n.origin ?? "warto\u015B\u0107"} b\u0119dzie mie\u0107 ${r2}${n.minimum.toString()} ${a.unit ?? "element\xF3w"}` : `Zbyt ma\u0142(y/a/e): oczekiwano, \u017Ce ${n.origin ?? "warto\u015B\u0107"} b\u0119dzie wynosi\u0107 ${r2}${n.minimum.toString()}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi zaczyna\u0107 si\u0119 od "${r2.prefix}"` : r2.format === "ends_with" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi ko\u0144czy\u0107 si\u0119 na "${r2.suffix}"` : r2.format === "includes" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi zawiera\u0107 "${r2.includes}"` : r2.format === "regex" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi odpowiada\u0107 wzorcowi ${r2.pattern}` : `Nieprawid\u0142ow(y/a/e) ${(_i2 = i[r2.format]) != null ? _i2 : n.format}`;
+        return r2.format === "starts_with" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi zaczyna\u0107 si\u0119 od "${r2.prefix}"` : r2.format === "ends_with" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi ko\u0144czy\u0107 si\u0119 na "${r2.suffix}"` : r2.format === "includes" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi zawiera\u0107 "${r2.includes}"` : r2.format === "regex" ? `Nieprawid\u0142owy ci\u0105g znak\xF3w: musi odpowiada\u0107 wzorcowi ${r2.pattern}` : `Nieprawid\u0142ow(y/a/e) ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Nieprawid\u0142owa liczba: musi by\u0107 wielokrotno\u015Bci\u0105 ${n.divisor}`;
@@ -55676,22 +55255,20 @@ function sy() {
 var uy = () => {
   let e2 = { string: { unit: "caracteres", verb: "ter" }, file: { unit: "bytes", verb: "ter" }, array: { unit: "itens", verb: "ter" }, set: { unit: "itens", verb: "ter" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "padr\xE3o", email: "endere\xE7o de e-mail", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "data e hora ISO", date: "data ISO", time: "hora ISO", duration: "dura\xE7\xE3o ISO", ipv4: "endere\xE7o IPv4", ipv6: "endere\xE7o IPv6", cidrv4: "faixa de IPv4", cidrv6: "faixa de IPv6", base64: "texto codificado em base64", base64url: "URL codificada em base64", json_string: "texto JSON", e164: "n\xFAmero E.164", jwt: "JWT", template_literal: "entrada" }, o = { nan: "NaN", number: "n\xFAmero", null: "nulo" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Tipo inv\xE1lido: esperado instanceof ${n.expected}, recebido ${s}` : `Tipo inv\xE1lido: esperado ${r2}, recebido ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Entrada inv\xE1lida: esperado ${w2(n.values[0])}` : `Op\xE7\xE3o inv\xE1lida: esperada uma das ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Muito grande: esperado que ${(_c2 = n.origin) != null ? _c2 : "valor"} tivesse ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementos"}` : `Muito grande: esperado que ${(_e2 = n.origin) != null ? _e2 : "valor"} fosse ${r2}${n.maximum.toString()}`;
+        return a ? `Muito grande: esperado que ${n.origin ?? "valor"} tivesse ${r2}${n.maximum.toString()} ${a.unit ?? "elementos"}` : `Muito grande: esperado que ${n.origin ?? "valor"} fosse ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55699,7 +55276,7 @@ var uy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Texto inv\xE1lido: deve come\xE7ar com "${r2.prefix}"` : r2.format === "ends_with" ? `Texto inv\xE1lido: deve terminar com "${r2.suffix}"` : r2.format === "includes" ? `Texto inv\xE1lido: deve incluir "${r2.includes}"` : r2.format === "regex" ? `Texto inv\xE1lido: deve corresponder ao padr\xE3o ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} inv\xE1lido`;
+        return r2.format === "starts_with" ? `Texto inv\xE1lido: deve come\xE7ar com "${r2.prefix}"` : r2.format === "ends_with" ? `Texto inv\xE1lido: deve terminar com "${r2.suffix}"` : r2.format === "includes" ? `Texto inv\xE1lido: deve incluir "${r2.includes}"` : r2.format === "regex" ? `Texto inv\xE1lido: deve corresponder ao padr\xE3o ${r2.pattern}` : `${i[r2.format] ?? n.format} inv\xE1lido`;
       }
       case "not_multiple_of":
         return `N\xFAmero inv\xE1lido: deve ser m\xFAltiplo de ${n.divisor}`;
@@ -55726,15 +55303,13 @@ function pa(e2, t, i, o) {
 var cy = () => {
   let e2 = { string: { unit: { one: "\u0441\u0438\u043C\u0432\u043E\u043B", few: "\u0441\u0438\u043C\u0432\u043E\u043B\u0430", many: "\u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432" }, verb: "\u0438\u043C\u0435\u0442\u044C" }, file: { unit: { one: "\u0431\u0430\u0439\u0442", few: "\u0431\u0430\u0439\u0442\u0430", many: "\u0431\u0430\u0439\u0442" }, verb: "\u0438\u043C\u0435\u0442\u044C" }, array: { unit: { one: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442", few: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430", many: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432" }, verb: "\u0438\u043C\u0435\u0442\u044C" }, set: { unit: { one: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442", few: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430", many: "\u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432" }, verb: "\u0438\u043C\u0435\u0442\u044C" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0432\u0432\u043E\u0434", email: "email \u0430\u0434\u0440\u0435\u0441", url: "URL", emoji: "\u044D\u043C\u043E\u0434\u0437\u0438", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0434\u0430\u0442\u0430 \u0438 \u0432\u0440\u0435\u043C\u044F", date: "ISO \u0434\u0430\u0442\u0430", time: "ISO \u0432\u0440\u0435\u043C\u044F", duration: "ISO \u0434\u043B\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C", ipv4: "IPv4 \u0430\u0434\u0440\u0435\u0441", ipv6: "IPv6 \u0430\u0434\u0440\u0435\u0441", cidrv4: "IPv4 \u0434\u0438\u0430\u043F\u0430\u0437\u043E\u043D", cidrv6: "IPv6 \u0434\u0438\u0430\u043F\u0430\u0437\u043E\u043D", base64: "\u0441\u0442\u0440\u043E\u043A\u0430 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 base64", base64url: "\u0441\u0442\u0440\u043E\u043A\u0430 \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 base64url", json_string: "JSON \u0441\u0442\u0440\u043E\u043A\u0430", e164: "\u043D\u043E\u043C\u0435\u0440 E.164", jwt: "JWT", template_literal: "\u0432\u0432\u043E\u0434" }, o = { nan: "NaN", number: "\u0447\u0438\u0441\u043B\u043E", array: "\u043C\u0430\u0441\u0441\u0438\u0432" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u0432\u0432\u043E\u0434: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C instanceof ${n.expected}, \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E ${s}` : `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 \u0432\u0432\u043E\u0434: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C ${r2}, \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E ${s}`;
       }
       case "invalid_value":
@@ -55743,9 +55318,9 @@ var cy = () => {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
         if (a) {
           let s = Number(n.maximum), u2 = pa(s, a.unit.one, a.unit.few, a.unit.many);
-          return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${(_c2 = n.origin) != null ? _c2 : "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 \u0438\u043C\u0435\u0442\u044C ${r2}${n.maximum.toString()} ${u2}`;
+          return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 \u0438\u043C\u0435\u0442\u044C ${r2}${n.maximum.toString()} ${u2}`;
         }
-        return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${(_d2 = n.origin) != null ? _d2 : "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 ${r2}${n.maximum.toString()}`;
+        return `\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435: \u043E\u0436\u0438\u0434\u0430\u043B\u043E\u0441\u044C, \u0447\u0442\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435"} \u0431\u0443\u0434\u0435\u0442 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55757,7 +55332,7 @@ var cy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C\u0441\u044F \u0441 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0437\u0430\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0442\u044C\u0441\u044F \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 ${(_e2 = i[r2.format]) != null ? _e2 : n.format}`;
+        return r2.format === "starts_with" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C\u0441\u044F \u0441 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0437\u0430\u043A\u0430\u043D\u0447\u0438\u0432\u0430\u0442\u044C\u0441\u044F \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u0432\u0435\u0440\u043D\u0430\u044F \u0441\u0442\u0440\u043E\u043A\u0430: \u0434\u043E\u043B\u0436\u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u0435\u0432\u0435\u0440\u043D\u044B\u0439 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u041D\u0435\u0432\u0435\u0440\u043D\u043E\u0435 \u0447\u0438\u0441\u043B\u043E: \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u043A\u0440\u0430\u0442\u043D\u044B\u043C ${n.divisor}`;
@@ -55780,22 +55355,20 @@ function dy() {
 var my = () => {
   let e2 = { string: { unit: "znakov", verb: "imeti" }, file: { unit: "bajtov", verb: "imeti" }, array: { unit: "elementov", verb: "imeti" }, set: { unit: "elementov", verb: "imeti" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "vnos", email: "e-po\u0161tni naslov", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO datum in \u010Das", date: "ISO datum", time: "ISO \u010Das", duration: "ISO trajanje", ipv4: "IPv4 naslov", ipv6: "IPv6 naslov", cidrv4: "obseg IPv4", cidrv6: "obseg IPv6", base64: "base64 kodiran niz", base64url: "base64url kodiran niz", json_string: "JSON niz", e164: "E.164 \u0161tevilka", jwt: "JWT", template_literal: "vnos" }, o = { nan: "NaN", number: "\u0161tevilo", array: "tabela" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Neveljaven vnos: pri\u010Dakovano instanceof ${n.expected}, prejeto ${s}` : `Neveljaven vnos: pri\u010Dakovano ${r2}, prejeto ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Neveljaven vnos: pri\u010Dakovano ${w2(n.values[0])}` : `Neveljavna mo\u017Enost: pri\u010Dakovano eno izmed ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Preveliko: pri\u010Dakovano, da bo ${(_c2 = n.origin) != null ? _c2 : "vrednost"} imelo ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "elementov"}` : `Preveliko: pri\u010Dakovano, da bo ${(_e2 = n.origin) != null ? _e2 : "vrednost"} ${r2}${n.maximum.toString()}`;
+        return a ? `Preveliko: pri\u010Dakovano, da bo ${n.origin ?? "vrednost"} imelo ${r2}${n.maximum.toString()} ${a.unit ?? "elementov"}` : `Preveliko: pri\u010Dakovano, da bo ${n.origin ?? "vrednost"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55803,7 +55376,7 @@ var my = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Neveljaven niz: mora se za\u010Deti z "${r2.prefix}"` : r2.format === "ends_with" ? `Neveljaven niz: mora se kon\u010Dati z "${r2.suffix}"` : r2.format === "includes" ? `Neveljaven niz: mora vsebovati "${r2.includes}"` : r2.format === "regex" ? `Neveljaven niz: mora ustrezati vzorcu ${r2.pattern}` : `Neveljaven ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Neveljaven niz: mora se za\u010Deti z "${r2.prefix}"` : r2.format === "ends_with" ? `Neveljaven niz: mora se kon\u010Dati z "${r2.suffix}"` : r2.format === "includes" ? `Neveljaven niz: mora vsebovati "${r2.includes}"` : r2.format === "regex" ? `Neveljaven niz: mora ustrezati vzorcu ${r2.pattern}` : `Neveljaven ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Neveljavno \u0161tevilo: mora biti ve\u010Dkratnik ${n.divisor}`;
@@ -55826,41 +55399,39 @@ function py() {
 var fy = () => {
   let e2 = { string: { unit: "tecken", verb: "att ha" }, file: { unit: "bytes", verb: "att ha" }, array: { unit: "objekt", verb: "att inneh\xE5lla" }, set: { unit: "objekt", verb: "att inneh\xE5lla" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "regulj\xE4rt uttryck", email: "e-postadress", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO-datum och tid", date: "ISO-datum", time: "ISO-tid", duration: "ISO-varaktighet", ipv4: "IPv4-intervall", ipv6: "IPv6-intervall", cidrv4: "IPv4-spektrum", cidrv6: "IPv6-spektrum", base64: "base64-kodad str\xE4ng", base64url: "base64url-kodad str\xE4ng", json_string: "JSON-str\xE4ng", e164: "E.164-nummer", jwt: "JWT", template_literal: "mall-literal" }, o = { nan: "NaN", number: "antal", array: "lista" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ogiltig inmatning: f\xF6rv\xE4ntat instanceof ${n.expected}, fick ${s}` : `Ogiltig inmatning: f\xF6rv\xE4ntat ${r2}, fick ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ogiltig inmatning: f\xF6rv\xE4ntat ${w2(n.values[0])}` : `Ogiltigt val: f\xF6rv\xE4ntade en av ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `F\xF6r stor(t): f\xF6rv\xE4ntade ${(_c2 = n.origin) != null ? _c2 : "v\xE4rdet"} att ha ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "element"}` : `F\xF6r stor(t): f\xF6rv\xE4ntat ${(_e2 = n.origin) != null ? _e2 : "v\xE4rdet"} att ha ${r2}${n.maximum.toString()}`;
+        return a ? `F\xF6r stor(t): f\xF6rv\xE4ntade ${n.origin ?? "v\xE4rdet"} att ha ${r2}${n.maximum.toString()} ${a.unit ?? "element"}` : `F\xF6r stor(t): f\xF6rv\xE4ntat ${n.origin ?? "v\xE4rdet"} att ha ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
-        return a ? `F\xF6r lite(t): f\xF6rv\xE4ntade ${(_f2 = n.origin) != null ? _f2 : "v\xE4rdet"} att ha ${r2}${n.minimum.toString()} ${a.unit}` : `F\xF6r lite(t): f\xF6rv\xE4ntade ${(_g2 = n.origin) != null ? _g2 : "v\xE4rdet"} att ha ${r2}${n.minimum.toString()}`;
+        return a ? `F\xF6r lite(t): f\xF6rv\xE4ntade ${n.origin ?? "v\xE4rdet"} att ha ${r2}${n.minimum.toString()} ${a.unit}` : `F\xF6r lite(t): f\xF6rv\xE4ntade ${n.origin ?? "v\xE4rdet"} att ha ${r2}${n.minimum.toString()}`;
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ogiltig str\xE4ng: m\xE5ste b\xF6rja med "${r2.prefix}"` : r2.format === "ends_with" ? `Ogiltig str\xE4ng: m\xE5ste sluta med "${r2.suffix}"` : r2.format === "includes" ? `Ogiltig str\xE4ng: m\xE5ste inneh\xE5lla "${r2.includes}"` : r2.format === "regex" ? `Ogiltig str\xE4ng: m\xE5ste matcha m\xF6nstret "${r2.pattern}"` : `Ogiltig(t) ${(_h2 = i[r2.format]) != null ? _h2 : n.format}`;
+        return r2.format === "starts_with" ? `Ogiltig str\xE4ng: m\xE5ste b\xF6rja med "${r2.prefix}"` : r2.format === "ends_with" ? `Ogiltig str\xE4ng: m\xE5ste sluta med "${r2.suffix}"` : r2.format === "includes" ? `Ogiltig str\xE4ng: m\xE5ste inneh\xE5lla "${r2.includes}"` : r2.format === "regex" ? `Ogiltig str\xE4ng: m\xE5ste matcha m\xF6nstret "${r2.pattern}"` : `Ogiltig(t) ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ogiltigt tal: m\xE5ste vara en multipel av ${n.divisor}`;
       case "unrecognized_keys":
         return `${n.keys.length > 1 ? "Ok\xE4nda nycklar" : "Ok\xE4nd nyckel"}: ${v2(n.keys, ", ")}`;
       case "invalid_key":
-        return `Ogiltig nyckel i ${(_i2 = n.origin) != null ? _i2 : "v\xE4rdet"}`;
+        return `Ogiltig nyckel i ${n.origin ?? "v\xE4rdet"}`;
       case "invalid_union":
         return "Ogiltig input";
       case "invalid_element":
-        return `Ogiltigt v\xE4rde i ${(_j = n.origin) != null ? _j : "v\xE4rdet"}`;
+        return `Ogiltigt v\xE4rde i ${n.origin ?? "v\xE4rdet"}`;
       default:
         return "Ogiltig input";
     }
@@ -55872,22 +55443,20 @@ function gy() {
 var hy = () => {
   let e2 = { string: { unit: "\u0B8E\u0BB4\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1\u0B95\u0BCD\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" }, file: { unit: "\u0BAA\u0BC8\u0B9F\u0BCD\u0B9F\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" }, array: { unit: "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" }, set: { unit: "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD", verb: "\u0B95\u0BCA\u0BA3\u0BCD\u0B9F\u0BBF\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0B89\u0BB3\u0BCD\u0BB3\u0BC0\u0B9F\u0BC1", email: "\u0BAE\u0BBF\u0BA9\u0BCD\u0BA9\u0B9E\u0BCD\u0B9A\u0BB2\u0BCD \u0BAE\u0BC1\u0B95\u0BB5\u0BB0\u0BBF", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u0BA4\u0BC7\u0BA4\u0BBF \u0BA8\u0BC7\u0BB0\u0BAE\u0BCD", date: "ISO \u0BA4\u0BC7\u0BA4\u0BBF", time: "ISO \u0BA8\u0BC7\u0BB0\u0BAE\u0BCD", duration: "ISO \u0B95\u0BBE\u0BB2 \u0B85\u0BB3\u0BB5\u0BC1", ipv4: "IPv4 \u0BAE\u0BC1\u0B95\u0BB5\u0BB0\u0BBF", ipv6: "IPv6 \u0BAE\u0BC1\u0B95\u0BB5\u0BB0\u0BBF", cidrv4: "IPv4 \u0BB5\u0BB0\u0BAE\u0BCD\u0BAA\u0BC1", cidrv6: "IPv6 \u0BB5\u0BB0\u0BAE\u0BCD\u0BAA\u0BC1", base64: "base64-encoded \u0B9A\u0BB0\u0BAE\u0BCD", base64url: "base64url-encoded \u0B9A\u0BB0\u0BAE\u0BCD", json_string: "JSON \u0B9A\u0BB0\u0BAE\u0BCD", e164: "E.164 \u0B8E\u0BA3\u0BCD", jwt: "JWT", template_literal: "input" }, o = { nan: "NaN", number: "\u0B8E\u0BA3\u0BCD", array: "\u0B85\u0BA3\u0BBF", null: "\u0BB5\u0BC6\u0BB1\u0BC1\u0BAE\u0BC8" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B89\u0BB3\u0BCD\u0BB3\u0BC0\u0B9F\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 instanceof ${n.expected}, \u0BAA\u0BC6\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${s}` : `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B89\u0BB3\u0BCD\u0BB3\u0BC0\u0B9F\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${r2}, \u0BAA\u0BC6\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B89\u0BB3\u0BCD\u0BB3\u0BC0\u0B9F\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${w2(n.values[0])}` : `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0BB5\u0BBF\u0BB0\u0BC1\u0BAA\u0BCD\u0BAA\u0BAE\u0BCD: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${v2(n.values, "|")} \u0B87\u0BB2\u0BCD \u0B92\u0BA9\u0BCD\u0BB1\u0BC1`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${(_c2 = n.origin) != null ? _c2 : "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD"} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${(_e2 = n.origin) != null ? _e2 : "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${r2}${n.maximum.toString()} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
+        return a ? `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${n.origin ?? "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${r2}${n.maximum.toString()} ${a.unit ?? "\u0B89\u0BB1\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1\u0B95\u0BB3\u0BCD"} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : `\u0BAE\u0BBF\u0B95 \u0BAA\u0BC6\u0BB0\u0BBF\u0BAF\u0BA4\u0BC1: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAA\u0BBE\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1 ${n.origin ?? "\u0BAE\u0BA4\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1"} ${r2}${n.maximum.toString()} \u0B86\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55895,7 +55464,7 @@ var hy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.prefix}" \u0B87\u0BB2\u0BCD \u0BA4\u0BCA\u0B9F\u0B99\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "ends_with" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.suffix}" \u0B87\u0BB2\u0BCD \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0B9F\u0BC8\u0BAF \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "includes" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.includes}" \u0B90 \u0B89\u0BB3\u0BCD\u0BB3\u0B9F\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "regex" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: ${r2.pattern} \u0BAE\u0BC1\u0BB1\u0BC8\u0BAA\u0BBE\u0B9F\u0BCD\u0B9F\u0BC1\u0B9F\u0BA9\u0BCD \u0BAA\u0BCA\u0BB0\u0BC1\u0BA8\u0BCD\u0BA4 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.prefix}" \u0B87\u0BB2\u0BCD \u0BA4\u0BCA\u0B9F\u0B99\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "ends_with" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.suffix}" \u0B87\u0BB2\u0BCD \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0B9F\u0BC8\u0BAF \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "includes" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: "${r2.includes}" \u0B90 \u0B89\u0BB3\u0BCD\u0BB3\u0B9F\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : r2.format === "regex" ? `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B9A\u0BB0\u0BAE\u0BCD: ${r2.pattern} \u0BAE\u0BC1\u0BB1\u0BC8\u0BAA\u0BBE\u0B9F\u0BCD\u0B9F\u0BC1\u0B9F\u0BA9\u0BCD \u0BAA\u0BCA\u0BB0\u0BC1\u0BA8\u0BCD\u0BA4 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD` : `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u0BA4\u0BB5\u0BB1\u0BBE\u0BA9 \u0B8E\u0BA3\u0BCD: ${n.divisor} \u0B87\u0BA9\u0BCD \u0BAA\u0BB2\u0BAE\u0BBE\u0B95 \u0B87\u0BB0\u0BC1\u0B95\u0BCD\u0B95 \u0BB5\u0BC7\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD`;
@@ -55918,22 +55487,20 @@ function vy() {
 var $y = () => {
   let e2 = { string: { unit: "\u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" }, file: { unit: "\u0E44\u0E1A\u0E15\u0E4C", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" }, array: { unit: "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" }, set: { unit: "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23", verb: "\u0E04\u0E27\u0E23\u0E21\u0E35" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E17\u0E35\u0E48\u0E1B\u0E49\u0E2D\u0E19", email: "\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48\u0E2D\u0E35\u0E40\u0E21\u0E25", url: "URL", emoji: "\u0E2D\u0E34\u0E42\u0E21\u0E08\u0E34", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48\u0E40\u0E27\u0E25\u0E32\u0E41\u0E1A\u0E1A ISO", date: "\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48\u0E41\u0E1A\u0E1A ISO", time: "\u0E40\u0E27\u0E25\u0E32\u0E41\u0E1A\u0E1A ISO", duration: "\u0E0A\u0E48\u0E27\u0E07\u0E40\u0E27\u0E25\u0E32\u0E41\u0E1A\u0E1A ISO", ipv4: "\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48 IPv4", ipv6: "\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48 IPv6", cidrv4: "\u0E0A\u0E48\u0E27\u0E07 IP \u0E41\u0E1A\u0E1A IPv4", cidrv6: "\u0E0A\u0E48\u0E27\u0E07 IP \u0E41\u0E1A\u0E1A IPv6", base64: "\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E41\u0E1A\u0E1A Base64", base64url: "\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E41\u0E1A\u0E1A Base64 \u0E2A\u0E33\u0E2B\u0E23\u0E31\u0E1A URL", json_string: "\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E41\u0E1A\u0E1A JSON", e164: "\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E23\u0E30\u0E2B\u0E27\u0E48\u0E32\u0E07\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28 (E.164)", jwt: "\u0E42\u0E17\u0E40\u0E04\u0E19 JWT", template_literal: "\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E17\u0E35\u0E48\u0E1B\u0E49\u0E2D\u0E19" }, o = { nan: "NaN", number: "\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02", array: "\u0E2D\u0E32\u0E23\u0E4C\u0E40\u0E23\u0E22\u0E4C (Array)", null: "\u0E44\u0E21\u0E48\u0E21\u0E35\u0E04\u0E48\u0E32 (null)" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E04\u0E27\u0E23\u0E40\u0E1B\u0E47\u0E19 instanceof ${n.expected} \u0E41\u0E15\u0E48\u0E44\u0E14\u0E49\u0E23\u0E31\u0E1A ${s}` : `\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E04\u0E27\u0E23\u0E40\u0E1B\u0E47\u0E19 ${r2} \u0E41\u0E15\u0E48\u0E44\u0E14\u0E49\u0E23\u0E31\u0E1A ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0E04\u0E48\u0E32\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E04\u0E27\u0E23\u0E40\u0E1B\u0E47\u0E19 ${w2(n.values[0])}` : `\u0E15\u0E31\u0E27\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E04\u0E27\u0E23\u0E40\u0E1B\u0E47\u0E19\u0E2B\u0E19\u0E36\u0E48\u0E07\u0E43\u0E19 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "\u0E44\u0E21\u0E48\u0E40\u0E01\u0E34\u0E19" : "\u0E19\u0E49\u0E2D\u0E22\u0E01\u0E27\u0E48\u0E32", a = t(n.origin);
-        return a ? `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${(_c2 = n.origin) != null ? _c2 : "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${r2} ${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23"}` : `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${(_e2 = n.origin) != null ? _e2 : "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${r2} ${n.maximum.toString()}`;
+        return a ? `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${n.origin ?? "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${r2} ${n.maximum.toString()} ${a.unit ?? "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23"}` : `\u0E40\u0E01\u0E34\u0E19\u0E01\u0E33\u0E2B\u0E19\u0E14: ${n.origin ?? "\u0E04\u0E48\u0E32"} \u0E04\u0E27\u0E23\u0E21\u0E35${r2} ${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? "\u0E2D\u0E22\u0E48\u0E32\u0E07\u0E19\u0E49\u0E2D\u0E22" : "\u0E21\u0E32\u0E01\u0E01\u0E27\u0E48\u0E32", a = t(n.origin);
@@ -55941,7 +55508,7 @@ var $y = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E02\u0E36\u0E49\u0E19\u0E15\u0E49\u0E19\u0E14\u0E49\u0E27\u0E22 "${r2.prefix}"` : r2.format === "ends_with" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E25\u0E07\u0E17\u0E49\u0E32\u0E22\u0E14\u0E49\u0E27\u0E22 "${r2.suffix}"` : r2.format === "includes" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 "${r2.includes}" \u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21` : r2.format === "regex" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E15\u0E49\u0E2D\u0E07\u0E15\u0E23\u0E07\u0E01\u0E31\u0E1A\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E17\u0E35\u0E48\u0E01\u0E33\u0E2B\u0E19\u0E14 ${r2.pattern}` : `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E02\u0E36\u0E49\u0E19\u0E15\u0E49\u0E19\u0E14\u0E49\u0E27\u0E22 "${r2.prefix}"` : r2.format === "ends_with" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E25\u0E07\u0E17\u0E49\u0E32\u0E22\u0E14\u0E49\u0E27\u0E22 "${r2.suffix}"` : r2.format === "includes" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 "${r2.includes}" \u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21` : r2.format === "regex" ? `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E15\u0E49\u0E2D\u0E07\u0E15\u0E23\u0E07\u0E01\u0E31\u0E1A\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E17\u0E35\u0E48\u0E01\u0E33\u0E2B\u0E19\u0E14 ${r2.pattern}` : `\u0E23\u0E39\u0E1B\u0E41\u0E1A\u0E1A\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E44\u0E21\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07: \u0E15\u0E49\u0E2D\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E08\u0E33\u0E19\u0E27\u0E19\u0E17\u0E35\u0E48\u0E2B\u0E32\u0E23\u0E14\u0E49\u0E27\u0E22 ${n.divisor} \u0E44\u0E14\u0E49\u0E25\u0E07\u0E15\u0E31\u0E27`;
@@ -55964,22 +55531,20 @@ function _y() {
 var by = () => {
   let e2 = { string: { unit: "karakter", verb: "olmal\u0131" }, file: { unit: "bayt", verb: "olmal\u0131" }, array: { unit: "\xF6\u011Fe", verb: "olmal\u0131" }, set: { unit: "\xF6\u011Fe", verb: "olmal\u0131" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "girdi", email: "e-posta adresi", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO tarih ve saat", date: "ISO tarih", time: "ISO saat", duration: "ISO s\xFCre", ipv4: "IPv4 adresi", ipv6: "IPv6 adresi", cidrv4: "IPv4 aral\u0131\u011F\u0131", cidrv6: "IPv6 aral\u0131\u011F\u0131", base64: "base64 ile \u015Fifrelenmi\u015F metin", base64url: "base64url ile \u015Fifrelenmi\u015F metin", json_string: "JSON dizesi", e164: "E.164 say\u0131s\u0131", jwt: "JWT", template_literal: "\u015Eablon dizesi" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Ge\xE7ersiz de\u011Fer: beklenen instanceof ${n.expected}, al\u0131nan ${s}` : `Ge\xE7ersiz de\u011Fer: beklenen ${r2}, al\u0131nan ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Ge\xE7ersiz de\u011Fer: beklenen ${w2(n.values[0])}` : `Ge\xE7ersiz se\xE7enek: a\u015Fa\u011F\u0131dakilerden biri olmal\u0131: ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\xC7ok b\xFCy\xFCk: beklenen ${(_c2 = n.origin) != null ? _c2 : "de\u011Fer"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\xF6\u011Fe"}` : `\xC7ok b\xFCy\xFCk: beklenen ${(_e2 = n.origin) != null ? _e2 : "de\u011Fer"} ${r2}${n.maximum.toString()}`;
+        return a ? `\xC7ok b\xFCy\xFCk: beklenen ${n.origin ?? "de\u011Fer"} ${r2}${n.maximum.toString()} ${a.unit ?? "\xF6\u011Fe"}` : `\xC7ok b\xFCy\xFCk: beklenen ${n.origin ?? "de\u011Fer"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -55987,7 +55552,7 @@ var by = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Ge\xE7ersiz metin: "${r2.prefix}" ile ba\u015Flamal\u0131` : r2.format === "ends_with" ? `Ge\xE7ersiz metin: "${r2.suffix}" ile bitmeli` : r2.format === "includes" ? `Ge\xE7ersiz metin: "${r2.includes}" i\xE7ermeli` : r2.format === "regex" ? `Ge\xE7ersiz metin: ${r2.pattern} desenine uymal\u0131` : `Ge\xE7ersiz ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `Ge\xE7ersiz metin: "${r2.prefix}" ile ba\u015Flamal\u0131` : r2.format === "ends_with" ? `Ge\xE7ersiz metin: "${r2.suffix}" ile bitmeli` : r2.format === "includes" ? `Ge\xE7ersiz metin: "${r2.includes}" i\xE7ermeli` : r2.format === "regex" ? `Ge\xE7ersiz metin: ${r2.pattern} desenine uymal\u0131` : `Ge\xE7ersiz ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Ge\xE7ersiz say\u0131: ${n.divisor} ile tam b\xF6l\xFCnebilmeli`;
@@ -56010,22 +55575,20 @@ function yy() {
 var ky = () => {
   let e2 = { string: { unit: "\u0441\u0438\u043C\u0432\u043E\u043B\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" }, file: { unit: "\u0431\u0430\u0439\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" }, array: { unit: "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" }, set: { unit: "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432", verb: "\u043C\u0430\u0442\u0438\u043C\u0435" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456", email: "\u0430\u0434\u0440\u0435\u0441\u0430 \u0435\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0457 \u043F\u043E\u0448\u0442\u0438", url: "URL", emoji: "\u0435\u043C\u043E\u0434\u0437\u0456", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\u0434\u0430\u0442\u0430 \u0442\u0430 \u0447\u0430\u0441 ISO", date: "\u0434\u0430\u0442\u0430 ISO", time: "\u0447\u0430\u0441 ISO", duration: "\u0442\u0440\u0438\u0432\u0430\u043B\u0456\u0441\u0442\u044C ISO", ipv4: "\u0430\u0434\u0440\u0435\u0441\u0430 IPv4", ipv6: "\u0430\u0434\u0440\u0435\u0441\u0430 IPv6", cidrv4: "\u0434\u0456\u0430\u043F\u0430\u0437\u043E\u043D IPv4", cidrv6: "\u0434\u0456\u0430\u043F\u0430\u0437\u043E\u043D IPv6", base64: "\u0440\u044F\u0434\u043E\u043A \u0443 \u043A\u043E\u0434\u0443\u0432\u0430\u043D\u043D\u0456 base64", base64url: "\u0440\u044F\u0434\u043E\u043A \u0443 \u043A\u043E\u0434\u0443\u0432\u0430\u043D\u043D\u0456 base64url", json_string: "\u0440\u044F\u0434\u043E\u043A JSON", e164: "\u043D\u043E\u043C\u0435\u0440 E.164", jwt: "JWT", template_literal: "\u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456" }, o = { nan: "NaN", number: "\u0447\u0438\u0441\u043B\u043E", array: "\u043C\u0430\u0441\u0438\u0432" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0456 \u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F instanceof ${n.expected}, \u043E\u0442\u0440\u0438\u043C\u0430\u043D\u043E ${s}` : `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0456 \u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F ${r2}, \u043E\u0442\u0440\u0438\u043C\u0430\u043D\u043E ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0456 \u0432\u0445\u0456\u0434\u043D\u0456 \u0434\u0430\u043D\u0456: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F ${w2(n.values[0])}` : `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0430 \u043E\u043F\u0446\u0456\u044F: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F \u043E\u0434\u043D\u0435 \u0437 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${(_c2 = n.origin) != null ? _c2 : "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} ${a.verb} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432"}` : `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${(_e2 = n.origin) != null ? _e2 : "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} \u0431\u0443\u0434\u0435 ${r2}${n.maximum.toString()}`;
+        return a ? `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} ${a.verb} ${r2}${n.maximum.toString()} ${a.unit ?? "\u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432"}` : `\u0417\u0430\u043D\u0430\u0434\u0442\u043E \u0432\u0435\u043B\u0438\u043A\u0435: \u043E\u0447\u0456\u043A\u0443\u0454\u0442\u044C\u0441\u044F, \u0449\u043E ${n.origin ?? "\u0437\u043D\u0430\u0447\u0435\u043D\u043D\u044F"} \u0431\u0443\u0434\u0435 ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56033,7 +55596,7 @@ var ky = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u043F\u043E\u0447\u0438\u043D\u0430\u0442\u0438\u0441\u044F \u0437 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u0437\u0430\u043A\u0456\u043D\u0447\u0443\u0432\u0430\u0442\u0438\u0441\u044F \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u043C\u0456\u0441\u0442\u0438\u0442\u0438 "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u0442\u0438 \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u043F\u043E\u0447\u0438\u043D\u0430\u0442\u0438\u0441\u044F \u0437 "${r2.prefix}"` : r2.format === "ends_with" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u0437\u0430\u043A\u0456\u043D\u0447\u0443\u0432\u0430\u0442\u0438\u0441\u044F \u043D\u0430 "${r2.suffix}"` : r2.format === "includes" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u043C\u0456\u0441\u0442\u0438\u0442\u0438 "${r2.includes}"` : r2.format === "regex" ? `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 \u0440\u044F\u0434\u043E\u043A: \u043F\u043E\u0432\u0438\u043D\u0435\u043D \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u0442\u0438 \u0448\u0430\u0431\u043B\u043E\u043D\u0443 ${r2.pattern}` : `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0439 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u041D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0435 \u0447\u0438\u0441\u043B\u043E: \u043F\u043E\u0432\u0438\u043D\u043D\u043E \u0431\u0443\u0442\u0438 \u043A\u0440\u0430\u0442\u043D\u0438\u043C ${n.divisor}`;
@@ -56059,22 +55622,20 @@ function Iy() {
 var wy = () => {
   let e2 = { string: { unit: "\u062D\u0631\u0648\u0641", verb: "\u06C1\u0648\u0646\u0627" }, file: { unit: "\u0628\u0627\u0626\u0679\u0633", verb: "\u06C1\u0648\u0646\u0627" }, array: { unit: "\u0622\u0626\u0679\u0645\u0632", verb: "\u06C1\u0648\u0646\u0627" }, set: { unit: "\u0622\u0626\u0679\u0645\u0632", verb: "\u06C1\u0648\u0646\u0627" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0627\u0646 \u067E\u0679", email: "\u0627\u06CC \u0645\u06CC\u0644 \u0627\u06CC\u0688\u0631\u06CC\u0633", url: "\u06CC\u0648 \u0622\u0631 \u0627\u06CC\u0644", emoji: "\u0627\u06CC\u0645\u0648\u062C\u06CC", uuid: "\u06CC\u0648 \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC", uuidv4: "\u06CC\u0648 \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC \u0648\u06CC 4", uuidv6: "\u06CC\u0648 \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC \u0648\u06CC 6", nanoid: "\u0646\u06CC\u0646\u0648 \u0622\u0626\u06CC \u0688\u06CC", guid: "\u062C\u06CC \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC", cuid: "\u0633\u06CC \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC", cuid2: "\u0633\u06CC \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC 2", ulid: "\u06CC\u0648 \u0627\u06CC\u0644 \u0622\u0626\u06CC \u0688\u06CC", xid: "\u0627\u06CC\u06A9\u0633 \u0622\u0626\u06CC \u0688\u06CC", ksuid: "\u06A9\u06D2 \u0627\u06CC\u0633 \u06CC\u0648 \u0622\u0626\u06CC \u0688\u06CC", datetime: "\u0622\u0626\u06CC \u0627\u06CC\u0633 \u0627\u0648 \u0688\u06CC\u0679 \u0679\u0627\u0626\u0645", date: "\u0622\u0626\u06CC \u0627\u06CC\u0633 \u0627\u0648 \u062A\u0627\u0631\u06CC\u062E", time: "\u0622\u0626\u06CC \u0627\u06CC\u0633 \u0627\u0648 \u0648\u0642\u062A", duration: "\u0622\u0626\u06CC \u0627\u06CC\u0633 \u0627\u0648 \u0645\u062F\u062A", ipv4: "\u0622\u0626\u06CC \u067E\u06CC \u0648\u06CC 4 \u0627\u06CC\u0688\u0631\u06CC\u0633", ipv6: "\u0622\u0626\u06CC \u067E\u06CC \u0648\u06CC 6 \u0627\u06CC\u0688\u0631\u06CC\u0633", cidrv4: "\u0622\u0626\u06CC \u067E\u06CC \u0648\u06CC 4 \u0631\u06CC\u0646\u062C", cidrv6: "\u0622\u0626\u06CC \u067E\u06CC \u0648\u06CC 6 \u0631\u06CC\u0646\u062C", base64: "\u0628\u06CC\u0633 64 \u0627\u0646 \u06A9\u0648\u0688\u0688 \u0633\u0679\u0631\u0646\u06AF", base64url: "\u0628\u06CC\u0633 64 \u06CC\u0648 \u0622\u0631 \u0627\u06CC\u0644 \u0627\u0646 \u06A9\u0648\u0688\u0688 \u0633\u0679\u0631\u0646\u06AF", json_string: "\u062C\u06D2 \u0627\u06CC\u0633 \u0627\u0648 \u0627\u06CC\u0646 \u0633\u0679\u0631\u0646\u06AF", e164: "\u0627\u06CC 164 \u0646\u0645\u0628\u0631", jwt: "\u062C\u06D2 \u0688\u0628\u0644\u06CC\u0648 \u0679\u06CC", template_literal: "\u0627\u0646 \u067E\u0679" }, o = { nan: "NaN", number: "\u0646\u0645\u0628\u0631", array: "\u0622\u0631\u06D2", null: "\u0646\u0644" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u063A\u0644\u0637 \u0627\u0646 \u067E\u0679: instanceof ${n.expected} \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627\u060C ${s} \u0645\u0648\u0635\u0648\u0644 \u06C1\u0648\u0627` : `\u063A\u0644\u0637 \u0627\u0646 \u067E\u0679: ${r2} \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627\u060C ${s} \u0645\u0648\u0635\u0648\u0644 \u06C1\u0648\u0627`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u063A\u0644\u0637 \u0627\u0646 \u067E\u0679: ${w2(n.values[0])} \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627` : `\u063A\u0644\u0637 \u0622\u067E\u0634\u0646: ${v2(n.values, "|")} \u0645\u06CC\u06BA \u0633\u06D2 \u0627\u06CC\u06A9 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u0628\u06C1\u062A \u0628\u0691\u0627: ${(_c2 = n.origin) != null ? _c2 : "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u06D2 ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u0639\u0646\u0627\u0635\u0631"} \u06C1\u0648\u0646\u06D2 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u06D2` : `\u0628\u06C1\u062A \u0628\u0691\u0627: ${(_e2 = n.origin) != null ? _e2 : "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u0627 ${r2}${n.maximum.toString()} \u06C1\u0648\u0646\u0627 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627`;
+        return a ? `\u0628\u06C1\u062A \u0628\u0691\u0627: ${n.origin ?? "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u06D2 ${r2}${n.maximum.toString()} ${a.unit ?? "\u0639\u0646\u0627\u0635\u0631"} \u06C1\u0648\u0646\u06D2 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u06D2` : `\u0628\u06C1\u062A \u0628\u0691\u0627: ${n.origin ?? "\u0648\u06CC\u0644\u06CC\u0648"} \u06A9\u0627 ${r2}${n.maximum.toString()} \u06C1\u0648\u0646\u0627 \u0645\u062A\u0648\u0642\u0639 \u062A\u06BE\u0627`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56082,7 +55643,7 @@ var wy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.prefix}" \u0633\u06D2 \u0634\u0631\u0648\u0639 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "ends_with" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.suffix}" \u067E\u0631 \u062E\u062A\u0645 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "includes" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.includes}" \u0634\u0627\u0645\u0644 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "regex" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: \u067E\u06CC\u0679\u0631\u0646 ${r2.pattern} \u0633\u06D2 \u0645\u06CC\u0686 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : `\u063A\u0644\u0637 ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.prefix}" \u0633\u06D2 \u0634\u0631\u0648\u0639 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "ends_with" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.suffix}" \u067E\u0631 \u062E\u062A\u0645 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "includes" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: "${r2.includes}" \u0634\u0627\u0645\u0644 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : r2.format === "regex" ? `\u063A\u0644\u0637 \u0633\u0679\u0631\u0646\u06AF: \u067E\u06CC\u0679\u0631\u0646 ${r2.pattern} \u0633\u06D2 \u0645\u06CC\u0686 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2` : `\u063A\u0644\u0637 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u063A\u0644\u0637 \u0646\u0645\u0628\u0631: ${n.divisor} \u06A9\u0627 \u0645\u0636\u0627\u0639\u0641 \u06C1\u0648\u0646\u0627 \u0686\u0627\u06C1\u06CC\u06D2`;
@@ -56105,22 +55666,20 @@ function Sy() {
 var xy = () => {
   let e2 = { string: { unit: "belgi", verb: "bo\u2018lishi kerak" }, file: { unit: "bayt", verb: "bo\u2018lishi kerak" }, array: { unit: "element", verb: "bo\u2018lishi kerak" }, set: { unit: "element", verb: "bo\u2018lishi kerak" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "kirish", email: "elektron pochta manzili", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO sana va vaqti", date: "ISO sana", time: "ISO vaqt", duration: "ISO davomiylik", ipv4: "IPv4 manzil", ipv6: "IPv6 manzil", mac: "MAC manzil", cidrv4: "IPv4 diapazon", cidrv6: "IPv6 diapazon", base64: "base64 kodlangan satr", base64url: "base64url kodlangan satr", json_string: "JSON satr", e164: "E.164 raqam", jwt: "JWT", template_literal: "kirish" }, o = { nan: "NaN", number: "raqam", array: "massiv" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `Noto\u2018g\u2018ri kirish: kutilgan instanceof ${n.expected}, qabul qilingan ${s}` : `Noto\u2018g\u2018ri kirish: kutilgan ${r2}, qabul qilingan ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `Noto\u2018g\u2018ri kirish: kutilgan ${w2(n.values[0])}` : `Noto\u2018g\u2018ri variant: quyidagilardan biri kutilgan ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Juda katta: kutilgan ${(_c2 = n.origin) != null ? _c2 : "qiymat"} ${r2}${n.maximum.toString()} ${a.unit} ${a.verb}` : `Juda katta: kutilgan ${(_d2 = n.origin) != null ? _d2 : "qiymat"} ${r2}${n.maximum.toString()}`;
+        return a ? `Juda katta: kutilgan ${n.origin ?? "qiymat"} ${r2}${n.maximum.toString()} ${a.unit} ${a.verb}` : `Juda katta: kutilgan ${n.origin ?? "qiymat"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56128,7 +55687,7 @@ var xy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Noto\u2018g\u2018ri satr: "${r2.prefix}" bilan boshlanishi kerak` : r2.format === "ends_with" ? `Noto\u2018g\u2018ri satr: "${r2.suffix}" bilan tugashi kerak` : r2.format === "includes" ? `Noto\u2018g\u2018ri satr: "${r2.includes}" ni o\u2018z ichiga olishi kerak` : r2.format === "regex" ? `Noto\u2018g\u2018ri satr: ${r2.pattern} shabloniga mos kelishi kerak` : `Noto\u2018g\u2018ri ${(_e2 = i[r2.format]) != null ? _e2 : n.format}`;
+        return r2.format === "starts_with" ? `Noto\u2018g\u2018ri satr: "${r2.prefix}" bilan boshlanishi kerak` : r2.format === "ends_with" ? `Noto\u2018g\u2018ri satr: "${r2.suffix}" bilan tugashi kerak` : r2.format === "includes" ? `Noto\u2018g\u2018ri satr: "${r2.includes}" ni o\u2018z ichiga olishi kerak` : r2.format === "regex" ? `Noto\u2018g\u2018ri satr: ${r2.pattern} shabloniga mos kelishi kerak` : `Noto\u2018g\u2018ri ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `Noto\u2018g\u2018ri raqam: ${n.divisor} ning karralisi bo\u2018lishi kerak`;
@@ -56151,22 +55710,20 @@ function zy() {
 var Uy = () => {
   let e2 = { string: { unit: "k\xFD t\u1EF1", verb: "c\xF3" }, file: { unit: "byte", verb: "c\xF3" }, array: { unit: "ph\u1EA7n t\u1EED", verb: "c\xF3" }, set: { unit: "ph\u1EA7n t\u1EED", verb: "c\xF3" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u0111\u1EA7u v\xE0o", email: "\u0111\u1ECBa ch\u1EC9 email", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ng\xE0y gi\u1EDD ISO", date: "ng\xE0y ISO", time: "gi\u1EDD ISO", duration: "kho\u1EA3ng th\u1EDDi gian ISO", ipv4: "\u0111\u1ECBa ch\u1EC9 IPv4", ipv6: "\u0111\u1ECBa ch\u1EC9 IPv6", cidrv4: "d\u1EA3i IPv4", cidrv6: "d\u1EA3i IPv6", base64: "chu\u1ED7i m\xE3 h\xF3a base64", base64url: "chu\u1ED7i m\xE3 h\xF3a base64url", json_string: "chu\u1ED7i JSON", e164: "s\u1ED1 E.164", jwt: "JWT", template_literal: "\u0111\u1EA7u v\xE0o" }, o = { nan: "NaN", number: "s\u1ED1", array: "m\u1EA3ng" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u0110\u1EA7u v\xE0o kh\xF4ng h\u1EE3p l\u1EC7: mong \u0111\u1EE3i instanceof ${n.expected}, nh\u1EADn \u0111\u01B0\u1EE3c ${s}` : `\u0110\u1EA7u v\xE0o kh\xF4ng h\u1EE3p l\u1EC7: mong \u0111\u1EE3i ${r2}, nh\u1EADn \u0111\u01B0\u1EE3c ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u0110\u1EA7u v\xE0o kh\xF4ng h\u1EE3p l\u1EC7: mong \u0111\u1EE3i ${w2(n.values[0])}` : `T\xF9y ch\u1ECDn kh\xF4ng h\u1EE3p l\u1EC7: mong \u0111\u1EE3i m\u1ED9t trong c\xE1c gi\xE1 tr\u1ECB ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${(_c2 = n.origin) != null ? _c2 : "gi\xE1 tr\u1ECB"} ${a.verb} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "ph\u1EA7n t\u1EED"}` : `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${(_e2 = n.origin) != null ? _e2 : "gi\xE1 tr\u1ECB"} ${r2}${n.maximum.toString()}`;
+        return a ? `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${n.origin ?? "gi\xE1 tr\u1ECB"} ${a.verb} ${r2}${n.maximum.toString()} ${a.unit ?? "ph\u1EA7n t\u1EED"}` : `Qu\xE1 l\u1EDBn: mong \u0111\u1EE3i ${n.origin ?? "gi\xE1 tr\u1ECB"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56174,7 +55731,7 @@ var Uy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i b\u1EAFt \u0111\u1EA7u b\u1EB1ng "${r2.prefix}"` : r2.format === "ends_with" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i k\u1EBFt th\xFAc b\u1EB1ng "${r2.suffix}"` : r2.format === "includes" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i bao g\u1ED3m "${r2.includes}"` : r2.format === "regex" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i kh\u1EDBp v\u1EDBi m\u1EABu ${r2.pattern}` : `${(_f2 = i[r2.format]) != null ? _f2 : n.format} kh\xF4ng h\u1EE3p l\u1EC7`;
+        return r2.format === "starts_with" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i b\u1EAFt \u0111\u1EA7u b\u1EB1ng "${r2.prefix}"` : r2.format === "ends_with" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i k\u1EBFt th\xFAc b\u1EB1ng "${r2.suffix}"` : r2.format === "includes" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i bao g\u1ED3m "${r2.includes}"` : r2.format === "regex" ? `Chu\u1ED7i kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i kh\u1EDBp v\u1EDBi m\u1EABu ${r2.pattern}` : `${i[r2.format] ?? n.format} kh\xF4ng h\u1EE3p l\u1EC7`;
       }
       case "not_multiple_of":
         return `S\u1ED1 kh\xF4ng h\u1EE3p l\u1EC7: ph\u1EA3i l\xE0 b\u1ED9i s\u1ED1 c\u1EE7a ${n.divisor}`;
@@ -56197,22 +55754,20 @@ function Oy() {
 var Zy = () => {
   let e2 = { string: { unit: "\u5B57\u7B26", verb: "\u5305\u542B" }, file: { unit: "\u5B57\u8282", verb: "\u5305\u542B" }, array: { unit: "\u9879", verb: "\u5305\u542B" }, set: { unit: "\u9879", verb: "\u5305\u542B" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u8F93\u5165", email: "\u7535\u5B50\u90AE\u4EF6", url: "URL", emoji: "\u8868\u60C5\u7B26\u53F7", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO\u65E5\u671F\u65F6\u95F4", date: "ISO\u65E5\u671F", time: "ISO\u65F6\u95F4", duration: "ISO\u65F6\u957F", ipv4: "IPv4\u5730\u5740", ipv6: "IPv6\u5730\u5740", cidrv4: "IPv4\u7F51\u6BB5", cidrv6: "IPv6\u7F51\u6BB5", base64: "base64\u7F16\u7801\u5B57\u7B26\u4E32", base64url: "base64url\u7F16\u7801\u5B57\u7B26\u4E32", json_string: "JSON\u5B57\u7B26\u4E32", e164: "E.164\u53F7\u7801", jwt: "JWT", template_literal: "\u8F93\u5165" }, o = { nan: "NaN", number: "\u6570\u5B57", array: "\u6570\u7EC4", null: "\u7A7A\u503C(null)" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u65E0\u6548\u8F93\u5165\uFF1A\u671F\u671B instanceof ${n.expected}\uFF0C\u5B9E\u9645\u63A5\u6536 ${s}` : `\u65E0\u6548\u8F93\u5165\uFF1A\u671F\u671B ${r2}\uFF0C\u5B9E\u9645\u63A5\u6536 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u65E0\u6548\u8F93\u5165\uFF1A\u671F\u671B ${w2(n.values[0])}` : `\u65E0\u6548\u9009\u9879\uFF1A\u671F\u671B\u4EE5\u4E0B\u4E4B\u4E00 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${(_c2 = n.origin) != null ? _c2 : "\u503C"} ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u4E2A\u5143\u7D20"}` : `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${(_e2 = n.origin) != null ? _e2 : "\u503C"} ${r2}${n.maximum.toString()}`;
+        return a ? `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${n.origin ?? "\u503C"} ${r2}${n.maximum.toString()} ${a.unit ?? "\u4E2A\u5143\u7D20"}` : `\u6570\u503C\u8FC7\u5927\uFF1A\u671F\u671B ${n.origin ?? "\u503C"} ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56220,7 +55775,7 @@ var Zy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u4EE5 "${r2.prefix}" \u5F00\u5934` : r2.format === "ends_with" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u4EE5 "${r2.suffix}" \u7ED3\u5C3E` : r2.format === "includes" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u5305\u542B "${r2.includes}"` : r2.format === "regex" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u6EE1\u8DB3\u6B63\u5219\u8868\u8FBE\u5F0F ${r2.pattern}` : `\u65E0\u6548${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u4EE5 "${r2.prefix}" \u5F00\u5934` : r2.format === "ends_with" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u4EE5 "${r2.suffix}" \u7ED3\u5C3E` : r2.format === "includes" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u5305\u542B "${r2.includes}"` : r2.format === "regex" ? `\u65E0\u6548\u5B57\u7B26\u4E32\uFF1A\u5FC5\u987B\u6EE1\u8DB3\u6B63\u5219\u8868\u8FBE\u5F0F ${r2.pattern}` : `\u65E0\u6548${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u65E0\u6548\u6570\u5B57\uFF1A\u5FC5\u987B\u662F ${n.divisor} \u7684\u500D\u6570`;
@@ -56243,22 +55798,20 @@ function Py() {
 var Ey = () => {
   let e2 = { string: { unit: "\u5B57\u5143", verb: "\u64C1\u6709" }, file: { unit: "\u4F4D\u5143\u7D44", verb: "\u64C1\u6709" }, array: { unit: "\u9805\u76EE", verb: "\u64C1\u6709" }, set: { unit: "\u9805\u76EE", verb: "\u64C1\u6709" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u8F38\u5165", email: "\u90F5\u4EF6\u5730\u5740", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "ISO \u65E5\u671F\u6642\u9593", date: "ISO \u65E5\u671F", time: "ISO \u6642\u9593", duration: "ISO \u671F\u9593", ipv4: "IPv4 \u4F4D\u5740", ipv6: "IPv6 \u4F4D\u5740", cidrv4: "IPv4 \u7BC4\u570D", cidrv6: "IPv6 \u7BC4\u570D", base64: "base64 \u7DE8\u78BC\u5B57\u4E32", base64url: "base64url \u7DE8\u78BC\u5B57\u4E32", json_string: "JSON \u5B57\u4E32", e164: "E.164 \u6578\u503C", jwt: "JWT", template_literal: "\u8F38\u5165" }, o = { nan: "NaN" };
   return (n) => {
-    var _a19, _b8, _c2, _d2, _e2, _f2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\u7121\u6548\u7684\u8F38\u5165\u503C\uFF1A\u9810\u671F\u70BA instanceof ${n.expected}\uFF0C\u4F46\u6536\u5230 ${s}` : `\u7121\u6548\u7684\u8F38\u5165\u503C\uFF1A\u9810\u671F\u70BA ${r2}\uFF0C\u4F46\u6536\u5230 ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\u7121\u6548\u7684\u8F38\u5165\u503C\uFF1A\u9810\u671F\u70BA ${w2(n.values[0])}` : `\u7121\u6548\u7684\u9078\u9805\uFF1A\u9810\u671F\u70BA\u4EE5\u4E0B\u5176\u4E2D\u4E4B\u4E00 ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${(_c2 = n.origin) != null ? _c2 : "\u503C"} \u61C9\u70BA ${r2}${n.maximum.toString()} ${(_d2 = a.unit) != null ? _d2 : "\u500B\u5143\u7D20"}` : `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${(_e2 = n.origin) != null ? _e2 : "\u503C"} \u61C9\u70BA ${r2}${n.maximum.toString()}`;
+        return a ? `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${n.origin ?? "\u503C"} \u61C9\u70BA ${r2}${n.maximum.toString()} ${a.unit ?? "\u500B\u5143\u7D20"}` : `\u6578\u503C\u904E\u5927\uFF1A\u9810\u671F ${n.origin ?? "\u503C"} \u61C9\u70BA ${r2}${n.maximum.toString()}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56266,7 +55819,7 @@ var Ey = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u4EE5 "${r2.prefix}" \u958B\u982D` : r2.format === "ends_with" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u4EE5 "${r2.suffix}" \u7D50\u5C3E` : r2.format === "includes" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u5305\u542B "${r2.includes}"` : r2.format === "regex" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u7B26\u5408\u683C\u5F0F ${r2.pattern}` : `\u7121\u6548\u7684 ${(_f2 = i[r2.format]) != null ? _f2 : n.format}`;
+        return r2.format === "starts_with" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u4EE5 "${r2.prefix}" \u958B\u982D` : r2.format === "ends_with" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u4EE5 "${r2.suffix}" \u7D50\u5C3E` : r2.format === "includes" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u5305\u542B "${r2.includes}"` : r2.format === "regex" ? `\u7121\u6548\u7684\u5B57\u4E32\uFF1A\u5FC5\u9808\u7B26\u5408\u683C\u5F0F ${r2.pattern}` : `\u7121\u6548\u7684 ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `\u7121\u6548\u7684\u6578\u5B57\uFF1A\u5FC5\u9808\u70BA ${n.divisor} \u7684\u500D\u6578`;
@@ -56289,22 +55842,20 @@ function Ny() {
 var Dy = () => {
   let e2 = { string: { unit: "\xE0mi", verb: "n\xED" }, file: { unit: "bytes", verb: "n\xED" }, array: { unit: "nkan", verb: "n\xED" }, set: { unit: "nkan", verb: "n\xED" } };
   function t(n) {
-    var _a19;
-    return (_a19 = e2[n]) != null ? _a19 : null;
+    return e2[n] ?? null;
   }
   let i = { regex: "\u1EB9\u0300r\u1ECD \xECb\xE1w\u1ECDl\xE9", email: "\xE0d\xEDr\u1EB9\u0301s\xEC \xECm\u1EB9\u0301l\xEC", url: "URL", emoji: "emoji", uuid: "UUID", uuidv4: "UUIDv4", uuidv6: "UUIDv6", nanoid: "nanoid", guid: "GUID", cuid: "cuid", cuid2: "cuid2", ulid: "ULID", xid: "XID", ksuid: "KSUID", datetime: "\xE0k\xF3k\xF2 ISO", date: "\u1ECDj\u1ECD\u0301 ISO", time: "\xE0k\xF3k\xF2 ISO", duration: "\xE0k\xF3k\xF2 t\xF3 p\xE9 ISO", ipv4: "\xE0d\xEDr\u1EB9\u0301s\xEC IPv4", ipv6: "\xE0d\xEDr\u1EB9\u0301s\xEC IPv6", cidrv4: "\xE0gb\xE8gb\xE8 IPv4", cidrv6: "\xE0gb\xE8gb\xE8 IPv6", base64: "\u1ECD\u0300r\u1ECD\u0300 t\xED a k\u1ECD\u0301 n\xED base64", base64url: "\u1ECD\u0300r\u1ECD\u0300 base64url", json_string: "\u1ECD\u0300r\u1ECD\u0300 JSON", e164: "n\u1ECD\u0301mb\xE0 E.164", jwt: "JWT", template_literal: "\u1EB9\u0300r\u1ECD \xECb\xE1w\u1ECDl\xE9" }, o = { nan: "NaN", number: "n\u1ECD\u0301mb\xE0", array: "akop\u1ECD" };
   return (n) => {
-    var _a19, _b8, _c2, _d2;
     switch (n.code) {
       case "invalid_type": {
-        let r2 = (_a19 = o[n.expected]) != null ? _a19 : n.expected, a = S(n.input), s = (_b8 = o[a]) != null ? _b8 : a;
+        let r2 = o[n.expected] ?? n.expected, a = S(n.input), s = o[a] ?? a;
         return /^[A-Z]/.test(n.expected) ? `\xCCb\xE1w\u1ECDl\xE9 a\u1E63\xEC\u1E63e: a n\xED l\xE1ti fi instanceof ${n.expected}, \xE0m\u1ECD\u0300 a r\xED ${s}` : `\xCCb\xE1w\u1ECDl\xE9 a\u1E63\xEC\u1E63e: a n\xED l\xE1ti fi ${r2}, \xE0m\u1ECD\u0300 a r\xED ${s}`;
       }
       case "invalid_value":
         return n.values.length === 1 ? `\xCCb\xE1w\u1ECDl\xE9 a\u1E63\xEC\u1E63e: a n\xED l\xE1ti fi ${w2(n.values[0])}` : `\xC0\u1E63\xE0y\xE0n a\u1E63\xEC\u1E63e: yan \u1ECD\u0300kan l\xE1ra ${v2(n.values, "|")}`;
       case "too_big": {
         let r2 = n.inclusive ? "<=" : "<", a = t(n.origin);
-        return a ? `T\xF3 p\u1ECD\u0300 j\xF9: a n\xED l\xE1ti j\u1EB9\u0301 p\xE9 ${(_c2 = n.origin) != null ? _c2 : "iye"} ${a.verb} ${r2}${n.maximum} ${a.unit}` : `T\xF3 p\u1ECD\u0300 j\xF9: a n\xED l\xE1ti j\u1EB9\u0301 ${r2}${n.maximum}`;
+        return a ? `T\xF3 p\u1ECD\u0300 j\xF9: a n\xED l\xE1ti j\u1EB9\u0301 p\xE9 ${n.origin ?? "iye"} ${a.verb} ${r2}${n.maximum} ${a.unit}` : `T\xF3 p\u1ECD\u0300 j\xF9: a n\xED l\xE1ti j\u1EB9\u0301 ${r2}${n.maximum}`;
       }
       case "too_small": {
         let r2 = n.inclusive ? ">=" : ">", a = t(n.origin);
@@ -56312,7 +55863,7 @@ var Dy = () => {
       }
       case "invalid_format": {
         let r2 = n;
-        return r2.format === "starts_with" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 b\u1EB9\u0300r\u1EB9\u0300 p\u1EB9\u0300l\xFA "${r2.prefix}"` : r2.format === "ends_with" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 par\xED p\u1EB9\u0300l\xFA "${r2.suffix}"` : r2.format === "includes" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 n\xED "${r2.includes}"` : r2.format === "regex" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 b\xE1 \xE0p\u1EB9\u1EB9r\u1EB9 mu ${r2.pattern}` : `A\u1E63\xEC\u1E63e: ${(_d2 = i[r2.format]) != null ? _d2 : n.format}`;
+        return r2.format === "starts_with" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 b\u1EB9\u0300r\u1EB9\u0300 p\u1EB9\u0300l\xFA "${r2.prefix}"` : r2.format === "ends_with" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 par\xED p\u1EB9\u0300l\xFA "${r2.suffix}"` : r2.format === "includes" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 n\xED "${r2.includes}"` : r2.format === "regex" ? `\u1ECC\u0300r\u1ECD\u0300 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 b\xE1 \xE0p\u1EB9\u1EB9r\u1EB9 mu ${r2.pattern}` : `A\u1E63\xEC\u1E63e: ${i[r2.format] ?? n.format}`;
       }
       case "not_multiple_of":
         return `N\u1ECD\u0301mb\xE0 a\u1E63\xEC\u1E63e: gb\u1ECD\u0301d\u1ECD\u0300 j\u1EB9\u0301 \xE8y\xE0 p\xEDp\xEDn ti ${n.divisor}`;
@@ -56351,10 +55902,9 @@ var Bl = class {
     return i && typeof i == "object" && "id" in i && this._idmap.delete(i.id), this._map.delete(t), this;
   }
   get(t) {
-    var _a19;
     let i = t._zod.parent;
     if (i) {
-      let o = { ...(_a19 = this.get(i)) != null ? _a19 : {} };
+      let o = { ...this.get(i) ?? {} };
       delete o.id;
       let n = { ...o, ...this._map.get(t) };
       return Object.keys(n).length ? n : void 0;
@@ -56368,8 +55918,7 @@ var Bl = class {
 function or() {
   return new Bl();
 }
-var _a3;
-(_a3 = (fa = globalThis).__zod_globalRegistry) != null ? _a3 : fa.__zod_globalRegistry = or();
+(fa = globalThis).__zod_globalRegistry ?? (fa.__zod_globalRegistry = or());
 var ce = globalThis.__zod_globalRegistry;
 function Hl(e2, t) {
   return new e2({ type: "string", ...$(t) });
@@ -56695,20 +56244,18 @@ function rk(e2, t) {
   return new e2({ type: "promise", innerType: t });
 }
 function Oc(e2, t, i) {
-  var _a19;
   let o = $(i);
-  return (_a19 = o.abort) != null ? _a19 : o.abort = true, new e2({ type: "custom", check: "custom", fn: t, ...o });
+  return o.abort ?? (o.abort = true), new e2({ type: "custom", check: "custom", fn: t, ...o });
 }
 function Zc(e2, t, i) {
   return new e2({ type: "custom", check: "custom", fn: t, ...$(i) });
 }
 function Pc(e2) {
   let t = Ec((i) => (i.addIssue = (o) => {
-    var _a19, _b8, _c2, _d2;
     if (typeof o == "string") i.issues.push(rn(o, i.value, t._zod.def));
     else {
       let n = o;
-      n.fatal && (n.continue = false), (_a19 = n.code) != null ? _a19 : n.code = "custom", (_b8 = n.input) != null ? _b8 : n.input = i.value, (_c2 = n.inst) != null ? _c2 : n.inst = t, (_d2 = n.continue) != null ? _d2 : n.continue = !t._zod.def.abort, i.issues.push(rn(n));
+      n.fatal && (n.continue = false), n.code ?? (n.code = "custom"), n.input ?? (n.input = i.value), n.inst ?? (n.inst = t), n.continue ?? (n.continue = !t._zod.def.abort), i.issues.push(rn(n));
     }
   }, e2(i.value, i)));
   return t;
@@ -56720,8 +56267,7 @@ function Ec(e2, t) {
 function Nc(e2) {
   let t = new J({ check: "describe" });
   return t._zod.onattach = [(i) => {
-    var _a19;
-    let o = (_a19 = ce.get(i)) != null ? _a19 : {};
+    let o = ce.get(i) ?? {};
     ce.add(i, { ...o, description: e2 });
   }], t._zod.check = () => {
   }, t;
@@ -56729,17 +56275,15 @@ function Nc(e2) {
 function Dc(e2) {
   let t = new J({ check: "meta" });
   return t._zod.onattach = [(i) => {
-    var _a19;
-    let o = (_a19 = ce.get(i)) != null ? _a19 : {};
+    let o = ce.get(i) ?? {};
     ce.add(i, { ...o, ...e2 });
   }], t._zod.check = () => {
   }, t;
 }
 function jc(e2, t) {
-  var _a19, _b8, _c2, _d2, _e2;
-  let i = $(t), o = (_a19 = i.truthy) != null ? _a19 : ["true", "1", "yes", "on", "y", "enabled"], n = (_b8 = i.falsy) != null ? _b8 : ["false", "0", "no", "off", "n", "disabled"];
+  let i = $(t), o = i.truthy ?? ["true", "1", "yes", "on", "y", "enabled"], n = i.falsy ?? ["false", "0", "no", "off", "n", "disabled"];
   i.case !== "sensitive" && (o = o.map((g) => typeof g == "string" ? g.toLowerCase() : g), n = n.map((g) => typeof g == "string" ? g.toLowerCase() : g));
-  let r2 = new Set(o), a = new Set(n), s = (_c2 = e2.Codec) != null ? _c2 : ir, u2 = (_d2 = e2.Boolean) != null ? _d2 : Qi, l = new ((_e2 = e2.String) != null ? _e2 : xt)({ type: "string", error: i.error }), d2 = new u2({ type: "boolean", error: i.error }), p2 = new s({ type: "pipe", in: l, out: d2, transform: (g, _2) => {
+  let r2 = new Set(o), a = new Set(n), s = e2.Codec ?? ir, u2 = e2.Boolean ?? Qi, l = new (e2.String ?? xt)({ type: "string", error: i.error }), d2 = new u2({ type: "boolean", error: i.error }), p2 = new s({ type: "pipe", in: l, out: d2, transform: (g, _2) => {
     let x = g;
     return i.case !== "sensitive" && (x = x.toLowerCase()), r2.has(x) ? true : a.has(x) ? false : (_2.issues.push({ code: "invalid_value", expected: "stringbool", values: [...r2, ...a], input: _2.value, inst: p2, continue: false }), {});
   }, reverseTransform: (g, _2) => g === true ? o[0] || "true" : n[0] || "false", error: i.error });
@@ -56750,20 +56294,18 @@ function Zt(e2, t, i, o = {}) {
   return i instanceof RegExp && (r2.pattern = i), new e2(r2);
 }
 function Ke(e2) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
-  let t = (_a19 = e2 == null ? void 0 : e2.target) != null ? _a19 : "draft-2020-12";
-  return t === "draft-4" && (t = "draft-04"), t === "draft-7" && (t = "draft-07"), { processors: (_b8 = e2.processors) != null ? _b8 : {}, metadataRegistry: (_c2 = e2 == null ? void 0 : e2.metadata) != null ? _c2 : ce, target: t, unrepresentable: (_d2 = e2 == null ? void 0 : e2.unrepresentable) != null ? _d2 : "throw", override: (_e2 = e2 == null ? void 0 : e2.override) != null ? _e2 : (() => {
-  }), io: (_f2 = e2 == null ? void 0 : e2.io) != null ? _f2 : "output", counter: 0, seen: /* @__PURE__ */ new Map(), cycles: (_g2 = e2 == null ? void 0 : e2.cycles) != null ? _g2 : "ref", reused: (_h2 = e2 == null ? void 0 : e2.reused) != null ? _h2 : "inline", external: (_i2 = e2 == null ? void 0 : e2.external) != null ? _i2 : void 0 };
+  let t = e2?.target ?? "draft-2020-12";
+  return t === "draft-4" && (t = "draft-04"), t === "draft-7" && (t = "draft-07"), { processors: e2.processors ?? {}, metadataRegistry: e2?.metadata ?? ce, target: t, unrepresentable: e2?.unrepresentable ?? "throw", override: e2?.override ?? (() => {
+  }), io: e2?.io ?? "output", counter: 0, seen: /* @__PURE__ */ new Map(), cycles: e2?.cycles ?? "ref", reused: e2?.reused ?? "inline", external: e2?.external ?? void 0 };
 }
 function T2(e2, t, i = { path: [], schemaPath: [] }) {
-  var _a19, _b8, _c2;
   var o;
   let n = e2._zod.def, r2 = t.seen.get(e2);
   if (r2)
     return r2.count++, i.schemaPath.includes(e2) && (r2.cycle = i.path), r2.schema;
   let a = { schema: {}, count: 1, cycle: void 0, path: i.path };
   t.seen.set(e2, a);
-  let s = (_b8 = (_a19 = e2._zod).toJSONSchema) == null ? void 0 : _b8.call(_a19);
+  let s = e2._zod.toJSONSchema?.();
   if (s) a.schema = s;
   else {
     let l = { ...i, schemaPath: [...i.schemaPath, e2], path: i.path };
@@ -56777,15 +56319,14 @@ function T2(e2, t, i = { path: [], schemaPath: [] }) {
     d2 && (a.ref || (a.ref = d2), T2(d2, t, l), t.seen.get(d2).isParent = true);
   }
   let u2 = t.metadataRegistry.get(e2);
-  return u2 && Object.assign(a.schema, u2), t.io === "input" && ne(e2) && (delete a.schema.examples, delete a.schema.default), t.io === "input" && a.schema._prefault && ((_c2 = (o = a.schema).default) != null ? _c2 : o.default = a.schema._prefault), delete a.schema._prefault, t.seen.get(e2).schema;
+  return u2 && Object.assign(a.schema, u2), t.io === "input" && ne(e2) && (delete a.schema.examples, delete a.schema.default), t.io === "input" && a.schema._prefault && ((o = a.schema).default ?? (o.default = a.schema._prefault)), delete a.schema._prefault, t.seen.get(e2).schema;
 }
 function Ve(e2, t) {
-  var _a19, _b8, _c2, _d2;
   let i = e2.seen.get(t);
   if (!i) throw Error("Unprocessed schema. This is a bug in Zod.");
   let o = /* @__PURE__ */ new Map();
   for (let a of e2.seen.entries()) {
-    let s = (_a19 = e2.metadataRegistry.get(a[0])) == null ? void 0 : _a19.id;
+    let s = e2.metadataRegistry.get(a[0])?.id;
     if (s) {
       let u2 = o.get(s);
       if (u2 && u2 !== a[0]) throw Error(`Duplicate schema id "${s}" detected during JSON Schema conversion. Two different schemas cannot share the same id when converted together.`);
@@ -56793,16 +56334,15 @@ function Ve(e2, t) {
     }
   }
   let n = (a) => {
-    var _a20, _b9, _c3, _d3, _e2;
     let s = e2.target === "draft-2020-12" ? "$defs" : "definitions";
     if (e2.external) {
-      let d2 = (_a20 = e2.external.registry.get(a[0])) == null ? void 0 : _a20.id, p2 = (_b9 = e2.external.uri) != null ? _b9 : ((_2) => _2);
+      let d2 = e2.external.registry.get(a[0])?.id, p2 = e2.external.uri ?? ((_2) => _2);
       if (d2) return { ref: p2(d2) };
-      let g = (_d3 = (_c3 = a[1].defId) != null ? _c3 : a[1].schema.id) != null ? _d3 : `schema${e2.counter++}`;
+      let g = a[1].defId ?? a[1].schema.id ?? `schema${e2.counter++}`;
       return a[1].defId = g, { defId: g, ref: `${p2("__shared")}#/${s}/${g}` };
     }
     if (a[1] === i) return { ref: "#" };
-    let u2 = `#/${s}/`, l = (_e2 = a[1].schema.id) != null ? _e2 : `__schema${e2.counter++}`;
+    let u2 = `#/${s}/`, l = a[1].schema.id ?? `__schema${e2.counter++}`;
     return { defId: l, ref: u2 + l };
   }, r2 = (a) => {
     if (a[1].schema.$ref) return;
@@ -56814,7 +56354,7 @@ function Ve(e2, t) {
   };
   if (e2.cycles === "throw") for (let a of e2.seen.entries()) {
     let s = a[1];
-    if (s.cycle) throw Error(`Cycle detected: #/${(_b8 = s.cycle) == null ? void 0 : _b8.join("/")}/<root>
+    if (s.cycle) throw Error(`Cycle detected: #/${s.cycle?.join("/")}/<root>
 
 Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.`);
   }
@@ -56825,13 +56365,13 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
       continue;
     }
     if (e2.external) {
-      let u2 = (_c2 = e2.external.registry.get(a[0])) == null ? void 0 : _c2.id;
+      let u2 = e2.external.registry.get(a[0])?.id;
       if (t !== a[0] && u2) {
         r2(a);
         continue;
       }
     }
-    if ((_d2 = e2.metadataRegistry.get(a[0])) == null ? void 0 : _d2.id) {
+    if (e2.metadataRegistry.get(a[0])?.id) {
       r2(a);
       continue;
     }
@@ -56846,18 +56386,16 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
   }
 }
 function Ge(e2, t) {
-  var _a19, _b8, _c2, _d2, _e2;
   let i = e2.seen.get(t);
   if (!i) throw Error("Unprocessed schema. This is a bug in Zod.");
   let o = (a) => {
-    var _a20, _b9, _c3;
     let s = e2.seen.get(a);
     if (s.ref === null) return;
-    let u2 = (_a20 = s.def) != null ? _a20 : s.schema, l = { ...u2 }, d2 = s.ref;
+    let u2 = s.def ?? s.schema, l = { ...u2 }, d2 = s.ref;
     if (s.ref = null, d2) {
       o(d2);
       let g = e2.seen.get(d2), _2 = g.schema;
-      if (_2.$ref && (e2.target === "draft-07" || e2.target === "draft-04" || e2.target === "openapi-3.0") ? (u2.allOf = (_b9 = u2.allOf) != null ? _b9 : [], u2.allOf.push(_2)) : Object.assign(u2, _2), Object.assign(u2, l), a._zod.parent === d2) for (let x in u2)
+      if (_2.$ref && (e2.target === "draft-07" || e2.target === "draft-04" || e2.target === "openapi-3.0") ? (u2.allOf = u2.allOf ?? [], u2.allOf.push(_2)) : Object.assign(u2, _2), Object.assign(u2, l), a._zod.parent === d2) for (let x in u2)
         x === "$ref" || x === "allOf" || x in l || delete u2[x];
       if (_2.$ref) for (let x in u2)
         x === "$ref" || x === "allOf" || x in g.def && JSON.stringify(u2[x]) === JSON.stringify(g.def[x]) && delete u2[x];
@@ -56866,21 +56404,21 @@ function Ge(e2, t) {
     if (p2 && p2 !== d2) {
       o(p2);
       let g = e2.seen.get(p2);
-      if ((g == null ? void 0 : g.schema.$ref) && (u2.$ref = g.schema.$ref, g.def))
+      if (g?.schema.$ref && (u2.$ref = g.schema.$ref, g.def))
         for (let _2 in u2)
           _2 === "$ref" || _2 === "allOf" || _2 in g.def && JSON.stringify(u2[_2]) === JSON.stringify(g.def[_2]) && delete u2[_2];
     }
-    e2.override({ zodSchema: a, jsonSchema: u2, path: (_c3 = s.path) != null ? _c3 : [] });
+    e2.override({ zodSchema: a, jsonSchema: u2, path: s.path ?? [] });
   };
   for (let a of [...e2.seen.entries()].reverse()) o(a[0]);
   let n = {};
-  if (e2.target === "draft-2020-12" ? n.$schema = "https://json-schema.org/draft/2020-12/schema" : e2.target === "draft-07" ? n.$schema = "http://json-schema.org/draft-07/schema#" : e2.target === "draft-04" ? n.$schema = "http://json-schema.org/draft-04/schema#" : e2.target, (_a19 = e2.external) == null ? void 0 : _a19.uri) {
-    let a = (_b8 = e2.external.registry.get(t)) == null ? void 0 : _b8.id;
+  if (e2.target === "draft-2020-12" ? n.$schema = "https://json-schema.org/draft/2020-12/schema" : e2.target === "draft-07" ? n.$schema = "http://json-schema.org/draft-07/schema#" : e2.target === "draft-04" ? n.$schema = "http://json-schema.org/draft-04/schema#" : e2.target, e2.external?.uri) {
+    let a = e2.external.registry.get(t)?.id;
     if (!a) throw Error("Schema is missing an `id` property");
     n.$id = e2.external.uri(a);
   }
-  Object.assign(n, (_c2 = i.def) != null ? _c2 : i.schema);
-  let r2 = (_e2 = (_d2 = e2.external) == null ? void 0 : _d2.defs) != null ? _e2 : {};
+  Object.assign(n, i.def ?? i.schema);
+  let r2 = e2.external?.defs ?? {};
   for (let a of e2.seen.entries()) {
     let s = a[1];
     s.def && s.defId && (r2[s.defId] = s.def);
@@ -56894,7 +56432,7 @@ function Ge(e2, t) {
   }
 }
 function ne(e2, t) {
-  let i = t != null ? t : { seen: /* @__PURE__ */ new Set() };
+  let i = t ?? { seen: /* @__PURE__ */ new Set() };
   if (i.seen.has(e2)) return false;
   i.seen.add(e2);
   let o = e2._zod.def;
@@ -56925,16 +56463,15 @@ var Tc = (e2, t = {}) => (i) => {
   return T2(e2, o), Ve(o, e2), Ge(o, e2);
 };
 var ot = (e2, t, i = {}) => (o) => {
-  let { libraryOptions: n, target: r2 } = o != null ? o : {}, a = Ke({ ...n != null ? n : {}, target: r2, io: t, processors: i });
+  let { libraryOptions: n, target: r2 } = o ?? {}, a = Ke({ ...n ?? {}, target: r2, io: t, processors: i });
   return T2(e2, a), Ve(a, e2), Ge(a, e2);
 };
 var ok = { guid: "uuid", url: "uri", datetime: "date-time", json_string: "json-string", regex: "" };
 var Ac = (e2, t, i, o) => {
-  var _a19;
   let n = i;
   n.type = "string";
   let { minimum: r2, maximum: a, format: s, patterns: u2, contentEncoding: l } = e2._zod.bag;
-  if (typeof r2 == "number" && (n.minLength = r2), typeof a == "number" && (n.maxLength = a), s && (n.format = (_a19 = ok[s]) != null ? _a19 : s, n.format === "" && delete n.format, s === "time" && delete n.format), l && (n.contentEncoding = l), u2 && u2.size > 0) {
+  if (typeof r2 == "number" && (n.minLength = r2), typeof a == "number" && (n.maxLength = a), s && (n.format = ok[s] ?? s, n.format === "" && delete n.format, s === "time" && delete n.format), l && (n.contentEncoding = l), u2 && u2.size > 0) {
     let d2 = [...u2];
     d2.length === 1 ? n.pattern = d2[0].source : d2.length > 1 && (n.allOf = [...d2.map((p2) => ({ ...t.target === "draft-07" || t.target === "draft-04" || t.target === "openapi-3.0" ? { type: "string" } : {}, pattern: p2.source }))]);
   }
@@ -57024,7 +56561,6 @@ var ad = (e2, t, i, o) => {
   typeof a == "number" && (n.minItems = a), typeof s == "number" && (n.maxItems = s), n.type = "array", n.items = T2(r2.element, t, { ...o, path: [...o.path, "items"] });
 };
 var sd = (e2, t, i, o) => {
-  var _a19;
   let n = i, r2 = e2._zod.def;
   n.type = "object", n.properties = {};
   let a = r2.shape;
@@ -57033,7 +56569,7 @@ var sd = (e2, t, i, o) => {
     let d2 = r2.shape[l]._zod;
     return t.io === "input" ? d2.optin === void 0 : d2.optout === void 0;
   }));
-  u2.size > 0 && (n.required = Array.from(u2)), ((_a19 = r2.catchall) == null ? void 0 : _a19._zod.def.type) === "never" ? n.additionalProperties = false : r2.catchall ? r2.catchall && (n.additionalProperties = T2(r2.catchall, t, { ...o, path: [...o.path, "additionalProperties"] })) : t.io === "output" && (n.additionalProperties = false);
+  u2.size > 0 && (n.required = Array.from(u2)), r2.catchall?._zod.def.type === "never" ? n.additionalProperties = false : r2.catchall ? r2.catchall && (n.additionalProperties = T2(r2.catchall, t, { ...o, path: [...o.path, "additionalProperties"] })) : t.io === "output" && (n.additionalProperties = false);
 };
 var Pr = (e2, t, i, o) => {
   let n = e2._zod.def, r2 = n.inclusive === false, a = n.options.map((s, u2) => T2(s, t, { ...o, path: [...o.path, r2 ? "oneOf" : "anyOf", u2] }));
@@ -57052,10 +56588,9 @@ var ld = (e2, t, i, o) => {
   typeof d2 == "number" && (n.minItems = d2), typeof p2 == "number" && (n.maxItems = p2);
 };
 var cd = (e2, t, i, o) => {
-  var _a19;
   let n = i, r2 = e2._zod.def;
   n.type = "object";
-  let a = r2.keyType, s = (_a19 = a._zod.bag) == null ? void 0 : _a19.patterns;
+  let a = r2.keyType, s = a._zod.bag?.patterns;
   if (r2.mode === "loose" && s && s.size > 0) {
     let l = T2(r2.valueType, t, { ...o, path: [...o.path, "patternProperties", "*"] });
     n.patternProperties = {};
@@ -57141,7 +56676,7 @@ function bd(e2, t) {
       let [l, d2] = u2;
       T2(d2, n);
     }
-    let a = {}, s = { registry: o, uri: t == null ? void 0 : t.uri, defs: r2 };
+    let a = {}, s = { registry: o, uri: t?.uri, defs: r2 };
     n.external = s;
     for (let u2 of o._idmap.entries()) {
       let [l, d2] = u2;
@@ -57182,9 +56717,8 @@ var ak = class {
     return this.ctx.seen;
   }
   constructor(t) {
-    var _a19;
-    let i = (_a19 = t == null ? void 0 : t.target) != null ? _a19 : "draft-2020-12";
-    i === "draft-4" && (i = "draft-04"), i === "draft-7" && (i = "draft-07"), this.ctx = Ke({ processors: $i, target: i, ...(t == null ? void 0 : t.metadata) && { metadata: t.metadata }, ...(t == null ? void 0 : t.unrepresentable) && { unrepresentable: t.unrepresentable }, ...(t == null ? void 0 : t.override) && { override: t.override }, ...(t == null ? void 0 : t.io) && { io: t.io } });
+    let i = t?.target ?? "draft-2020-12";
+    i === "draft-4" && (i = "draft-04"), i === "draft-7" && (i = "draft-07"), this.ctx = Ke({ processors: $i, target: i, ...t?.metadata && { metadata: t.metadata }, ...t?.unrepresentable && { unrepresentable: t.unrepresentable }, ...t?.override && { override: t.override }, ...t?.io && { io: t.io } });
   }
   process(t, i = { path: [], schemaPath: [] }) {
     return T2(t, this.ctx, i);
@@ -57249,25 +56783,20 @@ var Td = Ji(le);
 var Ad = qi(le);
 var Rd = Wi(le);
 var Cd = Ki(le);
-var U2 = m2("ZodType", (e2, t) => (z.init(e2, t), Object.assign(e2["~standard"], { jsonSchema: { input: ot(e2, "input"), output: ot(e2, "output") } }), e2.toJSONSchema = Tc(e2, {}), e2.def = t, e2.type = t.type, Object.defineProperty(e2, "_def", { value: t }), e2.check = (...i) => {
-  var _a19;
-  return e2.clone(P2.mergeDefs(t, { checks: [...(_a19 = t.checks) != null ? _a19 : [], ...i.map((o) => typeof o == "function" ? { _zod: { check: o, def: { check: "custom" }, onattach: [] } } : o)] }), { parent: true });
-}, e2.with = e2.check, e2.clone = (i, o) => ge(e2, i, o), e2.brand = () => e2, e2.register = (i, o) => (i.add(e2, o), e2), e2.parse = (i, o) => Ud(e2, i, o, { callee: e2.parse }), e2.safeParse = (i, o) => Zd(e2, i, o), e2.parseAsync = async (i, o) => Od(e2, i, o, { callee: e2.parseAsync }), e2.safeParseAsync = async (i, o) => Pd(e2, i, o), e2.spa = e2.safeParseAsync, e2.encode = (i, o) => Ed(e2, i, o), e2.decode = (i, o) => Nd(e2, i, o), e2.encodeAsync = async (i, o) => Dd(e2, i, o), e2.decodeAsync = async (i, o) => jd(e2, i, o), e2.safeEncode = (i, o) => Td(e2, i, o), e2.safeDecode = (i, o) => Ad(e2, i, o), e2.safeEncodeAsync = async (i, o) => Rd(e2, i, o), e2.safeDecodeAsync = async (i, o) => Cd(e2, i, o), e2.refine = (i, o) => e2.check(Uo(i, o)), e2.superRefine = (i) => e2.check(Oo(i)), e2.overwrite = (i) => e2.check(ke(i)), e2.optional = () => st(e2), e2.exactOptional = () => lo(e2), e2.nullable = () => ut(e2), e2.nullish = () => st(ut(e2)), e2.nonoptional = (i) => ho(e2, i), e2.array = () => Tt(e2), e2.or = (i) => ti([e2, i]), e2.and = (i) => Qr(e2, i), e2.transform = (i) => lt(e2, ii(i)), e2.default = (i) => po(e2, i), e2.prefault = (i) => go(e2, i), e2.catch = (i) => _o(e2, i), e2.pipe = (i) => lt(e2, i), e2.readonly = () => ko(e2), e2.describe = (i) => {
+var U2 = m2("ZodType", (e2, t) => (z.init(e2, t), Object.assign(e2["~standard"], { jsonSchema: { input: ot(e2, "input"), output: ot(e2, "output") } }), e2.toJSONSchema = Tc(e2, {}), e2.def = t, e2.type = t.type, Object.defineProperty(e2, "_def", { value: t }), e2.check = (...i) => e2.clone(P2.mergeDefs(t, { checks: [...t.checks ?? [], ...i.map((o) => typeof o == "function" ? { _zod: { check: o, def: { check: "custom" }, onattach: [] } } : o)] }), { parent: true }), e2.with = e2.check, e2.clone = (i, o) => ge(e2, i, o), e2.brand = () => e2, e2.register = (i, o) => (i.add(e2, o), e2), e2.parse = (i, o) => Ud(e2, i, o, { callee: e2.parse }), e2.safeParse = (i, o) => Zd(e2, i, o), e2.parseAsync = async (i, o) => Od(e2, i, o, { callee: e2.parseAsync }), e2.safeParseAsync = async (i, o) => Pd(e2, i, o), e2.spa = e2.safeParseAsync, e2.encode = (i, o) => Ed(e2, i, o), e2.decode = (i, o) => Nd(e2, i, o), e2.encodeAsync = async (i, o) => Dd(e2, i, o), e2.decodeAsync = async (i, o) => jd(e2, i, o), e2.safeEncode = (i, o) => Td(e2, i, o), e2.safeDecode = (i, o) => Ad(e2, i, o), e2.safeEncodeAsync = async (i, o) => Rd(e2, i, o), e2.safeDecodeAsync = async (i, o) => Cd(e2, i, o), e2.refine = (i, o) => e2.check(Uo(i, o)), e2.superRefine = (i) => e2.check(Oo(i)), e2.overwrite = (i) => e2.check(ke(i)), e2.optional = () => st(e2), e2.exactOptional = () => lo(e2), e2.nullable = () => ut(e2), e2.nullish = () => st(ut(e2)), e2.nonoptional = (i) => ho(e2, i), e2.array = () => Tt(e2), e2.or = (i) => ti([e2, i]), e2.and = (i) => Qr(e2, i), e2.transform = (i) => lt(e2, ii(i)), e2.default = (i) => po(e2, i), e2.prefault = (i) => go(e2, i), e2.catch = (i) => _o(e2, i), e2.pipe = (i) => lt(e2, i), e2.readonly = () => ko(e2), e2.describe = (i) => {
   let o = e2.clone();
   return ce.add(o, { description: i }), o;
 }, Object.defineProperty(e2, "description", { get() {
-  var _a19;
-  return (_a19 = ce.get(e2)) == null ? void 0 : _a19.description;
+  return ce.get(e2)?.description;
 }, configurable: true }), e2.meta = (...i) => {
   if (i.length === 0) return ce.get(e2);
   let o = e2.clone();
   return ce.add(o, i[0]), o;
 }, e2.isOptional = () => e2.safeParse(void 0).success, e2.isNullable = () => e2.safeParse(null).success, e2.apply = (i) => i(e2), e2));
 var jn = m2("_ZodString", (e2, t) => {
-  var _a19, _b8, _c2;
   xt.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (o, n, r2) => Ac(e2, o, n);
   let i = e2._zod.bag;
-  e2.format = (_a19 = i.format) != null ? _a19 : null, e2.minLength = (_b8 = i.minimum) != null ? _b8 : null, e2.maxLength = (_c2 = i.maximum) != null ? _c2 : null, e2.regex = (...o) => e2.check(In(...o)), e2.includes = (...o) => e2.check(xn(...o)), e2.startsWith = (...o) => e2.check(zn(...o)), e2.endsWith = (...o) => e2.check(Un(...o)), e2.min = (...o) => e2.check(De(...o)), e2.max = (...o) => e2.check(Ut(...o)), e2.length = (...o) => e2.check(Ot(...o)), e2.nonempty = (...o) => e2.check(De(1, ...o)), e2.lowercase = (o) => e2.check(wn(o)), e2.uppercase = (o) => e2.check(Sn(o)), e2.trim = () => e2.check(Pn()), e2.normalize = (...o) => e2.check(Zn(...o)), e2.toLowerCase = () => e2.check(En()), e2.toUpperCase = () => e2.check(Nn()), e2.slugify = () => e2.check(Dn());
+  e2.format = i.format ?? null, e2.minLength = i.minimum ?? null, e2.maxLength = i.maximum ?? null, e2.regex = (...o) => e2.check(In(...o)), e2.includes = (...o) => e2.check(xn(...o)), e2.startsWith = (...o) => e2.check(zn(...o)), e2.endsWith = (...o) => e2.check(Un(...o)), e2.min = (...o) => e2.check(De(...o)), e2.max = (...o) => e2.check(Ut(...o)), e2.length = (...o) => e2.check(Ot(...o)), e2.nonempty = (...o) => e2.check(De(1, ...o)), e2.lowercase = (o) => e2.check(wn(o)), e2.uppercase = (o) => e2.check(Sn(o)), e2.trim = () => e2.check(Pn()), e2.normalize = (...o) => e2.check(Zn(...o)), e2.toLowerCase = () => e2.check(En()), e2.toUpperCase = () => e2.check(Nn()), e2.slugify = () => e2.check(Dn());
 });
 var Pt = m2("ZodString", (e2, t) => {
   xt.init(e2, t), jn.init(e2, t), e2.email = (i) => e2.check(ar(Tn, i)), e2.url = (i) => e2.check(kn(Et, i)), e2.jwt = (i) => e2.check(Sr(Xn, i)), e2.emoji = (i) => e2.check(dr(An, i)), e2.guid = (i) => e2.check(an(at, i)), e2.uuid = (i) => e2.check(sr(ve, i)), e2.uuidv4 = (i) => e2.check(ur(ve, i)), e2.uuidv6 = (i) => e2.check(lr(ve, i)), e2.uuidv7 = (i) => e2.check(cr(ve, i)), e2.nanoid = (i) => e2.check(mr(Rn, i)), e2.guid = (i) => e2.check(an(at, i)), e2.cuid = (i) => e2.check(pr(Cn, i)), e2.cuid2 = (i) => e2.check(fr(Mn, i)), e2.ulid = (i) => e2.check(gr(Ln, i)), e2.base64 = (i) => e2.check(kr(Gn, i)), e2.base64url = (i) => e2.check(Ir(Bn, i)), e2.xid = (i) => e2.check(hr(Fn, i)), e2.ksuid = (i) => e2.check(vr(Jn, i)), e2.ipv4 = (i) => e2.check($r(qn, i)), e2.ipv6 = (i) => e2.check(_r(Wn, i)), e2.cidrv4 = (i) => e2.check(br(Kn, i)), e2.cidrv6 = (i) => e2.check(yr(Vn, i)), e2.e164 = (i) => e2.check(wr(Hn, i)), e2.datetime = (i) => e2.check(Id(i)), e2.date = (i) => e2.check(wd(i)), e2.time = (i) => e2.check(Sd(i)), e2.duration = (i) => e2.check(xd(i));
@@ -57423,16 +56952,14 @@ function mm(e2) {
   return Zt(Ye, "hex", Re.hex, e2);
 }
 function pm(e2, t) {
-  var _a19;
-  let i = (_a19 = t == null ? void 0 : t.enc) != null ? _a19 : "hex", o = `${e2}_${i}`, n = Re[o];
+  let i = t?.enc ?? "hex", o = `${e2}_${i}`, n = Re[o];
   if (!n) throw Error(`Unrecognized hash format: ${o}`);
   return Zt(Ye, o, n, t);
 }
 var Nt = m2("ZodNumber", (e2, t) => {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
   Yi.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (o, n, r2) => Rc(e2, o, n), e2.gt = (o, n) => e2.check(xe(o, n)), e2.gte = (o, n) => e2.check(ie(o, n)), e2.min = (o, n) => e2.check(ie(o, n)), e2.lt = (o, n) => e2.check(Se(o, n)), e2.lte = (o, n) => e2.check(de(o, n)), e2.max = (o, n) => e2.check(de(o, n)), e2.int = (o) => e2.check(un(o)), e2.safe = (o) => e2.check(un(o)), e2.positive = (o) => e2.check(xe(0, o)), e2.nonnegative = (o) => e2.check(ie(0, o)), e2.negative = (o) => e2.check(Se(0, o)), e2.nonpositive = (o) => e2.check(de(0, o)), e2.multipleOf = (o, n) => e2.check(We(o, n)), e2.step = (o, n) => e2.check(We(o, n)), e2.finite = () => e2;
   let i = e2._zod.bag;
-  e2.minValue = (_c2 = Math.max((_a19 = i.minimum) != null ? _a19 : Number.NEGATIVE_INFINITY, (_b8 = i.exclusiveMinimum) != null ? _b8 : Number.NEGATIVE_INFINITY)) != null ? _c2 : null, e2.maxValue = (_f2 = Math.min((_d2 = i.maximum) != null ? _d2 : Number.POSITIVE_INFINITY, (_e2 = i.exclusiveMaximum) != null ? _e2 : Number.POSITIVE_INFINITY)) != null ? _f2 : null, e2.isInt = ((_g2 = i.format) != null ? _g2 : "").includes("int") || Number.isSafeInteger((_h2 = i.multipleOf) != null ? _h2 : 0.5), e2.isFinite = true, e2.format = (_i2 = i.format) != null ? _i2 : null;
+  e2.minValue = Math.max(i.minimum ?? Number.NEGATIVE_INFINITY, i.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null, e2.maxValue = Math.min(i.maximum ?? Number.POSITIVE_INFINITY, i.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null, e2.isInt = (i.format ?? "").includes("int") || Number.isSafeInteger(i.multipleOf ?? 0.5), e2.isFinite = true, e2.format = i.format ?? null;
 });
 function Cr(e2) {
   return rc(Nt, e2);
@@ -57462,10 +56989,9 @@ function Mr(e2) {
   return dc(Dt, e2);
 }
 var jt = m2("ZodBigInt", (e2, t) => {
-  var _a19, _b8, _c2;
   er.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (o, n, r2) => Mc(e2, o), e2.gte = (o, n) => e2.check(ie(o, n)), e2.min = (o, n) => e2.check(ie(o, n)), e2.gt = (o, n) => e2.check(xe(o, n)), e2.gte = (o, n) => e2.check(ie(o, n)), e2.min = (o, n) => e2.check(ie(o, n)), e2.lt = (o, n) => e2.check(Se(o, n)), e2.lte = (o, n) => e2.check(de(o, n)), e2.max = (o, n) => e2.check(de(o, n)), e2.positive = (o) => e2.check(xe(BigInt(0), o)), e2.negative = (o) => e2.check(Se(BigInt(0), o)), e2.nonpositive = (o) => e2.check(de(BigInt(0), o)), e2.nonnegative = (o) => e2.check(ie(BigInt(0), o)), e2.multipleOf = (o, n) => e2.check(We(o, n));
   let i = e2._zod.bag;
-  e2.minValue = (_a19 = i.minimum) != null ? _a19 : null, e2.maxValue = (_b8 = i.maximum) != null ? _b8 : null, e2.format = (_c2 = i.format) != null ? _c2 : null;
+  e2.minValue = i.minimum ?? null, e2.maxValue = i.maximum ?? null, e2.format = i.format ?? null;
 });
 function $m(e2) {
   return pc(jt, e2);
@@ -57543,7 +57069,7 @@ var At = m2("ZodObject", (e2, t) => {
   $l.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (i, o, n) => sd(e2, i, o, n), P2.defineLazy(e2, "shape", () => t.shape), e2.keyof = () => ni(Object.keys(e2._zod.def.shape)), e2.catchall = (i) => e2.clone({ ...e2._zod.def, catchall: i }), e2.passthrough = () => e2.clone({ ...e2._zod.def, catchall: je() }), e2.loose = () => e2.clone({ ...e2._zod.def, catchall: je() }), e2.strict = () => e2.clone({ ...e2._zod.def, catchall: Qn() }), e2.strip = () => e2.clone({ ...e2._zod.def, catchall: void 0 }), e2.extend = (i) => P2.extend(e2, i), e2.safeExtend = (i) => P2.safeExtend(e2, i), e2.merge = (i) => P2.merge(e2, i), e2.pick = (i) => P2.pick(e2, i), e2.omit = (i) => P2.omit(e2, i), e2.partial = (...i) => P2.partial(ri, e2, i[0]), e2.required = (...i) => P2.required(oi, e2, i[0]);
 });
 function zm(e2, t) {
-  let i = { type: "object", shape: e2 != null ? e2 : {}, ...P2.normalizeParams(t) };
+  let i = { type: "object", shape: e2 ?? {}, ...P2.normalizeParams(t) };
   return new At(i);
 }
 function Um(e2, t) {
@@ -57649,11 +57175,10 @@ var so = m2("ZodTransform", (e2, t) => {
   Ul.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (i, o, n) => id(e2, i), e2._zod.parse = (i, o) => {
     if (o.direction === "backward") throw new vn(e2.constructor.name);
     i.addIssue = (r2) => {
-      var _a19, _b8, _c2;
       if (typeof r2 == "string") i.issues.push(P2.issue(r2, i.value, t));
       else {
         let a = r2;
-        a.fatal && (a.continue = false), (_a19 = a.code) != null ? _a19 : a.code = "custom", (_b8 = a.input) != null ? _b8 : a.input = i.value, (_c2 = a.inst) != null ? _c2 : a.inst = e2, i.issues.push(P2.issue(a));
+        a.fatal && (a.continue = false), a.code ?? (a.code = "custom"), a.input ?? (a.input = i.value), a.inst ?? (a.inst = e2), i.issues.push(P2.issue(a));
       }
     };
     let n = t.transform(i.value, i);
@@ -57764,8 +57289,7 @@ var zo = m2("ZodFunction", (e2, t) => {
   Ml.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (i, o, n) => nd(e2, i);
 });
 function ln(e2) {
-  var _a19, _b8;
-  return new zo({ type: "function", input: Array.isArray(e2 == null ? void 0 : e2.input) ? to(e2 == null ? void 0 : e2.input) : (_a19 = e2 == null ? void 0 : e2.input) != null ? _a19 : Tt(je()), output: (_b8 = e2 == null ? void 0 : e2.output) != null ? _b8 : je() });
+  return new zo({ type: "function", input: Array.isArray(e2?.input) ? to(e2?.input) : e2?.input ?? Tt(je()), output: e2?.output ?? je() });
 }
 var Mt = m2("ZodCustom", (e2, t) => {
   Jl.init(e2, t), U2.init(e2, t), e2._zod.processJSONSchema = (i, o, n) => td(e2, i);
@@ -57775,7 +57299,7 @@ function Wm(e2) {
   return t._zod.check = e2, t;
 }
 function Km(e2, t) {
-  return Oc(Mt, e2 != null ? e2 : (() => true), t);
+  return Oc(Mt, e2 ?? (() => true), t);
 }
 function Uo(e2, t = {}) {
   return Zc(Mt, e2, t);
@@ -57788,8 +57312,7 @@ var Gm = Dc;
 function Bm(e2, t = {}) {
   let i = new Mt({ type: "custom", check: "custom", fn: (o) => o instanceof e2, abort: true, ...P2.normalizeParams(t) });
   return i._zod.bag.Class = e2, i._zod.check = (o) => {
-    var _a19;
-    o.value instanceof e2 || o.issues.push({ code: "invalid_type", expected: e2.name, input: o.value, inst: i, path: [...(_a19 = i._zod.def.path) != null ? _a19 : []] });
+    o.value instanceof e2 || o.issues.push({ code: "invalid_type", expected: e2.name, input: o.value, inst: i, path: [...i._zod.def.path ?? []] });
   }, i;
 }
 var Hm = (...e2) => jc({ Codec: si, Boolean: Dt, String: Pt }, ...e2);
@@ -57813,7 +57336,7 @@ var b = { ...yd, ...kd, iso: Nr };
 var mk = /* @__PURE__ */ new Set(["$schema", "$ref", "$defs", "definitions", "$id", "id", "$comment", "$anchor", "$vocabulary", "$dynamicRef", "$dynamicAnchor", "type", "enum", "const", "anyOf", "oneOf", "allOf", "not", "properties", "required", "additionalProperties", "patternProperties", "propertyNames", "minProperties", "maxProperties", "items", "prefixItems", "additionalItems", "minItems", "maxItems", "uniqueItems", "contains", "minContains", "maxContains", "minLength", "maxLength", "pattern", "format", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "description", "default", "contentEncoding", "contentMediaType", "contentSchema", "unevaluatedItems", "unevaluatedProperties", "if", "then", "else", "dependentSchemas", "dependentRequired", "nullable", "readOnly"]);
 function pk(e2, t) {
   let i = e2.$schema;
-  return i === "https://json-schema.org/draft/2020-12/schema" ? "draft-2020-12" : i === "http://json-schema.org/draft-07/schema#" ? "draft-7" : i === "http://json-schema.org/draft-04/schema#" ? "draft-4" : t != null ? t : "draft-2020-12";
+  return i === "https://json-schema.org/draft/2020-12/schema" ? "draft-2020-12" : i === "http://json-schema.org/draft-07/schema#" ? "draft-7" : i === "http://json-schema.org/draft-04/schema#" ? "draft-4" : t ?? "draft-2020-12";
 }
 function fk(e2, t) {
   if (!e2.startsWith("#")) throw Error("External $ref is not supported, only local refs (#/...) are allowed");
@@ -57972,9 +57495,8 @@ function ee(e2, t) {
   return Object.keys(n).length > 0 && t.registry.add(i, n), i;
 }
 function gk(e2, t) {
-  var _a19;
   if (typeof e2 == "boolean") return e2 ? b.any() : b.never();
-  let i = pk(e2, t == null ? void 0 : t.defaultTarget), o = e2.$defs || e2.definitions || {}, n = { version: i, defs: o, refs: /* @__PURE__ */ new Map(), processing: /* @__PURE__ */ new Set(), rootSchema: e2, registry: (_a19 = t == null ? void 0 : t.registry) != null ? _a19 : ce };
+  let i = pk(e2, t?.defaultTarget), o = e2.$defs || e2.definitions || {}, n = { version: i, defs: o, refs: /* @__PURE__ */ new Map(), processing: /* @__PURE__ */ new Set(), rootSchema: e2, registry: t?.registry ?? ce };
   return ee(e2, n);
 }
 var ep = {};
@@ -59024,19 +58546,18 @@ function Dk(e2) {
 `.trim();
 }
 function ga(e2) {
-  var _a19, _b8, _c2, _d2;
-  const t = { ...(_a19 = e2.resourceProps) != null ? _a19 : {} };
+  const t = { ...e2.resourceProps ?? {} };
   if (e2.uiMetadata || e2.metadata) {
     const i = Object.fromEntries(
-      Object.entries((_b8 = e2.uiMetadata) != null ? _b8 : {}).map(([o, n]) => [
+      Object.entries(e2.uiMetadata ?? {}).map(([o, n]) => [
         `${Zk}${o}`,
         n
       ])
     );
     t._meta = {
       ...i,
-      ...(_c2 = e2.metadata) != null ? _c2 : {},
-      ...(_d2 = t._meta) != null ? _d2 : {}
+      ...e2.metadata ?? {},
+      ...t._meta ?? {}
     };
   }
   return t;
@@ -59065,24 +58586,22 @@ function jk(e2) {
   }
 }
 function Tk(e2) {
-  var _a19, _b8, _c2;
   if (e2) {
-    if ((_a19 = e2.appsSdk) == null ? void 0 : _a19.enabled)
-      return (_b8 = e2.appsSdk.mimeType) != null ? _b8 : "text/html+skybridge";
-    if ((_c2 = e2.mcpApps) == null ? void 0 : _c2.enabled)
+    if (e2.appsSdk?.enabled)
+      return e2.appsSdk.mimeType ?? "text/html+skybridge";
+    if (e2.mcpApps?.enabled)
       return Ht;
   }
 }
 function Ak(e2, t) {
-  var _a19, _b8;
   if (!t)
     return e2;
   const i = [];
-  if ((_a19 = t.appsSdk) == null ? void 0 : _a19.enabled) {
+  if (t.appsSdk?.enabled) {
     const r2 = Ek(t.appsSdk.config);
     i.push(r2);
   }
-  if ((_b8 = t.mcpApps) == null ? void 0 : _b8.enabled) {
+  if (t.mcpApps?.enabled) {
     const r2 = Dk(t.mcpApps.config);
     i.push(r2);
   }
@@ -59099,7 +58618,6 @@ ${o}
 ${e2}`, n;
 }
 function Lk(e2) {
-  var _a19, _b8;
   let t, i;
   if (e2.content.type === "rawHtml") {
     if (!e2.uri.startsWith("ui://"))
@@ -59108,7 +58626,7 @@ function Lk(e2) {
       throw new Error(
         "MCP-UI SDK: content.htmlString must be provided as a string when content.type is 'rawHtml'."
       );
-    e2.adapters ? (t = Ak(t, e2.adapters), i = (_a19 = Tk(e2.adapters)) != null ? _a19 : Ht) : i = Ht;
+    e2.adapters ? (t = Ak(t, e2.adapters), i = Tk(e2.adapters) ?? Ht) : i = Ht;
   } else if (e2.content.type === "externalUrl") {
     if (!e2.uri.startsWith("ui://"))
       throw new Error(
@@ -59150,7 +58668,7 @@ function Lk(e2) {
   return {
     type: "resource",
     resource: o,
-    ...(_b8 = e2.embeddedResourceProps) != null ? _b8 : {}
+    ...e2.embeddedResourceProps ?? {}
   };
 }
 
@@ -59189,12 +58707,11 @@ function checkUsage(key, usage) {
   }
 }
 function checkCryptoKey(key, expected, usage) {
-  var _a19;
   const algorithm = key.algorithm;
   if (algorithm.name !== expected.name) {
     throw unusable(expected.name);
   }
-  if (expected.hash && ((_a19 = algorithm.hash) == null ? void 0 : _a19.name) !== expected.hash) {
+  if (expected.hash && algorithm.hash?.name !== expected.hash) {
     throw unusable(expected.hash, "algorithm.hash");
   }
   if (expected.namedCurve && algorithm.namedCurve !== expected.namedCurve) {
@@ -59208,7 +58725,6 @@ function checkCryptoKey(key, expected, usage) {
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/invalid_key_input.js
 function message(msg, actual, ...types) {
-  var _a19;
   types = types.filter(Boolean);
   if (types.length > 2) {
     const last = types.pop();
@@ -59223,7 +58739,7 @@ function message(msg, actual, ...types) {
   } else if (typeof actual === "function" && actual.name) {
     msg += ` Received function ${actual.name}`;
   } else if (typeof actual === "object" && actual != null) {
-    if ((_a19 = actual.constructor) == null ? void 0 : _a19.name) {
+    if (actual.constructor?.name) {
       msg += ` Received an instance of ${actual.constructor.name}`;
     }
   }
@@ -59234,118 +58750,98 @@ var withAlg = (alg, actual, ...types) => message(`Key for the ${alg} algorithm m
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/util/errors.js
 var JOSEError = class extends Error {
+  static code = "ERR_JOSE_GENERIC";
+  code = "ERR_JOSE_GENERIC";
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "code", "ERR_JOSE_GENERIC");
     this.name = this.constructor.name;
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
-__publicField(JOSEError, "code", "ERR_JOSE_GENERIC");
 var JWTClaimValidationFailed = class extends JOSEError {
+  static code = "ERR_JWT_CLAIM_VALIDATION_FAILED";
+  code = "ERR_JWT_CLAIM_VALIDATION_FAILED";
+  claim;
+  reason;
+  payload;
   constructor(message2, payload, claim = "unspecified", reason = "unspecified") {
     super(message2, { cause: { claim, reason, payload } });
-    __publicField(this, "code", "ERR_JWT_CLAIM_VALIDATION_FAILED");
-    __publicField(this, "claim");
-    __publicField(this, "reason");
-    __publicField(this, "payload");
     this.claim = claim;
     this.reason = reason;
     this.payload = payload;
   }
 };
-__publicField(JWTClaimValidationFailed, "code", "ERR_JWT_CLAIM_VALIDATION_FAILED");
 var JWTExpired = class extends JOSEError {
+  static code = "ERR_JWT_EXPIRED";
+  code = "ERR_JWT_EXPIRED";
+  claim;
+  reason;
+  payload;
   constructor(message2, payload, claim = "unspecified", reason = "unspecified") {
     super(message2, { cause: { claim, reason, payload } });
-    __publicField(this, "code", "ERR_JWT_EXPIRED");
-    __publicField(this, "claim");
-    __publicField(this, "reason");
-    __publicField(this, "payload");
     this.claim = claim;
     this.reason = reason;
     this.payload = payload;
   }
 };
-__publicField(JWTExpired, "code", "ERR_JWT_EXPIRED");
 var JOSEAlgNotAllowed = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JOSE_ALG_NOT_ALLOWED");
-  }
+  static code = "ERR_JOSE_ALG_NOT_ALLOWED";
+  code = "ERR_JOSE_ALG_NOT_ALLOWED";
 };
-__publicField(JOSEAlgNotAllowed, "code", "ERR_JOSE_ALG_NOT_ALLOWED");
 var JOSENotSupported = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JOSE_NOT_SUPPORTED");
-  }
+  static code = "ERR_JOSE_NOT_SUPPORTED";
+  code = "ERR_JOSE_NOT_SUPPORTED";
 };
-__publicField(JOSENotSupported, "code", "ERR_JOSE_NOT_SUPPORTED");
 var JWSInvalid = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JWS_INVALID");
-  }
+  static code = "ERR_JWS_INVALID";
+  code = "ERR_JWS_INVALID";
 };
-__publicField(JWSInvalid, "code", "ERR_JWS_INVALID");
 var JWTInvalid = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JWT_INVALID");
-  }
+  static code = "ERR_JWT_INVALID";
+  code = "ERR_JWT_INVALID";
 };
-__publicField(JWTInvalid, "code", "ERR_JWT_INVALID");
 var JWKInvalid = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JWK_INVALID");
-  }
+  static code = "ERR_JWK_INVALID";
+  code = "ERR_JWK_INVALID";
 };
-__publicField(JWKInvalid, "code", "ERR_JWK_INVALID");
 var JWKSInvalid = class extends JOSEError {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "code", "ERR_JWKS_INVALID");
-  }
+  static code = "ERR_JWKS_INVALID";
+  code = "ERR_JWKS_INVALID";
 };
-__publicField(JWKSInvalid, "code", "ERR_JWKS_INVALID");
 var JWKSNoMatchingKey = class extends JOSEError {
+  static code = "ERR_JWKS_NO_MATCHING_KEY";
+  code = "ERR_JWKS_NO_MATCHING_KEY";
   constructor(message2 = "no applicable key found in the JSON Web Key Set", options) {
     super(message2, options);
-    __publicField(this, "code", "ERR_JWKS_NO_MATCHING_KEY");
   }
 };
-__publicField(JWKSNoMatchingKey, "code", "ERR_JWKS_NO_MATCHING_KEY");
-var _a4, _b2;
-var JWKSMultipleMatchingKeys = class extends (_b2 = JOSEError, _a4 = Symbol.asyncIterator, _b2) {
+var JWKSMultipleMatchingKeys = class extends JOSEError {
+  [Symbol.asyncIterator] = async function* () {
+  };
+  static code = "ERR_JWKS_MULTIPLE_MATCHING_KEYS";
+  code = "ERR_JWKS_MULTIPLE_MATCHING_KEYS";
   constructor(message2 = "multiple matching keys found in the JSON Web Key Set", options) {
     super(message2, options);
-    __publicField(this, _a4, async function* () {
-    });
-    __publicField(this, "code", "ERR_JWKS_MULTIPLE_MATCHING_KEYS");
   }
 };
-__publicField(JWKSMultipleMatchingKeys, "code", "ERR_JWKS_MULTIPLE_MATCHING_KEYS");
 var JWKSTimeout = class extends JOSEError {
+  static code = "ERR_JWKS_TIMEOUT";
+  code = "ERR_JWKS_TIMEOUT";
   constructor(message2 = "request timed out", options) {
     super(message2, options);
-    __publicField(this, "code", "ERR_JWKS_TIMEOUT");
   }
 };
-__publicField(JWKSTimeout, "code", "ERR_JWKS_TIMEOUT");
 var JWSSignatureVerificationFailed = class extends JOSEError {
+  static code = "ERR_JWS_SIGNATURE_VERIFICATION_FAILED";
+  code = "ERR_JWS_SIGNATURE_VERIFICATION_FAILED";
   constructor(message2 = "signature verification failed", options) {
     super(message2, options);
-    __publicField(this, "code", "ERR_JWS_SIGNATURE_VERIFICATION_FAILED");
   }
 };
-__publicField(JWSSignatureVerificationFailed, "code", "ERR_JWS_SIGNATURE_VERIFICATION_FAILED");
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/is_key_like.js
 var isCryptoKey = (key) => {
-  if ((key == null ? void 0 : key[Symbol.toStringTag]) === "CryptoKey")
+  if (key?.[Symbol.toStringTag] === "CryptoKey")
     return true;
   try {
     return key instanceof CryptoKey;
@@ -59353,7 +58849,7 @@ var isCryptoKey = (key) => {
     return false;
   }
 };
-var isKeyObject = (key) => (key == null ? void 0 : key[Symbol.toStringTag]) === "KeyObject";
+var isKeyObject = (key) => key?.[Symbol.toStringTag] === "KeyObject";
 var isKeyLike = (key) => isCryptoKey(key) || isKeyObject(key);
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/util/base64url.js
@@ -59504,14 +59000,12 @@ function parseJoseHeader(b64, ErrorClass, message2) {
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/jwk_to_key.js
 var unsupportedAlg = 'Invalid or unsupported JWK "alg" (Algorithm) Parameter value';
 function subtleParams(entry, jwk) {
-  var _a19, _b8;
   if (!entry.kty.includes(jwk.kty)) {
     throw new JOSENotSupported(unsupportedAlg);
   }
-  return (_b8 = (_a19 = entry.subtleFor) == null ? void 0 : _a19.call(entry, { kty: jwk.kty, crv: jwk.crv })) != null ? _b8 : entry.subtle;
+  return entry.subtleFor?.({ kty: jwk.kty, crv: jwk.crv }) ?? entry.subtle;
 }
 async function jwkToKey(entry, jwk) {
-  var _a19, _b8;
   if (jwk.kty === "RSA" && "oth" in jwk && jwk.oth !== void 0) {
     throw new JOSENotSupported('RSA JWK "oth" (Other Primes Info) Parameter value is not supported');
   }
@@ -59523,13 +59017,12 @@ async function jwkToKey(entry, jwk) {
     delete keyData.alg;
   }
   delete keyData.use;
-  return crypto.subtle.importKey("jwk", keyData, algorithm, (_a19 = jwk.ext) != null ? _a19 : isPrivate ? false : true, (_b8 = jwk.key_ops) != null ? _b8 : keyUsages);
+  return crypto.subtle.importKey("jwk", keyData, algorithm, jwk.ext ?? (isPrivate ? false : true), jwk.key_ops ?? keyUsages);
 }
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/key.js
 var tag = (key) => key[Symbol.toStringTag];
 var jwkMatchesOp = (entry, key, usage) => {
-  var _a19, _b8, _c2;
   const { alg } = entry;
   if (key.use !== void 0) {
     let expected;
@@ -59551,8 +59044,8 @@ var jwkMatchesOp = (entry, key, usage) => {
     throw new TypeError(`Invalid key for this operation, its "alg" must be "${alg}" when present`);
   }
   if (Array.isArray(key.key_ops)) {
-    const expectedKeyOp = usage === "encrypt" || usage === "decrypt" ? (_a19 = entry.keyOps) == null ? void 0 : _a19[usage] : usage;
-    if (expectedKeyOp && ((_c2 = (_b8 = key.key_ops) == null ? void 0 : _b8.includes) == null ? void 0 : _c2.call(_b8, expectedKeyOp)) === false) {
+    const expectedKeyOp = usage === "encrypt" || usage === "decrypt" ? entry.keyOps?.[usage] : usage;
+    if (expectedKeyOp && key.key_ops?.includes?.(expectedKeyOp) === false) {
       throw new TypeError(`Invalid key for this operation, its "key_ops" must include "${expectedKeyOp}" when present`);
     }
   }
@@ -59630,9 +59123,8 @@ var nist = {
   secp521r1: "P-521"
 };
 function cached2(key, alg) {
-  var _a19;
-  cache || (cache = /* @__PURE__ */ new WeakMap());
-  return (_a19 = cache.get(key)) == null ? void 0 : _a19[alg];
+  cache ||= /* @__PURE__ */ new WeakMap();
+  return cache.get(key)?.[alg];
 }
 function store(key, alg, cryptoKey) {
   const entry = cache.get(key);
@@ -59651,15 +59143,14 @@ var handleJWK = async (key, jwk, entry) => {
   return store(key, entry.alg, cryptoKey);
 };
 var handleKeyObject = (keyObject, entry) => {
-  var _a19, _b8, _c2;
   const hit = cached2(keyObject, entry.alg);
   if (hit)
     return hit;
   const isPublic = keyObject.type === "public";
   const usages = isPublic ? entry.usages.public : entry.usages.private;
   const { asymmetricKeyType } = keyObject;
-  const crv = nist[(_a19 = keyObject.asymmetricKeyDetails) == null ? void 0 : _a19.namedCurve];
-  const params = (_c2 = (_b8 = entry.subtleFor) == null ? void 0 : _b8.call(entry, { crv, asymmetricKeyType })) != null ? _c2 : entry.subtle;
+  const crv = nist[keyObject.asymmetricKeyDetails?.namedCurve];
+  const params = entry.subtleFor?.({ crv, asymmetricKeyType }) ?? entry.subtle;
   return store(keyObject, entry.alg, keyObject.toCryptoKey(params, isPublic, usages));
 };
 async function prepareKey(entry, key, usage) {
@@ -59878,13 +59369,13 @@ function validateAlgorithms(option, algorithms) {
   return new Set(algorithms);
 }
 function validateCritDuplicates(Err, protectedHeader) {
-  const { crit } = protectedHeader != null ? protectedHeader : {};
+  const { crit } = protectedHeader ?? {};
   if (Array.isArray(crit) && new Set(crit).size !== crit.length) {
     throw new Err('"crit" (Critical) Header Parameter MUST NOT contain duplicate values');
   }
 }
 function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader, joseHeader) {
-  if (joseHeader.crit !== void 0 && (protectedHeader == null ? void 0 : protectedHeader.crit) === void 0) {
+  if (joseHeader.crit !== void 0 && protectedHeader?.crit === void 0) {
     throw new Err('"crit" (Critical) Header Parameter MUST be integrity protected');
   }
   if (!protectedHeader || protectedHeader.crit === void 0) {
@@ -59991,11 +59482,10 @@ function maybeJWSAlgorithm(alg) {
 function prepareVerify(options) {
   return {
     algorithms: options && validateAlgorithms("algorithms", options.algorithms),
-    crit: options == null ? void 0 : options.crit
+    crit: options?.crit
   };
 }
 async function verifySignature(jws, shared, key) {
-  var _a19;
   let parsedProt = {};
   if (jws.protected) {
     parsedProt = parseJoseHeader(jws.protected, JWSInvalid, "JWS Protected Header is invalid");
@@ -60037,7 +59527,7 @@ async function verifySignature(jws, shared, key) {
     resolvedKey = true;
   }
   const entry = jwsAlgorithm(alg);
-  const data = concat(jws.protected !== void 0 ? encode(jws.protected) : new Uint8Array(), encode("."), typeof jws.payload === "string" ? b64 ? (_a19 = shared.b64p) != null ? _a19 : shared.b64p = encodeBase64url(jws.payload, "payload", JWSInvalid) : encoder.encode(jws.payload) : jws.payload);
+  const data = concat(jws.protected !== void 0 ? encode(jws.protected) : new Uint8Array(), encode("."), typeof jws.payload === "string" ? b64 ? shared.b64p ??= encodeBase64url(jws.payload, "payload", JWSInvalid) : encoder.encode(jws.payload) : jws.payload);
   const signature = decodeBase64url(jws.signature, "signature", JWSInvalid);
   const k3 = await prepareKey(entry, key, "verify");
   const verified = await verify(entry, k3, signature, data);
@@ -60231,70 +59721,68 @@ function validateClaimsSet(protectedHeader, encodedPayload, options = {}) {
   }
   return payload;
 }
-var _payload;
 var JWTClaimsBuilder = class {
+  #payload;
   constructor(payload) {
-    __privateAdd(this, _payload);
     if (!isObject2(payload)) {
       throw new TypeError("JWT Claims Set MUST be an object");
     }
-    __privateSet(this, _payload, structuredClone(payload));
+    this.#payload = structuredClone(payload);
   }
   data() {
-    return encoder.encode(JSON.stringify(__privateGet(this, _payload)));
+    return encoder.encode(JSON.stringify(this.#payload));
   }
   get iss() {
-    return __privateGet(this, _payload).iss;
+    return this.#payload.iss;
   }
   set iss(value) {
-    __privateGet(this, _payload).iss = value;
+    this.#payload.iss = value;
   }
   get sub() {
-    return __privateGet(this, _payload).sub;
+    return this.#payload.sub;
   }
   set sub(value) {
-    __privateGet(this, _payload).sub = value;
+    this.#payload.sub = value;
   }
   get aud() {
-    return __privateGet(this, _payload).aud;
+    return this.#payload.aud;
   }
   set aud(value) {
-    __privateGet(this, _payload).aud = value;
+    this.#payload.aud = value;
   }
   set jti(value) {
-    __privateGet(this, _payload).jti = value;
+    this.#payload.jti = value;
   }
   set nbf(value) {
     if (typeof value === "number") {
-      __privateGet(this, _payload).nbf = validateInput("setNotBefore", value);
+      this.#payload.nbf = validateInput("setNotBefore", value);
     } else if (value instanceof Date) {
-      __privateGet(this, _payload).nbf = validateInput("setNotBefore", epoch(value));
+      this.#payload.nbf = validateInput("setNotBefore", epoch(value));
     } else {
-      __privateGet(this, _payload).nbf = epoch(/* @__PURE__ */ new Date()) + secs(value);
+      this.#payload.nbf = epoch(/* @__PURE__ */ new Date()) + secs(value);
     }
   }
   set exp(value) {
     if (typeof value === "number") {
-      __privateGet(this, _payload).exp = validateInput("setExpirationTime", value);
+      this.#payload.exp = validateInput("setExpirationTime", value);
     } else if (value instanceof Date) {
-      __privateGet(this, _payload).exp = validateInput("setExpirationTime", epoch(value));
+      this.#payload.exp = validateInput("setExpirationTime", epoch(value));
     } else {
-      __privateGet(this, _payload).exp = epoch(/* @__PURE__ */ new Date()) + secs(value);
+      this.#payload.exp = epoch(/* @__PURE__ */ new Date()) + secs(value);
     }
   }
   set iat(value) {
     if (value === void 0) {
-      __privateGet(this, _payload).iat = epoch(/* @__PURE__ */ new Date());
+      this.#payload.iat = epoch(/* @__PURE__ */ new Date());
     } else if (value instanceof Date) {
-      __privateGet(this, _payload).iat = validateInput("setIssuedAt", epoch(value));
+      this.#payload.iat = validateInput("setIssuedAt", epoch(value));
     } else if (typeof value === "string") {
-      __privateGet(this, _payload).iat = validateInput("setIssuedAt", epoch(/* @__PURE__ */ new Date()) + secs(value));
+      this.#payload.iat = validateInput("setIssuedAt", epoch(/* @__PURE__ */ new Date()) + secs(value));
     } else {
-      __privateGet(this, _payload).iat = validateInput("setIssuedAt", value);
+      this.#payload.iat = validateInput("setIssuedAt", value);
     }
   }
 };
-_payload = new WeakMap();
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/jwt/verify.js
 async function jwtVerify(jwt2, key, options) {
@@ -60312,10 +59800,9 @@ async function jwtVerify(jwt2, key, options) {
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/jws_sign.js
 function unencodedPayload(protectedHeader) {
-  return (protectedHeader == null ? void 0 : protectedHeader.b64) === false && Array.isArray(protectedHeader.crit) && protectedHeader.crit.includes("b64");
+  return protectedHeader?.b64 === false && Array.isArray(protectedHeader.crit) && protectedHeader.crit.includes("b64");
 }
 async function createSignature(input, key) {
-  var _a19, _b8, _c2;
   const { protectedHeader, unprotectedHeader } = input;
   if (!isDisjoint(protectedHeader, unprotectedHeader)) {
     throw new JWSInvalid("JWS Protected and JWS Unprotected Header Parameter names must be disjoint");
@@ -60338,9 +59825,9 @@ async function createSignature(input, key) {
   let payloadS;
   let payloadB;
   if (b64) {
-    const encoded = (_a19 = input.encoded) != null ? _a19 : input.encoded = {};
-    (_b8 = encoded.b64) != null ? _b8 : encoded.b64 = encode2(input.payload);
-    (_c2 = encoded.raw) != null ? _c2 : encoded.raw = encode(encoded.b64);
+    const encoded = input.encoded ??= {};
+    encoded.b64 ??= encode2(input.payload);
+    encoded.raw ??= encode(encoded.b64);
     payloadS = encoded.b64;
     payloadB = encoded.raw;
   } else {
@@ -60370,133 +59857,122 @@ async function createSignature(input, key) {
 }
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/jws/flattened/sign.js
-var _payload2, _protectedHeader, _unprotectedHeader;
 var FlattenedSign = class {
+  #payload;
+  #protectedHeader;
+  #unprotectedHeader;
   constructor(payload) {
-    __privateAdd(this, _payload2);
-    __privateAdd(this, _protectedHeader);
-    __privateAdd(this, _unprotectedHeader);
     if (!(payload instanceof Uint8Array)) {
       throw new TypeError("payload must be an instance of Uint8Array");
     }
-    __privateSet(this, _payload2, payload);
+    this.#payload = payload;
   }
   setProtectedHeader(protectedHeader) {
-    assertNotSet(__privateGet(this, _protectedHeader), "setProtectedHeader");
-    __privateSet(this, _protectedHeader, protectedHeader);
+    assertNotSet(this.#protectedHeader, "setProtectedHeader");
+    this.#protectedHeader = protectedHeader;
     return this;
   }
   setUnprotectedHeader(unprotectedHeader) {
-    assertNotSet(__privateGet(this, _unprotectedHeader), "setUnprotectedHeader");
-    __privateSet(this, _unprotectedHeader, unprotectedHeader);
+    assertNotSet(this.#unprotectedHeader, "setUnprotectedHeader");
+    this.#unprotectedHeader = unprotectedHeader;
     return this;
   }
   async sign(key, options) {
-    if (!__privateGet(this, _protectedHeader) && !__privateGet(this, _unprotectedHeader)) {
+    if (!this.#protectedHeader && !this.#unprotectedHeader) {
       throw new JWSInvalid("either setProtectedHeader or setUnprotectedHeader must be called before #sign()");
     }
     const jws = await createSignature({
-      payload: __privateGet(this, _payload2),
-      protectedHeader: __privateGet(this, _protectedHeader),
-      unprotectedHeader: __privateGet(this, _unprotectedHeader),
-      crit: options == null ? void 0 : options.crit
+      payload: this.#payload,
+      protectedHeader: this.#protectedHeader,
+      unprotectedHeader: this.#unprotectedHeader,
+      crit: options?.crit
     }, key);
-    if (__privateGet(this, _unprotectedHeader)) {
-      jws.header = __privateGet(this, _unprotectedHeader);
+    if (this.#unprotectedHeader) {
+      jws.header = this.#unprotectedHeader;
     }
     return jws;
   }
 };
-_payload2 = new WeakMap();
-_protectedHeader = new WeakMap();
-_unprotectedHeader = new WeakMap();
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/jws/compact/sign.js
-var _flattened, _protectedHeader2;
 var CompactSign = class {
+  #flattened;
+  #protectedHeader;
   constructor(payload) {
-    __privateAdd(this, _flattened);
-    __privateAdd(this, _protectedHeader2);
-    __privateSet(this, _flattened, new FlattenedSign(payload));
+    this.#flattened = new FlattenedSign(payload);
   }
   setProtectedHeader(protectedHeader) {
-    __privateGet(this, _flattened).setProtectedHeader(protectedHeader);
-    __privateSet(this, _protectedHeader2, protectedHeader);
+    this.#flattened.setProtectedHeader(protectedHeader);
+    this.#protectedHeader = protectedHeader;
     return this;
   }
   async sign(key, options) {
-    if (unencodedPayload(__privateGet(this, _protectedHeader2))) {
+    if (unencodedPayload(this.#protectedHeader)) {
       throw new TypeError("use the flattened module for creating JWS with b64: false");
     }
-    const jws = await __privateGet(this, _flattened).sign(key, options);
+    const jws = await this.#flattened.sign(key, options);
     return `${jws.protected}.${jws.payload}.${jws.signature}`;
   }
 };
-_flattened = new WeakMap();
-_protectedHeader2 = new WeakMap();
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/jwt/sign.js
-var _protectedHeader3, _jwt2;
 var SignJWT = class {
+  #protectedHeader;
+  #jwt;
   constructor(payload = {}) {
-    __privateAdd(this, _protectedHeader3);
-    __privateAdd(this, _jwt2);
-    __privateSet(this, _jwt2, new JWTClaimsBuilder(payload));
+    this.#jwt = new JWTClaimsBuilder(payload);
   }
   setIssuer(issuer) {
-    __privateGet(this, _jwt2).iss = issuer;
+    this.#jwt.iss = issuer;
     return this;
   }
   setSubject(subject) {
-    __privateGet(this, _jwt2).sub = subject;
+    this.#jwt.sub = subject;
     return this;
   }
   setAudience(audience) {
-    __privateGet(this, _jwt2).aud = audience;
+    this.#jwt.aud = audience;
     return this;
   }
   setJti(jwtId) {
-    __privateGet(this, _jwt2).jti = jwtId;
+    this.#jwt.jti = jwtId;
     return this;
   }
   setNotBefore(input) {
-    __privateGet(this, _jwt2).nbf = input;
+    this.#jwt.nbf = input;
     return this;
   }
   setExpirationTime(input) {
-    __privateGet(this, _jwt2).exp = input;
+    this.#jwt.exp = input;
     return this;
   }
   setIssuedAt(input) {
-    __privateGet(this, _jwt2).iat = input;
+    this.#jwt.iat = input;
     return this;
   }
   setProtectedHeader(protectedHeader) {
-    __privateSet(this, _protectedHeader3, protectedHeader);
+    this.#protectedHeader = protectedHeader;
     return this;
   }
   async sign(key, options) {
-    const sig2 = new CompactSign(__privateGet(this, _jwt2).data());
-    sig2.setProtectedHeader(__privateGet(this, _protectedHeader3));
-    if (unencodedPayload(__privateGet(this, _protectedHeader3))) {
+    const sig2 = new CompactSign(this.#jwt.data());
+    sig2.setProtectedHeader(this.#protectedHeader);
+    if (unencodedPayload(this.#protectedHeader)) {
       throw new JWTInvalid("JWTs MUST NOT use unencoded payload");
     }
     return sig2.sign(key, options);
   }
 };
-_protectedHeader3 = new WeakMap();
-_jwt2 = new WeakMap();
 
 // ../auth0-agent-components/node_modules/jose/dist/webapi/lib/key_algorithm.js
 function unsupportedAlgorithm() {
   return new JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
 }
 function keyAlgorithm(alg) {
-  var _a19;
   if (typeof alg !== "string") {
     throw unsupportedAlgorithm();
   }
-  const entry = (_a19 = maybeJWSAlgorithm(alg)) != null ? _a19 : maybeJWEAlgorithm(alg);
+  const entry = maybeJWSAlgorithm(alg) ?? maybeJWEAlgorithm(alg);
   if (!entry) {
     throw unsupportedAlgorithm();
   }
@@ -60585,7 +60061,6 @@ var parseECAlgorithmIdentifier = (state) => {
   throw new Error("Unsupported named curve");
 };
 var genericImport = async (keyFormat, keyData, alg, options) => {
-  var _a19;
   const entry = keyAlgorithm(alg);
   if (entry.symmetric) {
     throw new JOSENotSupported('Invalid or unsupported "alg" (Algorithm) value');
@@ -60601,17 +60076,16 @@ var genericImport = async (keyFormat, keyData, alg, options) => {
   } else {
     algorithm = entry.subtle;
   }
-  return crypto.subtle.importKey(keyFormat, keyData, algorithm, (_a19 = options == null ? void 0 : options.extractable) != null ? _a19 : isPublic ? true : false, isPublic ? entry.usages.public : entry.usages.private);
+  return crypto.subtle.importKey(keyFormat, keyData, algorithm, options?.extractable ?? (isPublic ? true : false), isPublic ? entry.usages.public : entry.usages.private);
 };
 var processPEMData = (pem, pattern) => {
   return decodeBase64(pem.replace(pattern, ""));
 };
 var fromPKCS8 = (pem, alg, options) => {
-  var _a19;
   const keyData = processPEMData(pem, /(?:-----(?:BEGIN|END) PRIVATE KEY-----|\s)/g);
   let opts = options;
-  if ((_a19 = alg == null ? void 0 : alg.startsWith) == null ? void 0 : _a19.call(alg, "ECDH-ES")) {
-    opts || (opts = {});
+  if (alg?.startsWith?.("ECDH-ES")) {
+    opts ||= {};
     opts.getNamedCurve = (keyData2) => {
       const state = createASN1State(keyData2);
       parsePKCS8Header(state);
@@ -60671,7 +60145,7 @@ async function calculateJwkThumbprint(key, digestAlgorithm) {
   } else {
     throw new TypeError(invalidKeyInput(key, "CryptoKey", "KeyObject", "JSON Web Key"));
   }
-  digestAlgorithm != null ? digestAlgorithm : digestAlgorithm = "sha256";
+  digestAlgorithm ??= "sha256";
   if (digestAlgorithm !== "sha256" && digestAlgorithm !== "sha384" && digestAlgorithm !== "sha512") {
     throw new TypeError('digestAlgorithm must one of "sha256", "sha384", or "sha512"');
   }
@@ -60713,7 +60187,7 @@ async function calculateJwkThumbprint(key, digestAlgorithm) {
 async function EmbeddedJWK(protectedHeader, token) {
   const joseHeader = {
     ...protectedHeader,
-    ...token == null ? void 0 : token.header
+    ...token?.header
   };
   if (!isObject2(joseHeader.jwk)) {
     throw new JWSInvalid('"jwk" (JSON Web Key) Header Parameter must be a JSON object');
@@ -60744,23 +60218,22 @@ function isJWKSLike(jwks) {
 function isJWKLike(key) {
   return isObject2(key);
 }
-var _jwks, _cached;
 var LocalJWKSetImpl = class {
+  #jwks;
+  #cached = /* @__PURE__ */ new WeakMap();
   constructor(jwks) {
-    __privateAdd(this, _jwks);
-    __privateAdd(this, _cached, /* @__PURE__ */ new WeakMap());
     if (!isJWKSLike(jwks)) {
       throw new JWKSInvalid("JSON Web Key Set malformed");
     }
-    __privateSet(this, _jwks, structuredClone(jwks));
+    this.#jwks = structuredClone(jwks);
   }
   jwks() {
-    return __privateGet(this, _jwks);
+    return this.#jwks;
   }
   async getKey(protectedHeader, token) {
-    const { alg, kid } = { ...protectedHeader, ...token == null ? void 0 : token.header };
+    const { alg, kid } = { ...protectedHeader, ...token?.header };
     const entry = signatureAlgorithm(alg);
-    const candidates = __privateGet(this, _jwks).keys.filter((jwk2) => {
+    const candidates = this.#jwks.keys.filter((jwk2) => {
       let candidate = entry.kty.includes(jwk2.kty);
       if (candidate && typeof kid === "string") {
         candidate = kid === jwk2.kid;
@@ -60785,22 +60258,20 @@ var LocalJWKSetImpl = class {
     }
     if (length !== 1) {
       const error41 = new JWKSMultipleMatchingKeys();
-      const _cached2 = __privateGet(this, _cached);
+      const _cached = this.#cached;
       error41[Symbol.asyncIterator] = async function* () {
         for (const jwk2 of candidates) {
           try {
-            yield await importWithAlgCache(_cached2, jwk2, entry);
+            yield await importWithAlgCache(_cached, jwk2, entry);
           } catch {
           }
         }
       };
       throw error41;
     }
-    return importWithAlgCache(__privateGet(this, _cached), jwk, entry);
+    return importWithAlgCache(this.#cached, jwk, entry);
   }
 };
-_jwks = new WeakMap();
-_cached = new WeakMap();
 async function importWithAlgCache(cache2, jwk, entry) {
   const cached4 = cache2.get(jwk) || cache2.set(jwk, {}).get(jwk);
   if (cached4[entry.alg] === void 0) {
@@ -60831,8 +60302,7 @@ function isCloudflareWorkers() {
   return typeof WebSocketPair !== "undefined" || typeof navigator !== "undefined" && navigator.userAgent === "Cloudflare-Workers" || typeof EdgeRuntime !== "undefined" && EdgeRuntime === "vercel";
 }
 var USER_AGENT;
-var _a5, _b3;
-if (typeof navigator === "undefined" || !((_b3 = (_a5 = navigator.userAgent) == null ? void 0 : _a5.startsWith) == null ? void 0 : _b3.call(_a5, "Mozilla/5.0 "))) {
+if (typeof navigator === "undefined" || !navigator.userAgent?.startsWith?.("Mozilla/5.0 ")) {
   const NAME = "jose";
   const VERSION = "v6.2.5";
   USER_AGENT = `${NAME}/${VERSION}`;
@@ -60872,101 +60342,89 @@ function isFreshJwksCache(input, cacheMaxAge) {
   }
   return true;
 }
-var _url2, _timeoutDuration, _cooldownDuration, _cacheMaxAge, _jwksTimestamp, _pendingFetch, _headers, _customFetch, _local, _cache;
 var RemoteJWKSetImpl = class {
+  #url;
+  #timeoutDuration;
+  #cooldownDuration;
+  #cacheMaxAge;
+  #jwksTimestamp;
+  #pendingFetch;
+  #headers;
+  #customFetch;
+  #local;
+  #cache;
   constructor(url2, options) {
-    __privateAdd(this, _url2);
-    __privateAdd(this, _timeoutDuration);
-    __privateAdd(this, _cooldownDuration);
-    __privateAdd(this, _cacheMaxAge);
-    __privateAdd(this, _jwksTimestamp);
-    __privateAdd(this, _pendingFetch);
-    __privateAdd(this, _headers);
-    __privateAdd(this, _customFetch);
-    __privateAdd(this, _local);
-    __privateAdd(this, _cache);
     if (!(url2 instanceof URL)) {
       throw new TypeError("url must be an instance of URL");
     }
-    __privateSet(this, _url2, new URL(url2.href));
-    __privateSet(this, _timeoutDuration, typeof (options == null ? void 0 : options.timeoutDuration) === "number" ? options == null ? void 0 : options.timeoutDuration : 5e3);
-    __privateSet(this, _cooldownDuration, typeof (options == null ? void 0 : options.cooldownDuration) === "number" ? options == null ? void 0 : options.cooldownDuration : 3e4);
-    __privateSet(this, _cacheMaxAge, typeof (options == null ? void 0 : options.cacheMaxAge) === "number" ? options == null ? void 0 : options.cacheMaxAge : 6e5);
-    __privateSet(this, _headers, new Headers(options == null ? void 0 : options.headers));
-    if (USER_AGENT && !__privateGet(this, _headers).has("User-Agent")) {
-      __privateGet(this, _headers).set("User-Agent", USER_AGENT);
+    this.#url = new URL(url2.href);
+    this.#timeoutDuration = typeof options?.timeoutDuration === "number" ? options?.timeoutDuration : 5e3;
+    this.#cooldownDuration = typeof options?.cooldownDuration === "number" ? options?.cooldownDuration : 3e4;
+    this.#cacheMaxAge = typeof options?.cacheMaxAge === "number" ? options?.cacheMaxAge : 6e5;
+    this.#headers = new Headers(options?.headers);
+    if (USER_AGENT && !this.#headers.has("User-Agent")) {
+      this.#headers.set("User-Agent", USER_AGENT);
     }
-    if (!__privateGet(this, _headers).has("accept")) {
-      __privateGet(this, _headers).set("accept", "application/json");
-      __privateGet(this, _headers).append("accept", "application/jwk-set+json");
+    if (!this.#headers.has("accept")) {
+      this.#headers.set("accept", "application/json");
+      this.#headers.append("accept", "application/jwk-set+json");
     }
-    __privateSet(this, _customFetch, options == null ? void 0 : options[customFetch]);
-    if ((options == null ? void 0 : options[jwksCache]) !== void 0) {
-      __privateSet(this, _cache, options == null ? void 0 : options[jwksCache]);
-      if (isFreshJwksCache(options == null ? void 0 : options[jwksCache], __privateGet(this, _cacheMaxAge))) {
-        __privateSet(this, _jwksTimestamp, __privateGet(this, _cache).uat);
-        __privateSet(this, _local, createLocalJWKSet(__privateGet(this, _cache).jwks));
+    this.#customFetch = options?.[customFetch];
+    if (options?.[jwksCache] !== void 0) {
+      this.#cache = options?.[jwksCache];
+      if (isFreshJwksCache(options?.[jwksCache], this.#cacheMaxAge)) {
+        this.#jwksTimestamp = this.#cache.uat;
+        this.#local = createLocalJWKSet(this.#cache.jwks);
       }
     }
   }
   pendingFetch() {
-    return !!__privateGet(this, _pendingFetch);
+    return !!this.#pendingFetch;
   }
   coolingDown() {
-    return typeof __privateGet(this, _jwksTimestamp) === "number" ? Date.now() < __privateGet(this, _jwksTimestamp) + __privateGet(this, _cooldownDuration) : false;
+    return typeof this.#jwksTimestamp === "number" ? Date.now() < this.#jwksTimestamp + this.#cooldownDuration : false;
   }
   fresh() {
-    return typeof __privateGet(this, _jwksTimestamp) === "number" ? Date.now() < __privateGet(this, _jwksTimestamp) + __privateGet(this, _cacheMaxAge) : false;
+    return typeof this.#jwksTimestamp === "number" ? Date.now() < this.#jwksTimestamp + this.#cacheMaxAge : false;
   }
   jwks() {
-    var _a19;
-    return (_a19 = __privateGet(this, _local)) == null ? void 0 : _a19.jwks();
+    return this.#local?.jwks();
   }
   async getKey(protectedHeader, token) {
-    if (!__privateGet(this, _local) || !this.fresh()) {
+    if (!this.#local || !this.fresh()) {
       await this.reload();
     }
     try {
-      return await __privateGet(this, _local).call(this, protectedHeader, token);
+      return await this.#local(protectedHeader, token);
     } catch (err) {
       if (err instanceof JWKSNoMatchingKey) {
         if (this.coolingDown() === false) {
           await this.reload();
-          return __privateGet(this, _local).call(this, protectedHeader, token);
+          return this.#local(protectedHeader, token);
         }
       }
       throw err;
     }
   }
   async reload() {
-    if (__privateGet(this, _pendingFetch) && isCloudflareWorkers()) {
-      __privateSet(this, _pendingFetch, void 0);
+    if (this.#pendingFetch && isCloudflareWorkers()) {
+      this.#pendingFetch = void 0;
     }
-    __privateGet(this, _pendingFetch) || __privateSet(this, _pendingFetch, fetchJwks(__privateGet(this, _url2).href, __privateGet(this, _headers), AbortSignal.timeout(__privateGet(this, _timeoutDuration)), __privateGet(this, _customFetch)).then((json3) => {
-      __privateSet(this, _local, createLocalJWKSet(json3));
-      if (__privateGet(this, _cache)) {
-        __privateGet(this, _cache).uat = Date.now();
-        __privateGet(this, _cache).jwks = json3;
+    this.#pendingFetch ||= fetchJwks(this.#url.href, this.#headers, AbortSignal.timeout(this.#timeoutDuration), this.#customFetch).then((json3) => {
+      this.#local = createLocalJWKSet(json3);
+      if (this.#cache) {
+        this.#cache.uat = Date.now();
+        this.#cache.jwks = json3;
       }
-      __privateSet(this, _jwksTimestamp, Date.now());
-      __privateSet(this, _pendingFetch, void 0);
+      this.#jwksTimestamp = Date.now();
+      this.#pendingFetch = void 0;
     }).catch((err) => {
-      __privateSet(this, _pendingFetch, void 0);
+      this.#pendingFetch = void 0;
       throw err;
-    }));
-    await __privateGet(this, _pendingFetch);
+    });
+    await this.#pendingFetch;
   }
 };
-_url2 = new WeakMap();
-_timeoutDuration = new WeakMap();
-_cooldownDuration = new WeakMap();
-_cacheMaxAge = new WeakMap();
-_jwksTimestamp = new WeakMap();
-_pendingFetch = new WeakMap();
-_headers = new WeakMap();
-_customFetch = new WeakMap();
-_local = new WeakMap();
-_cache = new WeakMap();
 function createRemoteJWKSet(url2, options) {
   const set2 = new RemoteJWKSetImpl(url2, options);
   const remoteJWKSet = async (protectedHeader, token) => set2.getKey(protectedHeader, token);
@@ -61079,12 +60537,11 @@ function mapPermissions(p2) {
   return Object.keys(out).length ? out : void 0;
 }
 function buildResourceUiMeta(tenantOrigin, overrides, permissions, prefersBorder) {
-  var _a19, _b8, _c2, _d2;
   const origin = toOrigin(tenantOrigin);
-  const resourceDomains = dedupe([origin, ...(_a19 = overrides == null ? void 0 : overrides.resourceDomains) != null ? _a19 : []]);
-  const connectDomains = dedupe([origin, ...(_b8 = overrides == null ? void 0 : overrides.connectDomains) != null ? _b8 : []]);
-  const frameDomains = dedupe((_c2 = overrides == null ? void 0 : overrides.frameDomains) != null ? _c2 : []);
-  const baseUriDomains = dedupe((_d2 = overrides == null ? void 0 : overrides.baseUriDomains) != null ? _d2 : []);
+  const resourceDomains = dedupe([origin, ...overrides?.resourceDomains ?? []]);
+  const connectDomains = dedupe([origin, ...overrides?.connectDomains ?? []]);
+  const frameDomains = dedupe(overrides?.frameDomains ?? []);
+  const baseUriDomains = dedupe(overrides?.baseUriDomains ?? []);
   const csp = { resourceDomains, connectDomains };
   if (frameDomains.length) csp.frameDomains = frameDomains;
   if (baseUriDomains.length) csp.baseUriDomains = baseUriDomains;
@@ -61099,16 +60556,14 @@ function escapeForJsonScript(json3) {
   return json3.replace(/</g, "\\u003c").replace(/-->/g, "--\\u003e");
 }
 function resolveEmbedOptions(config3, runtime) {
-  var _a19;
   const opts = { ...config3.embedOptions };
-  if (config3.session && (runtime == null ? void 0 : runtime.sessionToken)) {
-    const field = (_a19 = config3.session.field) != null ? _a19 : "session_token";
+  if (config3.session && runtime?.sessionToken) {
+    const field = config3.session.field ?? "session_token";
     opts.fields = { ...opts.fields, [field]: runtime.sessionToken };
   }
   return opts;
 }
 function renderFormAppHtml(config3, runtime) {
-  var _a19, _b8, _c2, _d2;
   if (!config3.tenantOrigin) {
     throw new Error("renderFormAppHtml: config.tenantOrigin is required (resolve it before calling).");
   }
@@ -61116,16 +60571,16 @@ function renderFormAppHtml(config3, runtime) {
   const bundleUrl = `${origin}${SDK_BUNDLE_PATH}`;
   const uiMeta = buildResourceUiMeta(
     origin,
-    (_a19 = config3.ui) == null ? void 0 : _a19.csp,
-    (_b8 = config3.ui) == null ? void 0 : _b8.permissions,
-    (_c2 = config3.ui) == null ? void 0 : _c2.prefersBorder
+    config3.ui?.csp,
+    config3.ui?.permissions,
+    config3.ui?.prefersBorder
   );
   const bridgeConfig = {
     formId: config3.formId,
     embedOptions: resolveEmbedOptions(config3, runtime),
     // Allowlist of submitted fields the bridge may surface to the agent (status stays the
     // default; only these named, non-sensitive values ride the completion). Omitted when empty.
-    ...((_d2 = config3.surfaceFields) == null ? void 0 : _d2.length) ? { surfaceFields: config3.surfaceFields } : {},
+    ...config3.surfaceFields?.length ? { surfaceFields: config3.surfaceFields } : {},
     // Custom per-status completion copy (supports {field} placeholders). Omitted when unset.
     ...config3.completion ? { completion: config3.completion } : {}
   };
@@ -61157,22 +60612,19 @@ function slugify(input) {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 40) || "form";
 }
 function defaultToolName(config3, model) {
-  var _a19, _b8;
-  const basis = (_b8 = (_a19 = config3.formName) != null ? _a19 : model == null ? void 0 : model.name) != null ? _b8 : config3.formId;
+  const basis = config3.formName ?? model?.name ?? config3.formId;
   return `open_form_${slugify(basis)}`;
 }
 function defaultDescription(config3, model) {
-  var _a19;
-  const name = (_a19 = config3.formName) != null ? _a19 : model == null ? void 0 : model.name;
+  const name = config3.formName ?? model?.name;
   const subject = name ? `the "${name}" form` : "a form";
   return `Open ${subject} for the user to complete. Renders an interactive Auth0 Form; returns only whether the user completed, cancelled, or errored \u2014 never the field values.`;
 }
 function fieldToZod(field) {
-  var _a19, _b8, _c2;
   if (!field.name) return null;
-  const label = (_a19 = field.label) != null ? _a19 : field.name;
+  const label = field.label ?? field.name;
   const describe = (v3) => v3.optional().describe(`Prefill value for "${label}".`);
-  switch (((_b8 = field.type) != null ? _b8 : "").toUpperCase()) {
+  switch ((field.type ?? "").toUpperCase()) {
     case "NUMBER":
       return describe(external_exports.coerce.number());
     case "BOOLEAN":
@@ -61181,7 +60633,7 @@ function fieldToZod(field) {
     case "CHOICE":
     case "DROPDOWN":
     case "CARDS": {
-      const values = ((_c2 = field.options) != null ? _c2 : []).map((o) => o.value).filter(Boolean);
+      const values = (field.options ?? []).map((o) => o.value).filter(Boolean);
       if (values.length >= 1) {
         return describe(external_exports.enum(values));
       }
@@ -61194,10 +60646,9 @@ function fieldToZod(field) {
   }
 }
 function buildPrefillShape(model) {
-  var _a19, _b8;
   const shape = {};
-  for (const step of (_a19 = model == null ? void 0 : model.steps) != null ? _a19 : []) {
-    for (const field of (_b8 = step.fields) != null ? _b8 : []) {
+  for (const step of model?.steps ?? []) {
+    for (const field of step.fields ?? []) {
       const validator = fieldToZod(field);
       if (validator && field.name && !(field.name in shape)) {
         shape[field.name] = validator;
@@ -61207,9 +60658,8 @@ function buildPrefillShape(model) {
   return shape;
 }
 function formToTool(model, config3) {
-  var _a19, _b8;
-  const name = (_a19 = config3.toolName) != null ? _a19 : defaultToolName(config3, model);
-  const description = (_b8 = config3.description) != null ? _b8 : defaultDescription(config3, model);
+  const name = config3.toolName ?? defaultToolName(config3, model);
+  const description = config3.description ?? defaultDescription(config3, model);
   const presentation = { name, description };
   if (config3.inputMode === "prefill") {
     const shape = buildPrefillShape(model);
@@ -61232,20 +60682,18 @@ var DEFAULT_ISSUER = "mcp-forms";
 var DEFAULT_AUDIENCE = "auth0-forms";
 var DEFAULT_TTL_SECONDS = 30;
 async function mintSessionToken(sub, options) {
-  var _a19, _b8, _c2, _d2;
   if (!sub) throw new Error("mintSessionToken: sub is required");
   if (!options.secret) throw new Error("mintSessionToken: secret is required");
-  const issuer = (_a19 = options.issuer) != null ? _a19 : DEFAULT_ISSUER;
-  const audience = (_b8 = options.audience) != null ? _b8 : DEFAULT_AUDIENCE;
-  const ttl = (_c2 = options.ttlSeconds) != null ? _c2 : DEFAULT_TTL_SECONDS;
-  const iat = (_d2 = options.now) != null ? _d2 : Math.floor(Date.now() / 1e3);
+  const issuer = options.issuer ?? DEFAULT_ISSUER;
+  const audience = options.audience ?? DEFAULT_AUDIENCE;
+  const ttl = options.ttlSeconds ?? DEFAULT_TTL_SECONDS;
+  const iat = options.now ?? Math.floor(Date.now() / 1e3);
   const key = new TextEncoder().encode(options.secret);
   return new SignJWT({}).setProtectedHeader({ alg: "HS256", typ: "JWT" }).setSubject(sub).setIssuer(issuer).setAudience(audience).setIssuedAt(iat).setExpirationTime(iat + ttl).sign(key);
 }
 var resourceUriFor = (formId) => `ui://agent-components/${formId}`;
 function resolveOrigin(config3, options) {
-  var _a19;
-  const raw = (_a19 = config3.tenantOrigin) != null ? _a19 : options.tenantOrigin;
+  const raw = config3.tenantOrigin ?? options.tenantOrigin;
   if (!raw) {
     throw new Error(
       `[agent-components] Form ${config3.formId}: no tenantOrigin (set it on the form or as a server-wide default in RegisterOptions.tenantOrigin).`
@@ -61254,9 +60702,8 @@ function resolveOrigin(config3, options) {
   return toOrigin(raw);
 }
 function assertSessionConfig(config3, options) {
-  var _a19;
   if (!config3.session) return;
-  if (!((_a19 = options.sessionTrust) == null ? void 0 : _a19.secret)) {
+  if (!options.sessionTrust?.secret) {
     throw new Error(
       `[agent-components] Form ${config3.formId} is session-aware but RegisterOptions.sessionTrust.secret is not set \u2014 cannot mint the trusted session token. Provide a shared secret.`
     );
@@ -61268,15 +60715,13 @@ function assertSessionConfig(config3, options) {
   }
 }
 function detectUiSupport(server, assumeUiSupport) {
-  var _a19, _b8, _c2;
   if (assumeUiSupport !== "auto") return assumeUiSupport;
-  const uiCap = Y3((_b8 = (_a19 = server.server).getClientCapabilities) == null ? void 0 : _b8.call(_a19));
-  return Boolean((_c2 = uiCap == null ? void 0 : uiCap.mimeTypes) == null ? void 0 : _c2.includes(Ht));
+  const uiCap = Y3(server.server.getClientCapabilities?.());
+  return Boolean(uiCap?.mimeTypes?.includes(Ht));
 }
 function makeResourceReader(config3, options, resolvedConfig, resourceUri) {
-  var _a19;
   const staticRender = renderFormAppHtml(resolvedConfig);
-  const logger = (_a19 = options.logger) != null ? _a19 : console;
+  const logger = options.logger ?? console;
   return async (_uri, extra) => {
     let render = staticRender;
     if (config3.session && options.resolveUserSub) {
@@ -61305,7 +60750,6 @@ function makeResourceReader(config3, options, resolvedConfig, resourceUri) {
   };
 }
 async function registerOneForm(server, config3, options = {}) {
-  var _a19, _b8, _c2, _d2;
   const { hydrateFromTenant = true, logger = console, assumeUiSupport = "auto" } = options;
   const origin = resolveOrigin(config3, options);
   const resolvedConfig = { ...config3, tenantOrigin: origin };
@@ -61313,7 +60757,7 @@ async function registerOneForm(server, config3, options = {}) {
   let model = null;
   if (hydrateFromTenant) {
     try {
-      model = await fetchFormModel(origin, config3.formId, (_a19 = options.fetch) != null ? _a19 : fetch);
+      model = await fetchFormModel(origin, config3.formId, options.fetch ?? fetch);
     } catch (err) {
       logger.warn(
         `[agent-components] Could not hydrate form ${config3.formId} from ${origin}; using generic tool. (${String(err)})`
@@ -61324,7 +60768,7 @@ async function registerOneForm(server, config3, options = {}) {
   const resourceUri = resourceUriFor(config3.formId);
   const toolConfig = {
     description: presentation.description,
-    inputSchema: (_b8 = presentation.inputSchema) != null ? _b8 : {}
+    inputSchema: presentation.inputSchema ?? {}
   };
   if (!detectUiSupport(server, assumeUiSupport)) {
     if (config3.session) {
@@ -61332,7 +60776,7 @@ async function registerOneForm(server, config3, options = {}) {
         `[agent-components] Form ${config3.formId} is session-aware but the client can't render MCP Apps; returning a hosted link with NO session token \u2014 flow steps will fail.`
       );
     }
-    const hostedUrl = (_d2 = (_c2 = config3.hostedUrl) == null ? void 0 : _c2.call(config3, origin)) != null ? _d2 : `${origin}/forms/sdk/#${config3.formId}`;
+    const hostedUrl = config3.hostedUrl?.(origin) ?? `${origin}/forms/sdk/#${config3.formId}`;
     server.registerTool(
       presentation.name,
       {
@@ -61368,8 +60812,7 @@ async function registerOneForm(server, config3, options = {}) {
         _meta: { ui: { visibility: ["app"] } }
       },
       async (args) => {
-        var _a20;
-        await ((_a20 = config3.onComplete) == null ? void 0 : _a20.call(config3, { formId: config3.formId, ...args }));
+        await config3.onComplete?.({ formId: config3.formId, ...args });
         return { content: [{ type: "text", text: "ok" }] };
       }
     );
@@ -61387,7 +60830,7 @@ function installAuth0Forms(server, forms, options = {}) {
   return new Promise((resolve, reject) => {
     const prior = server.server.oninitialized;
     server.server.oninitialized = () => {
-      prior == null ? void 0 : prior();
+      prior?.();
       registerAuth0Forms(server, forms, options).then(resolve, reject);
     };
   });
@@ -61401,8 +60844,7 @@ function createAgentComponents(defaults) {
 
 // ../auth0-agent-components/node_modules/oauth4webapi/build/index.js
 var USER_AGENT2;
-var _a6, _b4;
-if (typeof navigator === "undefined" || !((_b4 = (_a6 = navigator.userAgent) == null ? void 0 : _a6.startsWith) == null ? void 0 : _b4.call(_a6, "Mozilla/5.0 "))) {
+if (typeof navigator === "undefined" || !navigator.userAgent?.startsWith?.("Mozilla/5.0 ")) {
   const NAME = "oauth4webapi";
   const VERSION = "v3.8.6";
   USER_AGENT2 = `${NAME}/${VERSION}`;
@@ -61489,25 +60931,23 @@ function b64u(input) {
   return encodeBase64Url(input);
 }
 var UnsupportedOperationError = class extends Error {
+  code;
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "code");
     this.name = this.constructor.name;
     this.code = UNSUPPORTED_OPERATION;
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 var OperationProcessingError = class extends Error {
+  code;
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "code");
     this.name = this.constructor.name;
-    if (options == null ? void 0 : options.code) {
-      this.code = options == null ? void 0 : options.code;
+    if (options?.code) {
+      this.code = options?.code;
     }
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 function OPE(message2, code, cause) {
@@ -61534,7 +60974,7 @@ function prepareHeaders(input) {
   if (looseInstanceOf(input, Headers)) {
     input = Object.fromEntries(input.entries());
   }
-  const headers2 = new Headers(input != null ? input : {});
+  const headers2 = new Headers(input ?? {});
   if (USER_AGENT2 && !headers2.has("user-agent")) {
     headers2.set("user-agent", USER_AGENT2);
   }
@@ -61577,21 +61017,21 @@ async function performDiscovery(input, urlName, transform3, options) {
   if (!(input instanceof URL)) {
     throw CodedTypeError(`"${urlName}" must be an instance of URL`, ERR_INVALID_ARG_TYPE);
   }
-  checkProtocol(input, (options == null ? void 0 : options[allowInsecureRequests]) !== true);
+  checkProtocol(input, options?.[allowInsecureRequests] !== true);
   const url2 = transform3(new URL(input.href));
-  const headers2 = prepareHeaders(options == null ? void 0 : options.headers);
+  const headers2 = prepareHeaders(options?.headers);
   headers2.set("accept", "application/json");
-  return ((options == null ? void 0 : options[customFetch2]) || fetch)(url2.href, {
+  return (options?.[customFetch2] || fetch)(url2.href, {
     body: void 0,
     headers: Object.fromEntries(headers2.entries()),
     method: "GET",
     redirect: "manual",
-    signal: signal(url2, options == null ? void 0 : options.signal)
+    signal: signal(url2, options?.signal)
   });
 }
 async function discoveryRequest(issuerIdentifier, options) {
   return performDiscovery(issuerIdentifier, "issuerIdentifier", (url2) => {
-    switch (options == null ? void 0 : options.algorithm) {
+    switch (options?.algorithm) {
       case void 0:
       case "oidc":
         appendWellKnown(url2, ".well-known/openid-configuration");
@@ -61694,7 +61134,7 @@ function getKeyAndKid(input) {
   if (input instanceof CryptoKey) {
     return { key: input };
   }
-  if (!((input == null ? void 0 : input.key) instanceof CryptoKey)) {
+  if (!(input?.key instanceof CryptoKey)) {
     return {};
   }
   if (input.kid !== void 0) {
@@ -61765,11 +61205,11 @@ function keyToJws(key) {
   }
 }
 function getClockSkew(client) {
-  const skew = client == null ? void 0 : client[clockSkew];
+  const skew = client?.[clockSkew];
   return typeof skew === "number" && Number.isFinite(skew) ? skew : 0;
 }
 function getClockTolerance(client) {
-  const tolerance = client == null ? void 0 : client[clockTolerance];
+  const tolerance = client?.[clockTolerance];
   return typeof tolerance === "number" && Number.isFinite(tolerance) && Math.sign(tolerance) !== -1 ? tolerance : 30;
 }
 function epochTime() {
@@ -61789,7 +61229,7 @@ function assertClient(client) {
 }
 function ClientSecretPost(clientSecret) {
   assertString(clientSecret, '"clientSecret"');
-  return (_as, client, body, _headers2) => {
+  return (_as, client, body, _headers) => {
     body.set("client_id", client.client_id);
     body.set("client_secret", clientSecret);
   };
@@ -61809,18 +61249,17 @@ function clientAssertionPayload(as2, client) {
 function PrivateKeyJwt(clientPrivateKey, options) {
   const { key, kid } = getKeyAndKid(clientPrivateKey);
   assertPrivateKey(key, '"clientPrivateKey.key"');
-  return async (as2, client, body, _headers2) => {
-    var _a19;
+  return async (as2, client, body, _headers) => {
     const header = { alg: keyToJws(key), kid };
     const payload = clientAssertionPayload(as2, client);
-    (_a19 = options == null ? void 0 : options[modifyAssertion]) == null ? void 0 : _a19.call(options, header, payload);
+    options?.[modifyAssertion]?.(header, payload);
     body.set("client_id", client.client_id);
     body.set("client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
     body.set("client_assertion", await signJwt(header, payload, key));
   };
 }
 function None() {
-  return (_as, client, body, _headers2) => {
+  return (_as, client, body, _headers) => {
     body.set("client_id", client.client_id);
   };
 }
@@ -61865,20 +61304,19 @@ function resolveEndpoint(as2, endpoint, useMtlsAlias, enforceHttps) {
   return validateEndpoint(as2[endpoint], endpoint, useMtlsAlias, enforceHttps);
 }
 async function pushedAuthorizationRequest(as2, client, clientAuthentication, parameters, options) {
-  var _a19;
   assertAs(as2);
   assertClient(client);
-  const url2 = resolveEndpoint(as2, "pushed_authorization_request_endpoint", client.use_mtls_endpoint_aliases, (options == null ? void 0 : options[allowInsecureRequests]) !== true);
+  const url2 = resolveEndpoint(as2, "pushed_authorization_request_endpoint", client.use_mtls_endpoint_aliases, options?.[allowInsecureRequests] !== true);
   const body = new URLSearchParams(parameters);
   body.set("client_id", client.client_id);
-  const headers2 = prepareHeaders(options == null ? void 0 : options.headers);
+  const headers2 = prepareHeaders(options?.headers);
   headers2.set("accept", "application/json");
-  if ((options == null ? void 0 : options.DPoP) !== void 0) {
+  if (options?.DPoP !== void 0) {
     assertDPoP(options.DPoP);
     await options.DPoP.addProof(url2, headers2, "POST");
   }
   const response = await authenticatedRequest(as2, client, clientAuthentication, url2, body, headers2, options);
-  (_a19 = options == null ? void 0 : options.DPoP) == null ? void 0 : _a19.cacheNonce(response, url2);
+  options?.DPoP?.cacheNonce(response, url2);
   return response;
 }
 function isDPoPNonceError(err) {
@@ -61892,15 +61330,14 @@ function isDPoPNonceError(err) {
   return false;
 }
 var ResponseBodyError = class extends Error {
+  cause;
+  code;
+  error;
+  status;
+  error_description;
+  response;
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "cause");
-    __publicField(this, "code");
-    __publicField(this, "error");
-    __publicField(this, "status");
-    __publicField(this, "error_description");
-    __publicField(this, "response");
     this.name = this.constructor.name;
     this.code = RESPONSE_BODY_ERROR;
     this.cause = options.cause;
@@ -61908,40 +61345,38 @@ var ResponseBodyError = class extends Error {
     this.status = options.response.status;
     this.error_description = options.cause.error_description;
     Object.defineProperty(this, "response", { enumerable: false, value: options.response });
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 var AuthorizationResponseError = class extends Error {
+  cause;
+  code;
+  error;
+  error_description;
   constructor(message2, options) {
-    var _a19, _b8;
     super(message2, options);
-    __publicField(this, "cause");
-    __publicField(this, "code");
-    __publicField(this, "error");
-    __publicField(this, "error_description");
     this.name = this.constructor.name;
     this.code = AUTHORIZATION_RESPONSE_ERROR;
     this.cause = options.cause;
     this.error = options.cause.get("error");
-    this.error_description = (_a19 = options.cause.get("error_description")) != null ? _a19 : void 0;
-    (_b8 = Error.captureStackTrace) == null ? void 0 : _b8.call(Error, this, this.constructor);
+    this.error_description = options.cause.get("error_description") ?? void 0;
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 var WWWAuthenticateChallengeError = class extends Error {
+  cause;
+  code;
+  response;
+  status;
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "cause");
-    __publicField(this, "code");
-    __publicField(this, "response");
-    __publicField(this, "status");
     this.name = this.constructor.name;
     this.code = WWW_AUTHENTICATE_CHALLENGE;
     this.cause = options.cause;
     this.status = options.response.status;
     this.response = options.response;
     Object.defineProperty(this, "response", { enumerable: false });
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 var tokenMatch = "[a-zA-Z0-9!#$%&\\'\\*\\+\\-\\.\\^_`\\|~]+";
@@ -61965,7 +61400,7 @@ function parseWwwAuthenticateChallenges(response) {
   let rest = header;
   while (rest) {
     let match = rest.match(schemeRE);
-    const scheme = match == null ? void 0 : match["1"].toLowerCase();
+    const scheme = match?.["1"].toLowerCase();
     if (!scheme) {
       return void 0;
     }
@@ -62058,12 +61493,11 @@ async function parseOAuthResponseErrorBody(response) {
   return void 0;
 }
 async function checkOAuthBodyError(response, expected, label) {
-  var _a19;
   if (response.status !== expected) {
     checkAuthenticationChallenges(response);
     let err;
     if (err = await parseOAuthResponseErrorBody(response)) {
-      await ((_a19 = response.body) == null ? void 0 : _a19.cancel());
+      await response.body?.cancel();
       throw new ResponseBodyError("server responded with an error in the response body", {
         cause: err,
         response
@@ -62078,39 +61512,37 @@ function assertDPoP(option) {
   }
 }
 function getContentType(input) {
-  var _a19;
-  return (_a19 = input.headers.get("content-type")) == null ? void 0 : _a19.split(";")[0];
+  return input.headers.get("content-type")?.split(";")[0];
 }
 async function authenticatedRequest(as2, client, clientAuthentication, url2, body, headers2, options) {
   await clientAuthentication(as2, client, body, headers2);
   headers2.set("content-type", "application/x-www-form-urlencoded;charset=UTF-8");
-  return ((options == null ? void 0 : options[customFetch2]) || fetch)(url2.href, {
+  return (options?.[customFetch2] || fetch)(url2.href, {
     body,
     headers: Object.fromEntries(headers2.entries()),
     method: "POST",
     redirect: "manual",
-    signal: signal(url2, options == null ? void 0 : options.signal)
+    signal: signal(url2, options?.signal)
   });
 }
 async function tokenEndpointRequest(as2, client, clientAuthentication, grantType, parameters, options) {
-  var _a19;
-  const url2 = resolveEndpoint(as2, "token_endpoint", client.use_mtls_endpoint_aliases, (options == null ? void 0 : options[allowInsecureRequests]) !== true);
+  const url2 = resolveEndpoint(as2, "token_endpoint", client.use_mtls_endpoint_aliases, options?.[allowInsecureRequests] !== true);
   parameters.set("grant_type", grantType);
-  const headers2 = prepareHeaders(options == null ? void 0 : options.headers);
+  const headers2 = prepareHeaders(options?.headers);
   headers2.set("accept", "application/json");
-  if ((options == null ? void 0 : options.DPoP) !== void 0) {
+  if (options?.DPoP !== void 0) {
     assertDPoP(options.DPoP);
     await options.DPoP.addProof(url2, headers2, "POST");
   }
   const response = await authenticatedRequest(as2, client, clientAuthentication, url2, parameters, headers2, options);
-  (_a19 = options == null ? void 0 : options.DPoP) == null ? void 0 : _a19.cacheNonce(response, url2);
+  options?.DPoP?.cacheNonce(response, url2);
   return response;
 }
 async function refreshTokenGrantRequest(as2, client, clientAuthentication, refreshToken, options) {
   assertAs(as2);
   assertClient(client);
   assertString(refreshToken, '"refreshToken"');
-  const parameters = new URLSearchParams(options == null ? void 0 : options.additionalParameters);
+  const parameters = new URLSearchParams(options?.additionalParameters);
   parameters.set("refresh_token", refreshToken);
   return tokenEndpointRequest(as2, client, clientAuthentication, "refresh_token", parameters, options);
 }
@@ -62169,7 +61601,7 @@ async function processGenericAccessTokenResponse(as2, client, response, addition
       assertNumber(client.default_max_age, true, '"client.default_max_age"');
       requiredClaims.push("auth_time");
     }
-    if (additionalRequiredIdTokenClaims == null ? void 0 : additionalRequiredIdTokenClaims.length) {
+    if (additionalRequiredIdTokenClaims?.length) {
       requiredClaims.push(...additionalRequiredIdTokenClaims);
     }
     const { claims, jwt: jwt2 } = await validateJwt(json3.id_token, checkSigningAlgorithm.bind(void 0, client.id_token_signed_response_alg, as2.id_token_signing_alg_values_supported, "RS256"), getClockSkew(client), getClockTolerance(client), decryptFn).then(validatePresence.bind(void 0, requiredClaims)).then(validateIssuer.bind(void 0, as2)).then(validateAudience.bind(void 0, client.client_id));
@@ -62187,7 +61619,7 @@ async function processGenericAccessTokenResponse(as2, client, response, addition
     jwtRefs.set(response, jwt2);
     idTokenClaims.set(json3, claims);
   }
-  if ((recognizedTokenTypes == null ? void 0 : recognizedTokenTypes[json3.token_type]) !== void 0) {
+  if (recognizedTokenTypes?.[json3.token_type] !== void 0) {
     recognizedTokenTypes[json3.token_type](response, json3);
   } else if (json3.token_type !== "dpop" && json3.token_type !== "bearer") {
     throw new UnsupportedOperationError("unsupported `token_type` value", { cause: { body: json3 } });
@@ -62201,7 +61633,7 @@ function checkAuthenticationChallenges(response) {
   }
 }
 async function processRefreshTokenResponse(as2, client, response, options) {
-  return processGenericAccessTokenResponse(as2, client, response, void 0, options == null ? void 0 : options[jweDecrypt], options == null ? void 0 : options.recognizedTokenTypes);
+  return processGenericAccessTokenResponse(as2, client, response, void 0, options?.[jweDecrypt], options?.recognizedTokenTypes);
 }
 function validateAudience(expected, result) {
   if (Array.isArray(result.claims.aud)) {
@@ -62222,8 +61654,7 @@ function validateAudience(expected, result) {
   return result;
 }
 function validateIssuer(as2, result) {
-  var _a19, _b8;
-  const expected = (_b8 = (_a19 = as2[_expectedIssuer]) == null ? void 0 : _a19.call(as2, result)) != null ? _b8 : as2.issuer;
+  const expected = as2[_expectedIssuer]?.(result) ?? as2.issuer;
   if (result.claims.iss !== expected) {
     throw OPE('unexpected JWT "iss" (issuer) claim value', JWT_CLAIM_COMPARISON, {
       expected,
@@ -62250,7 +61681,7 @@ async function authorizationCodeGrantRequest(as2, client, clientAuthentication, 
   if (!code) {
     throw OPE('no authorization code in "callbackParameters"', INVALID_RESPONSE);
   }
-  const parameters = new URLSearchParams(options == null ? void 0 : options.additionalParameters);
+  const parameters = new URLSearchParams(options?.additionalParameters);
   parameters.set("redirect_uri", redirectUri);
   parameters.set("code", code);
   if (codeVerifier !== nopkce) {
@@ -62289,10 +61720,10 @@ function validatePresence(required3, result) {
 var expectNoNonce = /* @__PURE__ */ Symbol();
 var skipAuthTimeCheck = /* @__PURE__ */ Symbol();
 async function processAuthorizationCodeResponse(as2, client, response, options) {
-  if (typeof (options == null ? void 0 : options.expectedNonce) === "string" || typeof (options == null ? void 0 : options.maxAge) === "number" || (options == null ? void 0 : options.requireIdToken)) {
+  if (typeof options?.expectedNonce === "string" || typeof options?.maxAge === "number" || options?.requireIdToken) {
     return processAuthorizationCodeOpenIDResponse(as2, client, response, options.expectedNonce, options.maxAge, options[jweDecrypt], options.recognizedTokenTypes);
   }
-  return processAuthorizationCodeOAuth2Response(as2, client, response, options == null ? void 0 : options[jweDecrypt], options == null ? void 0 : options.recognizedTokenTypes);
+  return processAuthorizationCodeOAuth2Response(as2, client, response, options?.[jweDecrypt], options?.recognizedTokenTypes);
 }
 async function processAuthorizationCodeOpenIDResponse(as2, client, response, expectedNonce, maxAge, decryptFn, recognizedTokenTypes) {
   const additionalRequiredClaims = [];
@@ -62306,7 +61737,7 @@ async function processAuthorizationCodeOpenIDResponse(as2, client, response, exp
       assertString(expectedNonce, '"expectedNonce" argument');
       additionalRequiredClaims.push("nonce");
   }
-  maxAge != null ? maxAge : maxAge = client.default_max_age;
+  maxAge ??= client.default_max_age;
   switch (maxAge) {
     case void 0:
       maxAge = skipAuthTimeCheck;
@@ -62395,19 +61826,19 @@ async function genericTokenEndpointRequest(as2, client, clientAuthentication, gr
   return tokenEndpointRequest(as2, client, clientAuthentication, grantType, new URLSearchParams(parameters), options);
 }
 async function processGenericTokenEndpointResponse(as2, client, response, options) {
-  return processGenericAccessTokenResponse(as2, client, response, void 0, options == null ? void 0 : options[jweDecrypt], options == null ? void 0 : options.recognizedTokenTypes);
+  return processGenericAccessTokenResponse(as2, client, response, void 0, options?.[jweDecrypt], options?.recognizedTokenTypes);
 }
 async function processClientCredentialsResponse(as2, client, response, options) {
-  return processGenericAccessTokenResponse(as2, client, response, void 0, options == null ? void 0 : options[jweDecrypt], options == null ? void 0 : options.recognizedTokenTypes);
+  return processGenericAccessTokenResponse(as2, client, response, void 0, options?.[jweDecrypt], options?.recognizedTokenTypes);
 }
 async function revocationRequest(as2, client, clientAuthentication, token, options) {
   assertAs(as2);
   assertClient(client);
   assertString(token, '"token"');
-  const url2 = resolveEndpoint(as2, "revocation_endpoint", client.use_mtls_endpoint_aliases, (options == null ? void 0 : options[allowInsecureRequests]) !== true);
-  const body = new URLSearchParams(options == null ? void 0 : options.additionalParameters);
+  const url2 = resolveEndpoint(as2, "revocation_endpoint", client.use_mtls_endpoint_aliases, options?.[allowInsecureRequests] !== true);
+  const body = new URLSearchParams(options?.additionalParameters);
   body.set("token", token);
-  const headers2 = prepareHeaders(options == null ? void 0 : options.headers);
+  const headers2 = prepareHeaders(options?.headers);
   headers2.delete("accept");
   return authenticatedRequest(as2, client, clientAuthentication, url2, body, headers2, options);
 }
@@ -62666,10 +62097,10 @@ function validateAuthResponse(as2, client, parameters, expectedState) {
 async function backchannelAuthenticationRequest(as2, client, clientAuthentication, parameters, options) {
   assertAs(as2);
   assertClient(client);
-  const url2 = resolveEndpoint(as2, "backchannel_authentication_endpoint", client.use_mtls_endpoint_aliases, (options == null ? void 0 : options[allowInsecureRequests]) !== true);
+  const url2 = resolveEndpoint(as2, "backchannel_authentication_endpoint", client.use_mtls_endpoint_aliases, options?.[allowInsecureRequests] !== true);
   const body = new URLSearchParams(parameters);
   body.set("client_id", client.client_id);
-  const headers2 = prepareHeaders(options == null ? void 0 : options.headers);
+  const headers2 = prepareHeaders(options?.headers);
   headers2.set("accept", "application/json");
   return authenticatedRequest(as2, client, clientAuthentication, url2, body, headers2, options);
 }
@@ -62701,12 +62132,12 @@ async function backchannelAuthenticationGrantRequest(as2, client, clientAuthenti
   assertAs(as2);
   assertClient(client);
   assertString(authReqId, '"authReqId"');
-  const parameters = new URLSearchParams(options == null ? void 0 : options.additionalParameters);
+  const parameters = new URLSearchParams(options?.additionalParameters);
   parameters.set("auth_req_id", authReqId);
   return tokenEndpointRequest(as2, client, clientAuthentication, "urn:openid:params:grant-type:ciba", parameters, options);
 }
 async function processBackchannelAuthenticationGrantResponse(as2, client, response, options) {
-  return processGenericAccessTokenResponse(as2, client, response, void 0, options == null ? void 0 : options[jweDecrypt], options == null ? void 0 : options.recognizedTokenTypes);
+  return processGenericAccessTokenResponse(as2, client, response, void 0, options?.[jweDecrypt], options?.recognizedTokenTypes);
 }
 async function getResponseJsonBody(response, check4 = assertApplicationJson) {
   let json3;
@@ -62727,8 +62158,7 @@ var _expectedIssuer = /* @__PURE__ */ Symbol();
 // ../auth0-agent-components/node_modules/openid-client/build/index.js
 var headers;
 var USER_AGENT3;
-var _a7, _b5;
-if (typeof navigator === "undefined" || !((_b5 = (_a7 = navigator.userAgent) == null ? void 0 : _a7.startsWith) == null ? void 0 : _b5.call(_a7, "Mozilla/5.0 "))) {
+if (typeof navigator === "undefined" || !navigator.userAgent?.startsWith?.("Mozilla/5.0 ")) {
   const NAME = "openid-client";
   const VERSION = "v6.8.4";
   USER_AGENT3 = `${NAME}/${VERSION}`;
@@ -62743,7 +62173,7 @@ function ClientSecretPost2(clientSecret) {
   if (clientSecret !== void 0) {
     return ClientSecretPost(clientSecret);
   }
-  tbi || (tbi = /* @__PURE__ */ new WeakMap());
+  tbi ||= /* @__PURE__ */ new WeakMap();
   return (as2, client, body, headers2) => {
     let auth;
     if (!(auth = tbi.get(client))) {
@@ -62786,13 +62216,12 @@ function randomPKCECodeVerifier() {
   return generateRandomCodeVerifier();
 }
 var ClientError = class extends Error {
+  code;
   constructor(message2, options) {
-    var _a19;
     super(message2, options);
-    __publicField(this, "code");
     this.name = this.constructor.name;
-    this.code = options == null ? void 0 : options.code;
-    (_a19 = Error.captureStackTrace) == null ? void 0 : _a19.call(Error, this, this.constructor);
+    this.code = options?.code;
+    Error.captureStackTrace?.(this, this.constructor);
   }
 };
 var decoder3 = new TextDecoder();
@@ -62845,14 +62274,14 @@ function errorHandler(err) {
   throw new ClientError("something went wrong", { cause: err });
 }
 function handleEntraId(server, as2, options) {
-  if (server.origin === "https://login.microsoftonline.com" && (!(options == null ? void 0 : options.algorithm) || options.algorithm === "oidc")) {
+  if (server.origin === "https://login.microsoftonline.com" && (!options?.algorithm || options.algorithm === "oidc")) {
     as2[kEntraId] = true;
     return true;
   }
   return false;
 }
 function handleB2Clogin(server, options) {
-  if (server.hostname.endsWith(".b2clogin.com") && (!(options == null ? void 0 : options.algorithm) || options.algorithm === "oidc")) {
+  if (server.hostname.endsWith(".b2clogin.com") && (!options?.algorithm || options.algorithm === "oidc")) {
     return true;
   }
   return false;
@@ -62861,13 +62290,13 @@ async function discovery(server, clientId, metadata, clientAuthentication, optio
   const as2 = await performDiscovery2(server, options);
   const instance = new Configuration(as2, clientId, metadata, clientAuthentication);
   let internals = int2(instance);
-  if (options == null ? void 0 : options[customFetch3]) {
+  if (options?.[customFetch3]) {
     internals.fetch = options[customFetch3];
   }
-  if (options == null ? void 0 : options.timeout) {
+  if (options?.timeout) {
     internals.timeout = options.timeout;
   }
-  if (options == null ? void 0 : options.execute) {
+  if (options?.execute) {
     for (const extension of options.execute) {
       extension(instance);
     }
@@ -62875,22 +62304,20 @@ async function discovery(server, clientId, metadata, clientAuthentication, optio
   return instance;
 }
 async function performDiscovery2(server, options) {
-  var _a19, _b8;
   if (!(server instanceof URL)) {
     throw CodedTypeError2('"server" must be an instance of URL', ERR_INVALID_ARG_TYPE2);
   }
   const resolve = !server.href.includes("/.well-known/");
-  const timeout = (_a19 = options == null ? void 0 : options.timeout) != null ? _a19 : 30;
+  const timeout = options?.timeout ?? 30;
   const signal3 = AbortSignal.timeout(timeout * 1e3);
   const as2 = await (resolve ? discoveryRequest(server, {
-    algorithm: options == null ? void 0 : options.algorithm,
-    [customFetch2]: options == null ? void 0 : options[customFetch3],
-    [allowInsecureRequests]: (_b8 = options == null ? void 0 : options.execute) == null ? void 0 : _b8.includes(allowInsecureRequests2),
+    algorithm: options?.algorithm,
+    [customFetch2]: options?.[customFetch3],
+    [allowInsecureRequests]: options?.execute?.includes(allowInsecureRequests2),
     signal: signal3,
     headers: new Headers(headers)
-  }) : ((options == null ? void 0 : options[customFetch3]) || fetch)((() => {
-    var _a20;
-    checkProtocol(server, ((_a20 = options == null ? void 0 : options.execute) == null ? void 0 : _a20.includes(allowInsecureRequests2)) ? false : true);
+  }) : (options?.[customFetch3] || fetch)((() => {
+    checkProtocol(server, options?.execute?.includes(allowInsecureRequests2) ? false : true);
     return server.href;
   })(), {
     headers: Object.fromEntries(new Headers({ accept: "application/json", ...headers }).entries()),
@@ -62918,8 +62345,7 @@ function getServerHelpers(metadata) {
     supportsPKCE: {
       __proto__: null,
       value(method = "S256") {
-        var _a19;
-        return ((_a19 = metadata.code_challenge_methods_supported) == null ? void 0 : _a19.includes(method)) === true;
+        return metadata.code_challenge_methods_supported?.includes(method) === true;
       }
     }
   };
@@ -62930,22 +62356,21 @@ function addServerHelpers(metadata) {
 var kEntraId = /* @__PURE__ */ Symbol();
 var Configuration = class {
   constructor(server, clientId, metadata, clientAuthentication) {
-    var _a19, _b8;
     if (typeof clientId !== "string" || !clientId.length) {
       throw CodedTypeError2('"clientId" must be a non-empty string', ERR_INVALID_ARG_TYPE2);
     }
     if (typeof metadata === "string") {
       metadata = { client_secret: metadata };
     }
-    if ((metadata == null ? void 0 : metadata.client_id) !== void 0 && clientId !== metadata.client_id) {
+    if (metadata?.client_id !== void 0 && clientId !== metadata.client_id) {
       throw CodedTypeError2('"clientId" and "metadata.client_id" must be the same', ERR_INVALID_ARG_VALUE2);
     }
     const client = {
       ...structuredClone(metadata),
       client_id: clientId
     };
-    client[clockSkew] = (_a19 = metadata == null ? void 0 : metadata[clockSkew]) != null ? _a19 : 0;
-    client[clockTolerance] = (_b8 = metadata == null ? void 0 : metadata[clockTolerance]) != null ? _b8 : 30;
+    client[clockSkew] = metadata?.[clockSkew] ?? 0;
+    client[clockTolerance] = metadata?.[clockTolerance] ?? 30;
     let auth;
     if (clientAuthentication) {
       auth = clientAuthentication;
@@ -62962,7 +62387,7 @@ var Configuration = class {
       clone3[_expectedIssuer] = ({ claims: { tid } }) => server.issuer.replace("{tenantid}", tid);
     }
     let as2 = Object.freeze(clone3);
-    props || (props = /* @__PURE__ */ new WeakMap());
+    props ||= /* @__PURE__ */ new WeakMap();
     props.set(this, {
       __proto__: null,
       as: as2,
@@ -63032,8 +62457,7 @@ function addHelpers(response) {
   Object.defineProperties(response, getHelpers(response));
 }
 async function handleRetryAfter(response, currentInterval, signal3, throwIfInvalid = false) {
-  var _a19;
-  const retryAfter = (_a19 = response.headers.get("retry-after")) == null ? void 0 : _a19.trim();
+  const retryAfter = response.headers.get("retry-after")?.trim();
   if (retryAfter === void 0)
     return;
   let delaySeconds;
@@ -63116,11 +62540,10 @@ async function initiateBackchannelAuthentication(config3, parameters) {
   }).then((response) => processBackchannelAuthenticationResponse(as2, c2, response)).catch(errorHandler);
 }
 async function pollBackchannelAuthenticationGrant(config3, backchannelAuthenticationResponse, parameters, options) {
-  var _a19, _b8, _c2;
   checkConfig(config3);
   parameters = new URLSearchParams(parameters);
-  let interval = (_a19 = backchannelAuthenticationResponse.interval) != null ? _a19 : 5;
-  const pollingSignal = (_b8 = options == null ? void 0 : options.signal) != null ? _b8 : AbortSignal.timeout(backchannelAuthenticationResponse.expires_in * 1e3);
+  let interval = backchannelAuthenticationResponse.interval ?? 5;
+  const pollingSignal = options?.signal ?? AbortSignal.timeout(backchannelAuthenticationResponse.expires_in * 1e3);
   try {
     await wait(interval, pollingSignal);
   } catch (err) {
@@ -63140,13 +62563,13 @@ async function pollBackchannelAuthenticationGrant(config3, backchannelAuthentica
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
     additionalParameters: parameters,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: requestSignal.signal
   }).catch(errorHandler).finally(requestSignal.cleanup);
   if (response.status === 503 && response.headers.has("retry-after")) {
     await handleRetryAfter(response, interval, pollingSignal, true);
-    await ((_c2 = response.body) == null ? void 0 : _c2.cancel());
+    await response.body?.cancel();
     return retryPoll(interval);
   }
   const p2 = processBackchannelAuthenticationGrantResponse(as2, c2, response, {
@@ -63170,7 +62593,7 @@ async function pollBackchannelAuthenticationGrant(config3, backchannelAuthentica
     }
     errorHandler(err);
   }
-  result.id_token && await (nonRepudiation == null ? void 0 : nonRepudiation(response));
+  result.id_token && await nonRepudiation?.(response);
   addHelpers(result);
   return result;
 }
@@ -63192,13 +62615,13 @@ function webInstanceOf(input, toStringTag) {
 }
 async function authorizationCodeGrant(config3, currentUrl, checks, tokenEndpointParameters, options) {
   checkConfig(config3);
-  if ((options == null ? void 0 : options.flag) !== retry && !(currentUrl instanceof URL) && !webInstanceOf(currentUrl, "Request")) {
+  if (options?.flag !== retry && !(currentUrl instanceof URL) && !webInstanceOf(currentUrl, "Request")) {
     throw CodedTypeError2('"currentUrl" must be an instance of URL, or Request', ERR_INVALID_ARG_TYPE2);
   }
   let authResponse;
   let redirectUri;
   const { as: as2, c: c2, auth, fetch: fetch2, tlsOnly, jarm, hybrid, nonRepudiation, timeout, decrypt, implicit } = int2(config3);
-  if ((options == null ? void 0 : options.flag) === retry) {
+  if (options?.flag === retry) {
     authResponse = options.authResponse;
     redirectUri = options.redirectUri;
   } else {
@@ -63225,36 +62648,36 @@ async function authorizationCodeGrant(config3, currentUrl, checks, tokenEndpoint
     redirectUri = stripParams(currentUrl);
     switch (true) {
       case !!jarm:
-        authResponse = await jarm(currentUrl, checks == null ? void 0 : checks.expectedState);
+        authResponse = await jarm(currentUrl, checks?.expectedState);
         break;
       case !!hybrid:
-        authResponse = await hybrid(currentUrl, checks == null ? void 0 : checks.expectedNonce, checks == null ? void 0 : checks.expectedState, checks == null ? void 0 : checks.maxAge);
+        authResponse = await hybrid(currentUrl, checks?.expectedNonce, checks?.expectedState, checks?.maxAge);
         break;
       case !!implicit:
         throw new TypeError("authorizationCodeGrant() cannot be used by response_type=id_token clients");
       default:
         try {
-          authResponse = validateAuthResponse(as2, c2, currentUrl.searchParams, checks == null ? void 0 : checks.expectedState);
+          authResponse = validateAuthResponse(as2, c2, currentUrl.searchParams, checks?.expectedState);
         } catch (err) {
           errorHandler(err);
         }
     }
   }
-  const response = await authorizationCodeGrantRequest(as2, c2, auth, authResponse, redirectUri, (checks == null ? void 0 : checks.pkceCodeVerifier) || nopkce, {
+  const response = await authorizationCodeGrantRequest(as2, c2, auth, authResponse, redirectUri, checks?.pkceCodeVerifier || nopkce, {
     additionalParameters: tokenEndpointParameters,
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: signal2(timeout)
   }).catch(errorHandler);
-  if (typeof (checks == null ? void 0 : checks.expectedNonce) === "string" || typeof (checks == null ? void 0 : checks.maxAge) === "number") {
+  if (typeof checks?.expectedNonce === "string" || typeof checks?.maxAge === "number") {
     checks.idTokenExpected = true;
   }
   const p2 = processAuthorizationCodeResponse(as2, c2, response, {
-    expectedNonce: checks == null ? void 0 : checks.expectedNonce,
-    maxAge: checks == null ? void 0 : checks.maxAge,
-    requireIdToken: checks == null ? void 0 : checks.idTokenExpected,
+    expectedNonce: checks?.expectedNonce,
+    maxAge: checks?.maxAge,
+    requireIdToken: checks?.idTokenExpected,
     [jweDecrypt]: decrypt
   });
   let result;
@@ -63271,7 +62694,7 @@ async function authorizationCodeGrant(config3, currentUrl, checks, tokenEndpoint
     }
     errorHandler(err);
   }
-  result.id_token && await (nonRepudiation == null ? void 0 : nonRepudiation(response));
+  result.id_token && await nonRepudiation?.(response);
   addHelpers(result);
   return result;
 }
@@ -63283,7 +62706,7 @@ async function refreshTokenGrant(config3, refreshToken, parameters, options) {
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
     additionalParameters: parameters,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: signal2(timeout)
   }).catch(errorHandler);
@@ -63302,7 +62725,7 @@ async function refreshTokenGrant(config3, refreshToken, parameters, options) {
     }
     errorHandler(err);
   }
-  result.id_token && await (nonRepudiation == null ? void 0 : nonRepudiation(response));
+  result.id_token && await nonRepudiation?.(response);
   addHelpers(result);
   return result;
 }
@@ -63313,7 +62736,7 @@ async function clientCredentialsGrant(config3, parameters, options) {
   const response = await clientCredentialsGrantRequest(as2, c2, auth, parameters, {
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: signal2(timeout)
   }).catch(errorHandler);
@@ -63364,7 +62787,7 @@ async function buildAuthorizationUrlWithPAR(config3, parameters, options) {
   const response = await pushedAuthorizationRequest(as2, c2, auth, authorizationEndpoint.searchParams, {
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: signal2(timeout)
   }).catch(errorHandler);
@@ -63408,7 +62831,7 @@ function signal2(timeout) {
   return timeout ? AbortSignal.timeout(timeout * 1e3) : void 0;
 }
 function retryable(err, options) {
-  if ((options == null ? void 0 : options.DPoP) && options.flag !== retry) {
+  if (options?.DPoP && options.flag !== retry) {
     return isDPoPNonceError(err);
   }
   return false;
@@ -63420,7 +62843,7 @@ async function genericGrantRequest(config3, grantType, parameters, options) {
   const response = await genericTokenEndpointRequest(as2, c2, auth, grantType, new URLSearchParams(parameters), {
     [customFetch2]: fetch2,
     [allowInsecureRequests]: !tlsOnly,
-    DPoP: options == null ? void 0 : options.DPoP,
+    DPoP: options?.DPoP,
     headers: new Headers(headers),
     signal: signal2(timeout)
   }).catch(errorHandler);
@@ -63445,7 +62868,7 @@ async function genericGrantRequest(config3, grantType, parameters, options) {
     }
     errorHandler(err);
   }
-  result.id_token && await (nonRepudiation == null ? void 0 : nonRepudiation(response));
+  result.id_token && await nonRepudiation?.(response);
   addHelpers(result);
   return result;
 }
@@ -63463,14 +62886,13 @@ async function tokenRevocation(config3, token, parameters) {
 
 // ../auth0-agent-components/node_modules/@auth0/auth0-auth-js/dist/index.js
 function toOAuth2Error(e2) {
-  var _a19, _b8;
   if (typeof e2 !== "object" || e2 === null) {
     return { error: "unknown_error", error_description: String(e2) };
   }
   const err = e2;
   const base = {
-    error: (_a19 = err.error) != null ? _a19 : "",
-    error_description: (_b8 = err.error_description) != null ? _b8 : "",
+    error: err.error ?? "",
+    error_description: err.error_description ?? "",
     message: err.message
   };
   if (err.error === "mfa_required" && err.cause) {
@@ -63483,18 +62905,18 @@ function toOAuth2Error(e2) {
   return base;
 }
 var NotSupportedError = class extends Error {
+  code;
   constructor(code, message2) {
     super(message2);
-    __publicField(this, "code");
     this.name = "NotSupportedError";
     this.code = code;
   }
 };
 var ApiError = class extends Error {
+  cause;
+  code;
   constructor(code, message2, cause) {
     super(message2);
-    __publicField(this, "cause");
-    __publicField(this, "code");
     this.code = code;
     this.cause = cause && {
       error: cause.error,
@@ -63548,20 +62970,20 @@ var TokenRevocationError = class extends ApiError {
   }
 };
 var VerifyLogoutTokenError = class extends Error {
+  code = "verify_logout_token_error";
   constructor(message2) {
     super(message2);
-    __publicField(this, "code", "verify_logout_token_error");
     this.name = "VerifyLogoutTokenError";
   }
 };
 var BackchannelAuthenticationError = class extends ApiError {
+  code = "backchannel_authentication_error";
   constructor(cause) {
     super(
       "backchannel_authentication_error",
       "There was an error when trying to use Client-Initiated Backchannel Authentication.",
       cause
     );
-    __publicField(this, "code", "backchannel_authentication_error");
     this.name = "BackchannelAuthenticationError";
   }
 };
@@ -63584,16 +63006,16 @@ var BuildUnlinkUserUrlError = class extends ApiError {
   }
 };
 var MissingClientAuthError2 = class extends Error {
+  code = "missing_client_auth_error";
   constructor() {
     super("The client secret or client assertion signing key must be provided.");
-    __publicField(this, "code", "missing_client_auth_error");
     this.name = "MissingClientAuthError";
   }
 };
 var OrganizationValidationError = class extends Error {
+  code = "organization_validation_error";
   constructor(message2) {
     super(message2);
-    __publicField(this, "code", "organization_validation_error");
     this.name = "OrganizationValidationError";
   }
 };
@@ -63635,10 +63057,10 @@ function validateOrganizationClaim(claims, organization) {
   }
 }
 var MfaError = class extends Error {
+  cause;
+  code;
   constructor(code, message2, cause) {
     super(message2);
-    __publicField(this, "cause");
-    __publicField(this, "code");
     this.code = code;
     this.cause = cause && {
       error: cause.error,
@@ -63723,62 +63145,62 @@ function transformChallengeResponse(api) {
   return result;
 }
 var TokenResponse = class _TokenResponse {
+  /**
+   * The access token retrieved from Auth0.
+   */
+  accessToken;
+  /**
+   * The id token retrieved from Auth0.
+   */
+  idToken;
+  /**
+   * The refresh token retrieved from Auth0.
+   */
+  refreshToken;
+  /**
+   * The time at which the access token expires (Unix timestamp in seconds).
+   */
+  expiresAt;
+  /**
+   * The scope of the access token.
+   */
+  scope;
+  /**
+   * The claims of the id token.
+   */
+  claims;
+  /**
+   * The authorization details of the token response.
+   */
+  authorizationDetails;
+  /**
+   * The type of the token (typically "Bearer").
+   */
+  tokenType;
+  /**
+   * A URI that identifies the type of the issued token (RFC 8693).
+   *
+   * @see {@link https://datatracker.ietf.org/doc/html/rfc8693#section-3 RFC 8693 Section 3}
+   * @example "urn:ietf:params:oauth:token-type:access_token"
+   */
+  issuedTokenType;
+  /**
+   * A new recovery code returned after verifying with a recovery code.
+   * Only present when using the recovery-code MFA factor.
+   */
+  recoveryCode;
+  /**
+   * The actor claim from a delegation token exchange (RFC 8693).
+   *
+   * Present when an `actorToken` was provided. Sourced from the ID token when
+   * one is issued, or from the JWT access token in M2M flows where no ID token
+   * is returned. Identifies the acting party on whose behalf the subject token
+   * was exchanged.
+   *
+   * @see {@link https://www.rfc-editor.org/rfc/rfc8693#section-4.1 RFC 8693 Section 4.1}
+   */
+  act;
   constructor(accessToken, expiresAt, idToken, refreshToken, scope, claims, authorizationDetails) {
-    /**
-     * The access token retrieved from Auth0.
-     */
-    __publicField(this, "accessToken");
-    /**
-     * The id token retrieved from Auth0.
-     */
-    __publicField(this, "idToken");
-    /**
-     * The refresh token retrieved from Auth0.
-     */
-    __publicField(this, "refreshToken");
-    /**
-     * The time at which the access token expires (Unix timestamp in seconds).
-     */
-    __publicField(this, "expiresAt");
-    /**
-     * The scope of the access token.
-     */
-    __publicField(this, "scope");
-    /**
-     * The claims of the id token.
-     */
-    __publicField(this, "claims");
-    /**
-     * The authorization details of the token response.
-     */
-    __publicField(this, "authorizationDetails");
-    /**
-     * The type of the token (typically "Bearer").
-     */
-    __publicField(this, "tokenType");
-    /**
-     * A URI that identifies the type of the issued token (RFC 8693).
-     *
-     * @see {@link https://datatracker.ietf.org/doc/html/rfc8693#section-3 RFC 8693 Section 3}
-     * @example "urn:ietf:params:oauth:token-type:access_token"
-     */
-    __publicField(this, "issuedTokenType");
-    /**
-     * A new recovery code returned after verifying with a recovery code.
-     * Only present when using the recovery-code MFA factor.
-     */
-    __publicField(this, "recoveryCode");
-    /**
-     * The actor claim from a delegation token exchange (RFC 8693).
-     *
-     * Present when an `actorToken` was provided. Sourced from the ID token when
-     * one is issued, or from the JWT access token in M2M flows where no ID token
-     * is returned. Identifies the acting party on whose behalf the subject token
-     * was exchanged.
-     *
-     * @see {@link https://www.rfc-editor.org/rfc/rfc8693#section-4.1 RFC 8693 Section 4.1}
-     */
-    __publicField(this, "act");
     this.accessToken = accessToken;
     this.idToken = idToken;
     this.refreshToken = refreshToken;
@@ -63818,23 +63240,21 @@ var GRANT_TYPE_MAP = {
   oob: "http://auth0.com/oauth/grant-type/mfa-oob",
   "recovery-code": "http://auth0.com/oauth/grant-type/mfa-recovery-code"
 };
-var _baseUrl, _clientId, _clientSecret, _customFetch2, _getConfiguration, _a8;
-var MfaClient = (_a8 = class {
+var MfaClient = class {
+  #baseUrl;
+  #clientId;
+  #clientSecret;
+  #customFetch;
+  #getConfiguration;
   /**
    * @internal
    */
   constructor(options) {
-    __privateAdd(this, _baseUrl);
-    __privateAdd(this, _clientId);
-    __privateAdd(this, _clientSecret);
-    __privateAdd(this, _customFetch2);
-    __privateAdd(this, _getConfiguration);
-    var _a19;
-    __privateSet(this, _baseUrl, `https://${options.domain}`);
-    __privateSet(this, _clientId, options.clientId);
-    __privateSet(this, _clientSecret, options.clientSecret);
-    __privateSet(this, _customFetch2, (_a19 = options.customFetch) != null ? _a19 : ((...args) => fetch(...args)));
-    __privateSet(this, _getConfiguration, options.getConfiguration);
+    this.#baseUrl = `https://${options.domain}`;
+    this.#clientId = options.clientId;
+    this.#clientSecret = options.clientSecret;
+    this.#customFetch = options.customFetch ?? ((...args) => fetch(...args));
+    this.#getConfiguration = options.getConfiguration;
   }
   /**
    * Lists all MFA authenticators enrolled by the user.
@@ -63858,9 +63278,9 @@ var MfaClient = (_a8 = class {
    * ```
    */
   async listAuthenticators(options) {
-    const url2 = `${__privateGet(this, _baseUrl)}/mfa/authenticators`;
+    const url2 = `${this.#baseUrl}/mfa/authenticators`;
     const { mfaToken } = options;
-    const response = await __privateGet(this, _customFetch2).call(this, url2, {
+    const response = await this.#customFetch(url2, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${mfaToken}`,
@@ -63918,7 +63338,7 @@ var MfaClient = (_a8 = class {
    * ```
    */
   async enrollAuthenticator(options) {
-    const url2 = `${__privateGet(this, _baseUrl)}/mfa/associate`;
+    const url2 = `${this.#baseUrl}/mfa/associate`;
     const { mfaToken, ...sdkParams } = options;
     const apiParams = {
       authenticator_types: sdkParams.authenticatorTypes
@@ -63932,7 +63352,7 @@ var MfaClient = (_a8 = class {
     if ("email" in sdkParams && sdkParams.email) {
       apiParams.email = sdkParams.email;
     }
-    const response = await __privateGet(this, _customFetch2).call(this, url2, {
+    const response = await this.#customFetch(url2, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${mfaToken}`,
@@ -63980,8 +63400,8 @@ var MfaClient = (_a8 = class {
    */
   async deleteAuthenticator(options) {
     const { authenticatorId, mfaToken } = options;
-    const url2 = `${__privateGet(this, _baseUrl)}/mfa/authenticators/${encodeURIComponent(authenticatorId)}`;
-    const response = await __privateGet(this, _customFetch2).call(this, url2, {
+    const url2 = `${this.#baseUrl}/mfa/authenticators/${encodeURIComponent(authenticatorId)}`;
+    const response = await this.#customFetch(url2, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${mfaToken}`,
@@ -64031,20 +63451,20 @@ var MfaClient = (_a8 = class {
    * ```
    */
   async challengeAuthenticator(options) {
-    const url2 = `${__privateGet(this, _baseUrl)}/mfa/challenge`;
+    const url2 = `${this.#baseUrl}/mfa/challenge`;
     const { mfaToken, ...challengeParams } = options;
     const body = {
       mfa_token: mfaToken,
-      client_id: __privateGet(this, _clientId),
+      client_id: this.#clientId,
       challenge_type: challengeParams.challengeType
     };
-    if (__privateGet(this, _clientSecret)) {
-      body.client_secret = __privateGet(this, _clientSecret);
+    if (this.#clientSecret) {
+      body.client_secret = this.#clientSecret;
     }
     if (challengeParams.authenticatorId) {
       body.authenticator_id = challengeParams.authenticatorId;
     }
-    const response = await __privateGet(this, _customFetch2).call(this, url2, {
+    const response = await this.#customFetch(url2, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -64071,11 +63491,10 @@ var MfaClient = (_a8 = class {
    * @throws {MfaVerifyError} When verification fails (e.g. invalid token, wrong code, malformed response)
    */
   async verify(options) {
-    var _a19, _b8, _c2;
-    if (!__privateGet(this, _getConfiguration)) {
+    if (!this.#getConfiguration) {
       throw new Error("MFA verify requires a configuration provider (getConfiguration was not set)");
     }
-    const configuration = await __privateGet(this, _getConfiguration).call(this);
+    const configuration = await this.#getConfiguration();
     const params = {
       mfa_token: options.mfaToken
     };
@@ -64109,17 +63528,17 @@ var MfaClient = (_a8 = class {
       }
       const err = e2;
       throw new MfaVerifyError(err.error_description || err.message || "Failed to verify MFA challenge", {
-        error: (_a19 = err.error) != null ? _a19 : "mfa_verify_error",
-        error_description: (_c2 = (_b8 = err.error_description) != null ? _b8 : err.message) != null ? _c2 : "Failed to verify MFA challenge"
+        error: err.error ?? "mfa_verify_error",
+        error_description: err.error_description ?? err.message ?? "Failed to verify MFA challenge"
       });
     }
   }
-}, _baseUrl = new WeakMap(), _clientId = new WeakMap(), _clientSecret = new WeakMap(), _customFetch2 = new WeakMap(), _getConfiguration = new WeakMap(), _a8);
+};
 var PasskeyError = class extends Error {
+  cause;
+  code;
   constructor(code, message2, cause) {
     super(message2);
-    __publicField(this, "cause");
-    __publicField(this, "code");
     this.code = code;
     this.cause = cause && {
       error: cause.error,
@@ -64166,22 +63585,29 @@ function transformLoginChallengeResponse(api) {
   };
 }
 var PASSKEY_GRANT_TYPE = "urn:okta:params:oauth:grant-type:webauthn";
-var _baseUrl2, _clientId2, _customFetch3, _grantRequest, _PasskeyClient_instances, parseErrorResponse_fn, _a9;
-var PasskeyClient = (_a9 = class {
+var PasskeyClient = class {
+  #baseUrl;
+  #clientId;
+  #customFetch;
+  #grantRequest;
   /**
    * @internal
    */
   constructor(options) {
-    __privateAdd(this, _PasskeyClient_instances);
-    __privateAdd(this, _baseUrl2);
-    __privateAdd(this, _clientId2);
-    __privateAdd(this, _customFetch3);
-    __privateAdd(this, _grantRequest);
-    var _a19;
-    __privateSet(this, _baseUrl2, `https://${options.domain}`);
-    __privateSet(this, _clientId2, options.clientId);
-    __privateSet(this, _customFetch3, (_a19 = options.customFetch) != null ? _a19 : ((...args) => fetch(...args)));
-    __privateSet(this, _grantRequest, options.grantRequest);
+    this.#baseUrl = `https://${options.domain}`;
+    this.#clientId = options.clientId;
+    this.#customFetch = options.customFetch ?? ((...args) => fetch(...args));
+    this.#grantRequest = options.grantRequest;
+  }
+  async #parseErrorResponse(response) {
+    try {
+      return await response.json();
+    } catch {
+      return {
+        error: "unknown_error",
+        error_description: `HTTP ${response.status} ${response.statusText}`
+      };
+    }
   }
   /**
    * Requests a passkey signup challenge for a new user.
@@ -64204,7 +63630,7 @@ var PasskeyClient = (_a9 = class {
    * ```
    */
   async register(options) {
-    const url2 = `${__privateGet(this, _baseUrl2)}/passkey/register`;
+    const url2 = `${this.#baseUrl}/passkey/register`;
     const userProfile = {
       ...options.email && { email: options.email },
       ...options.name && { name: options.name },
@@ -64216,19 +63642,19 @@ var PasskeyClient = (_a9 = class {
       ...options.picture && { picture: options.picture }
     };
     const body = {
-      client_id: __privateGet(this, _clientId2),
+      client_id: this.#clientId,
       user_profile: userProfile
     };
     if (options.realm) body.realm = options.realm;
     if (options.organization) body.organization = options.organization;
     if (options.userMetadata) body.user_metadata = options.userMetadata;
-    const response = await __privateGet(this, _customFetch3).call(this, url2, {
+    const response = await this.#customFetch(url2, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
     if (!response.ok) {
-      const error41 = await __privateMethod(this, _PasskeyClient_instances, parseErrorResponse_fn).call(this, response);
+      const error41 = await this.#parseErrorResponse(response);
       throw new PasskeyRegisterError(error41.error_description || "Failed to request signup challenge", error41);
     }
     const apiResponse = await response.json();
@@ -64253,19 +63679,19 @@ var PasskeyClient = (_a9 = class {
    * ```
    */
   async challenge(options) {
-    const url2 = `${__privateGet(this, _baseUrl2)}/passkey/challenge`;
+    const url2 = `${this.#baseUrl}/passkey/challenge`;
     const body = {
-      client_id: __privateGet(this, _clientId2)
+      client_id: this.#clientId
     };
-    if (options == null ? void 0 : options.realm) body.realm = options.realm;
-    if (options == null ? void 0 : options.organization) body.organization = options.organization;
-    const response = await __privateGet(this, _customFetch3).call(this, url2, {
+    if (options?.realm) body.realm = options.realm;
+    if (options?.organization) body.organization = options.organization;
+    const response = await this.#customFetch(url2, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
     if (!response.ok) {
-      const error41 = await __privateMethod(this, _PasskeyClient_instances, parseErrorResponse_fn).call(this, response);
+      const error41 = await this.#parseErrorResponse(response);
       throw new PasskeyChallengeError(error41.error_description || "Failed to request login challenge", error41);
     }
     const apiResponse = await response.json();
@@ -64321,7 +63747,7 @@ var PasskeyClient = (_a9 = class {
     if (options.organization) params.append("organization", options.organization);
     let tokenResponse;
     try {
-      tokenResponse = await __privateGet(this, _grantRequest).call(this, PASSKEY_GRANT_TYPE, params);
+      tokenResponse = await this.#grantRequest(PASSKEY_GRANT_TYPE, params);
     } catch (e2) {
       const apiError = toOAuth2Error(e2);
       throw new PasskeyGetTokenError(
@@ -64334,21 +63760,12 @@ var PasskeyClient = (_a9 = class {
     }
     return tokenResponse;
   }
-}, _baseUrl2 = new WeakMap(), _clientId2 = new WeakMap(), _customFetch3 = new WeakMap(), _grantRequest = new WeakMap(), _PasskeyClient_instances = new WeakSet(), parseErrorResponse_fn = async function(response) {
-  try {
-    return await response.json();
-  } catch {
-    return {
-      error: "unknown_error",
-      error_description: `HTTP ${response.status} ${response.statusText}`
-    };
-  }
-}, _a9);
+};
 var PasswordlessError = class extends Error {
+  cause;
+  code;
   constructor(code, message2, cause) {
     super(message2);
-    __publicField(this, "cause");
-    __publicField(this, "code");
     Object.setPrototypeOf(this, new.target.prototype);
     this.code = code;
     this.cause = cause && {
@@ -64384,6 +63801,15 @@ var PasswordlessDbGetTokenError = class extends PasswordlessError {
 };
 var PasswordlessChallengeError = class extends PasswordlessError {
   /**
+   * HTTP status code of the failed response. Set to 0 for network errors.
+   */
+  statusCode;
+  /**
+   * Field-level validation errors from the server, if present in the response.
+   * Format: `[{ field: string, message: string }, ...]`
+   */
+  validationErrors;
+  /**
    * Constructs a PasswordlessChallengeError.
    *
    * @param message - Human-readable error description
@@ -64393,15 +63819,6 @@ var PasswordlessChallengeError = class extends PasswordlessError {
    */
   constructor(message2, statusCode, cause, validationErrors) {
     super("passwordless_challenge_error", message2, cause);
-    /**
-     * HTTP status code of the failed response. Set to 0 for network errors.
-     */
-    __publicField(this, "statusCode");
-    /**
-     * Field-level validation errors from the server, if present in the response.
-     * Format: `[{ field: string, message: string }, ...]`
-     */
-    __publicField(this, "validationErrors");
     this.name = "PasswordlessChallengeError";
     this.statusCode = statusCode;
     this.validationErrors = validationErrors;
@@ -64414,12 +63831,11 @@ function isE164PhoneNumber(phoneNumber) {
   return /^\+[1-9]\d{1,14}$/.test(phoneNumber);
 }
 async function buildClientAuthBody(options, clientId, domain2) {
-  var _a19;
   if (options.useMtls) {
     return {};
   }
   if (options.clientAssertionSigningKey) {
-    const alg = (_a19 = options.clientAssertionSigningAlg) != null ? _a19 : DEFAULT_CLIENT_ASSERTION_ALG;
+    const alg = options.clientAssertionSigningAlg ?? DEFAULT_CLIENT_ASSERTION_ALG;
     const privateKey = options.clientAssertionSigningKey instanceof CryptoKey ? options.clientAssertionSigningKey : await importPKCS8(options.clientAssertionSigningKey, alg);
     const clientAssertion = await new SignJWT({}).setProtectedHeader({ alg }).setIssuer(clientId).setSubject(clientId).setAudience(`https://${domain2}/`).setJti(crypto.randomUUID()).setIssuedAt().setExpirationTime(`${CLIENT_ASSERTION_EXPIRY_SECONDS}s`).sign(privateKey);
     return {
@@ -64433,8 +63849,7 @@ async function buildClientAuthBody(options, clientId, domain2) {
   throw new MissingClientAuthError2();
 }
 function transformSendEmailRequest(options) {
-  var _a19;
-  const send = (_a19 = options.send) != null ? _a19 : "code";
+  const send = options.send ?? "code";
   const wire = {
     email: options.email,
     connection: "email",
@@ -64452,19 +63867,17 @@ function transformSendSmsRequest(options) {
   };
 }
 function transformChallengeEmailRequest(options) {
-  var _a19;
   return {
     email: options.email,
     connection: options.connection,
-    allow_signup: (_a19 = options.allowSignup) != null ? _a19 : false
+    allow_signup: options.allowSignup ?? false
   };
 }
 function transformChallengePhoneRequest(options) {
-  var _a19;
   const body = {
     phone_number: options.phoneNumber,
     connection: options.connection,
-    allow_signup: (_a19 = options.allowSignup) != null ? _a19 : false
+    allow_signup: options.allowSignup ?? false
   };
   if (options.deliveryMethod) {
     body.delivery_method = options.deliveryMethod;
@@ -64472,31 +63885,28 @@ function transformChallengePhoneRequest(options) {
   return body;
 }
 var PASSWORDLESS_OTP_GRANT_TYPE = "http://auth0.com/oauth/grant-type/passwordless/otp";
-var _baseUrl3, _domain, _clientId3, _customFetch4, _clientAuthOptions, _grantRequest2, _PasswordlessClient_instances, start_fn, challenge_fn, _a10;
-var PasswordlessClient = (_a10 = class {
+var PasswordlessClient = class {
+  #baseUrl;
+  #domain;
+  #clientId;
+  #customFetch;
+  #clientAuthOptions;
+  #grantRequest;
   /**
    * @internal
    */
   constructor(options) {
-    __privateAdd(this, _PasswordlessClient_instances);
-    __privateAdd(this, _baseUrl3);
-    __privateAdd(this, _domain);
-    __privateAdd(this, _clientId3);
-    __privateAdd(this, _customFetch4);
-    __privateAdd(this, _clientAuthOptions);
-    __privateAdd(this, _grantRequest2);
-    var _a19;
-    __privateSet(this, _domain, options.domain);
-    __privateSet(this, _baseUrl3, `https://${options.domain}`);
-    __privateSet(this, _clientId3, options.clientId);
-    __privateSet(this, _customFetch4, (_a19 = options.customFetch) != null ? _a19 : ((...args) => fetch(...args)));
-    __privateSet(this, _clientAuthOptions, {
+    this.#domain = options.domain;
+    this.#baseUrl = `https://${options.domain}`;
+    this.#clientId = options.clientId;
+    this.#customFetch = options.customFetch ?? ((...args) => fetch(...args));
+    this.#clientAuthOptions = {
       clientSecret: options.clientSecret,
       clientAssertionSigningKey: options.clientAssertionSigningKey,
       clientAssertionSigningAlg: options.clientAssertionSigningAlg,
       useMtls: options.useMtls
-    });
-    __privateSet(this, _grantRequest2, options.grantRequest);
+    };
+    this.#grantRequest = options.grantRequest;
   }
   /**
    * Sends a passwordless email containing either a one-time code (default) or a magic link.
@@ -64525,7 +63935,7 @@ var PasswordlessClient = (_a10 = class {
    * ```
    */
   async sendEmail(options) {
-    await __privateMethod(this, _PasswordlessClient_instances, start_fn).call(this, transformSendEmailRequest(options), "Failed to send passwordless email", options.language);
+    await this.#start(transformSendEmailRequest(options), "Failed to send passwordless email", options.language);
   }
   /**
    * Sends a passwordless SMS containing a one-time code. SMS does not support magic links.
@@ -64544,7 +63954,7 @@ var PasswordlessClient = (_a10 = class {
     if (!isE164PhoneNumber(options.phoneNumber)) {
       throw new PasswordlessStartError("Phone number must be in E.164 format (e.g. +14155550100).");
     }
-    await __privateMethod(this, _PasswordlessClient_instances, start_fn).call(this, transformSendSmsRequest(options), "Failed to send passwordless SMS", options.language);
+    await this.#start(transformSendSmsRequest(options), "Failed to send passwordless SMS", options.language);
   }
   /**
    * Requests a passwordless OTP challenge for email delivery against a database connection.
@@ -64574,7 +63984,7 @@ var PasswordlessClient = (_a10 = class {
    */
   async challengeWithEmail(options) {
     const wireBody = transformChallengeEmailRequest(options);
-    return __privateMethod(this, _PasswordlessClient_instances, challenge_fn).call(this, wireBody, "Failed to request email OTP challenge");
+    return this.#challenge(wireBody, "Failed to request email OTP challenge");
   }
   /**
    * Requests a passwordless OTP challenge for phone delivery against a database connection.
@@ -64607,7 +64017,112 @@ var PasswordlessClient = (_a10 = class {
       );
     }
     const wireBody = transformChallengePhoneRequest(options);
-    return __privateMethod(this, _PasswordlessClient_instances, challenge_fn).call(this, wireBody, "Failed to request phone OTP challenge");
+    return this.#challenge(wireBody, "Failed to request phone OTP challenge");
+  }
+  /**
+   * Performs the `/passwordless/start` POST with client authentication and uniform
+   * error handling. Accepts both `200 {}` and `204 No Content` as success; never
+   * parses a body on `204`.
+   */
+  async #start(wireBody, failureMessage, language) {
+    const clientAuthBody = await buildClientAuthBody(this.#clientAuthOptions, this.#clientId, this.#domain);
+    const finalBody = {
+      client_id: this.#clientId,
+      ...wireBody,
+      ...clientAuthBody
+    };
+    let response;
+    try {
+      response = await this.#customFetch(`${this.#baseUrl}/passwordless/start`, {
+        method: "POST",
+        // `x-request-language` is an HTTP header (not a body field) used to localize
+        // the email/SMS template, matching node-auth0 / nextjs-auth0.
+        headers: {
+          "Content-Type": "application/json",
+          ...language ? { "x-request-language": language } : {}
+        },
+        body: JSON.stringify(finalBody)
+      });
+    } catch {
+      throw new PasswordlessStartError(`${failureMessage}: a network error occurred.`);
+    }
+    if (response.ok) {
+      return;
+    }
+    let errorBody;
+    if (response.status !== 204) {
+      try {
+        errorBody = await response.json();
+      } catch {
+        errorBody = void 0;
+      }
+    }
+    throw new PasswordlessStartError(errorBody?.error_description || failureMessage, errorBody);
+  }
+  /**
+   * Performs the POST `/otp/challenge` request with client authentication
+   * and uniform error handling. Returns PasswordlessChallenge on success.
+   *
+   * Note (D4 — language support deferred): this helper intentionally sends no
+   * language hint — neither an `x-request-language` header nor a `language`
+   * field in wireBody. This is a deliberate scope decision, not an omission.
+   * The design leaves room to add an optional `language` passthrough later
+   * without a breaking change; until then #challenge stays language-agnostic.
+   */
+  async #challenge(wireBody, failureMessage) {
+    const clientAuthBody = await buildClientAuthBody(
+      this.#clientAuthOptions,
+      this.#clientId,
+      this.#domain
+    );
+    const finalBody = {
+      client_id: this.#clientId,
+      ...wireBody,
+      ...clientAuthBody
+    };
+    let response;
+    try {
+      response = await this.#customFetch(`${this.#baseUrl}/otp/challenge`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(finalBody)
+      });
+    } catch {
+      throw new PasswordlessChallengeError(
+        "challenge error: a network error occurred.",
+        0,
+        void 0,
+        void 0
+      );
+    }
+    if (response.ok) {
+      let responseBody;
+      try {
+        responseBody = await response.json();
+      } catch {
+        throw new PasswordlessChallengeError(
+          `${failureMessage}: could not parse the response body.`,
+          response.status,
+          void 0,
+          void 0
+        );
+      }
+      return { authSession: responseBody.auth_session };
+    }
+    let errorBody;
+    try {
+      errorBody = await response.json();
+    } catch {
+      errorBody = void 0;
+    }
+    throw new PasswordlessChallengeError(
+      errorBody?.error_description || failureMessage,
+      response.status,
+      errorBody,
+      errorBody?.validation_errors
+    );
   }
   /**
    * Exchanges an OTP for tokens against a database connection (OTP grant).
@@ -64654,112 +64169,24 @@ var PasswordlessClient = (_a10 = class {
     if (options.audience) {
       params.append("audience", options.audience);
     }
-    if (!__privateGet(this, _grantRequest2)) {
+    if (!this.#grantRequest) {
       throw new PasswordlessDbGetTokenError(
         "Missing grant request delegate.",
         toOAuth2Error(new Error("missing grantRequest"))
       );
     }
     try {
-      return await __privateGet(this, _grantRequest2).call(this, PASSWORDLESS_OTP_GRANT_TYPE, params);
+      return await this.#grantRequest(PASSWORDLESS_OTP_GRANT_TYPE, params);
     } catch (e2) {
       throw new PasswordlessDbGetTokenError("There was an error while trying to request a token.", toOAuth2Error(e2));
     }
   }
-}, _baseUrl3 = new WeakMap(), _domain = new WeakMap(), _clientId3 = new WeakMap(), _customFetch4 = new WeakMap(), _clientAuthOptions = new WeakMap(), _grantRequest2 = new WeakMap(), _PasswordlessClient_instances = new WeakSet(), start_fn = async function(wireBody, failureMessage, language) {
-  const clientAuthBody = await buildClientAuthBody(__privateGet(this, _clientAuthOptions), __privateGet(this, _clientId3), __privateGet(this, _domain));
-  const finalBody = {
-    client_id: __privateGet(this, _clientId3),
-    ...wireBody,
-    ...clientAuthBody
-  };
-  let response;
-  try {
-    response = await __privateGet(this, _customFetch4).call(this, `${__privateGet(this, _baseUrl3)}/passwordless/start`, {
-      method: "POST",
-      // `x-request-language` is an HTTP header (not a body field) used to localize
-      // the email/SMS template, matching node-auth0 / nextjs-auth0.
-      headers: {
-        "Content-Type": "application/json",
-        ...language ? { "x-request-language": language } : {}
-      },
-      body: JSON.stringify(finalBody)
-    });
-  } catch {
-    throw new PasswordlessStartError(`${failureMessage}: a network error occurred.`);
-  }
-  if (response.ok) {
-    return;
-  }
-  let errorBody;
-  if (response.status !== 204) {
-    try {
-      errorBody = await response.json();
-    } catch {
-      errorBody = void 0;
-    }
-  }
-  throw new PasswordlessStartError((errorBody == null ? void 0 : errorBody.error_description) || failureMessage, errorBody);
-}, challenge_fn = async function(wireBody, failureMessage) {
-  const clientAuthBody = await buildClientAuthBody(
-    __privateGet(this, _clientAuthOptions),
-    __privateGet(this, _clientId3),
-    __privateGet(this, _domain)
-  );
-  const finalBody = {
-    client_id: __privateGet(this, _clientId3),
-    ...wireBody,
-    ...clientAuthBody
-  };
-  let response;
-  try {
-    response = await __privateGet(this, _customFetch4).call(this, `${__privateGet(this, _baseUrl3)}/otp/challenge`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(finalBody)
-    });
-  } catch {
-    throw new PasswordlessChallengeError(
-      "challenge error: a network error occurred.",
-      0,
-      void 0,
-      void 0
-    );
-  }
-  if (response.ok) {
-    let responseBody;
-    try {
-      responseBody = await response.json();
-    } catch {
-      throw new PasswordlessChallengeError(
-        `${failureMessage}: could not parse the response body.`,
-        response.status,
-        void 0,
-        void 0
-      );
-    }
-    return { authSession: responseBody.auth_session };
-  }
-  let errorBody;
-  try {
-    errorBody = await response.json();
-  } catch {
-    errorBody = void 0;
-  }
-  throw new PasswordlessChallengeError(
-    (errorBody == null ? void 0 : errorBody.error_description) || failureMessage,
-    response.status,
-    errorBody,
-    errorBody == null ? void 0 : errorBody.validation_errors
-  );
-}, _a10);
+};
 var DatabaseError = class extends Error {
+  cause;
+  code;
   constructor(code, message2, cause) {
     super(message2);
-    __publicField(this, "cause");
-    __publicField(this, "code");
     Object.setPrototypeOf(this, new.target.prototype);
     this.code = code;
     this.cause = cause && {
@@ -64813,8 +64240,7 @@ function transformChangePasswordRequest(options) {
   return wire;
 }
 function normalizeSignUpResult(raw) {
-  var _a19, _b8;
-  const id2 = (_b8 = (_a19 = raw._id) != null ? _a19 : raw.user_id) != null ? _b8 : raw.id;
+  const id2 = raw._id ?? raw.user_id ?? raw.id;
   return {
     id: id2,
     email: typeof raw.email === "string" ? raw.email : "",
@@ -64846,54 +64272,55 @@ async function parseErrorBody(response) {
   }
   return void 0;
 }
-var _baseUrl4, _clientId4, _customFetch5, _DatabaseClient_instances, post_fn, _a11;
-var DatabaseClient = (_a11 = class {
+var DatabaseClient = class {
+  #baseUrl;
+  #clientId;
+  #customFetch;
   /** @internal */
   constructor(options) {
-    __privateAdd(this, _DatabaseClient_instances);
-    __privateAdd(this, _baseUrl4);
-    __privateAdd(this, _clientId4);
-    __privateAdd(this, _customFetch5);
-    var _a19;
-    __privateSet(this, _baseUrl4, `https://${options.domain}`);
-    __privateSet(this, _clientId4, options.clientId);
-    __privateSet(this, _customFetch5, (_a19 = options.customFetch) != null ? _a19 : ((...args) => fetch(...args)));
+    this.#baseUrl = `https://${options.domain}`;
+    this.#clientId = options.clientId;
+    this.#customFetch = options.customFetch ?? ((...args) => fetch(...args));
   }
   async signUp(options) {
-    var _a19;
     requireFields(options, ["email", "password", "connection"], SignUpError);
-    const body = { client_id: (_a19 = options.clientId) != null ? _a19 : __privateGet(this, _clientId4), ...transformSignUpRequest(options) };
-    const response = await __privateMethod(this, _DatabaseClient_instances, post_fn).call(this, "/dbconnections/signup", body, SignUpError, "Failed to sign up");
+    const body = { client_id: options.clientId ?? this.#clientId, ...transformSignUpRequest(options) };
+    const response = await this.#post("/dbconnections/signup", body, SignUpError, "Failed to sign up");
     const raw = await response.json();
     return normalizeSignUpResult(raw);
   }
   async changePassword(options) {
-    var _a19;
     requireFields(options, ["connection"], ChangePasswordError);
     if (!options.email && !options.username) {
       throw new ChangePasswordError('Either "email" or "username" is required.');
     }
-    const body = { client_id: (_a19 = options.clientId) != null ? _a19 : __privateGet(this, _clientId4), ...transformChangePasswordRequest(options) };
-    const response = await __privateMethod(this, _DatabaseClient_instances, post_fn).call(this, "/dbconnections/change_password", body, ChangePasswordError, "Failed to request a password change");
+    const body = { client_id: options.clientId ?? this.#clientId, ...transformChangePasswordRequest(options) };
+    const response = await this.#post(
+      "/dbconnections/change_password",
+      body,
+      ChangePasswordError,
+      "Failed to request a password change"
+    );
     return response.text();
   }
-}, _baseUrl4 = new WeakMap(), _clientId4 = new WeakMap(), _customFetch5 = new WeakMap(), _DatabaseClient_instances = new WeakSet(), post_fn = async function(path, body, ErrorClass, failureMessage) {
-  let response;
-  try {
-    response = await __privateGet(this, _customFetch5).call(this, `${__privateGet(this, _baseUrl4)}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-  } catch {
-    throw new ErrorClass(`${failureMessage}: a network error occurred.`);
+  async #post(path, body, ErrorClass, failureMessage) {
+    let response;
+    try {
+      response = await this.#customFetch(`${this.#baseUrl}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } catch {
+      throw new ErrorClass(`${failureMessage}: a network error occurred.`);
+    }
+    if (response.ok) {
+      return response;
+    }
+    const errorBody = await parseErrorBody(response);
+    throw new ErrorClass(errorBody?.error_description || failureMessage, errorBody);
   }
-  if (response.ok) {
-    return response;
-  }
-  const errorBody = await parseErrorBody(response);
-  throw new ErrorClass((errorBody == null ? void 0 : errorBody.error_description) || failureMessage, errorBody);
-}, _a11);
+};
 function createTelemetryFetch(baseFetch, config3) {
   if (config3.enabled === false) {
     return baseFetch;
@@ -64905,7 +64332,7 @@ function createTelemetryFetch(baseFetch, config3) {
   const headerValue = btoa(JSON.stringify(telemetryData));
   return async (input, init) => {
     const headers2 = input instanceof Request ? new Headers(input.headers) : new Headers();
-    if (init == null ? void 0 : init.headers) {
+    if (init?.headers) {
       const initHeaders = new Headers(init.headers);
       initHeaders.forEach((value, key) => {
         headers2.set(key, value);
@@ -64916,18 +64343,19 @@ function createTelemetryFetch(baseFetch, config3) {
   };
 }
 function getTelemetryConfig(config3) {
-  var _a19, _b8;
-  if ((config3 == null ? void 0 : config3.enabled) === false) {
+  if (config3?.enabled === false) {
     return config3;
   }
   return {
     enabled: true,
-    name: (_a19 = config3 == null ? void 0 : config3.name) != null ? _a19 : "@auth0/auth0-auth-js",
-    version: (_b8 = config3 == null ? void 0 : config3.version) != null ? _b8 : "1.12.0"
+    name: config3?.name ?? "@auth0/auth0-auth-js",
+    version: config3?.version ?? "1.12.0"
   };
 }
-var _entries, _ttlMs, _maxEntries, _a12;
-var LruCache = (_a12 = class {
+var LruCache = class {
+  #entries = /* @__PURE__ */ new Map();
+  #ttlMs;
+  #maxEntries;
   /**
    * Create a new LRU cache.
    *
@@ -64935,11 +64363,8 @@ var LruCache = (_a12 = class {
    * @param ttlMs - Time-to-live in milliseconds for each entry. Minimum 0.
    */
   constructor(maxEntries, ttlMs) {
-    __privateAdd(this, _entries, /* @__PURE__ */ new Map());
-    __privateAdd(this, _ttlMs);
-    __privateAdd(this, _maxEntries);
-    __privateSet(this, _maxEntries, Math.max(1, Math.floor(maxEntries)));
-    __privateSet(this, _ttlMs, Math.max(0, Math.floor(ttlMs)));
+    this.#maxEntries = Math.max(1, Math.floor(maxEntries));
+    this.#ttlMs = Math.max(0, Math.floor(ttlMs));
   }
   /**
    * Retrieves a value from the cache.
@@ -64955,16 +64380,16 @@ var LruCache = (_a12 = class {
    * @returns Cached value or undefined
    */
   get(key) {
-    const entry = __privateGet(this, _entries).get(key);
+    const entry = this.#entries.get(key);
     if (!entry) {
       return;
     }
     if (Date.now() >= entry.expiresAt) {
-      __privateGet(this, _entries).delete(key);
+      this.#entries.delete(key);
       return;
     }
-    __privateGet(this, _entries).delete(key);
-    __privateGet(this, _entries).set(key, entry);
+    this.#entries.delete(key);
+    this.#entries.set(key, entry);
     return entry.value;
   }
   /**
@@ -64977,22 +64402,22 @@ var LruCache = (_a12 = class {
    * @param value - Value to cache
    */
   set(key, value) {
-    if (__privateGet(this, _entries).has(key)) {
-      __privateGet(this, _entries).delete(key);
+    if (this.#entries.has(key)) {
+      this.#entries.delete(key);
     }
-    __privateGet(this, _entries).set(key, {
+    this.#entries.set(key, {
       value,
-      expiresAt: Date.now() + __privateGet(this, _ttlMs)
+      expiresAt: Date.now() + this.#ttlMs
     });
-    while (__privateGet(this, _entries).size > __privateGet(this, _maxEntries)) {
-      const oldestKey = __privateGet(this, _entries).keys().next().value;
+    while (this.#entries.size > this.#maxEntries) {
+      const oldestKey = this.#entries.keys().next().value;
       if (oldestKey === void 0) {
         break;
       }
-      __privateGet(this, _entries).delete(oldestKey);
+      this.#entries.delete(oldestKey);
     }
   }
-}, _entries = new WeakMap(), _ttlMs = new WeakMap(), _maxEntries = new WeakMap(), _a12);
+};
 var globalCaches = /* @__PURE__ */ new Map();
 function getGlobalCache(key) {
   return globalCaches.get(key);
@@ -65001,8 +64426,8 @@ function getGlobalCacheKey(maxEntries, ttlMs) {
   return `${maxEntries}:${ttlMs}`;
 }
 function resolveCacheConfig(options) {
-  const ttlSeconds = typeof (options == null ? void 0 : options.ttl) === "number" ? options.ttl : 600;
-  const maxEntries = typeof (options == null ? void 0 : options.maxEntries) === "number" && options.maxEntries > 0 ? options.maxEntries : 100;
+  const ttlSeconds = typeof options?.ttl === "number" ? options.ttl : 600;
+  const maxEntries = typeof options?.maxEntries === "number" && options.maxEntries > 0 ? options.maxEntries : 100;
   const ttlMs = ttlSeconds * 1e3;
   return {
     ttlMs,
@@ -65103,7 +64528,7 @@ var SUBJECT_TYPE_ACCESS_TOKEN = "urn:ietf:params:oauth:token-type:access_token";
 var REQUESTED_TOKEN_TYPE_FEDERATED_CONNECTION_ACCESS_TOKEN = "http://auth0.com/oauth/token-type/federated-connection-access-token";
 function createPasskeyFetch(customFetch32, grantType) {
   return (input, init) => {
-    const body = init == null ? void 0 : init.body;
+    const body = init?.body;
     if (grantType !== PASSKEY_GRANT_TYPE || !(body instanceof URLSearchParams)) {
       return customFetch32(input, init);
     }
@@ -65111,7 +64536,7 @@ function createPasskeyFetch(customFetch32, grantType) {
     for (const [key, value] of body) {
       jsonBody[key] = key === "authn_response" ? JSON.parse(value) : value;
     }
-    const headers2 = new Headers(init == null ? void 0 : init.headers);
+    const headers2 = new Headers(init?.headers);
     headers2.set("Content-Type", "application/json");
     return customFetch32(input, {
       ...init,
@@ -65120,88 +64545,170 @@ function createPasskeyFetch(customFetch32, grantType) {
     });
   };
 }
-var _configuration, _serverMetadata, _clientAuthPromise, _options, _customFetch6, _jwks2, _discoveryCache, _inFlightDiscovery, _jwksCache, _AuthClient_instances, getDiscoveryCacheKey_fn, createConfiguration_fn, discover_fn, exchangeTokenVaultToken_fn, exchangeProfileToken_fn, getTokenByPasswordlessOtp_fn, getClientAuth_fn, buildAuthorizationUrl_fn, _a13;
-var AuthClient2 = (_a13 = class {
+var AuthClient2 = class {
+  #configuration;
+  #serverMetadata;
+  #clientAuthPromise;
+  #options;
+  #customFetch;
+  #jwks;
+  #discoveryCache;
+  #inFlightDiscovery;
+  #jwksCache;
+  mfa;
+  passkey;
+  /**
+   * Sub-client for the Auth0 Passwordless `/passwordless/start` endpoint
+   * (`sendEmail`, `sendSms`). Token exchange for the codes it sends is done via
+   * {@link AuthClient#getTokenByPasswordlessEmail} / {@link AuthClient#getTokenByPasswordlessSms}.
+   */
+  passwordless;
+  database;
   constructor(options) {
-    __privateAdd(this, _AuthClient_instances);
-    __privateAdd(this, _configuration);
-    __privateAdd(this, _serverMetadata);
-    __privateAdd(this, _clientAuthPromise);
-    __privateAdd(this, _options);
-    __privateAdd(this, _customFetch6);
-    __privateAdd(this, _jwks2);
-    __privateAdd(this, _discoveryCache);
-    __privateAdd(this, _inFlightDiscovery);
-    __privateAdd(this, _jwksCache);
-    __publicField(this, "mfa");
-    __publicField(this, "passkey");
-    /**
-     * Sub-client for the Auth0 Passwordless `/passwordless/start` endpoint
-     * (`sendEmail`, `sendSms`). Token exchange for the codes it sends is done via
-     * {@link AuthClient#getTokenByPasswordlessEmail} / {@link AuthClient#getTokenByPasswordlessSms}.
-     */
-    __publicField(this, "passwordless");
-    __publicField(this, "database");
-    var _a19;
-    __privateSet(this, _options, options);
+    this.#options = options;
     if (options.useMtls && !options.customFetch) {
       throw new NotSupportedError(
         "mtls_without_custom_fetch_not_supported",
         "Using mTLS without a custom fetch implementation is not supported"
       );
     }
-    __privateSet(this, _customFetch6, createTelemetryFetch(
-      (_a19 = options.customFetch) != null ? _a19 : ((...args) => fetch(...args)),
+    this.#customFetch = createTelemetryFetch(
+      options.customFetch ?? ((...args) => fetch(...args)),
       getTelemetryConfig(options.telemetry)
-    ));
+    );
     const cacheConfig = resolveCacheConfig(options.discoveryCache);
-    __privateSet(this, _discoveryCache, DiscoveryCacheFactory.createDiscoveryCache(cacheConfig));
-    __privateSet(this, _inFlightDiscovery, /* @__PURE__ */ new Map());
-    __privateSet(this, _jwksCache, DiscoveryCacheFactory.createJwksCache());
+    this.#discoveryCache = DiscoveryCacheFactory.createDiscoveryCache(cacheConfig);
+    this.#inFlightDiscovery = /* @__PURE__ */ new Map();
+    this.#jwksCache = DiscoveryCacheFactory.createJwksCache();
     this.mfa = new MfaClient({
-      domain: __privateGet(this, _options).domain,
-      clientId: __privateGet(this, _options).clientId,
-      clientSecret: __privateGet(this, _options).clientSecret,
-      customFetch: __privateGet(this, _customFetch6),
-      getConfiguration: async () => (await __privateMethod(this, _AuthClient_instances, discover_fn).call(this)).configuration
+      domain: this.#options.domain,
+      clientId: this.#options.clientId,
+      clientSecret: this.#options.clientSecret,
+      customFetch: this.#customFetch,
+      getConfiguration: async () => (await this.#discover()).configuration
     });
     this.passkey = new PasskeyClient({
-      domain: __privateGet(this, _options).domain,
-      clientId: __privateGet(this, _options).clientId,
-      customFetch: __privateGet(this, _customFetch6),
+      domain: this.#options.domain,
+      clientId: this.#options.clientId,
+      customFetch: this.#customFetch,
       grantRequest: async (grantType, params) => {
-        const { serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-        const configuration = await __privateMethod(this, _AuthClient_instances, createConfiguration_fn).call(this, serverMetadata);
-        configuration[customFetch3] = createPasskeyFetch(__privateGet(this, _customFetch6), grantType);
+        const { serverMetadata } = await this.#discover();
+        const configuration = await this.#createConfiguration(serverMetadata);
+        configuration[customFetch3] = createPasskeyFetch(this.#customFetch, grantType);
         const tokenEndpointResponse = await genericGrantRequest(configuration, grantType, params);
         return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
       }
     });
     this.passwordless = new PasswordlessClient({
-      domain: __privateGet(this, _options).domain,
-      clientId: __privateGet(this, _options).clientId,
-      customFetch: __privateGet(this, _customFetch6),
-      clientSecret: __privateGet(this, _options).clientSecret,
-      clientAssertionSigningKey: __privateGet(this, _options).clientAssertionSigningKey,
-      clientAssertionSigningAlg: __privateGet(this, _options).clientAssertionSigningAlg,
-      useMtls: __privateGet(this, _options).useMtls,
+      domain: this.#options.domain,
+      clientId: this.#options.clientId,
+      customFetch: this.#customFetch,
+      clientSecret: this.#options.clientSecret,
+      clientAssertionSigningKey: this.#options.clientAssertionSigningKey,
+      clientAssertionSigningAlg: this.#options.clientAssertionSigningAlg,
+      useMtls: this.#options.useMtls,
       grantRequest: async (grantType, params) => {
-        const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+        const { configuration } = await this.#discover();
         const tokenEndpointResponse = await genericGrantRequest(configuration, grantType, params);
         return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
       }
     });
     this.database = new DatabaseClient({
-      domain: __privateGet(this, _options).domain,
-      clientId: __privateGet(this, _options).clientId,
-      customFetch: __privateGet(this, _customFetch6)
+      domain: this.#options.domain,
+      clientId: this.#options.clientId,
+      customFetch: this.#customFetch
     });
+  }
+  #getDiscoveryCacheKey() {
+    const domain2 = this.#options.domain.toLowerCase();
+    return `${domain2}|mtls:${this.#options.useMtls ? "1" : "0"}`;
+  }
+  async #createConfiguration(serverMetadata) {
+    const clientAuth = await this.#getClientAuth();
+    const configuration = new Configuration(
+      serverMetadata,
+      this.#options.clientId,
+      this.#options.clientSecret,
+      clientAuth
+    );
+    configuration[customFetch3] = this.#customFetch;
+    return configuration;
+  }
+  /**
+   * Initializes the SDK by performing Metadata Discovery.
+   *
+   * Discovers and caches the OAuth 2.0 Authorization Server metadata from the
+   * Auth0 tenant's well-known endpoint. This metadata is required for subsequent
+   * operations and is cached for the lifetime of the AuthClient instance.
+   *
+   * @private
+   * @returns Promise resolving to the cached configuration and server metadata
+   */
+  async #discover() {
+    if (this.#configuration && this.#serverMetadata) {
+      return {
+        configuration: this.#configuration,
+        serverMetadata: this.#serverMetadata
+      };
+    }
+    const cacheKey2 = this.#getDiscoveryCacheKey();
+    const cached4 = this.#discoveryCache.get(cacheKey2);
+    if (cached4) {
+      this.#serverMetadata = cached4.serverMetadata;
+      this.#configuration = await this.#createConfiguration(cached4.serverMetadata);
+      return {
+        configuration: this.#configuration,
+        serverMetadata: this.#serverMetadata
+      };
+    }
+    const inFlight = this.#inFlightDiscovery.get(cacheKey2);
+    if (inFlight) {
+      const entry = await inFlight;
+      this.#serverMetadata = entry.serverMetadata;
+      this.#configuration = await this.#createConfiguration(entry.serverMetadata);
+      return {
+        configuration: this.#configuration,
+        serverMetadata: this.#serverMetadata
+      };
+    }
+    const discoveryPromise = (async () => {
+      const clientAuth = await this.#getClientAuth();
+      const configuration = await discovery(
+        new URL(`https://${this.#options.domain}`),
+        this.#options.clientId,
+        { use_mtls_endpoint_aliases: this.#options.useMtls },
+        clientAuth,
+        {
+          [customFetch3]: this.#customFetch
+        }
+      );
+      const serverMetadata = configuration.serverMetadata();
+      this.#discoveryCache.set(cacheKey2, { serverMetadata });
+      return { configuration, serverMetadata };
+    })();
+    const inFlightEntry = discoveryPromise.then(({ serverMetadata }) => ({
+      serverMetadata
+    }));
+    void inFlightEntry.catch(() => void 0);
+    this.#inFlightDiscovery.set(cacheKey2, inFlightEntry);
+    try {
+      const { configuration, serverMetadata } = await discoveryPromise;
+      this.#configuration = configuration;
+      this.#serverMetadata = serverMetadata;
+      this.#configuration[customFetch3] = this.#customFetch;
+    } finally {
+      this.#inFlightDiscovery.delete(cacheKey2);
+    }
+    return {
+      configuration: this.#configuration,
+      serverMetadata: this.#serverMetadata
+    };
   }
   /**
    * Returns the discovered server metadata for the configured domain.
    */
   async getServerMetadata() {
-    const { serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { serverMetadata } = await this.#discover();
     return serverMetadata;
   }
   /**
@@ -65213,15 +64720,15 @@ var AuthClient2 = (_a13 = class {
    * @returns A promise resolving to an object, containing the authorizationUrl and codeVerifier.
    */
   async buildAuthorizationUrl(options) {
-    const { serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-    if ((options == null ? void 0 : options.pushedAuthorizationRequests) && !serverMetadata.pushed_authorization_request_endpoint) {
+    const { serverMetadata } = await this.#discover();
+    if (options?.pushedAuthorizationRequests && !serverMetadata.pushed_authorization_request_endpoint) {
       throw new NotSupportedError(
         "par_not_supported_error",
         "The Auth0 tenant does not have pushed authorization requests enabled. Learn how to enable it here: https://auth0.com/docs/get-started/applications/configure-par"
       );
     }
     try {
-      return await __privateMethod(this, _AuthClient_instances, buildAuthorizationUrl_fn).call(this, options);
+      return await this.#buildAuthorizationUrl(options);
     } catch (e2) {
       throw new BuildAuthorizationUrlError(e2);
     }
@@ -65236,7 +64743,7 @@ var AuthClient2 = (_a13 = class {
    */
   async buildLinkUserUrl(options) {
     try {
-      const result = await __privateMethod(this, _AuthClient_instances, buildAuthorizationUrl_fn).call(this, {
+      const result = await this.#buildAuthorizationUrl({
         authorizationParams: {
           ...options.authorizationParams,
           requested_connection: options.connection,
@@ -65263,7 +64770,7 @@ var AuthClient2 = (_a13 = class {
    */
   async buildUnlinkUserUrl(options) {
     try {
-      const result = await __privateMethod(this, _AuthClient_instances, buildAuthorizationUrl_fn).call(this, {
+      const result = await this.#buildAuthorizationUrl({
         authorizationParams: {
           ...options.authorizationParams,
           requested_connection: options.connection,
@@ -65293,15 +64800,15 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async backchannelAuthentication(options) {
-    const { configuration, serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration, serverMetadata } = await this.#discover();
     const additionalParams = stripUndefinedProperties({
-      ...__privateGet(this, _options).authorizationParams,
-      ...options == null ? void 0 : options.authorizationParams
+      ...this.#options.authorizationParams,
+      ...options?.authorizationParams
     });
     const params = new URLSearchParams({
       scope: DEFAULT_SCOPES,
       ...additionalParams,
-      client_id: __privateGet(this, _options).clientId,
+      client_id: this.#options.clientId,
       binding_message: options.bindingMessage,
       login_hint: JSON.stringify({
         format: "iss_sub",
@@ -65339,15 +64846,15 @@ var AuthClient2 = (_a13 = class {
    * @returns An object containing `authReqId`, `expiresIn`, and `interval` for polling.
    */
   async initiateBackchannelAuthentication(options) {
-    const { configuration, serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration, serverMetadata } = await this.#discover();
     const additionalParams = stripUndefinedProperties({
-      ...__privateGet(this, _options).authorizationParams,
-      ...options == null ? void 0 : options.authorizationParams
+      ...this.#options.authorizationParams,
+      ...options?.authorizationParams
     });
     const params = new URLSearchParams({
       scope: DEFAULT_SCOPES,
       ...additionalParams,
-      client_id: __privateGet(this, _options).clientId,
+      client_id: this.#options.clientId,
       binding_message: options.bindingMessage,
       login_hint: JSON.stringify({
         format: "iss_sub",
@@ -65382,7 +64889,7 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async backchannelAuthenticationGrant({ authReqId }) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     const params = new URLSearchParams({
       auth_req_id: authReqId
     });
@@ -65438,11 +64945,10 @@ var AuthClient2 = (_a13 = class {
    * ```
    */
   async getTokenForConnection(options) {
-    var _a19;
     if (options.refreshToken && options.accessToken) {
       throw new TokenForConnectionError2("Either a refresh or access token should be specified, but not both.");
     }
-    const subjectTokenValue = (_a19 = options.accessToken) != null ? _a19 : options.refreshToken;
+    const subjectTokenValue = options.accessToken ?? options.refreshToken;
     if (!subjectTokenValue) {
       throw new TokenForConnectionError2("Either a refresh or access token must be specified.");
     }
@@ -65459,6 +64965,133 @@ var AuthClient2 = (_a13 = class {
       }
       throw e2;
     }
+  }
+  /**
+   * Internal implementation for Access Token Exchange with Token Vault.
+   *
+   * Exchanges an Auth0 token (access token or refresh token) for an external provider's access token
+   * from a third-party provider configured in Token Vault. The external provider's refresh token
+   * is securely stored in Auth0 and never exposed to the client.
+   *
+   * This method constructs the appropriate request for Auth0's proprietary Token Vault
+   * grant type and handles the exchange with proper validation and error handling.
+   *
+   * @private
+   * @param options Access Token Exchange with Token Vault configuration including connection and optional hints
+   * @returns Promise resolving to TokenResponse containing the external provider's access token
+   * @throws {TokenExchangeError} When validation fails, audience/resource are provided,
+   *                               or the exchange operation fails
+   */
+  async #exchangeTokenVaultToken(options) {
+    const { configuration } = await this.#discover();
+    if ("audience" in options || "resource" in options) {
+      throw new TokenExchangeError2("audience and resource parameters are not supported for Token Vault exchanges");
+    }
+    validateSubjectToken(options.subjectToken);
+    const tokenRequestParams = new URLSearchParams({
+      connection: options.connection,
+      subject_token: options.subjectToken,
+      subject_token_type: options.subjectTokenType ?? SUBJECT_TYPE_ACCESS_TOKEN,
+      requested_token_type: options.requestedTokenType ?? REQUESTED_TOKEN_TYPE_FEDERATED_CONNECTION_ACCESS_TOKEN
+    });
+    if (options.loginHint) {
+      tokenRequestParams.append("login_hint", options.loginHint);
+    }
+    if (options.scope) {
+      tokenRequestParams.append("scope", options.scope);
+    }
+    appendExtraParams(tokenRequestParams, options.extra);
+    try {
+      const tokenEndpointResponse = await genericGrantRequest(
+        configuration,
+        GRANT_TYPE_FEDERATED_CONNECTION_ACCESS_TOKEN,
+        tokenRequestParams
+      );
+      return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
+    } catch (e2) {
+      throw new TokenExchangeError2(
+        `Failed to exchange token for connection '${options.connection}'.`,
+        toOAuth2Error(e2)
+      );
+    }
+  }
+  /**
+   * Internal implementation for Token Exchange via Token Exchange Profile (RFC 8693).
+   *
+   * Exchanges a custom token for Auth0 tokens targeting a specific API audience,
+   * preserving user identity. This enables first-party on-behalf-of flows where
+   * a custom token (e.g., from an MCP server, legacy system, or partner service)
+   * is exchanged for Auth0 tokens.
+   *
+   * Requires a Token Exchange Profile configured in Auth0 that defines the
+   * subject_token_type, validation logic, and user mapping.
+   *
+   * @private
+   * @param options Token Exchange Profile configuration including token type and target API
+   * @returns Promise resolving to TokenResponse containing Auth0 tokens
+   * @throws {TokenExchangeError} When validation fails or the exchange operation fails
+   */
+  async #exchangeProfileToken(options) {
+    const { configuration } = await this.#discover();
+    validateSubjectToken(options.subjectToken);
+    if (options.organization !== void 0) {
+      assertValidOrganization(options.organization);
+    }
+    if (options.actorToken !== void 0 && options.actorTokenType === void 0) {
+      throw new TokenExchangeError2("actorTokenType is required when actorToken is provided");
+    }
+    const tokenRequestParams = new URLSearchParams({
+      subject_token_type: options.subjectTokenType,
+      subject_token: options.subjectToken
+    });
+    if (options.audience) {
+      tokenRequestParams.append("audience", options.audience);
+    }
+    if (options.scope) {
+      tokenRequestParams.append("scope", options.scope);
+    }
+    if (options.requestedTokenType) {
+      tokenRequestParams.append("requested_token_type", options.requestedTokenType);
+    }
+    if (options.organization) {
+      tokenRequestParams.append("organization", options.organization);
+    }
+    if (options.actorToken) {
+      tokenRequestParams.append("actor_token", options.actorToken);
+    }
+    if (options.actorTokenType) {
+      tokenRequestParams.append("actor_token_type", options.actorTokenType);
+    }
+    appendExtraParams(tokenRequestParams, options.extra);
+    let tokenResponse;
+    let tokenEndpointResponse;
+    try {
+      tokenEndpointResponse = await genericGrantRequest(
+        configuration,
+        TOKEN_EXCHANGE_GRANT_TYPE,
+        tokenRequestParams
+      );
+      tokenResponse = TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
+    } catch (e2) {
+      throw new TokenExchangeError2(
+        `Failed to exchange token of type '${options.subjectTokenType}'${options.audience ? ` for audience '${options.audience}'` : ""}.`,
+        toOAuth2Error(e2)
+      );
+    }
+    if (options.organization) {
+      validateOrganizationClaim(tokenResponse.claims, options.organization);
+    }
+    if (options.actorToken) {
+      if (tokenResponse.claims?.act) {
+        tokenResponse.act = tokenResponse.claims.act;
+      } else {
+        try {
+          tokenResponse.act = decodeJwt(tokenEndpointResponse.access_token).act;
+        } catch {
+        }
+      }
+    }
+    return tokenResponse;
   }
   /**
    * Exchanges a token using either Token Exchange via Token Exchange Profile (RFC 8693) or Access Token Exchange with Token Vault.
@@ -65490,7 +65123,7 @@ var AuthClient2 = (_a13 = class {
    * ```
    */
   async exchangeToken(options) {
-    return "connection" in options ? __privateMethod(this, _AuthClient_instances, exchangeTokenVaultToken_fn).call(this, options) : __privateMethod(this, _AuthClient_instances, exchangeProfileToken_fn).call(this, options);
+    return "connection" in options ? this.#exchangeTokenVaultToken(options) : this.#exchangeProfileToken(options);
   }
   /**
    * Retrieves a token by exchanging an authorization code.
@@ -65503,7 +65136,7 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async getTokenByCode(url2, options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     if (options.organization !== void 0) {
       assertValidOrganization(options.organization);
     }
@@ -65547,12 +65180,12 @@ var AuthClient2 = (_a13 = class {
    * });
    */
   async getTokenByMagicLinkCode(url2, options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     try {
       const tokenEndpointResponse = await authorizationCodeGrant(configuration, url2, {
         // `pkceCodeVerifier` intentionally omitted: openid-client substitutes its no-PKCE sentinel
         // (oauth.nopkce). `expectedState` drives oauth.validateAuthResponse for anti-forgery binding.
-        expectedState: options == null ? void 0 : options.expectedState
+        expectedState: options?.expectedState
       });
       return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
     } catch (e2) {
@@ -65569,7 +65202,7 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async getTokenByRefreshToken(options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     const additionalParameters = new URLSearchParams();
     if (options.audience) {
       additionalParameters.append("audience", options.audience);
@@ -65597,7 +65230,7 @@ var AuthClient2 = (_a13 = class {
    * @throws {TokenRevocationError} If the revocation request fails.
    */
   async revokeToken(options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     const params = {};
     if (options.tokenTypeHint) {
       params["token_type_hint"] = options.tokenTypeHint;
@@ -65620,7 +65253,7 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async getTokenByPassword(options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     const params = new URLSearchParams({
       username: options.username,
       password: options.password
@@ -65636,15 +65269,15 @@ var AuthClient2 = (_a13 = class {
     }
     let requestConfig = configuration;
     if (options.auth0ForwardedFor) {
-      const clientAuth = await __privateMethod(this, _AuthClient_instances, getClientAuth_fn).call(this);
+      const clientAuth = await this.#getClientAuth();
       requestConfig = new Configuration(
         configuration.serverMetadata(),
-        __privateGet(this, _options).clientId,
-        __privateGet(this, _options).clientSecret,
+        this.#options.clientId,
+        this.#options.clientSecret,
         clientAuth
       );
       requestConfig[customFetch3] = ((url2, init) => {
-        return __privateGet(this, _customFetch6).call(this, url2, {
+        return this.#customFetch(url2, {
           ...init,
           headers: {
             ...init.headers,
@@ -65707,7 +65340,7 @@ var AuthClient2 = (_a13 = class {
     if (options.scope) {
       params.append("scope", options.scope);
     }
-    return __privateMethod(this, _AuthClient_instances, getTokenByPasswordlessOtp_fn).call(this, params);
+    return this.#getTokenByPasswordlessOtp(params);
   }
   /**
    * Exchanges a passwordless SMS one-time code for a token (OTP grant).
@@ -65745,7 +65378,29 @@ var AuthClient2 = (_a13 = class {
     if (options.scope) {
       params.append("scope", options.scope);
     }
-    return __privateMethod(this, _AuthClient_instances, getTokenByPasswordlessOtp_fn).call(this, params);
+    return this.#getTokenByPasswordlessOtp(params);
+  }
+  /**
+   * Executes the passwordless OTP grant and maps errors to {@link PasswordlessVerifyError}.
+   *
+   * A `403 mfa_required` response is not a distinct error type: like the other token
+   * methods (`getTokenByPassword`, `passkey.getTokenByPasskey`), the thrown
+   * `PasswordlessVerifyError` carries `cause.error === 'mfa_required'` with the
+   * server's `mfa_token` lifted onto `cause`. Callers narrow with {@link isMfaRequiredError}
+   * and drive the challenge via `authClient.mfa`.
+   */
+  async #getTokenByPasswordlessOtp(params) {
+    const { configuration } = await this.#discover();
+    try {
+      const tokenEndpointResponse = await genericGrantRequest(
+        configuration,
+        "http://auth0.com/oauth/grant-type/passwordless/otp",
+        params
+      );
+      return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
+    } catch (e2) {
+      throw new PasswordlessVerifyError("There was an error while trying to request a token.", toOAuth2Error(e2));
+    }
   }
   /**
    * Retrieves a token by exchanging client credentials.
@@ -65756,7 +65411,7 @@ var AuthClient2 = (_a13 = class {
    * @returns A Promise, resolving to the TokenResponse as returned from Auth0.
    */
   async getTokenByClientCredentials(options) {
-    const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration } = await this.#discover();
     try {
       const params = new URLSearchParams({
         audience: options.audience
@@ -65776,11 +65431,11 @@ var AuthClient2 = (_a13 = class {
    * @returns A promise resolving to the URL to redirect the user-agent to.
    */
   async buildLogoutUrl(options) {
-    const { configuration, serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
+    const { configuration, serverMetadata } = await this.#discover();
     if (!serverMetadata.end_session_endpoint) {
-      const url2 = new URL(`https://${__privateGet(this, _options).domain}/v2/logout`);
+      const url2 = new URL(`https://${this.#options.domain}/v2/logout`);
       url2.searchParams.set("returnTo", options.returnTo);
-      url2.searchParams.set("client_id", __privateGet(this, _options).clientId);
+      url2.searchParams.set("client_id", this.#options.clientId);
       return url2;
     }
     return buildEndSessionUrl(configuration, {
@@ -65796,17 +65451,17 @@ var AuthClient2 = (_a13 = class {
    * @returns An object containing the `sid` and `sub` claims from the logout token.
    */
   async verifyLogoutToken(options) {
-    const { serverMetadata } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-    const cacheConfig = resolveCacheConfig(__privateGet(this, _options).discoveryCache);
+    const { serverMetadata } = await this.#discover();
+    const cacheConfig = resolveCacheConfig(this.#options.discoveryCache);
     const jwksUri = serverMetadata.jwks_uri;
-    __privateGet(this, _jwks2) || __privateSet(this, _jwks2, createRemoteJWKSet(new URL(jwksUri), {
+    this.#jwks ||= createRemoteJWKSet(new URL(jwksUri), {
       cacheMaxAge: cacheConfig.ttlMs,
-      [customFetch]: __privateGet(this, _customFetch6),
-      [jwksCache]: __privateGet(this, _jwksCache)
-    }));
-    const { payload } = await jwtVerify(options.logoutToken, __privateGet(this, _jwks2), {
+      [customFetch]: this.#customFetch,
+      [jwksCache]: this.#jwksCache
+    });
+    const { payload } = await jwtVerify(options.logoutToken, this.#jwks, {
       issuer: serverMetadata.issuer,
-      audience: __privateGet(this, _options).clientId,
+      audience: this.#options.clientId,
       algorithms: ["RS256"],
       requiredClaims: ["iat"]
     });
@@ -65843,253 +65498,93 @@ var AuthClient2 = (_a13 = class {
       sub: payload.sub
     };
   }
-}, _configuration = new WeakMap(), _serverMetadata = new WeakMap(), _clientAuthPromise = new WeakMap(), _options = new WeakMap(), _customFetch6 = new WeakMap(), _jwks2 = new WeakMap(), _discoveryCache = new WeakMap(), _inFlightDiscovery = new WeakMap(), _jwksCache = new WeakMap(), _AuthClient_instances = new WeakSet(), getDiscoveryCacheKey_fn = function() {
-  const domain2 = __privateGet(this, _options).domain.toLowerCase();
-  return `${domain2}|mtls:${__privateGet(this, _options).useMtls ? "1" : "0"}`;
-}, createConfiguration_fn = async function(serverMetadata) {
-  const clientAuth = await __privateMethod(this, _AuthClient_instances, getClientAuth_fn).call(this);
-  const configuration = new Configuration(
-    serverMetadata,
-    __privateGet(this, _options).clientId,
-    __privateGet(this, _options).clientSecret,
-    clientAuth
-  );
-  configuration[customFetch3] = __privateGet(this, _customFetch6);
-  return configuration;
-}, discover_fn = async function() {
-  if (__privateGet(this, _configuration) && __privateGet(this, _serverMetadata)) {
-    return {
-      configuration: __privateGet(this, _configuration),
-      serverMetadata: __privateGet(this, _serverMetadata)
-    };
-  }
-  const cacheKey2 = __privateMethod(this, _AuthClient_instances, getDiscoveryCacheKey_fn).call(this);
-  const cached4 = __privateGet(this, _discoveryCache).get(cacheKey2);
-  if (cached4) {
-    __privateSet(this, _serverMetadata, cached4.serverMetadata);
-    __privateSet(this, _configuration, await __privateMethod(this, _AuthClient_instances, createConfiguration_fn).call(this, cached4.serverMetadata));
-    return {
-      configuration: __privateGet(this, _configuration),
-      serverMetadata: __privateGet(this, _serverMetadata)
-    };
-  }
-  const inFlight = __privateGet(this, _inFlightDiscovery).get(cacheKey2);
-  if (inFlight) {
-    const entry = await inFlight;
-    __privateSet(this, _serverMetadata, entry.serverMetadata);
-    __privateSet(this, _configuration, await __privateMethod(this, _AuthClient_instances, createConfiguration_fn).call(this, entry.serverMetadata));
-    return {
-      configuration: __privateGet(this, _configuration),
-      serverMetadata: __privateGet(this, _serverMetadata)
-    };
-  }
-  const discoveryPromise = (async () => {
-    const clientAuth = await __privateMethod(this, _AuthClient_instances, getClientAuth_fn).call(this);
-    const configuration = await discovery(
-      new URL(`https://${__privateGet(this, _options).domain}`),
-      __privateGet(this, _options).clientId,
-      { use_mtls_endpoint_aliases: __privateGet(this, _options).useMtls },
-      clientAuth,
-      {
-        [customFetch3]: __privateGet(this, _customFetch6)
-      }
-    );
-    const serverMetadata = configuration.serverMetadata();
-    __privateGet(this, _discoveryCache).set(cacheKey2, { serverMetadata });
-    return { configuration, serverMetadata };
-  })();
-  const inFlightEntry = discoveryPromise.then(({ serverMetadata }) => ({
-    serverMetadata
-  }));
-  void inFlightEntry.catch(() => void 0);
-  __privateGet(this, _inFlightDiscovery).set(cacheKey2, inFlightEntry);
-  try {
-    const { configuration, serverMetadata } = await discoveryPromise;
-    __privateSet(this, _configuration, configuration);
-    __privateSet(this, _serverMetadata, serverMetadata);
-    __privateGet(this, _configuration)[customFetch3] = __privateGet(this, _customFetch6);
-  } finally {
-    __privateGet(this, _inFlightDiscovery).delete(cacheKey2);
-  }
-  return {
-    configuration: __privateGet(this, _configuration),
-    serverMetadata: __privateGet(this, _serverMetadata)
-  };
-}, exchangeTokenVaultToken_fn = async function(options) {
-  var _a19, _b8;
-  const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-  if ("audience" in options || "resource" in options) {
-    throw new TokenExchangeError2("audience and resource parameters are not supported for Token Vault exchanges");
-  }
-  validateSubjectToken(options.subjectToken);
-  const tokenRequestParams = new URLSearchParams({
-    connection: options.connection,
-    subject_token: options.subjectToken,
-    subject_token_type: (_a19 = options.subjectTokenType) != null ? _a19 : SUBJECT_TYPE_ACCESS_TOKEN,
-    requested_token_type: (_b8 = options.requestedTokenType) != null ? _b8 : REQUESTED_TOKEN_TYPE_FEDERATED_CONNECTION_ACCESS_TOKEN
-  });
-  if (options.loginHint) {
-    tokenRequestParams.append("login_hint", options.loginHint);
-  }
-  if (options.scope) {
-    tokenRequestParams.append("scope", options.scope);
-  }
-  appendExtraParams(tokenRequestParams, options.extra);
-  try {
-    const tokenEndpointResponse = await genericGrantRequest(
-      configuration,
-      GRANT_TYPE_FEDERATED_CONNECTION_ACCESS_TOKEN,
-      tokenRequestParams
-    );
-    return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
-  } catch (e2) {
-    throw new TokenExchangeError2(
-      `Failed to exchange token for connection '${options.connection}'.`,
-      toOAuth2Error(e2)
-    );
-  }
-}, exchangeProfileToken_fn = async function(options) {
-  var _a19;
-  const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-  validateSubjectToken(options.subjectToken);
-  if (options.organization !== void 0) {
-    assertValidOrganization(options.organization);
-  }
-  if (options.actorToken !== void 0 && options.actorTokenType === void 0) {
-    throw new TokenExchangeError2("actorTokenType is required when actorToken is provided");
-  }
-  const tokenRequestParams = new URLSearchParams({
-    subject_token_type: options.subjectTokenType,
-    subject_token: options.subjectToken
-  });
-  if (options.audience) {
-    tokenRequestParams.append("audience", options.audience);
-  }
-  if (options.scope) {
-    tokenRequestParams.append("scope", options.scope);
-  }
-  if (options.requestedTokenType) {
-    tokenRequestParams.append("requested_token_type", options.requestedTokenType);
-  }
-  if (options.organization) {
-    tokenRequestParams.append("organization", options.organization);
-  }
-  if (options.actorToken) {
-    tokenRequestParams.append("actor_token", options.actorToken);
-  }
-  if (options.actorTokenType) {
-    tokenRequestParams.append("actor_token_type", options.actorTokenType);
-  }
-  appendExtraParams(tokenRequestParams, options.extra);
-  let tokenResponse;
-  let tokenEndpointResponse;
-  try {
-    tokenEndpointResponse = await genericGrantRequest(
-      configuration,
-      TOKEN_EXCHANGE_GRANT_TYPE,
-      tokenRequestParams
-    );
-    tokenResponse = TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
-  } catch (e2) {
-    throw new TokenExchangeError2(
-      `Failed to exchange token of type '${options.subjectTokenType}'${options.audience ? ` for audience '${options.audience}'` : ""}.`,
-      toOAuth2Error(e2)
-    );
-  }
-  if (options.organization) {
-    validateOrganizationClaim(tokenResponse.claims, options.organization);
-  }
-  if (options.actorToken) {
-    if ((_a19 = tokenResponse.claims) == null ? void 0 : _a19.act) {
-      tokenResponse.act = tokenResponse.claims.act;
-    } else {
-      try {
-        tokenResponse.act = decodeJwt(tokenEndpointResponse.access_token).act;
-      } catch {
-      }
+  /**
+   * Gets the client authentication method based on the provided options.
+   *
+   * Supports three authentication methods in order of preference:
+   * 1. mTLS (mutual TLS) - requires customFetch with client certificate
+   * 2. private_key_jwt - requires clientAssertionSigningKey
+   * 3. client_secret_post - requires clientSecret
+   *
+   * @private
+   * @returns The ClientAuth object to use for client authentication.
+   * @throws {MissingClientAuthError} When no valid authentication method is configured
+   */
+  async #getClientAuth() {
+    if (!this.#clientAuthPromise) {
+      this.#clientAuthPromise = (async () => {
+        if (!this.#options.clientSecret && !this.#options.clientAssertionSigningKey && !this.#options.useMtls) {
+          throw new MissingClientAuthError2();
+        }
+        if (this.#options.useMtls) {
+          return TlsClientAuth2();
+        }
+        let clientPrivateKey = this.#options.clientAssertionSigningKey;
+        if (clientPrivateKey && !(clientPrivateKey instanceof CryptoKey)) {
+          clientPrivateKey = await importPKCS8(
+            clientPrivateKey,
+            this.#options.clientAssertionSigningAlg || "RS256"
+          );
+        }
+        return clientPrivateKey ? PrivateKeyJwt2(clientPrivateKey) : ClientSecretPost2(this.#options.clientSecret);
+      })().catch((error41) => {
+        this.#clientAuthPromise = void 0;
+        throw error41;
+      });
     }
+    return this.#clientAuthPromise;
   }
-  return tokenResponse;
-}, getTokenByPasswordlessOtp_fn = async function(params) {
-  const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-  try {
-    const tokenEndpointResponse = await genericGrantRequest(
-      configuration,
-      "http://auth0.com/oauth/grant-type/passwordless/otp",
-      params
-    );
-    return TokenResponse.fromTokenEndpointResponse(tokenEndpointResponse);
-  } catch (e2) {
-    throw new PasswordlessVerifyError("There was an error while trying to request a token.", toOAuth2Error(e2));
+  /**
+   * Builds the URL to redirect the user-agent to to request authorization at Auth0.
+   * @param options Options used to configure the authorization URL.
+   * @returns A promise resolving to an object, containing the authorizationUrl and codeVerifier.
+   */
+  async #buildAuthorizationUrl(options) {
+    const { configuration } = await this.#discover();
+    const codeChallengeMethod = "S256";
+    const codeVerifier = randomPKCECodeVerifier();
+    const codeChallenge = await calculatePKCECodeChallenge2(codeVerifier);
+    const additionalParams = stripUndefinedProperties({
+      ...this.#options.authorizationParams,
+      ...options?.authorizationParams
+    });
+    const params = new URLSearchParams({
+      scope: DEFAULT_SCOPES,
+      ...additionalParams,
+      client_id: this.#options.clientId,
+      code_challenge: codeChallenge,
+      code_challenge_method: codeChallengeMethod
+    });
+    const authorizationUrl = options?.pushedAuthorizationRequests ? await buildAuthorizationUrlWithPAR(configuration, params) : await buildAuthorizationUrl(configuration, params);
+    return {
+      authorizationUrl,
+      codeVerifier
+    };
   }
-}, getClientAuth_fn = async function() {
-  if (!__privateGet(this, _clientAuthPromise)) {
-    __privateSet(this, _clientAuthPromise, (async () => {
-      if (!__privateGet(this, _options).clientSecret && !__privateGet(this, _options).clientAssertionSigningKey && !__privateGet(this, _options).useMtls) {
-        throw new MissingClientAuthError2();
-      }
-      if (__privateGet(this, _options).useMtls) {
-        return TlsClientAuth2();
-      }
-      let clientPrivateKey = __privateGet(this, _options).clientAssertionSigningKey;
-      if (clientPrivateKey && !(clientPrivateKey instanceof CryptoKey)) {
-        clientPrivateKey = await importPKCS8(
-          clientPrivateKey,
-          __privateGet(this, _options).clientAssertionSigningAlg || "RS256"
-        );
-      }
-      return clientPrivateKey ? PrivateKeyJwt2(clientPrivateKey) : ClientSecretPost2(__privateGet(this, _options).clientSecret);
-    })().catch((error41) => {
-      __privateSet(this, _clientAuthPromise, void 0);
-      throw error41;
-    }));
-  }
-  return __privateGet(this, _clientAuthPromise);
-}, buildAuthorizationUrl_fn = async function(options) {
-  const { configuration } = await __privateMethod(this, _AuthClient_instances, discover_fn).call(this);
-  const codeChallengeMethod = "S256";
-  const codeVerifier = randomPKCECodeVerifier();
-  const codeChallenge = await calculatePKCECodeChallenge2(codeVerifier);
-  const additionalParams = stripUndefinedProperties({
-    ...__privateGet(this, _options).authorizationParams,
-    ...options == null ? void 0 : options.authorizationParams
-  });
-  const params = new URLSearchParams({
-    scope: DEFAULT_SCOPES,
-    ...additionalParams,
-    client_id: __privateGet(this, _options).clientId,
-    code_challenge: codeChallenge,
-    code_challenge_method: codeChallengeMethod
-  });
-  const authorizationUrl = (options == null ? void 0 : options.pushedAuthorizationRequests) ? await buildAuthorizationUrlWithPAR(configuration, params) : await buildAuthorizationUrl(configuration, params);
-  return {
-    authorizationUrl,
-    codeVerifier
-  };
-}, _a13);
+};
 
 // ../auth0-agent-components/node_modules/@auth0/auth0-api-js/dist/index.js
 var import_crypto = require("crypto");
 var MissingRequiredArgumentError2 = class extends Error {
+  code = "missing_required_argument_error";
   constructor(argument) {
     super(`The argument '${argument}' is required but was not provided.`);
-    __publicField(this, "code", "missing_required_argument_error");
     this.name = "MissingRequiredArgumentError";
   }
 };
 var InvalidConfigurationError = class extends Error {
+  code = "invalid_configuration_error";
   constructor(message2) {
     super(message2);
-    __publicField(this, "code", "invalid_configuration_error");
     this.name = "InvalidConfigurationError";
   }
 };
 var AuthError = class extends Error {
+  code;
+  statusCode;
+  headers;
   constructor(message2, code, statusCode, headers2) {
     super(message2);
-    __publicField(this, "code");
-    __publicField(this, "statusCode");
-    __publicField(this, "headers");
     this.name = this.constructor.name;
     this.code = code;
     this.statusCode = statusCode;
@@ -66277,43 +65772,41 @@ function buildChallenges(dpopMode, algorithms = ALLOWED_DPOP_ALGORITHMS, params 
     "www-authenticate": challenges
   };
 }
-var _map2, _inflight, _ttlMs2, _maxEntries2, _LruCache_instances, enforceLimit_fn, _a14;
-var LruCache2 = (_a14 = class {
+var LruCache2 = class {
+  #map;
+  #inflight;
+  #ttlMs;
+  #maxEntries;
   constructor(ttlMs, maxEntries) {
-    __privateAdd(this, _LruCache_instances);
-    __privateAdd(this, _map2);
-    __privateAdd(this, _inflight);
-    __privateAdd(this, _ttlMs2);
-    __privateAdd(this, _maxEntries2);
-    __privateSet(this, _ttlMs2, ttlMs);
-    __privateSet(this, _maxEntries2, maxEntries);
-    __privateSet(this, _map2, /* @__PURE__ */ new Map());
-    __privateSet(this, _inflight, /* @__PURE__ */ new Map());
+    this.#ttlMs = ttlMs;
+    this.#maxEntries = maxEntries;
+    this.#map = /* @__PURE__ */ new Map();
+    this.#inflight = /* @__PURE__ */ new Map();
   }
   get(key) {
-    const entry = __privateGet(this, _map2).get(key);
+    const entry = this.#map.get(key);
     if (!entry) {
       return void 0;
     }
-    if (__privateGet(this, _ttlMs2) !== void 0 && entry.expiresAt !== void 0 && entry.expiresAt <= Date.now()) {
-      __privateGet(this, _map2).delete(key);
+    if (this.#ttlMs !== void 0 && entry.expiresAt !== void 0 && entry.expiresAt <= Date.now()) {
+      this.#map.delete(key);
       return void 0;
     }
-    __privateGet(this, _map2).delete(key);
-    __privateGet(this, _map2).set(key, entry);
+    this.#map.delete(key);
+    this.#map.set(key, entry);
     return entry.value;
   }
   set(key, value) {
-    const expiresAt = __privateGet(this, _ttlMs2) !== void 0 ? Date.now() + __privateGet(this, _ttlMs2) : void 0;
-    __privateGet(this, _map2).set(key, { value, expiresAt });
-    __privateMethod(this, _LruCache_instances, enforceLimit_fn).call(this);
+    const expiresAt = this.#ttlMs !== void 0 ? Date.now() + this.#ttlMs : void 0;
+    this.#map.set(key, { value, expiresAt });
+    this.#enforceLimit();
   }
   async getOrSet(key, loader) {
     const cached4 = this.get(key);
     if (cached4 !== void 0) {
       return cached4;
     }
-    const inflight = __privateGet(this, _inflight).get(key);
+    const inflight = this.#inflight.get(key);
     if (inflight) {
       return inflight;
     }
@@ -66323,36 +65816,34 @@ var LruCache2 = (_a14 = class {
       return value;
     })();
     const inflightPromise = promise2.finally(() => {
-      __privateGet(this, _inflight).delete(key);
+      this.#inflight.delete(key);
     });
-    __privateGet(this, _inflight).set(key, inflightPromise);
+    this.#inflight.set(key, inflightPromise);
     return inflightPromise;
   }
-}, _map2 = new WeakMap(), _inflight = new WeakMap(), _ttlMs2 = new WeakMap(), _maxEntries2 = new WeakMap(), _LruCache_instances = new WeakSet(), enforceLimit_fn = function() {
-  if (__privateGet(this, _maxEntries2) === void 0) {
-    return;
-  }
-  while (__privateGet(this, _map2).size > __privateGet(this, _maxEntries2)) {
-    const oldestKey = __privateGet(this, _map2).keys().next().value;
-    if (oldestKey === void 0) {
-      break;
+  #enforceLimit() {
+    if (this.#maxEntries === void 0) {
+      return;
     }
-    __privateGet(this, _map2).delete(oldestKey);
+    while (this.#map.size > this.#maxEntries) {
+      const oldestKey = this.#map.keys().next().value;
+      if (oldestKey === void 0) {
+        break;
+      }
+      this.#map.delete(oldestKey);
+    }
   }
-}, _a14);
+};
 var OBO_ACCESS_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:access_token";
-var _serverMetadataByDomain, _options2, _jwksByUri, _domains, _algorithms, _defaultDomainUrl, _authClient, _ApiClient_instances, discoverDomain_fn, resolveDomains_fn, requireDiscoveryMetadata_fn, getJwksForDomain_fn, createJwksFetch_fn, addChallenges_fn, _a15;
-var ApiClient = (_a15 = class {
+var ApiClient = class {
+  #serverMetadataByDomain;
+  #options;
+  #jwksByUri;
+  #domains;
+  #algorithms;
+  #defaultDomainUrl;
+  #authClient;
   constructor(options) {
-    __privateAdd(this, _ApiClient_instances);
-    __privateAdd(this, _serverMetadataByDomain);
-    __privateAdd(this, _options2);
-    __privateAdd(this, _jwksByUri);
-    __privateAdd(this, _domains);
-    __privateAdd(this, _algorithms);
-    __privateAdd(this, _defaultDomainUrl);
-    __privateAdd(this, _authClient);
-    var _a19, _b8, _c2;
     if (options.dpop !== void 0 && (typeof options.dpop !== "object" || options.dpop === null)) {
       throw new InvalidConfigurationError('Invalid DPoP configuration: "dpop" must be an object');
     }
@@ -66380,8 +65871,8 @@ var ApiClient = (_a15 = class {
         }
       }
     }
-    const discoveryCacheConfig = (_a19 = options.discoveryCache) != null ? _a19 : {};
-    const ttlSeconds = (_b8 = discoveryCacheConfig.ttl) != null ? _b8 : 600;
+    const discoveryCacheConfig = options.discoveryCache ?? {};
+    const ttlSeconds = discoveryCacheConfig.ttl ?? 600;
     if (!Number.isFinite(ttlSeconds)) {
       throw new InvalidConfigurationError('Invalid discoveryCache configuration: "ttl" must be a number');
     }
@@ -66389,7 +65880,7 @@ var ApiClient = (_a15 = class {
       throw new InvalidConfigurationError('Invalid discoveryCache configuration: "ttl" must be a non-negative number');
     }
     const cacheTtlMs = ttlSeconds * 1e3;
-    const maxEntries = (_c2 = discoveryCacheConfig.maxEntries) != null ? _c2 : 100;
+    const maxEntries = discoveryCacheConfig.maxEntries ?? 100;
     if (!Number.isFinite(maxEntries)) {
       throw new InvalidConfigurationError('Invalid discoveryCache configuration: "maxEntries" must be a number');
     }
@@ -66398,12 +65889,12 @@ var ApiClient = (_a15 = class {
         'Invalid discoveryCache configuration: "maxEntries" must be a non-negative number'
       );
     }
-    __privateSet(this, _serverMetadataByDomain, new LruCache2(cacheTtlMs, maxEntries));
-    __privateSet(this, _jwksByUri, new LruCache2(cacheTtlMs, maxEntries));
-    __privateSet(this, _options2, options);
+    this.#serverMetadataByDomain = new LruCache2(cacheTtlMs, maxEntries);
+    this.#jwksByUri = new LruCache2(cacheTtlMs, maxEntries);
+    this.#options = options;
     if (options.domain !== void 0) {
       try {
-        __privateSet(this, _defaultDomainUrl, normalizeDomain(options.domain));
+        this.#defaultDomainUrl = normalizeDomain(options.domain);
       } catch (error41) {
         const message2 = error41.message;
         throw new InvalidConfigurationError(`Invalid domain configuration: ${message2}`);
@@ -66422,33 +65913,46 @@ var ApiClient = (_a15 = class {
             throw new InvalidConfigurationError(`Invalid domains configuration: ${message2}`);
           }
         });
-        __privateSet(this, _domains, Array.from(new Set(normalized)));
+        this.#domains = Array.from(new Set(normalized));
       } else if (typeof options.domains === "function") {
-        __privateSet(this, _domains, options.domains);
+        this.#domains = options.domains;
       } else {
         throw new InvalidConfigurationError('Invalid domains configuration: "domains" must be an array or a function');
       }
     }
-    __privateSet(this, _algorithms, normalizeAlgorithms(options.algorithms));
-    if (!__privateGet(this, _defaultDomainUrl) && __privateGet(this, _domains) === void 0) {
+    this.#algorithms = normalizeAlgorithms(options.algorithms);
+    if (!this.#defaultDomainUrl && this.#domains === void 0) {
       throw new MissingRequiredArgumentError2("domain or domains");
     }
     if (options.clientId) {
       if (!options.domain) {
         throw new MissingRequiredArgumentError2("domain");
       }
-      __privateSet(this, _authClient, new AuthClient2({
+      this.#authClient = new AuthClient2({
         domain: options.domain,
         clientId: options.clientId,
         clientSecret: options.clientSecret,
         clientAssertionSigningKey: options.clientAssertionSigningKey,
         clientAssertionSigningAlg: options.clientAssertionSigningAlg,
         customFetch: options.customFetch
-      }));
+      });
     }
-    if (!__privateGet(this, _options2).audience) {
+    if (!this.#options.audience) {
       throw new MissingRequiredArgumentError2("audience");
     }
+  }
+  /**
+   * Initialized the SDK by performing Metadata Discovery.
+   */
+  async #discoverDomain(domain2) {
+    const serverMetadata = await this.#serverMetadataByDomain.getOrSet(domain2, async () => {
+      const issuer = new URL(domain2);
+      const response = await discoveryRequest(issuer, {
+        [customFetch2]: this.#options.customFetch
+      });
+      return processDiscoveryResponse(issuer, response);
+    });
+    return { serverMetadata };
   }
   /**
    * Verifies the provided access token against the ApiClient's configured audience.
@@ -66495,24 +65999,23 @@ var ApiClient = (_a15 = class {
    * ```
    */
   async verifyAccessToken(options) {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
-    const mode = (_b8 = (_a19 = __privateGet(this, _options2).dpop) == null ? void 0 : _a19.mode) != null ? _b8 : "allowed";
-    const iatOffset = (_d2 = (_c2 = __privateGet(this, _options2).dpop) == null ? void 0 : _c2.iatOffset) != null ? _d2 : 300;
-    const iatLeeway = (_f2 = (_e2 = __privateGet(this, _options2).dpop) == null ? void 0 : _e2.iatLeeway) != null ? _f2 : 30;
-    const scheme = ((_g2 = options.scheme) != null ? _g2 : "bearer").toLowerCase();
+    const mode = this.#options.dpop?.mode ?? "allowed";
+    const iatOffset = this.#options.dpop?.iatOffset ?? 300;
+    const iatLeeway = this.#options.dpop?.iatLeeway ?? 30;
+    const scheme = (options.scheme ?? "bearer").toLowerCase();
     const dpopProof = options.dpopProof;
     const httpMethod = options.httpMethod;
     const httpUrl = options.httpUrl;
-    const hasDpopParams = dpopProof !== void 0 || httpMethod !== void 0 || __privateGet(this, _domains) === void 0 && httpUrl !== void 0;
+    const hasDpopParams = dpopProof !== void 0 || httpMethod !== void 0 || this.#domains === void 0 && httpUrl !== void 0;
     if (mode !== "disabled" && scheme && !["bearer", "dpop"].includes(scheme)) {
       const err = new InvalidRequestError("");
       err.cause = { code: "invalid_auth_scheme" };
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, { includeError: false });
+      throw this.#addChallenges(err, mode, scheme, { includeError: false });
     }
     if (mode === "required" && scheme !== "dpop") {
       const err = new InvalidRequestError("");
       err.cause = { code: "invalid_auth_scheme" };
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, {
+      throw this.#addChallenges(err, mode, scheme, {
         includeError: false,
         dpopSpecific: true
       });
@@ -66520,26 +66023,26 @@ var ApiClient = (_a15 = class {
     if (mode === "disabled" && scheme && scheme !== "bearer") {
       const err = new InvalidRequestError("");
       err.cause = { code: "invalid_auth_scheme" };
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, { includeError: false });
+      throw this.#addChallenges(err, mode, scheme, { includeError: false });
     }
     if (mode !== "disabled" && hasDpopParams && options.scheme === void 0) {
       const err = new InvalidRequestError("");
       err.cause = { code: "invalid_auth_scheme" };
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, {
+      throw this.#addChallenges(err, mode, scheme, {
         includeError: false,
         dpopSpecific: true
       });
     }
     if (typeof options.accessToken !== "string" || !options.accessToken) {
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(""), mode, scheme, { includeError: false });
+      throw this.#addChallenges(new VerifyAccessTokenError(""), mode, scheme, { includeError: false });
     }
     const accessToken = options.accessToken;
-    const domains = __privateGet(this, _domains);
+    const domains = this.#domains;
     let jwks;
     let issuerForVerify = "";
     let unverifiedIss;
     let alg;
-    const defaultDomainUrl = __privateGet(this, _defaultDomainUrl);
+    const defaultDomainUrl = this.#defaultDomainUrl;
     try {
       try {
         const header = decodeProtectedHeader(accessToken);
@@ -66552,42 +66055,50 @@ var ApiClient = (_a15 = class {
         }
       } catch (error41) {
         const message2 = error41.message;
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(message2), mode, scheme);
+        throw this.#addChallenges(new VerifyAccessTokenError(message2), mode, scheme);
       }
       if (alg && alg.toUpperCase().startsWith("HS")) {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError("unsupported algorithm (symmetric algorithms are not supported)"), mode, scheme);
+        throw this.#addChallenges(
+          new VerifyAccessTokenError("unsupported algorithm (symmetric algorithms are not supported)"),
+          mode,
+          scheme
+        );
       }
       if (domains !== void 0) {
         if (!unverifiedIss) {
-          throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError('missing required "iss" claim'), mode, scheme);
+          throw this.#addChallenges(new VerifyAccessTokenError('missing required "iss" claim'), mode, scheme);
         }
         const context = {
           url: httpUrl,
           headers: options.headers,
           unverifiedIss
         };
-        const allowedDomains = await __privateMethod(this, _ApiClient_instances, resolveDomains_fn).call(this, domains, context, mode, scheme);
+        const allowedDomains = await this.#resolveDomains(domains, context, mode, scheme);
         const matchedDomain = allowedDomains.find((domain2) => domain2 === unverifiedIss);
         if (!matchedDomain) {
-          throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(
-            'unexpected "iss" claim value (issuer is not in the configured domain list)'
-          ), mode, scheme);
+          throw this.#addChallenges(
+            new VerifyAccessTokenError(
+              'unexpected "iss" claim value (issuer is not in the configured domain list)'
+            ),
+            mode,
+            scheme
+          );
         }
-        const { serverMetadata } = await __privateMethod(this, _ApiClient_instances, discoverDomain_fn).call(this, matchedDomain);
-        const { issuer, jwksUri } = __privateMethod(this, _ApiClient_instances, requireDiscoveryMetadata_fn).call(this, serverMetadata, mode, scheme);
+        const { serverMetadata } = await this.#discoverDomain(matchedDomain);
+        const { issuer, jwksUri } = this.#requireDiscoveryMetadata(serverMetadata, mode, scheme);
         issuerForVerify = issuer;
-        jwks = __privateMethod(this, _ApiClient_instances, getJwksForDomain_fn).call(this, jwksUri);
+        jwks = this.#getJwksForDomain(jwksUri);
       } else if (defaultDomainUrl !== void 0) {
-        const { serverMetadata } = await __privateMethod(this, _ApiClient_instances, discoverDomain_fn).call(this, defaultDomainUrl);
-        const { issuer, jwksUri } = __privateMethod(this, _ApiClient_instances, requireDiscoveryMetadata_fn).call(this, serverMetadata, mode, scheme);
+        const { serverMetadata } = await this.#discoverDomain(defaultDomainUrl);
+        const { issuer, jwksUri } = this.#requireDiscoveryMetadata(serverMetadata, mode, scheme);
         issuerForVerify = issuer;
-        jwks = __privateMethod(this, _ApiClient_instances, getJwksForDomain_fn).call(this, jwksUri);
+        jwks = this.#getJwksForDomain(jwksUri);
       } else {
         throw new MissingRequiredArgumentError2("domain or domains");
       }
       const jwtVerifyOptions = {
-        audience: __privateGet(this, _options2).audience,
-        algorithms: options.algorithms ? normalizeAlgorithms(options.algorithms) : __privateGet(this, _algorithms),
+        audience: this.#options.audience,
+        algorithms: options.algorithms ? normalizeAlgorithms(options.algorithms) : this.#algorithms,
         requiredClaims: ["iat", "exp", ...options.requiredClaims || []],
         issuer: issuerForVerify
       };
@@ -66602,31 +66113,44 @@ var ApiClient = (_a15 = class {
       }
       const hasProof = typeof dpopProof === "string";
       if (mode !== "disabled" && scheme === "bearer" && hasProof && !cnfJkt) {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new InvalidRequestError("DPoP proof requires the DPoP authentication scheme, not Bearer"), mode, scheme);
+        throw this.#addChallenges(
+          new InvalidRequestError("DPoP proof requires the DPoP authentication scheme, not Bearer"),
+          mode,
+          scheme
+        );
       }
       const shouldVerifyDpop = mode !== "disabled" && (mode === "required" || scheme === "dpop" || hasProof || !!cnfJkt);
       if (mode !== "disabled" && scheme === "dpop" && !cnfJkt) {
         const err = new VerifyAccessTokenError("JWT Access Token has no jkt confirmation claim");
         err.cause = { code: "dpop_binding_mismatch" };
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, { dpopSpecific: true });
+        throw this.#addChallenges(err, mode, scheme, { dpopSpecific: true });
       }
       if (scheme === "bearer" && cnfJkt && mode !== "disabled") {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError("DPoP-bound token requires the DPoP authentication scheme, not Bearer"), mode, scheme);
+        throw this.#addChallenges(
+          new VerifyAccessTokenError("DPoP-bound token requires the DPoP authentication scheme, not Bearer"),
+          mode,
+          scheme
+        );
       }
       if (!shouldVerifyDpop) {
         return payload;
       }
       if (!dpopProof) {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new InvalidRequestError(""), mode, scheme, {
+        throw this.#addChallenges(new InvalidRequestError(""), mode, scheme, {
           dpopSpecific: true,
           includeError: false
         });
       }
       if (typeof httpMethod !== "string" || !httpMethod) {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new InvalidRequestError("HTTP method is required for DPoP validation"), mode, scheme, { dpopSpecific: true });
+        throw this.#addChallenges(
+          new InvalidRequestError("HTTP method is required for DPoP validation"),
+          mode,
+          scheme,
+          { dpopSpecific: true }
+        );
       }
       if (typeof httpUrl !== "string" || !httpUrl) {
-        throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new InvalidRequestError("HTTP URL is required for DPoP validation"), mode, scheme, {
+        throw this.#addChallenges(new InvalidRequestError("HTTP URL is required for DPoP validation"), mode, scheme, {
           dpopSpecific: true
         });
       }
@@ -66643,7 +66167,7 @@ var ApiClient = (_a15 = class {
         });
       } catch (err) {
         if (err instanceof VerifyAccessTokenError || err instanceof InvalidDpopProofError || err instanceof InvalidRequestError) {
-          throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme, { dpopSpecific: true });
+          throw this.#addChallenges(err, mode, scheme, { dpopSpecific: true });
         }
         throw err;
       }
@@ -66654,8 +66178,117 @@ var ApiClient = (_a15 = class {
       }
       const message2 = e2 instanceof Error ? e2.message : String(e2);
       const err = new VerifyAccessTokenError(message2);
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, err, mode, scheme);
+      throw this.#addChallenges(err, mode, scheme);
     }
+  }
+  async #resolveDomains(domains, context, mode, scheme) {
+    if (Array.isArray(domains)) {
+      return domains;
+    }
+    let resolved;
+    try {
+      resolved = await domains(context);
+    } catch {
+      throw this.#addChallenges(
+        new VerifyAccessTokenError("domain validation failed: domains resolver failed"),
+        mode,
+        scheme
+      );
+    }
+    if (!Array.isArray(resolved)) {
+      throw this.#addChallenges(
+        new VerifyAccessTokenError(
+          "domain validation failed: domains resolver must return an array of domain strings"
+        ),
+        mode,
+        scheme
+      );
+    }
+    if (resolved.length === 0) {
+      throw this.#addChallenges(
+        new VerifyAccessTokenError(
+          "domain validation failed: domains resolver returned no allowed domains"
+        ),
+        mode,
+        scheme
+      );
+    }
+    const normalized = [];
+    for (const domain2 of resolved) {
+      if (typeof domain2 !== "string" || !domain2.trim()) {
+        throw this.#addChallenges(
+          new VerifyAccessTokenError(
+            "domain validation failed: domains resolver returned a non-string domain"
+          ),
+          mode,
+          scheme
+        );
+      }
+      try {
+        normalized.push(normalizeDomain(domain2));
+      } catch (error41) {
+        const message2 = error41.message;
+        throw this.#addChallenges(new VerifyAccessTokenError(message2), mode, scheme);
+      }
+    }
+    return Array.from(new Set(normalized));
+  }
+  #requireDiscoveryMetadata(serverMetadata, mode, scheme) {
+    if (!serverMetadata.jwks_uri) {
+      throw this.#addChallenges(
+        new VerifyAccessTokenError('missing "jwks_uri" in discovery metadata'),
+        mode,
+        scheme
+      );
+    }
+    return { issuer: serverMetadata.issuer, jwksUri: serverMetadata.jwks_uri };
+  }
+  #getJwksForDomain(jwksUri) {
+    const existing = this.#jwksByUri.get(jwksUri);
+    if (existing) {
+      return existing;
+    }
+    const jwksUrl = new URL(jwksUri);
+    const jwks = createRemoteJWKSet(jwksUrl, {
+      [customFetch]: this.#createJwksFetch()
+    });
+    this.#jwksByUri.set(jwksUri, jwks);
+    return jwks;
+  }
+  #createJwksFetch() {
+    const baseFetch = this.#options.customFetch ?? fetch;
+    return async (input, init) => {
+      try {
+        const response = await baseFetch(input, init);
+        if (!response.ok) {
+          throw new Error("JWKS request failed");
+        }
+        return response;
+      } catch (error41) {
+        if (error41 instanceof Error && error41.message.startsWith("JWKS request failed")) {
+          throw error41;
+        }
+        throw new Error("JWKS request failed");
+      }
+    };
+  }
+  #addChallenges(err, mode, scheme, params) {
+    const authErr = err;
+    if (!authErr.headers) {
+      const includeError = params?.includeError ?? true;
+      const target = params?.target ?? (params?.dpopSpecific === true ? "dpop" : scheme === "dpop" ? "dpop" : "bearer");
+      let challengeCode = authErr.code;
+      if (authErr instanceof VerifyAccessTokenError) {
+        challengeCode = "invalid_token";
+      } else if (authErr instanceof InvalidRequestError) {
+        challengeCode = "invalid_request";
+      } else if (authErr instanceof InvalidDpopProofError) {
+        challengeCode = "invalid_dpop_proof";
+      }
+      const challengeParams = includeError && target === "dpop" ? { dpopError: challengeCode, dpopErrorDescription: authErr.message } : includeError && target === "bearer" ? { error: challengeCode, errorDescription: authErr.message } : {};
+      authErr.headers = buildChallenges(mode, ALLOWED_DPOP_ALGORITHMS, challengeParams);
+    }
+    return authErr;
   }
   /**
    * Retrieves an access token for a connection.
@@ -66667,10 +66300,10 @@ var ApiClient = (_a15 = class {
    * @returns The Connection Token Set, containing the access token for the connection, as well as additional information.
    */
   async getAccessTokenForConnection(options) {
-    if (!__privateGet(this, _authClient)) {
+    if (!this.#authClient) {
       throw new TokenForConnectionError2("Client credentials are required to use getAccessTokenForConnection");
     }
-    const tokenEndpointResponse = await __privateGet(this, _authClient).getTokenForConnection({
+    const tokenEndpointResponse = await this.#authClient.getTokenForConnection({
       connection: options.connection,
       loginHint: options.loginHint,
       accessToken: options.accessToken
@@ -66719,10 +66352,10 @@ var ApiClient = (_a15 = class {
    * ```
    */
   async getTokenByExchangeProfile(subjectToken, options) {
-    if (!__privateGet(this, _authClient)) {
+    if (!this.#authClient) {
       throw new MissingClientAuthError2();
     }
-    const response = await __privateGet(this, _authClient).exchangeToken({
+    const response = await this.#authClient.exchangeToken({
       subjectTokenType: options.subjectTokenType,
       subjectToken,
       audience: options.audience,
@@ -66781,102 +66414,7 @@ var ApiClient = (_a15 = class {
       ...result.issuedTokenType && { issuedTokenType: result.issuedTokenType }
     };
   }
-}, _serverMetadataByDomain = new WeakMap(), _options2 = new WeakMap(), _jwksByUri = new WeakMap(), _domains = new WeakMap(), _algorithms = new WeakMap(), _defaultDomainUrl = new WeakMap(), _authClient = new WeakMap(), _ApiClient_instances = new WeakSet(), discoverDomain_fn = async function(domain2) {
-  const serverMetadata = await __privateGet(this, _serverMetadataByDomain).getOrSet(domain2, async () => {
-    const issuer = new URL(domain2);
-    const response = await discoveryRequest(issuer, {
-      [customFetch2]: __privateGet(this, _options2).customFetch
-    });
-    return processDiscoveryResponse(issuer, response);
-  });
-  return { serverMetadata };
-}, resolveDomains_fn = async function(domains, context, mode, scheme) {
-  if (Array.isArray(domains)) {
-    return domains;
-  }
-  let resolved;
-  try {
-    resolved = await domains(context);
-  } catch {
-    throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError("domain validation failed: domains resolver failed"), mode, scheme);
-  }
-  if (!Array.isArray(resolved)) {
-    throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(
-      "domain validation failed: domains resolver must return an array of domain strings"
-    ), mode, scheme);
-  }
-  if (resolved.length === 0) {
-    throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(
-      "domain validation failed: domains resolver returned no allowed domains"
-    ), mode, scheme);
-  }
-  const normalized = [];
-  for (const domain2 of resolved) {
-    if (typeof domain2 !== "string" || !domain2.trim()) {
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(
-        "domain validation failed: domains resolver returned a non-string domain"
-      ), mode, scheme);
-    }
-    try {
-      normalized.push(normalizeDomain(domain2));
-    } catch (error41) {
-      const message2 = error41.message;
-      throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError(message2), mode, scheme);
-    }
-  }
-  return Array.from(new Set(normalized));
-}, requireDiscoveryMetadata_fn = function(serverMetadata, mode, scheme) {
-  if (!serverMetadata.jwks_uri) {
-    throw __privateMethod(this, _ApiClient_instances, addChallenges_fn).call(this, new VerifyAccessTokenError('missing "jwks_uri" in discovery metadata'), mode, scheme);
-  }
-  return { issuer: serverMetadata.issuer, jwksUri: serverMetadata.jwks_uri };
-}, getJwksForDomain_fn = function(jwksUri) {
-  const existing = __privateGet(this, _jwksByUri).get(jwksUri);
-  if (existing) {
-    return existing;
-  }
-  const jwksUrl = new URL(jwksUri);
-  const jwks = createRemoteJWKSet(jwksUrl, {
-    [customFetch]: __privateMethod(this, _ApiClient_instances, createJwksFetch_fn).call(this)
-  });
-  __privateGet(this, _jwksByUri).set(jwksUri, jwks);
-  return jwks;
-}, createJwksFetch_fn = function() {
-  var _a19;
-  const baseFetch = (_a19 = __privateGet(this, _options2).customFetch) != null ? _a19 : fetch;
-  return async (input, init) => {
-    try {
-      const response = await baseFetch(input, init);
-      if (!response.ok) {
-        throw new Error("JWKS request failed");
-      }
-      return response;
-    } catch (error41) {
-      if (error41 instanceof Error && error41.message.startsWith("JWKS request failed")) {
-        throw error41;
-      }
-      throw new Error("JWKS request failed");
-    }
-  };
-}, addChallenges_fn = function(err, mode, scheme, params) {
-  var _a19, _b8;
-  const authErr = err;
-  if (!authErr.headers) {
-    const includeError = (_a19 = params == null ? void 0 : params.includeError) != null ? _a19 : true;
-    const target = (_b8 = params == null ? void 0 : params.target) != null ? _b8 : (params == null ? void 0 : params.dpopSpecific) === true ? "dpop" : scheme === "dpop" ? "dpop" : "bearer";
-    let challengeCode = authErr.code;
-    if (authErr instanceof VerifyAccessTokenError) {
-      challengeCode = "invalid_token";
-    } else if (authErr instanceof InvalidRequestError) {
-      challengeCode = "invalid_request";
-    } else if (authErr instanceof InvalidDpopProofError) {
-      challengeCode = "invalid_dpop_proof";
-    }
-    const challengeParams = includeError && target === "dpop" ? { dpopError: challengeCode, dpopErrorDescription: authErr.message } : includeError && target === "bearer" ? { error: challengeCode, errorDescription: authErr.message } : {};
-    authErr.headers = buildChallenges(mode, ALLOWED_DPOP_ALGORITHMS, challengeParams);
-  }
-  return authErr;
-}, _a15);
+};
 function normalizeDomain(value) {
   if (typeof value !== "string" || !value.trim()) {
     throw new Error("domain must be a non-empty string");
@@ -67044,7 +66582,6 @@ function createAuth0Verifier(opts) {
   const client = new ApiClient({ domain: toDomain(opts.domain), audience: opts.audience });
   return {
     async verifyAccessToken(token) {
-      var _a19;
       let claims;
       try {
         claims = await client.verifyAccessToken({ accessToken: token });
@@ -67056,7 +66593,7 @@ function createAuth0Verifier(opts) {
       const scopes = typeof claims.scope === "string" ? claims.scope.split(" ").filter(Boolean) : [];
       return {
         token,
-        clientId: typeof claims.azp === "string" ? claims.azp : (_a19 = claims.aud) != null ? _a19 : "",
+        clientId: typeof claims.azp === "string" ? claims.azp : claims.aud ?? "",
         scopes,
         expiresAt: typeof claims.exp === "number" ? claims.exp : void 0,
         // The user id `resolveUserSub` needs. subFromExtra reads this. `act` (RFC
@@ -67067,9 +66604,8 @@ function createAuth0Verifier(opts) {
   };
 }
 function subFromExtra(extra) {
-  var _a19;
-  const authInfo = extra == null ? void 0 : extra.authInfo;
-  const sub = (_a19 = authInfo == null ? void 0 : authInfo.extra) == null ? void 0 : _a19.sub;
+  const authInfo = extra?.authInfo;
+  const sub = authInfo?.extra?.sub;
   return typeof sub === "string" ? sub : void 0;
 }
 
@@ -67543,7 +67079,7 @@ var isAsync2 = (x) => typeof Promise !== "undefined" && x instanceof Promise;
 var errorUtil2;
 (function(errorUtil3) {
   errorUtil3.errToObj = (message2) => typeof message2 === "string" ? { message: message2 } : message2 || {};
-  errorUtil3.toString = (message2) => typeof message2 === "string" ? message2 : message2 == null ? void 0 : message2.message;
+  errorUtil3.toString = (message2) => typeof message2 === "string" ? message2 : message2?.message;
 })(errorUtil2 || (errorUtil2 = {}));
 
 // node_modules/zod/v3/types.js
@@ -67595,17 +67131,16 @@ function processCreateParams2(params) {
   if (errorMap3)
     return { errorMap: errorMap3, description };
   const customMap = (iss, ctx) => {
-    var _a19, _b8;
     const { message: message2 } = params;
     if (iss.code === "invalid_enum_value") {
-      return { message: message2 != null ? message2 : ctx.defaultError };
+      return { message: message2 ?? ctx.defaultError };
     }
     if (typeof ctx.data === "undefined") {
-      return { message: (_a19 = message2 != null ? message2 : required_error) != null ? _a19 : ctx.defaultError };
+      return { message: message2 ?? required_error ?? ctx.defaultError };
     }
     if (iss.code !== "invalid_type")
       return { message: ctx.defaultError };
-    return { message: (_b8 = message2 != null ? message2 : invalid_type_error) != null ? _b8 : ctx.defaultError };
+    return { message: message2 ?? invalid_type_error ?? ctx.defaultError };
   };
   return { errorMap: customMap, description };
 }
@@ -67657,14 +67192,13 @@ var ZodType3 = class {
     throw result.error;
   }
   safeParse(data, params) {
-    var _a19;
     const ctx = {
       common: {
         issues: [],
-        async: (_a19 = params == null ? void 0 : params.async) != null ? _a19 : false,
-        contextualErrorMap: params == null ? void 0 : params.errorMap
+        async: params?.async ?? false,
+        contextualErrorMap: params?.errorMap
       },
-      path: (params == null ? void 0 : params.path) || [],
+      path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
@@ -67674,7 +67208,6 @@ var ZodType3 = class {
     return handleResult2(ctx, result);
   }
   "~validate"(data) {
-    var _a19, _b8;
     const ctx = {
       common: {
         issues: [],
@@ -67695,7 +67228,7 @@ var ZodType3 = class {
           issues: ctx.common.issues
         };
       } catch (err) {
-        if ((_b8 = (_a19 = err == null ? void 0 : err.message) == null ? void 0 : _a19.toLowerCase()) == null ? void 0 : _b8.includes("encountered")) {
+        if (err?.message?.toLowerCase()?.includes("encountered")) {
           this["~standard"].async = true;
         }
         ctx.common = {
@@ -67720,10 +67253,10 @@ var ZodType3 = class {
     const ctx = {
       common: {
         issues: [],
-        contextualErrorMap: params == null ? void 0 : params.errorMap,
+        contextualErrorMap: params?.errorMap,
         async: true
       },
-      path: (params == null ? void 0 : params.path) || [],
+      path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
@@ -67954,7 +67487,7 @@ function isValidJWT3(jwt2, alg) {
     const decoded = JSON.parse(atob(base644));
     if (typeof decoded !== "object" || decoded === null)
       return false;
-    if ("typ" in decoded && (decoded == null ? void 0 : decoded.typ) !== "JWT")
+    if ("typ" in decoded && decoded?.typ !== "JWT")
       return false;
     if (!decoded.alg)
       return false;
@@ -68332,7 +67865,6 @@ var ZodString3 = class _ZodString3 extends ZodType3 {
     return this._addCheck({ kind: "cidr", ...errorUtil2.errToObj(options) });
   }
   datetime(options) {
-    var _a19, _b8;
     if (typeof options === "string") {
       return this._addCheck({
         kind: "datetime",
@@ -68344,10 +67876,10 @@ var ZodString3 = class _ZodString3 extends ZodType3 {
     }
     return this._addCheck({
       kind: "datetime",
-      precision: typeof (options == null ? void 0 : options.precision) === "undefined" ? null : options == null ? void 0 : options.precision,
-      offset: (_a19 = options == null ? void 0 : options.offset) != null ? _a19 : false,
-      local: (_b8 = options == null ? void 0 : options.local) != null ? _b8 : false,
-      ...errorUtil2.errToObj(options == null ? void 0 : options.message)
+      precision: typeof options?.precision === "undefined" ? null : options?.precision,
+      offset: options?.offset ?? false,
+      local: options?.local ?? false,
+      ...errorUtil2.errToObj(options?.message)
     });
   }
   date(message2) {
@@ -68363,8 +67895,8 @@ var ZodString3 = class _ZodString3 extends ZodType3 {
     }
     return this._addCheck({
       kind: "time",
-      precision: typeof (options == null ? void 0 : options.precision) === "undefined" ? null : options == null ? void 0 : options.precision,
-      ...errorUtil2.errToObj(options == null ? void 0 : options.message)
+      precision: typeof options?.precision === "undefined" ? null : options?.precision,
+      ...errorUtil2.errToObj(options?.message)
     });
   }
   duration(message2) {
@@ -68381,8 +67913,8 @@ var ZodString3 = class _ZodString3 extends ZodType3 {
     return this._addCheck({
       kind: "includes",
       value,
-      position: options == null ? void 0 : options.position,
-      ...errorUtil2.errToObj(options == null ? void 0 : options.message)
+      position: options?.position,
+      ...errorUtil2.errToObj(options?.message)
     });
   }
   startsWith(value, message2) {
@@ -68514,11 +68046,10 @@ var ZodString3 = class _ZodString3 extends ZodType3 {
   }
 };
 ZodString3.create = (params) => {
-  var _a19;
   return new ZodString3({
     checks: [],
     typeName: ZodFirstPartyTypeKind2.ZodString,
-    coerce: (_a19 = params == null ? void 0 : params.coerce) != null ? _a19 : false,
+    coerce: params?.coerce ?? false,
     ...processCreateParams2(params)
   });
 };
@@ -68758,7 +68289,7 @@ ZodNumber3.create = (params) => {
   return new ZodNumber3({
     checks: [],
     typeName: ZodFirstPartyTypeKind2.ZodNumber,
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     ...processCreateParams2(params)
   });
 };
@@ -68927,11 +68458,10 @@ var ZodBigInt3 = class _ZodBigInt extends ZodType3 {
   }
 };
 ZodBigInt3.create = (params) => {
-  var _a19;
   return new ZodBigInt3({
     checks: [],
     typeName: ZodFirstPartyTypeKind2.ZodBigInt,
-    coerce: (_a19 = params == null ? void 0 : params.coerce) != null ? _a19 : false,
+    coerce: params?.coerce ?? false,
     ...processCreateParams2(params)
   });
 };
@@ -68956,7 +68486,7 @@ var ZodBoolean3 = class extends ZodType3 {
 ZodBoolean3.create = (params) => {
   return new ZodBoolean3({
     typeName: ZodFirstPartyTypeKind2.ZodBoolean,
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     ...processCreateParams2(params)
   });
 };
@@ -69064,7 +68594,7 @@ var ZodDate3 = class _ZodDate extends ZodType3 {
 ZodDate3.create = (params) => {
   return new ZodDate3({
     checks: [],
-    coerce: (params == null ? void 0 : params.coerce) || false,
+    coerce: params?.coerce || false,
     typeName: ZodFirstPartyTypeKind2.ZodDate,
     ...processCreateParams2(params)
   });
@@ -69438,11 +68968,10 @@ var ZodObject3 = class _ZodObject extends ZodType3 {
       unknownKeys: "strict",
       ...message2 !== void 0 ? {
         errorMap: (issue3, ctx) => {
-          var _a19, _b8, _c2, _d2;
-          const defaultError = (_c2 = (_b8 = (_a19 = this._def).errorMap) == null ? void 0 : _b8.call(_a19, issue3, ctx).message) != null ? _c2 : ctx.defaultError;
+          const defaultError = this._def.errorMap?.(issue3, ctx).message ?? ctx.defaultError;
           if (issue3.code === "unrecognized_keys")
             return {
-              message: (_d2 = errorUtil2.errToObj(message2).message) != null ? _d2 : defaultError
+              message: errorUtil2.errToObj(message2).message ?? defaultError
             };
           return {
             message: defaultError
@@ -70962,15 +70491,13 @@ var NEVER3 = Object.freeze({
 });
 // @__NO_SIDE_EFFECTS__
 function $constructor2(name, initializer5, params) {
-  var _a19;
   function init(inst, def) {
-    var _a21, _b8;
-    var _a20;
+    var _a2;
     Object.defineProperty(inst, "_zod", {
-      value: (_a21 = inst._zod) != null ? _a21 : {},
+      value: inst._zod ?? {},
       enumerable: false
     });
-    (_b8 = (_a20 = inst._zod).traits) != null ? _b8 : _a20.traits = /* @__PURE__ */ new Set();
+    (_a2 = inst._zod).traits ?? (_a2.traits = /* @__PURE__ */ new Set());
     inst._zod.traits.add(name);
     initializer5(inst, def);
     for (const k3 in _2.prototype) {
@@ -70980,16 +70507,15 @@ function $constructor2(name, initializer5, params) {
     inst._zod.constr = _2;
     inst._zod.def = def;
   }
-  const Parent = (_a19 = params == null ? void 0 : params.Parent) != null ? _a19 : Object;
+  const Parent = params?.Parent ?? Object;
   class Definition extends Parent {
   }
   Object.defineProperty(Definition, "name", { value: name });
   function _2(def) {
-    var _a21;
-    var _a20;
-    const inst = (params == null ? void 0 : params.Parent) ? new Definition() : this;
+    var _a2;
+    const inst = params?.Parent ? new Definition() : this;
     init(inst, def);
-    (_a21 = (_a20 = inst._zod).deferred) != null ? _a21 : _a20.deferred = [];
+    (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
     for (const fn2 of inst._zod.deferred) {
       fn2();
     }
@@ -70998,10 +70524,9 @@ function $constructor2(name, initializer5, params) {
   Object.defineProperty(_2, "init", { value: init });
   Object.defineProperty(_2, Symbol.hasInstance, {
     value: (inst) => {
-      var _a20, _b8;
-      if ((params == null ? void 0 : params.Parent) && inst instanceof params.Parent)
+      if (params?.Parent && inst instanceof params.Parent)
         return true;
-      return (_b8 = (_a20 = inst == null ? void 0 : inst._zod) == null ? void 0 : _a20.traits) == null ? void 0 : _b8.has(name);
+      return inst?._zod?.traits?.has(name);
     }
   });
   Object.defineProperty(_2, "name", { value: name });
@@ -71158,7 +70683,7 @@ function assignProp2(target, prop, value) {
 function getElementAtPath2(obj, path) {
   if (!path)
     return obj;
-  return path.reduce((acc, key) => acc == null ? void 0 : acc[key], obj);
+  return path.reduce((acc, key) => acc?.[key], obj);
 }
 function promiseAllObject2(promisesObj) {
   const keys = Object.keys(promisesObj);
@@ -71188,8 +70713,7 @@ function isObject3(data) {
   return typeof data === "object" && data !== null && !Array.isArray(data);
 }
 var allowsEval2 = cached3(() => {
-  var _a19;
-  if (typeof navigator !== "undefined" && ((_a19 = navigator == null ? void 0 : navigator.userAgent) == null ? void 0 : _a19.includes("Cloudflare"))) {
+  if (typeof navigator !== "undefined" && navigator?.userAgent?.includes("Cloudflare")) {
     return false;
   }
   try {
@@ -71273,8 +70797,8 @@ function escapeRegex2(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 function clone2(inst, def, params) {
-  const cl2 = new inst._zod.constr(def != null ? def : inst._zod.def);
-  if (!def || (params == null ? void 0 : params.parent))
+  const cl2 = new inst._zod.constr(def ?? inst._zod.def);
+  if (!def || params?.parent)
     cl2._zod.parent = inst;
   return cl2;
 }
@@ -71284,8 +70808,8 @@ function normalizeParams2(_params) {
     return {};
   if (typeof params === "string")
     return { error: () => params };
-  if ((params == null ? void 0 : params.message) !== void 0) {
-    if ((params == null ? void 0 : params.error) !== void 0)
+  if (params?.message !== void 0) {
+    if (params?.error !== void 0)
       throw new Error("Cannot specify both `message` and `error` params");
     params.error = params.message;
   }
@@ -71298,31 +70822,31 @@ function createTransparentProxy2(getter) {
   let target;
   return new Proxy({}, {
     get(_2, prop, receiver) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.get(target, prop, receiver);
     },
     set(_2, prop, value, receiver) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.set(target, prop, value, receiver);
     },
     has(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.has(target, prop);
     },
     deleteProperty(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.deleteProperty(target, prop);
     },
     ownKeys(_2) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.ownKeys(target);
     },
     getOwnPropertyDescriptor(_2, prop) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.getOwnPropertyDescriptor(target, prop);
     },
     defineProperty(_2, prop, descriptor) {
-      target != null ? target : target = getter();
+      target ?? (target = getter());
       return Reflect.defineProperty(target, prop, descriptor);
     }
   });
@@ -71473,35 +70997,32 @@ function required2(Class3, schema, mask) {
   });
 }
 function aborted2(x, startIndex = 0) {
-  var _a19;
   for (let i = startIndex; i < x.issues.length; i++) {
-    if (((_a19 = x.issues[i]) == null ? void 0 : _a19.continue) !== true)
+    if (x.issues[i]?.continue !== true)
       return true;
   }
   return false;
 }
 function prefixIssues2(path, issues) {
   return issues.map((iss) => {
-    var _a20;
-    var _a19;
-    (_a20 = (_a19 = iss).path) != null ? _a20 : _a19.path = [];
+    var _a2;
+    (_a2 = iss).path ?? (_a2.path = []);
     iss.path.unshift(path);
     return iss;
   });
 }
 function unwrapMessage2(message2) {
-  return typeof message2 === "string" ? message2 : message2 == null ? void 0 : message2.message;
+  return typeof message2 === "string" ? message2 : message2?.message;
 }
 function finalizeIssue2(iss, ctx, config3) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2;
-  const full = { ...iss, path: (_a19 = iss.path) != null ? _a19 : [] };
+  const full = { ...iss, path: iss.path ?? [] };
   if (!iss.message) {
-    const message2 = (_k2 = (_j = (_h2 = (_f2 = unwrapMessage2((_d2 = (_c2 = (_b8 = iss.inst) == null ? void 0 : _b8._zod.def) == null ? void 0 : _c2.error) == null ? void 0 : _d2.call(_c2, iss))) != null ? _f2 : unwrapMessage2((_e2 = ctx == null ? void 0 : ctx.error) == null ? void 0 : _e2.call(ctx, iss))) != null ? _h2 : unwrapMessage2((_g2 = config3.customError) == null ? void 0 : _g2.call(config3, iss))) != null ? _j : unwrapMessage2((_i2 = config3.localeError) == null ? void 0 : _i2.call(config3, iss))) != null ? _k2 : "Invalid input";
+    const message2 = unwrapMessage2(iss.inst?._zod.def?.error?.(iss)) ?? unwrapMessage2(ctx?.error?.(iss)) ?? unwrapMessage2(config3.customError?.(iss)) ?? unwrapMessage2(config3.localeError?.(iss)) ?? "Invalid input";
     full.message = message2;
   }
   delete full.inst;
   delete full.continue;
-  if (!(ctx == null ? void 0 : ctx.reportInput)) {
+  if (!ctx?.reportInput) {
     delete full.input;
   }
   return full;
@@ -71621,29 +71142,27 @@ function formatError2(error41, _mapper) {
 
 // node_modules/zod/v4/core/parse.js
 var _parse2 = (_Err) => (schema, value, _ctx, _params) => {
-  var _a19;
   const ctx = _ctx ? Object.assign(_ctx, { async: false }) : { async: false };
   const result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise) {
     throw new $ZodAsyncError2();
   }
   if (result.issues.length) {
-    const e2 = new ((_a19 = _params == null ? void 0 : _params.Err) != null ? _a19 : _Err)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())));
-    captureStackTrace2(e2, _params == null ? void 0 : _params.callee);
+    const e2 = new (_params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())));
+    captureStackTrace2(e2, _params?.callee);
     throw e2;
   }
   return result.value;
 };
 var parse3 = /* @__PURE__ */ _parse2($ZodRealError2);
 var _parseAsync2 = (_Err) => async (schema, value, _ctx, params) => {
-  var _a19;
   const ctx = _ctx ? Object.assign(_ctx, { async: true }) : { async: true };
   let result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise)
     result = await result;
   if (result.issues.length) {
-    const e2 = new ((_a19 = params == null ? void 0 : params.Err) != null ? _a19 : _Err)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())));
-    captureStackTrace2(e2, params == null ? void 0 : params.callee);
+    const e2 = new (params?.Err ?? _Err)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())));
+    captureStackTrace2(e2, params?.callee);
     throw e2;
   }
   return result.value;
@@ -71657,7 +71176,7 @@ var _safeParse2 = (_Err) => (schema, value, _ctx) => {
   }
   return result.issues.length ? {
     success: false,
-    error: new (_Err != null ? _Err : $ZodError2)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())))
+    error: new (_Err ?? $ZodError2)(result.issues.map((iss) => finalizeIssue2(iss, ctx, config2())))
   } : { success: true, data: result.value };
 };
 var safeParse4 = /* @__PURE__ */ _safeParse2($ZodRealError2);
@@ -71721,8 +71240,7 @@ function datetime3(args) {
   return new RegExp(`^${dateSource2}T(?:${timeRegex3})$`);
 }
 var string4 = (params) => {
-  var _a19, _b8;
-  const regex = params ? `[\\s\\S]{${(_a19 = params == null ? void 0 : params.minimum) != null ? _a19 : 0},${(_b8 = params == null ? void 0 : params.maximum) != null ? _b8 : ""}}` : `[\\s\\S]*`;
+  const regex = params ? `[\\s\\S]{${params?.minimum ?? 0},${params?.maximum ?? ""}}` : `[\\s\\S]*`;
   return new RegExp(`^${regex}$`);
 };
 var integer2 = /^\d+$/;
@@ -71734,11 +71252,10 @@ var uppercase2 = /^[^a-z]*$/;
 
 // node_modules/zod/v4/core/checks.js
 var $ZodCheck2 = /* @__PURE__ */ $constructor2("$ZodCheck", (inst, def) => {
-  var _a20, _b8;
-  var _a19;
-  (_a20 = inst._zod) != null ? _a20 : inst._zod = {};
+  var _a2;
+  inst._zod ?? (inst._zod = {});
   inst._zod.def = def;
-  (_b8 = (_a19 = inst._zod).onattach) != null ? _b8 : _a19.onattach = [];
+  (_a2 = inst._zod).onattach ?? (_a2.onattach = []);
 });
 var numericOriginMap2 = {
   number: "number",
@@ -71749,9 +71266,8 @@ var $ZodCheckLessThan2 = /* @__PURE__ */ $constructor2("$ZodCheckLessThan", (ins
   $ZodCheck2.init(inst, def);
   const origin = numericOriginMap2[typeof def.value];
   inst._zod.onattach.push((inst2) => {
-    var _a19;
     const bag = inst2._zod.bag;
-    const curr = (_a19 = def.inclusive ? bag.maximum : bag.exclusiveMaximum) != null ? _a19 : Number.POSITIVE_INFINITY;
+    const curr = (def.inclusive ? bag.maximum : bag.exclusiveMaximum) ?? Number.POSITIVE_INFINITY;
     if (def.value < curr) {
       if (def.inclusive)
         bag.maximum = def.value;
@@ -71778,9 +71294,8 @@ var $ZodCheckGreaterThan2 = /* @__PURE__ */ $constructor2("$ZodCheckGreaterThan"
   $ZodCheck2.init(inst, def);
   const origin = numericOriginMap2[typeof def.value];
   inst._zod.onattach.push((inst2) => {
-    var _a19;
     const bag = inst2._zod.bag;
-    const curr = (_a19 = def.inclusive ? bag.minimum : bag.exclusiveMinimum) != null ? _a19 : Number.NEGATIVE_INFINITY;
+    const curr = (def.inclusive ? bag.minimum : bag.exclusiveMinimum) ?? Number.NEGATIVE_INFINITY;
     if (def.value > curr) {
       if (def.inclusive)
         bag.minimum = def.value;
@@ -71806,9 +71321,8 @@ var $ZodCheckGreaterThan2 = /* @__PURE__ */ $constructor2("$ZodCheckGreaterThan"
 var $ZodCheckMultipleOf2 = /* @__PURE__ */ $constructor2("$ZodCheckMultipleOf", (inst, def) => {
   $ZodCheck2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
-    var _a20;
-    var _a19;
-    (_a20 = (_a19 = inst2._zod.bag).multipleOf) != null ? _a20 : _a19.multipleOf = def.value;
+    var _a2;
+    (_a2 = inst2._zod.bag).multipleOf ?? (_a2.multipleOf = def.value);
   });
   inst._zod.check = (payload) => {
     if (typeof payload.value !== typeof def.value)
@@ -71827,10 +71341,9 @@ var $ZodCheckMultipleOf2 = /* @__PURE__ */ $constructor2("$ZodCheckMultipleOf", 
   };
 });
 var $ZodCheckNumberFormat2 = /* @__PURE__ */ $constructor2("$ZodCheckNumberFormat", (inst, def) => {
-  var _a19;
   $ZodCheck2.init(inst, def);
   def.format = def.format || "float64";
-  const isInt = (_a19 = def.format) == null ? void 0 : _a19.includes("int");
+  const isInt = def.format?.includes("int");
   const origin = isInt ? "int" : "number";
   const [minimum, maximum] = NUMBER_FORMAT_RANGES2[def.format];
   inst._zod.onattach.push((inst2) => {
@@ -71902,16 +71415,14 @@ var $ZodCheckNumberFormat2 = /* @__PURE__ */ $constructor2("$ZodCheckNumberForma
   };
 });
 var $ZodCheckMaxLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMaxLength", (inst, def) => {
-  var _a20;
-  var _a19;
+  var _a2;
   $ZodCheck2.init(inst, def);
-  (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
     const val = payload.value;
     return !nullish3(val) && val.length !== void 0;
-  };
+  });
   inst._zod.onattach.push((inst2) => {
-    var _a21;
-    const curr = (_a21 = inst2._zod.bag.maximum) != null ? _a21 : Number.POSITIVE_INFINITY;
+    const curr = inst2._zod.bag.maximum ?? Number.POSITIVE_INFINITY;
     if (def.maximum < curr)
       inst2._zod.bag.maximum = def.maximum;
   });
@@ -71933,16 +71444,14 @@ var $ZodCheckMaxLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMaxLength", (i
   };
 });
 var $ZodCheckMinLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMinLength", (inst, def) => {
-  var _a20;
-  var _a19;
+  var _a2;
   $ZodCheck2.init(inst, def);
-  (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
     const val = payload.value;
     return !nullish3(val) && val.length !== void 0;
-  };
+  });
   inst._zod.onattach.push((inst2) => {
-    var _a21;
-    const curr = (_a21 = inst2._zod.bag.minimum) != null ? _a21 : Number.NEGATIVE_INFINITY;
+    const curr = inst2._zod.bag.minimum ?? Number.NEGATIVE_INFINITY;
     if (def.minimum > curr)
       inst2._zod.bag.minimum = def.minimum;
   });
@@ -71964,13 +71473,12 @@ var $ZodCheckMinLength2 = /* @__PURE__ */ $constructor2("$ZodCheckMinLength", (i
   };
 });
 var $ZodCheckLengthEquals2 = /* @__PURE__ */ $constructor2("$ZodCheckLengthEquals", (inst, def) => {
-  var _a20;
-  var _a19;
+  var _a2;
   $ZodCheck2.init(inst, def);
-  (_a20 = (_a19 = inst._zod.def).when) != null ? _a20 : _a19.when = (payload) => {
+  (_a2 = inst._zod.def).when ?? (_a2.when = (payload) => {
     const val = payload.value;
     return !nullish3(val) && val.length !== void 0;
-  };
+  });
   inst._zod.onattach.push((inst2) => {
     const bag = inst2._zod.bag;
     bag.minimum = def.length;
@@ -71996,20 +71504,18 @@ var $ZodCheckLengthEquals2 = /* @__PURE__ */ $constructor2("$ZodCheckLengthEqual
   };
 });
 var $ZodCheckStringFormat2 = /* @__PURE__ */ $constructor2("$ZodCheckStringFormat", (inst, def) => {
-  var _a20, _b9;
-  var _a19, _b8;
+  var _a2, _b2;
   $ZodCheck2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
-    var _a21;
     const bag = inst2._zod.bag;
     bag.format = def.format;
     if (def.pattern) {
-      (_a21 = bag.patterns) != null ? _a21 : bag.patterns = /* @__PURE__ */ new Set();
+      bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
       bag.patterns.add(def.pattern);
     }
   });
   if (def.pattern)
-    (_a20 = (_a19 = inst._zod).check) != null ? _a20 : _a19.check = (payload) => {
+    (_a2 = inst._zod).check ?? (_a2.check = (payload) => {
       def.pattern.lastIndex = 0;
       if (def.pattern.test(payload.value))
         return;
@@ -72022,10 +71528,10 @@ var $ZodCheckStringFormat2 = /* @__PURE__ */ $constructor2("$ZodCheckStringForma
         inst,
         continue: !def.abort
       });
-    };
+    });
   else
-    (_b9 = (_b8 = inst._zod).check) != null ? _b9 : _b8.check = () => {
-    };
+    (_b2 = inst._zod).check ?? (_b2.check = () => {
+    });
 });
 var $ZodCheckRegex2 = /* @__PURE__ */ $constructor2("$ZodCheckRegex", (inst, def) => {
   $ZodCheckStringFormat2.init(inst, def);
@@ -72045,13 +71551,11 @@ var $ZodCheckRegex2 = /* @__PURE__ */ $constructor2("$ZodCheckRegex", (inst, def
   };
 });
 var $ZodCheckLowerCase2 = /* @__PURE__ */ $constructor2("$ZodCheckLowerCase", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = lowercase2;
+  def.pattern ?? (def.pattern = lowercase2);
   $ZodCheckStringFormat2.init(inst, def);
 });
 var $ZodCheckUpperCase2 = /* @__PURE__ */ $constructor2("$ZodCheckUpperCase", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = uppercase2;
+  def.pattern ?? (def.pattern = uppercase2);
   $ZodCheckStringFormat2.init(inst, def);
 });
 var $ZodCheckIncludes2 = /* @__PURE__ */ $constructor2("$ZodCheckIncludes", (inst, def) => {
@@ -72060,9 +71564,8 @@ var $ZodCheckIncludes2 = /* @__PURE__ */ $constructor2("$ZodCheckIncludes", (ins
   const pattern = new RegExp(typeof def.position === "number" ? `^.{${def.position}}${escapedRegex}` : escapedRegex);
   def.pattern = pattern;
   inst._zod.onattach.push((inst2) => {
-    var _a19;
     const bag = inst2._zod.bag;
-    (_a19 = bag.patterns) != null ? _a19 : bag.patterns = /* @__PURE__ */ new Set();
+    bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
     bag.patterns.add(pattern);
   });
   inst._zod.check = (payload) => {
@@ -72080,14 +71583,12 @@ var $ZodCheckIncludes2 = /* @__PURE__ */ $constructor2("$ZodCheckIncludes", (ins
   };
 });
 var $ZodCheckStartsWith2 = /* @__PURE__ */ $constructor2("$ZodCheckStartsWith", (inst, def) => {
-  var _a19;
   $ZodCheck2.init(inst, def);
   const pattern = new RegExp(`^${escapeRegex2(def.prefix)}.*`);
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = pattern;
+  def.pattern ?? (def.pattern = pattern);
   inst._zod.onattach.push((inst2) => {
-    var _a20;
     const bag = inst2._zod.bag;
-    (_a20 = bag.patterns) != null ? _a20 : bag.patterns = /* @__PURE__ */ new Set();
+    bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
     bag.patterns.add(pattern);
   });
   inst._zod.check = (payload) => {
@@ -72105,14 +71606,12 @@ var $ZodCheckStartsWith2 = /* @__PURE__ */ $constructor2("$ZodCheckStartsWith", 
   };
 });
 var $ZodCheckEndsWith2 = /* @__PURE__ */ $constructor2("$ZodCheckEndsWith", (inst, def) => {
-  var _a19;
   $ZodCheck2.init(inst, def);
   const pattern = new RegExp(`.*${escapeRegex2(def.suffix)}$`);
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = pattern;
+  def.pattern ?? (def.pattern = pattern);
   inst._zod.onattach.push((inst2) => {
-    var _a20;
     const bag = inst2._zod.bag;
-    (_a20 = bag.patterns) != null ? _a20 : bag.patterns = /* @__PURE__ */ new Set();
+    bag.patterns ?? (bag.patterns = /* @__PURE__ */ new Set());
     bag.patterns.add(pattern);
   });
   inst._zod.check = (payload) => {
@@ -72164,10 +71663,9 @@ var Doc2 = class {
     }
   }
   compile() {
-    var _a19;
     const F2 = Function;
-    const args = this == null ? void 0 : this.args;
-    const content2 = (_a19 = this == null ? void 0 : this.content) != null ? _a19 : [``];
+    const args = this?.args;
+    const content2 = this?.content ?? [``];
     const lines = [...content2.map((x) => `  ${x}`)];
     return new F2(...args, lines.join("\n"));
   }
@@ -72182,13 +71680,12 @@ var version2 = {
 
 // node_modules/zod/v4/core/schemas.js
 var $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
-  var _a20, _b8, _c2;
-  var _a19;
-  inst != null ? inst : inst = {};
+  var _a2;
+  inst ?? (inst = {});
   inst._zod.def = def;
   inst._zod.bag = inst._zod.bag || {};
   inst._zod.version = version2;
-  const checks = [...(_a20 = inst._zod.def.checks) != null ? _a20 : []];
+  const checks = [...inst._zod.def.checks ?? []];
   if (inst._zod.traits.has("$ZodCheck")) {
     checks.unshift(inst);
   }
@@ -72198,8 +71695,8 @@ var $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
     }
   }
   if (checks.length === 0) {
-    (_b8 = (_a19 = inst._zod).deferred) != null ? _b8 : _a19.deferred = [];
-    (_c2 = inst._zod.deferred) == null ? void 0 : _c2.push(() => {
+    (_a2 = inst._zod).deferred ?? (_a2.deferred = []);
+    inst._zod.deferred?.push(() => {
       inst._zod.run = inst._zod.parse;
     });
   } else {
@@ -72216,11 +71713,11 @@ var $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
         }
         const currLen = payload.issues.length;
         const _2 = ch2._zod.check(payload);
-        if (_2 instanceof Promise && (ctx == null ? void 0 : ctx.async) === false) {
+        if (_2 instanceof Promise && ctx?.async === false) {
           throw new $ZodAsyncError2();
         }
         if (asyncResult || _2 instanceof Promise) {
-          asyncResult = (asyncResult != null ? asyncResult : Promise.resolve()).then(async () => {
+          asyncResult = (asyncResult ?? Promise.resolve()).then(async () => {
             await _2;
             const nextLen = payload.issues.length;
             if (nextLen === currLen)
@@ -72255,15 +71752,11 @@ var $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
   }
   inst["~standard"] = {
     validate: (value) => {
-      var _a21;
       try {
         const r2 = safeParse4(inst, value);
-        return r2.success ? { value: r2.data } : { issues: (_a21 = r2.error) == null ? void 0 : _a21.issues };
+        return r2.success ? { value: r2.data } : { issues: r2.error?.issues };
       } catch (_2) {
-        return safeParseAsync3(inst, value).then((r2) => {
-          var _a22;
-          return r2.success ? { value: r2.data } : { issues: (_a22 = r2.error) == null ? void 0 : _a22.issues };
-        });
+        return safeParseAsync3(inst, value).then((r2) => r2.success ? { value: r2.data } : { issues: r2.error?.issues });
       }
     },
     vendor: "zod",
@@ -72271,9 +71764,8 @@ var $ZodType2 = /* @__PURE__ */ $constructor2("$ZodType", (inst, def) => {
   };
 });
 var $ZodString2 = /* @__PURE__ */ $constructor2("$ZodString", (inst, def) => {
-  var _a19, _b8, _c2;
   $ZodType2.init(inst, def);
-  inst._zod.pattern = (_c2 = [...(_b8 = (_a19 = inst == null ? void 0 : inst._zod.bag) == null ? void 0 : _a19.patterns) != null ? _b8 : []].pop()) != null ? _c2 : string4(inst._zod.bag);
+  inst._zod.pattern = [...inst?._zod.bag?.patterns ?? []].pop() ?? string4(inst._zod.bag);
   inst._zod.parse = (payload, _2) => {
     if (def.coerce)
       try {
@@ -72296,12 +71788,10 @@ var $ZodStringFormat2 = /* @__PURE__ */ $constructor2("$ZodStringFormat", (inst,
   $ZodString2.init(inst, def);
 });
 var $ZodGUID2 = /* @__PURE__ */ $constructor2("$ZodGUID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = guid3;
+  def.pattern ?? (def.pattern = guid3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodUUID2 = /* @__PURE__ */ $constructor2("$ZodUUID", (inst, def) => {
-  var _a19, _b8;
   if (def.version) {
     const versionMap = {
       v1: 1,
@@ -72316,14 +71806,13 @@ var $ZodUUID2 = /* @__PURE__ */ $constructor2("$ZodUUID", (inst, def) => {
     const v3 = versionMap[def.version];
     if (v3 === void 0)
       throw new Error(`Invalid UUID version: "${def.version}"`);
-    (_a19 = def.pattern) != null ? _a19 : def.pattern = uuid3(v3);
+    def.pattern ?? (def.pattern = uuid3(v3));
   } else
-    (_b8 = def.pattern) != null ? _b8 : def.pattern = uuid3();
+    def.pattern ?? (def.pattern = uuid3());
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodEmail2 = /* @__PURE__ */ $constructor2("$ZodEmail", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = email3;
+  def.pattern ?? (def.pattern = email3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodURL2 = /* @__PURE__ */ $constructor2("$ZodURL", (inst, def) => {
@@ -72379,63 +71868,51 @@ var $ZodURL2 = /* @__PURE__ */ $constructor2("$ZodURL", (inst, def) => {
   };
 });
 var $ZodEmoji2 = /* @__PURE__ */ $constructor2("$ZodEmoji", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = emoji3();
+  def.pattern ?? (def.pattern = emoji3());
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodNanoID2 = /* @__PURE__ */ $constructor2("$ZodNanoID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = nanoid3;
+  def.pattern ?? (def.pattern = nanoid3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodCUID3 = /* @__PURE__ */ $constructor2("$ZodCUID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = cuid4;
+  def.pattern ?? (def.pattern = cuid4);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodCUID22 = /* @__PURE__ */ $constructor2("$ZodCUID2", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = cuid23;
+  def.pattern ?? (def.pattern = cuid23);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodULID2 = /* @__PURE__ */ $constructor2("$ZodULID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = ulid3;
+  def.pattern ?? (def.pattern = ulid3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodXID2 = /* @__PURE__ */ $constructor2("$ZodXID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = xid3;
+  def.pattern ?? (def.pattern = xid3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodKSUID2 = /* @__PURE__ */ $constructor2("$ZodKSUID", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = ksuid3;
+  def.pattern ?? (def.pattern = ksuid3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodISODateTime2 = /* @__PURE__ */ $constructor2("$ZodISODateTime", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = datetime3(def);
+  def.pattern ?? (def.pattern = datetime3(def));
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodISODate2 = /* @__PURE__ */ $constructor2("$ZodISODate", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = date5;
+  def.pattern ?? (def.pattern = date5);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodISOTime2 = /* @__PURE__ */ $constructor2("$ZodISOTime", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = time3(def);
+  def.pattern ?? (def.pattern = time3(def));
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodISODuration2 = /* @__PURE__ */ $constructor2("$ZodISODuration", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = duration3;
+  def.pattern ?? (def.pattern = duration3);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodIPv42 = /* @__PURE__ */ $constructor2("$ZodIPv4", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = ipv43;
+  def.pattern ?? (def.pattern = ipv43);
   $ZodStringFormat2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     const bag = inst2._zod.bag;
@@ -72443,8 +71920,7 @@ var $ZodIPv42 = /* @__PURE__ */ $constructor2("$ZodIPv4", (inst, def) => {
   });
 });
 var $ZodIPv62 = /* @__PURE__ */ $constructor2("$ZodIPv6", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = ipv63;
+  def.pattern ?? (def.pattern = ipv63);
   $ZodStringFormat2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     const bag = inst2._zod.bag;
@@ -72465,13 +71941,11 @@ var $ZodIPv62 = /* @__PURE__ */ $constructor2("$ZodIPv6", (inst, def) => {
   };
 });
 var $ZodCIDRv42 = /* @__PURE__ */ $constructor2("$ZodCIDRv4", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = cidrv43;
+  def.pattern ?? (def.pattern = cidrv43);
   $ZodStringFormat2.init(inst, def);
 });
 var $ZodCIDRv62 = /* @__PURE__ */ $constructor2("$ZodCIDRv6", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = cidrv63;
+  def.pattern ?? (def.pattern = cidrv63);
   $ZodStringFormat2.init(inst, def);
   inst._zod.check = (payload) => {
     const [address, prefix] = payload.value.split("/");
@@ -72508,8 +71982,7 @@ function isValidBase642(data) {
   }
 }
 var $ZodBase642 = /* @__PURE__ */ $constructor2("$ZodBase64", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = base643;
+  def.pattern ?? (def.pattern = base643);
   $ZodStringFormat2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     inst2._zod.bag.contentEncoding = "base64";
@@ -72534,8 +72007,7 @@ function isValidBase64URL2(data) {
   return isValidBase642(padded);
 }
 var $ZodBase64URL2 = /* @__PURE__ */ $constructor2("$ZodBase64URL", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = base64url3;
+  def.pattern ?? (def.pattern = base64url3);
   $ZodStringFormat2.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     inst2._zod.bag.contentEncoding = "base64url";
@@ -72553,8 +72025,7 @@ var $ZodBase64URL2 = /* @__PURE__ */ $constructor2("$ZodBase64URL", (inst, def) 
   };
 });
 var $ZodE1642 = /* @__PURE__ */ $constructor2("$ZodE164", (inst, def) => {
-  var _a19;
-  (_a19 = def.pattern) != null ? _a19 : def.pattern = e1643;
+  def.pattern ?? (def.pattern = e1643);
   $ZodStringFormat2.init(inst, def);
 });
 function isValidJWT4(token, algorithm = null) {
@@ -72566,7 +72037,7 @@ function isValidJWT4(token, algorithm = null) {
     if (!header)
       return false;
     const parsedHeader = JSON.parse(atob(header));
-    if ("typ" in parsedHeader && (parsedHeader == null ? void 0 : parsedHeader.typ) !== "JWT")
+    if ("typ" in parsedHeader && parsedHeader?.typ !== "JWT")
       return false;
     if (!parsedHeader.alg)
       return false;
@@ -72592,9 +72063,8 @@ var $ZodJWT2 = /* @__PURE__ */ $constructor2("$ZodJWT", (inst, def) => {
   };
 });
 var $ZodNumber2 = /* @__PURE__ */ $constructor2("$ZodNumber", (inst, def) => {
-  var _a19;
   $ZodType2.init(inst, def);
-  inst._zod.pattern = (_a19 = inst._zod.bag.pattern) != null ? _a19 : number4;
+  inst._zod.pattern = inst._zod.bag.pattern ?? number4;
   inst._zod.parse = (payload, _ctx) => {
     if (def.coerce)
       try {
@@ -72756,13 +72226,12 @@ var $ZodObject2 = /* @__PURE__ */ $constructor2("$ZodObject", (inst, def) => {
     };
   });
   defineLazy2(inst._zod, "propValues", () => {
-    var _a19;
     const shape = def.shape;
     const propValues = {};
     for (const key in shape) {
       const field = shape[key]._zod;
       if (field.values) {
-        (_a19 = propValues[key]) != null ? _a19 : propValues[key] = /* @__PURE__ */ new Set();
+        propValues[key] ?? (propValues[key] = /* @__PURE__ */ new Set());
         for (const v3 of field.values)
           propValues[key].add(v3);
       }
@@ -72832,7 +72301,7 @@ var $ZodObject2 = /* @__PURE__ */ $constructor2("$ZodObject", (inst, def) => {
   const catchall = def.catchall;
   let value;
   inst._zod.parse = (payload, ctx) => {
-    value != null ? value : value = _normalized.value;
+    value ?? (value = _normalized.value);
     const input = payload.value;
     if (!isObject4(input)) {
       payload.issues.push({
@@ -72844,7 +72313,7 @@ var $ZodObject2 = /* @__PURE__ */ $constructor2("$ZodObject", (inst, def) => {
       return payload;
     }
     const proms = [];
-    if (jit && fastEnabled && (ctx == null ? void 0 : ctx.async) === false && ctx.jitless !== true) {
+    if (jit && fastEnabled && ctx?.async === false && ctx.jitless !== true) {
       if (!fastpass)
         fastpass = generateFastpass(def.shape);
       payload = fastpass(payload, ctx);
@@ -73002,7 +72471,7 @@ var $ZodDiscriminatedUnion2 = /* @__PURE__ */ $constructor2("$ZodDiscriminatedUn
       });
       return payload;
     }
-    const opt = disc.value.get(input == null ? void 0 : input[def.discriminator]);
+    const opt = disc.value.get(input?.[def.discriminator]);
     if (opt) {
       return opt._zod.run(payload, ctx);
     }
@@ -73133,7 +72602,7 @@ var $ZodRecord2 = /* @__PURE__ */ $constructor2("$ZodRecord", (inst, def) => {
       let unrecognized;
       for (const key in input) {
         if (!values.has(key)) {
-          unrecognized = unrecognized != null ? unrecognized : [];
+          unrecognized = unrecognized ?? [];
           unrecognized.push(key);
         }
       }
@@ -73430,14 +72899,13 @@ var $ZodCustom2 = /* @__PURE__ */ $constructor2("$ZodCustom", (inst, def) => {
   };
 });
 function handleRefineResult2(result, payload, input, inst) {
-  var _a19;
   if (!result) {
     const _iss = {
       code: "custom",
       input,
       inst,
       // incorporates params.error into issue reporting
-      path: [...(_a19 = inst._zod.def.path) != null ? _a19 : []],
+      path: [...inst._zod.def.path ?? []],
       // incorporates params.error into issue reporting
       continue: !inst._zod.def.abort
       // params: inst._zod.def.params,
@@ -73477,8 +72945,7 @@ var error40 = () => {
     set: { unit: "items", verb: "to have" }
   };
   function getSizing(origin) {
-    var _a19;
-    return (_a19 = Sizable[origin]) != null ? _a19 : null;
+    return Sizable[origin] ?? null;
   }
   const Nouns = {
     regex: "input",
@@ -73511,7 +72978,6 @@ var error40 = () => {
     template_literal: "input"
   };
   return (issue3) => {
-    var _a19, _b8, _c2, _d2;
     switch (issue3.code) {
       case "invalid_type":
         return `Invalid input: expected ${issue3.expected}, received ${parsedType4(issue3.input)}`;
@@ -73523,8 +72989,8 @@ var error40 = () => {
         const adj = issue3.inclusive ? "<=" : "<";
         const sizing = getSizing(issue3.origin);
         if (sizing)
-          return `Too big: expected ${(_a19 = issue3.origin) != null ? _a19 : "value"} to have ${adj}${issue3.maximum.toString()} ${(_b8 = sizing.unit) != null ? _b8 : "elements"}`;
-        return `Too big: expected ${(_c2 = issue3.origin) != null ? _c2 : "value"} to be ${adj}${issue3.maximum.toString()}`;
+          return `Too big: expected ${issue3.origin ?? "value"} to have ${adj}${issue3.maximum.toString()} ${sizing.unit ?? "elements"}`;
+        return `Too big: expected ${issue3.origin ?? "value"} to be ${adj}${issue3.maximum.toString()}`;
       }
       case "too_small": {
         const adj = issue3.inclusive ? ">=" : ">";
@@ -73545,7 +73011,7 @@ var error40 = () => {
           return `Invalid string: must include "${_issue.includes}"`;
         if (_issue.format === "regex")
           return `Invalid string: must match pattern ${_issue.pattern}`;
-        return `Invalid ${(_d2 = Nouns[_issue.format]) != null ? _d2 : issue3.format}`;
+        return `Invalid ${Nouns[_issue.format] ?? issue3.format}`;
       }
       case "not_multiple_of":
         return `Invalid number: must be a multiple of ${issue3.divisor}`;
@@ -73599,10 +73065,9 @@ var $ZodRegistry2 = class {
     return this;
   }
   get(schema) {
-    var _a19;
     const p2 = schema._zod.parent;
     if (p2) {
-      const pm2 = { ...(_a19 = this.get(p2)) != null ? _a19 : {} };
+      const pm2 = { ...this.get(p2) ?? {} };
       delete pm2.id;
       return { ...pm2, ...this._map.get(schema) };
     }
@@ -73681,7 +73146,7 @@ function _uuidv72(Class3, params) {
     ...normalizeParams2(params)
   });
 }
-function _url3(Class3, params) {
+function _url2(Class3, params) {
   return new Class3({
     type: "string",
     format: "url",
@@ -73816,7 +73281,7 @@ function _e1642(Class3, params) {
     ...normalizeParams2(params)
   });
 }
-function _jwt3(Class3, params) {
+function _jwt2(Class3, params) {
   return new Class3({
     type: "string",
     format: "jwt",
@@ -74036,9 +73501,8 @@ function _array2(Class3, element, params) {
   });
 }
 function _custom2(Class3, fn2, _params) {
-  var _a19;
   const norm = normalizeParams2(_params);
-  (_a19 = norm.abort) != null ? _a19 : norm.abort = true;
+  norm.abort ?? (norm.abort = true);
   const schema = new Class3({
     type: "custom",
     check: "custom",
@@ -74060,19 +73524,17 @@ function _refine2(Class3, fn2, _params) {
 // node_modules/zod/v4/core/to-json-schema.js
 var JSONSchemaGenerator2 = class {
   constructor(params) {
-    var _a19, _b8, _c2, _d2, _e2;
     this.counter = 0;
-    this.metadataRegistry = (_a19 = params == null ? void 0 : params.metadata) != null ? _a19 : globalRegistry2;
-    this.target = (_b8 = params == null ? void 0 : params.target) != null ? _b8 : "draft-2020-12";
-    this.unrepresentable = (_c2 = params == null ? void 0 : params.unrepresentable) != null ? _c2 : "throw";
-    this.override = (_d2 = params == null ? void 0 : params.override) != null ? _d2 : (() => {
+    this.metadataRegistry = params?.metadata ?? globalRegistry2;
+    this.target = params?.target ?? "draft-2020-12";
+    this.unrepresentable = params?.unrepresentable ?? "throw";
+    this.override = params?.override ?? (() => {
     });
-    this.io = (_e2 = params == null ? void 0 : params.io) != null ? _e2 : "output";
+    this.io = params?.io ?? "output";
     this.seen = /* @__PURE__ */ new Map();
   }
   process(schema, _params = { path: [], schemaPath: [] }) {
-    var _a20, _b8, _c2, _d2, _e2;
-    var _a19;
+    var _a2;
     const def = schema._zod.def;
     const formatMap = {
       guid: "uuid",
@@ -74093,7 +73555,7 @@ var JSONSchemaGenerator2 = class {
     }
     const result = { schema: {}, count: 1, cycle: void 0, path: _params.path };
     this.seen.set(schema, result);
-    const overrideSchema = (_b8 = (_a20 = schema._zod).toJSONSchema) == null ? void 0 : _b8.call(_a20);
+    const overrideSchema = schema._zod.toJSONSchema?.();
     if (overrideSchema) {
       result.schema = overrideSchema;
     } else {
@@ -74119,7 +73581,7 @@ var JSONSchemaGenerator2 = class {
             if (typeof maximum === "number")
               json3.maxLength = maximum;
             if (format) {
-              json3.format = (_c2 = formatMap[format]) != null ? _c2 : format;
+              json3.format = formatMap[format] ?? format;
               if (json3.format === "")
                 delete json3.format;
             }
@@ -74256,7 +73718,7 @@ var JSONSchemaGenerator2 = class {
             if (requiredKeys.size > 0) {
               json3.required = Array.from(requiredKeys);
             }
-            if (((_d2 = def.catchall) == null ? void 0 : _d2._zod.def.type) === "never") {
+            if (def.catchall?._zod.def.type === "never") {
               json3.additionalProperties = false;
             } else if (!def.catchall) {
               if (this.io === "output")
@@ -74534,33 +73996,31 @@ var JSONSchemaGenerator2 = class {
       delete result.schema.default;
     }
     if (this.io === "input" && result.schema._prefault)
-      (_e2 = (_a19 = result.schema).default) != null ? _e2 : _a19.default = result.schema._prefault;
+      (_a2 = result.schema).default ?? (_a2.default = result.schema._prefault);
     delete result.schema._prefault;
     const _result = this.seen.get(schema);
     return _result.schema;
   }
   emit(schema, _params) {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j;
     const params = {
-      cycles: (_a19 = _params == null ? void 0 : _params.cycles) != null ? _a19 : "ref",
-      reused: (_b8 = _params == null ? void 0 : _params.reused) != null ? _b8 : "inline",
+      cycles: _params?.cycles ?? "ref",
+      reused: _params?.reused ?? "inline",
       // unrepresentable: _params?.unrepresentable ?? "throw",
       // uri: _params?.uri ?? ((id) => `${id}`),
-      external: (_c2 = _params == null ? void 0 : _params.external) != null ? _c2 : void 0
+      external: _params?.external ?? void 0
     };
     const root = this.seen.get(schema);
     if (!root)
       throw new Error("Unprocessed schema. This is a bug in Zod.");
     const makeURI = (entry) => {
-      var _a20, _b9, _c3, _d3, _e3;
       const defsSegment = this.target === "draft-2020-12" ? "$defs" : "definitions";
       if (params.external) {
-        const externalId = (_a20 = params.external.registry.get(entry[0])) == null ? void 0 : _a20.id;
-        const uriGenerator = (_b9 = params.external.uri) != null ? _b9 : ((id3) => id3);
+        const externalId = params.external.registry.get(entry[0])?.id;
+        const uriGenerator = params.external.uri ?? ((id3) => id3);
         if (externalId) {
           return { ref: uriGenerator(externalId) };
         }
-        const id2 = (_d3 = (_c3 = entry[1].defId) != null ? _c3 : entry[1].schema.id) != null ? _d3 : `schema${this.counter++}`;
+        const id2 = entry[1].defId ?? entry[1].schema.id ?? `schema${this.counter++}`;
         entry[1].defId = id2;
         return { defId: id2, ref: `${uriGenerator("__shared")}#/${defsSegment}/${id2}` };
       }
@@ -74569,7 +74029,7 @@ var JSONSchemaGenerator2 = class {
       }
       const uriPrefix = `#`;
       const defUriPrefix = `${uriPrefix}/${defsSegment}/`;
-      const defId = (_e3 = entry[1].schema.id) != null ? _e3 : `__schema${this.counter++}`;
+      const defId = entry[1].schema.id ?? `__schema${this.counter++}`;
       return { defId, ref: defUriPrefix + defId };
     };
     const extractToDef = (entry) => {
@@ -74591,7 +74051,7 @@ var JSONSchemaGenerator2 = class {
       for (const entry of this.seen.entries()) {
         const seen = entry[1];
         if (seen.cycle) {
-          throw new Error(`Cycle detected: #/${(_d2 = seen.cycle) == null ? void 0 : _d2.join("/")}/<root>
+          throw new Error(`Cycle detected: #/${seen.cycle?.join("/")}/<root>
 
 Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.`);
         }
@@ -74604,13 +74064,13 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
         continue;
       }
       if (params.external) {
-        const ext = (_e2 = params.external.registry.get(entry[0])) == null ? void 0 : _e2.id;
+        const ext = params.external.registry.get(entry[0])?.id;
         if (schema !== entry[0] && ext) {
           extractToDef(entry);
           continue;
         }
       }
-      const id2 = (_f2 = this.metadataRegistry.get(entry[0])) == null ? void 0 : _f2.id;
+      const id2 = this.metadataRegistry.get(entry[0])?.id;
       if (id2) {
         extractToDef(entry);
         continue;
@@ -74627,10 +74087,9 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
       }
     }
     const flattenRef = (zodSchema, params2) => {
-      var _a20, _b9, _c3;
       const seen = this.seen.get(zodSchema);
-      const schema2 = (_a20 = seen.def) != null ? _a20 : seen.schema;
-      const _cached2 = { ...schema2 };
+      const schema2 = seen.def ?? seen.schema;
+      const _cached = { ...schema2 };
       if (seen.ref === null) {
         return;
       }
@@ -74640,18 +74099,18 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
         flattenRef(ref, params2);
         const refSchema = this.seen.get(ref).schema;
         if (refSchema.$ref && params2.target === "draft-7") {
-          schema2.allOf = (_b9 = schema2.allOf) != null ? _b9 : [];
+          schema2.allOf = schema2.allOf ?? [];
           schema2.allOf.push(refSchema);
         } else {
           Object.assign(schema2, refSchema);
-          Object.assign(schema2, _cached2);
+          Object.assign(schema2, _cached);
         }
       }
       if (!seen.isParent)
         this.override({
           zodSchema,
           jsonSchema: schema2,
-          path: (_c3 = seen.path) != null ? _c3 : []
+          path: seen.path ?? []
         });
     };
     for (const entry of [...this.seen.entries()].reverse()) {
@@ -74665,14 +74124,14 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
     } else {
       console.warn(`Invalid target: ${this.target}`);
     }
-    if ((_g2 = params.external) == null ? void 0 : _g2.uri) {
-      const id2 = (_h2 = params.external.registry.get(schema)) == null ? void 0 : _h2.id;
+    if (params.external?.uri) {
+      const id2 = params.external.registry.get(schema)?.id;
       if (!id2)
         throw new Error("Schema is missing an `id` property");
       result.$id = params.external.uri(id2);
     }
     Object.assign(result, root.def);
-    const defs = (_j = (_i2 = params.external) == null ? void 0 : _i2.defs) != null ? _j : {};
+    const defs = params.external?.defs ?? {};
     for (const entry of this.seen.entries()) {
       const seen = entry[1];
       if (seen.def && seen.defId) {
@@ -74707,7 +74166,7 @@ function toJSONSchema2(input, _params) {
     const schemas = {};
     const external = {
       registry: input,
-      uri: _params == null ? void 0 : _params.uri,
+      uri: _params?.uri,
       defs
     };
     for (const entry of input._idmap.entries()) {
@@ -74730,7 +74189,7 @@ function toJSONSchema2(input, _params) {
   return gen.emit(input, _params);
 }
 function isTransforming2(_schema, _ctx) {
-  const ctx = _ctx != null ? _ctx : { seen: /* @__PURE__ */ new Set() };
+  const ctx = _ctx ?? { seen: /* @__PURE__ */ new Set() };
   if (ctx.seen.has(_schema))
     return false;
   ctx.seen.add(_schema);
@@ -74840,12 +74299,11 @@ var ZodMiniType = /* @__PURE__ */ $constructor2("ZodMiniType", (inst, def) => {
   inst.parseAsync = async (data, params) => parseAsync3(inst, data, params, { callee: inst.parseAsync });
   inst.safeParseAsync = async (data, params) => safeParseAsync3(inst, data, params);
   inst.check = (...checks) => {
-    var _a19;
     return inst.clone(
       {
         ...def,
         checks: [
-          ...(_a19 = def.checks) != null ? _a19 : [],
+          ...def.checks ?? [],
           ...checks.map((ch2) => typeof ch2 === "function" ? { _zod: { check: ch2, def: { check: "custom" }, onattach: [] } } : ch2)
         ]
       }
@@ -74912,13 +74370,12 @@ async function safeParseAsync4(schema, data) {
   return result;
 }
 function getObjectShape2(schema) {
-  var _a19, _b8;
   if (!schema)
     return void 0;
   let rawShape;
   if (isZ4Schema2(schema)) {
     const v4Schema = schema;
-    rawShape = (_b8 = (_a19 = v4Schema._zod) == null ? void 0 : _a19.def) == null ? void 0 : _b8.shape;
+    rawShape = v4Schema._zod?.def?.shape;
   } else {
     const v3Schema = schema;
     rawShape = v3Schema.shape;
@@ -74935,7 +74392,6 @@ function getObjectShape2(schema) {
   return rawShape;
 }
 function normalizeObjectSchema(schema) {
-  var _a19;
   if (!schema)
     return void 0;
   if (typeof schema === "object") {
@@ -74950,7 +74406,7 @@ function normalizeObjectSchema(schema) {
   }
   if (isZ4Schema2(schema)) {
     const v4Schema = schema;
-    const def = (_a19 = v4Schema._zod) == null ? void 0 : _a19.def;
+    const def = v4Schema._zod?.def;
     if (def && (def.type === "object" || def.shape !== void 0)) {
       return schema;
     }
@@ -74980,8 +74436,7 @@ function getParseErrorMessage(error41) {
   if (error41 && typeof error41 === "object") {
     if ("issues" in error41 && Array.isArray(error41.issues) && error41.issues.length > 0) {
       return error41.issues.map((i) => {
-        var _a19;
-        if (!((_a19 = i.path) == null ? void 0 : _a19.length)) {
+        if (!i.path?.length) {
           return i.message;
         }
         return `${i.message} at ${getDotPath(i.path)}`;
@@ -75002,22 +74457,20 @@ function getSchemaDescription(schema) {
   return schema.description;
 }
 function isSchemaOptional(schema) {
-  var _a19, _b8, _c2;
   if (isZ4Schema2(schema)) {
     const v4Schema = schema;
-    return ((_b8 = (_a19 = v4Schema._zod) == null ? void 0 : _a19.def) == null ? void 0 : _b8.type) === "optional";
+    return v4Schema._zod?.def?.type === "optional";
   }
   const v3Schema = schema;
   if (typeof schema.isOptional === "function") {
     return schema.isOptional();
   }
-  return ((_c2 = v3Schema._def) == null ? void 0 : _c2.typeName) === "ZodOptional";
+  return v3Schema._def?.typeName === "ZodOptional";
 }
 function getLiteralValue2(schema) {
-  var _a19;
   if (isZ4Schema2(schema)) {
     const v4Schema = schema;
-    const def2 = (_a19 = v4Schema._zod) == null ? void 0 : _a19.def;
+    const def2 = v4Schema._zod?.def;
     if (def2) {
       if (def2.value !== void 0)
         return def2.value;
@@ -75042,8 +74495,8 @@ function getLiteralValue2(schema) {
 }
 
 // node_modules/zod/v4/classic/iso.js
-var iso_exports2 = {};
-__export(iso_exports2, {
+var iso_exports3 = {};
+__export(iso_exports3, {
   ZodISODate: () => ZodISODate2,
   ZodISODateTime: () => ZodISODateTime2,
   ZodISODuration: () => ZodISODuration2,
@@ -75128,12 +74581,11 @@ var ZodType4 = /* @__PURE__ */ $constructor2("ZodType", (inst, def) => {
   inst.def = def;
   Object.defineProperty(inst, "_def", { value: def });
   inst.check = (...checks) => {
-    var _a19;
     return inst.clone(
       {
         ...def,
         checks: [
-          ...(_a19 = def.checks) != null ? _a19 : [],
+          ...def.checks ?? [],
           ...checks.map((ch2) => typeof ch2 === "function" ? { _zod: { check: ch2, def: { check: "custom" }, onattach: [] } } : ch2)
         ]
       }
@@ -75174,8 +74626,7 @@ var ZodType4 = /* @__PURE__ */ $constructor2("ZodType", (inst, def) => {
   };
   Object.defineProperty(inst, "description", {
     get() {
-      var _a19;
-      return (_a19 = globalRegistry2.get(inst)) == null ? void 0 : _a19.description;
+      return globalRegistry2.get(inst)?.description;
     },
     configurable: true
   });
@@ -75192,13 +74643,12 @@ var ZodType4 = /* @__PURE__ */ $constructor2("ZodType", (inst, def) => {
   return inst;
 });
 var _ZodString2 = /* @__PURE__ */ $constructor2("_ZodString", (inst, def) => {
-  var _a19, _b8, _c2;
   $ZodString2.init(inst, def);
   ZodType4.init(inst, def);
   const bag = inst._zod.bag;
-  inst.format = (_a19 = bag.format) != null ? _a19 : null;
-  inst.minLength = (_b8 = bag.minimum) != null ? _b8 : null;
-  inst.maxLength = (_c2 = bag.maximum) != null ? _c2 : null;
+  inst.format = bag.format ?? null;
+  inst.minLength = bag.minimum ?? null;
+  inst.maxLength = bag.maximum ?? null;
   inst.regex = (...args) => inst.check(_regex2(...args));
   inst.includes = (...args) => inst.check(_includes2(...args));
   inst.startsWith = (...args) => inst.check(_startsWith2(...args));
@@ -75218,8 +74668,8 @@ var ZodString4 = /* @__PURE__ */ $constructor2("ZodString", (inst, def) => {
   $ZodString2.init(inst, def);
   _ZodString2.init(inst, def);
   inst.email = (params) => inst.check(_email2(ZodEmail2, params));
-  inst.url = (params) => inst.check(_url3(ZodURL2, params));
-  inst.jwt = (params) => inst.check(_jwt3(ZodJWT2, params));
+  inst.url = (params) => inst.check(_url2(ZodURL2, params));
+  inst.jwt = (params) => inst.check(_jwt2(ZodJWT2, params));
   inst.emoji = (params) => inst.check(_emoji4(ZodEmoji2, params));
   inst.guid = (params) => inst.check(_guid2(ZodGUID2, params));
   inst.uuid = (params) => inst.check(_uuid2(ZodUUID2, params));
@@ -75329,7 +74779,6 @@ var ZodJWT2 = /* @__PURE__ */ $constructor2("ZodJWT", (inst, def) => {
   ZodStringFormat2.init(inst, def);
 });
 var ZodNumber4 = /* @__PURE__ */ $constructor2("ZodNumber", (inst, def) => {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2;
   $ZodNumber2.init(inst, def);
   ZodType4.init(inst, def);
   inst.gt = (value, params) => inst.check(_gt2(value, params));
@@ -75348,11 +74797,11 @@ var ZodNumber4 = /* @__PURE__ */ $constructor2("ZodNumber", (inst, def) => {
   inst.step = (value, params) => inst.check(_multipleOf2(value, params));
   inst.finite = () => inst;
   const bag = inst._zod.bag;
-  inst.minValue = (_c2 = Math.max((_a19 = bag.minimum) != null ? _a19 : Number.NEGATIVE_INFINITY, (_b8 = bag.exclusiveMinimum) != null ? _b8 : Number.NEGATIVE_INFINITY)) != null ? _c2 : null;
-  inst.maxValue = (_f2 = Math.min((_d2 = bag.maximum) != null ? _d2 : Number.POSITIVE_INFINITY, (_e2 = bag.exclusiveMaximum) != null ? _e2 : Number.POSITIVE_INFINITY)) != null ? _f2 : null;
-  inst.isInt = ((_g2 = bag.format) != null ? _g2 : "").includes("int") || Number.isSafeInteger((_h2 = bag.multipleOf) != null ? _h2 : 0.5);
+  inst.minValue = Math.max(bag.minimum ?? Number.NEGATIVE_INFINITY, bag.exclusiveMinimum ?? Number.NEGATIVE_INFINITY) ?? null;
+  inst.maxValue = Math.min(bag.maximum ?? Number.POSITIVE_INFINITY, bag.exclusiveMaximum ?? Number.POSITIVE_INFINITY) ?? null;
+  inst.isInt = (bag.format ?? "").includes("int") || Number.isSafeInteger(bag.multipleOf ?? 0.5);
   inst.isFinite = true;
-  inst.format = (_i2 = bag.format) != null ? _i2 : null;
+  inst.format = bag.format ?? null;
 });
 function number5(params) {
   return _number2(ZodNumber4, params);
@@ -75565,17 +75014,16 @@ var ZodTransform2 = /* @__PURE__ */ $constructor2("ZodTransform", (inst, def) =>
   ZodType4.init(inst, def);
   inst._zod.parse = (payload, _ctx) => {
     payload.addIssue = (issue3) => {
-      var _a19, _b8, _c2, _d2;
       if (typeof issue3 === "string") {
         payload.issues.push(util_exports2.issue(issue3, payload.value, def));
       } else {
         const _issue = issue3;
         if (_issue.fatal)
           _issue.continue = false;
-        (_a19 = _issue.code) != null ? _a19 : _issue.code = "custom";
-        (_b8 = _issue.input) != null ? _b8 : _issue.input = payload.value;
-        (_c2 = _issue.inst) != null ? _c2 : _issue.inst = inst;
-        (_d2 = _issue.continue) != null ? _d2 : _issue.continue = true;
+        _issue.code ?? (_issue.code = "custom");
+        _issue.input ?? (_issue.input = payload.value);
+        _issue.inst ?? (_issue.inst = inst);
+        _issue.continue ?? (_issue.continue = true);
         payload.issues.push(util_exports2.issue(_issue));
       }
     };
@@ -75709,7 +75157,7 @@ function check3(fn2) {
   return ch2;
 }
 function custom3(fn2, _params) {
-  return _custom2(ZodCustom2, fn2 != null ? fn2 : (() => true), _params);
+  return _custom2(ZodCustom2, fn2 ?? (() => true), _params);
 }
 function refine2(fn2, _params = {}) {
   return _refine2(ZodCustom2, fn2, _params);
@@ -75717,17 +75165,16 @@ function refine2(fn2, _params = {}) {
 function superRefine2(fn2) {
   const ch2 = check3((payload) => {
     payload.addIssue = (issue3) => {
-      var _a19, _b8, _c2, _d2;
       if (typeof issue3 === "string") {
         payload.issues.push(util_exports2.issue(issue3, payload.value, ch2._zod.def));
       } else {
         const _issue = issue3;
         if (_issue.fatal)
           _issue.continue = false;
-        (_a19 = _issue.code) != null ? _a19 : _issue.code = "custom";
-        (_b8 = _issue.input) != null ? _b8 : _issue.input = payload.value;
-        (_c2 = _issue.inst) != null ? _c2 : _issue.inst = ch2;
-        (_d2 = _issue.continue) != null ? _d2 : _issue.continue = !ch2._zod.def.abort;
+        _issue.code ?? (_issue.code = "custom");
+        _issue.input ?? (_issue.input = payload.value);
+        _issue.inst ?? (_issue.inst = ch2);
+        _issue.continue ?? (_issue.continue = !ch2._zod.def.abort);
         payload.issues.push(util_exports2.issue(_issue));
       }
     };
@@ -76298,7 +75745,7 @@ var AnnotationsSchema2 = object3({
   /**
    * ISO 8601 timestamp for the most recent modification.
    */
-  lastModified: iso_exports2.datetime({ offset: true }).optional()
+  lastModified: iso_exports3.datetime({ offset: true }).optional()
 });
 var ResourceSchema2 = object3({
   ...BaseMetadataSchema2.shape,
@@ -77271,8 +76718,7 @@ var UrlElicitationRequiredError = class extends McpError2 {
     });
   }
   get elicitations() {
-    var _a19, _b8;
-    return (_b8 = (_a19 = this.data) == null ? void 0 : _a19.elicitations) != null ? _b8 : [];
+    return this.data?.elicitations ?? [];
   }
 };
 
@@ -77317,18 +76763,18 @@ var getDefaultOptions2 = (options) => typeof options === "string" ? {
 
 // node_modules/zod-to-json-schema/dist/esm/Refs.js
 var getRefs2 = (options) => {
-  const _options3 = getDefaultOptions2(options);
-  const currentPath = _options3.name !== void 0 ? [..._options3.basePath, _options3.definitionPath, _options3.name] : _options3.basePath;
+  const _options = getDefaultOptions2(options);
+  const currentPath = _options.name !== void 0 ? [..._options.basePath, _options.definitionPath, _options.name] : _options.basePath;
   return {
-    ..._options3,
+    ..._options,
     flags: { hasReferencedOpenAiAnyType: false },
     currentPath,
     propertyPath: void 0,
-    seen: new Map(Object.entries(_options3.definitions).map(([name, def]) => [
+    seen: new Map(Object.entries(_options.definitions).map(([name, def]) => [
       def._def,
       {
         def: def._def,
-        path: [..._options3.basePath, _options3.definitionPath, name],
+        path: [..._options.basePath, _options.definitionPath, name],
         // Resolution of references will be forced even though seen, so it's ok that the schema is undefined here for now.
         jsonSchema: void 0
       }
@@ -77338,7 +76784,7 @@ var getRefs2 = (options) => {
 
 // node_modules/zod-to-json-schema/dist/esm/errorMessages.js
 function addErrorMessage2(res, key, errorMessage, refs) {
-  if (!(refs == null ? void 0 : refs.errorMessages))
+  if (!refs?.errorMessages)
     return;
   if (errorMessage) {
     res.errorMessage = {
@@ -77380,11 +76826,10 @@ function parseAnyDef2(refs) {
 
 // node_modules/zod-to-json-schema/dist/esm/parsers/array.js
 function parseArrayDef2(def, refs) {
-  var _a19, _b8, _c2;
   const res = {
     type: "array"
   };
-  if (((_a19 = def.type) == null ? void 0 : _a19._def) && ((_c2 = (_b8 = def.type) == null ? void 0 : _b8._def) == null ? void 0 : _c2.typeName) !== ZodFirstPartyTypeKind2.ZodAny) {
+  if (def.type?._def && def.type?._def?.typeName !== ZodFirstPartyTypeKind2.ZodAny) {
     res.items = parseDef2(def.type._def, {
       ...refs,
       currentPath: [...refs.currentPath, "items"]
@@ -77468,7 +76913,7 @@ var parseCatchDef2 = (def, refs) => {
 
 // node_modules/zod-to-json-schema/dist/esm/parsers/date.js
 function parseDateDef2(def, refs, overrideDateStrategy) {
-  const strategy = overrideDateStrategy != null ? overrideDateStrategy : refs.dateStrategy;
+  const strategy = overrideDateStrategy ?? refs.dateStrategy;
   if (Array.isArray(strategy)) {
     return {
       anyOf: strategy.map((item, i) => parseDateDef2(def, refs, item))
@@ -77802,8 +77247,7 @@ function escapeNonAlphaNumeric(source) {
   return result;
 }
 function addFormat(schema, value, message2, refs) {
-  var _a19;
-  if (schema.format || ((_a19 = schema.anyOf) == null ? void 0 : _a19.some((x) => x.format))) {
+  if (schema.format || schema.anyOf?.some((x) => x.format)) {
     if (!schema.anyOf) {
       schema.anyOf = [];
     }
@@ -77831,8 +77275,7 @@ function addFormat(schema, value, message2, refs) {
   }
 }
 function addPattern(schema, regex, message2, refs) {
-  var _a19;
-  if (schema.pattern || ((_a19 = schema.allOf) == null ? void 0 : _a19.some((x) => x.pattern))) {
+  if (schema.pattern || schema.allOf?.some((x) => x.pattern)) {
     if (!schema.allOf) {
       schema.allOf = [];
     }
@@ -77860,7 +77303,6 @@ function addPattern(schema, regex, message2, refs) {
   }
 }
 function stringifyRegExpWithFlags(regex, refs) {
-  var _a19;
   if (!refs.applyRegexFlags || !regex.flags) {
     return regex.source;
   }
@@ -77888,7 +77330,7 @@ function stringifyRegExpWithFlags(regex, refs) {
             pattern += source[i];
             pattern += `${source[i - 2]}-${source[i]}`.toUpperCase();
             inCharRange = false;
-          } else if (source[i + 1] === "-" && ((_a19 = source[i + 2]) == null ? void 0 : _a19.match(/[a-z]/))) {
+          } else if (source[i + 1] === "-" && source[i + 2]?.match(/[a-z]/)) {
             pattern += source[i];
             inCharRange = true;
           } else {
@@ -77938,51 +77380,47 @@ function stringifyRegExpWithFlags(regex, refs) {
 
 // node_modules/zod-to-json-schema/dist/esm/parsers/record.js
 function parseRecordDef2(def, refs) {
-  var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
   if (refs.target === "openAi") {
     console.warn("Warning: OpenAI may not support records in schemas! Try an array of key-value pairs instead.");
   }
-  if (refs.target === "openApi3" && ((_a19 = def.keyType) == null ? void 0 : _a19._def.typeName) === ZodFirstPartyTypeKind2.ZodEnum) {
+  if (refs.target === "openApi3" && def.keyType?._def.typeName === ZodFirstPartyTypeKind2.ZodEnum) {
     return {
       type: "object",
       required: def.keyType._def.values,
-      properties: def.keyType._def.values.reduce((acc, key) => {
-        var _a20;
-        return {
-          ...acc,
-          [key]: (_a20 = parseDef2(def.valueType._def, {
-            ...refs,
-            currentPath: [...refs.currentPath, "properties", key]
-          })) != null ? _a20 : parseAnyDef2(refs)
-        };
-      }, {}),
+      properties: def.keyType._def.values.reduce((acc, key) => ({
+        ...acc,
+        [key]: parseDef2(def.valueType._def, {
+          ...refs,
+          currentPath: [...refs.currentPath, "properties", key]
+        }) ?? parseAnyDef2(refs)
+      }), {}),
       additionalProperties: refs.rejectedAdditionalProperties
     };
   }
   const schema = {
     type: "object",
-    additionalProperties: (_b8 = parseDef2(def.valueType._def, {
+    additionalProperties: parseDef2(def.valueType._def, {
       ...refs,
       currentPath: [...refs.currentPath, "additionalProperties"]
-    })) != null ? _b8 : refs.allowedAdditionalProperties
+    }) ?? refs.allowedAdditionalProperties
   };
   if (refs.target === "openApi3") {
     return schema;
   }
-  if (((_c2 = def.keyType) == null ? void 0 : _c2._def.typeName) === ZodFirstPartyTypeKind2.ZodString && ((_d2 = def.keyType._def.checks) == null ? void 0 : _d2.length)) {
+  if (def.keyType?._def.typeName === ZodFirstPartyTypeKind2.ZodString && def.keyType._def.checks?.length) {
     const { type, ...keyType } = parseStringDef2(def.keyType._def, refs);
     return {
       ...schema,
       propertyNames: keyType
     };
-  } else if (((_e2 = def.keyType) == null ? void 0 : _e2._def.typeName) === ZodFirstPartyTypeKind2.ZodEnum) {
+  } else if (def.keyType?._def.typeName === ZodFirstPartyTypeKind2.ZodEnum) {
     return {
       ...schema,
       propertyNames: {
         enum: def.keyType._def.values
       }
     };
-  } else if (((_f2 = def.keyType) == null ? void 0 : _f2._def.typeName) === ZodFirstPartyTypeKind2.ZodBranded && def.keyType._def.type._def.typeName === ZodFirstPartyTypeKind2.ZodString && ((_g2 = def.keyType._def.type._def.checks) == null ? void 0 : _g2.length)) {
+  } else if (def.keyType?._def.typeName === ZodFirstPartyTypeKind2.ZodBranded && def.keyType._def.type._def.typeName === ZodFirstPartyTypeKind2.ZodString && def.keyType._def.type._def.checks?.length) {
     const { type, ...keyType } = parseBrandedDef2(def.keyType._def, refs);
     return {
       ...schema,
@@ -78272,8 +77710,7 @@ function safeIsOptional(schema) {
 
 // node_modules/zod-to-json-schema/dist/esm/parsers/optional.js
 var parseOptionalDef2 = (def, refs) => {
-  var _a19;
-  if (refs.currentPath.toString() === ((_a19 = refs.propertyPath) == null ? void 0 : _a19.toString())) {
+  if (refs.currentPath.toString() === refs.propertyPath?.toString()) {
     return parseDef2(def.innerType._def, refs);
   }
   const innerSchema = parseDef2(def.innerType._def, {
@@ -78458,10 +77895,9 @@ var selectParser2 = (def, typeName, refs) => {
 
 // node_modules/zod-to-json-schema/dist/esm/parseDef.js
 function parseDef2(def, refs, forceResolution = false) {
-  var _a19;
   const seenItem = refs.seen.get(def);
   if (refs.override) {
-    const overrideResult = (_a19 = refs.override) == null ? void 0 : _a19.call(refs, def, refs, seenItem, forceResolution);
+    const overrideResult = refs.override?.(def, refs, seenItem, forceResolution);
     if (overrideResult !== ignoreOverride2) {
       return overrideResult;
     }
@@ -78515,23 +77951,19 @@ var addMeta = (def, refs, jsonSchema) => {
 
 // node_modules/zod-to-json-schema/dist/esm/zodToJsonSchema.js
 var zodToJsonSchema2 = (schema, options) => {
-  var _a19;
   const refs = getRefs2(options);
-  let definitions = typeof options === "object" && options.definitions ? Object.entries(options.definitions).reduce((acc, [name2, schema2]) => {
-    var _a20;
-    return {
-      ...acc,
-      [name2]: (_a20 = parseDef2(schema2._def, {
-        ...refs,
-        currentPath: [...refs.basePath, refs.definitionPath, name2]
-      }, true)) != null ? _a20 : parseAnyDef2(refs)
-    };
-  }, {}) : void 0;
-  const name = typeof options === "string" ? options : (options == null ? void 0 : options.nameStrategy) === "title" ? void 0 : options == null ? void 0 : options.name;
-  const main = (_a19 = parseDef2(schema._def, name === void 0 ? refs : {
+  let definitions = typeof options === "object" && options.definitions ? Object.entries(options.definitions).reduce((acc, [name2, schema2]) => ({
+    ...acc,
+    [name2]: parseDef2(schema2._def, {
+      ...refs,
+      currentPath: [...refs.basePath, refs.definitionPath, name2]
+    }, true) ?? parseAnyDef2(refs)
+  }), {}) : void 0;
+  const name = typeof options === "string" ? options : options?.nameStrategy === "title" ? void 0 : options?.name;
+  const main = parseDef2(schema._def, name === void 0 ? refs : {
     ...refs,
     currentPath: [...refs.basePath, refs.definitionPath, name]
-  }, false)) != null ? _a19 : parseAnyDef2(refs);
+  }, false) ?? parseAnyDef2(refs);
   const title = typeof options === "object" && options.name !== void 0 && options.nameStrategy === "title" ? options.name : void 0;
   if (title !== void 0) {
     main.title = title;
@@ -78590,21 +78022,20 @@ function mapMiniTarget(t) {
   return "draft-7";
 }
 function toJsonSchemaCompat(schema, opts) {
-  var _a19, _b8, _c2;
   if (isZ4Schema2(schema)) {
     return toJSONSchema2(schema, {
-      target: mapMiniTarget(opts == null ? void 0 : opts.target),
-      io: (_a19 = opts == null ? void 0 : opts.pipeStrategy) != null ? _a19 : "input"
+      target: mapMiniTarget(opts?.target),
+      io: opts?.pipeStrategy ?? "input"
     });
   }
   return zodToJsonSchema2(schema, {
-    strictUnions: (_b8 = opts == null ? void 0 : opts.strictUnions) != null ? _b8 : true,
-    pipeStrategy: (_c2 = opts == null ? void 0 : opts.pipeStrategy) != null ? _c2 : "input"
+    strictUnions: opts?.strictUnions ?? true,
+    pipeStrategy: opts?.pipeStrategy ?? "input"
   });
 }
 function getMethodLiteral2(schema) {
   const shape = getObjectShape2(schema);
-  const methodSchema = shape == null ? void 0 : shape.method;
+  const methodSchema = shape?.method;
   if (!methodSchema) {
     throw new Error("Schema is missing a method literal");
   }
@@ -78625,8 +78056,8 @@ function parseWithCompat2(schema, data) {
 // node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js
 var DEFAULT_REQUEST_TIMEOUT_MSEC = 6e4;
 var Protocol2 = class {
-  constructor(_options3) {
-    this._options = _options3;
+  constructor(_options) {
+    this._options = _options;
     this._requestMessageId = 0;
     this._requestHandlers = /* @__PURE__ */ new Map();
     this._requestHandlerAbortControllers = /* @__PURE__ */ new Map();
@@ -78648,8 +78079,8 @@ var Protocol2 = class {
       // Automatic pong by default.
       (_request) => ({})
     );
-    this._taskStore = _options3 == null ? void 0 : _options3.taskStore;
-    this._taskMessageQueue = _options3 == null ? void 0 : _options3.taskMessageQueue;
+    this._taskStore = _options?.taskStore;
+    this._taskMessageQueue = _options?.taskMessageQueue;
     if (this._taskStore) {
       this.setRequestHandler(GetTaskRequestSchema2, async (request, extra) => {
         const task = await this._taskStore.getTask(request.params.taskId, extra.sessionId);
@@ -78662,7 +78093,6 @@ var Protocol2 = class {
       });
       this.setRequestHandler(GetTaskPayloadRequestSchema2, async (request, extra) => {
         const handleTaskResult = async () => {
-          var _a19;
           const taskId = request.params.taskId;
           if (this._taskMessageQueue) {
             let queuedMessage;
@@ -78686,7 +78116,7 @@ var Protocol2 = class {
                 }
                 continue;
               }
-              await ((_a19 = this._transport) == null ? void 0 : _a19.send(queuedMessage.message, { relatedRequestId: extra.requestId }));
+              await this._transport?.send(queuedMessage.message, { relatedRequestId: extra.requestId });
             }
           }
           const task = await this._taskStore.getTask(taskId, extra.sessionId);
@@ -78715,9 +78145,8 @@ var Protocol2 = class {
         return await handleTaskResult();
       });
       this.setRequestHandler(ListTasksRequestSchema2, async (request, extra) => {
-        var _a19;
         try {
-          const { tasks, nextCursor } = await this._taskStore.listTasks((_a19 = request.params) == null ? void 0 : _a19.cursor, extra.sessionId);
+          const { tasks, nextCursor } = await this._taskStore.listTasks(request.params?.cursor, extra.sessionId);
           return {
             tasks,
             nextCursor,
@@ -78760,7 +78189,7 @@ var Protocol2 = class {
       return;
     }
     const controller = this._requestHandlerAbortControllers.get(notification.params.requestId);
-    controller == null ? void 0 : controller.abort(notification.params.reason);
+    controller?.abort(notification.params.reason);
   }
   _setupTimeout(messageId, timeout, maxTotalTimeout, onTimeout, resetTimeoutOnProgress = false) {
     this._timeoutInfo.set(messageId, {
@@ -78801,24 +78230,23 @@ var Protocol2 = class {
    * The Protocol object assumes ownership of the Transport, replacing any callbacks that have already been set, and expects that it is the only user of the Transport instance going forward.
    */
   async connect(transport) {
-    var _a19, _b8, _c2;
     if (this._transport) {
       throw new Error("Already connected to a transport. Call close() before connecting to a new transport, or use a separate Protocol instance per connection.");
     }
     this._transport = transport;
-    const _onclose = (_a19 = this.transport) == null ? void 0 : _a19.onclose;
+    const _onclose = this.transport?.onclose;
     this._transport.onclose = () => {
-      _onclose == null ? void 0 : _onclose();
+      _onclose?.();
       this._onclose();
     };
-    const _onerror = (_b8 = this.transport) == null ? void 0 : _b8.onerror;
+    const _onerror = this.transport?.onerror;
     this._transport.onerror = (error41) => {
-      _onerror == null ? void 0 : _onerror(error41);
+      _onerror?.(error41);
       this._onerror(error41);
     };
-    const _onmessage = (_c2 = this._transport) == null ? void 0 : _c2.onmessage;
+    const _onmessage = this._transport?.onmessage;
     this._transport.onmessage = (message2, extra) => {
-      _onmessage == null ? void 0 : _onmessage(message2, extra);
+      _onmessage?.(message2, extra);
       if (isJSONRPCResultResponse2(message2) || isJSONRPCErrorResponse2(message2)) {
         this._onresponse(message2);
       } else if (isJSONRPCRequest2(message2)) {
@@ -78832,7 +78260,6 @@ var Protocol2 = class {
     await this._transport.start();
   }
   _onclose() {
-    var _a19;
     const responseHandlers = this._responseHandlers;
     this._responseHandlers = /* @__PURE__ */ new Map();
     this._progressHandlers.clear();
@@ -78848,28 +78275,25 @@ var Protocol2 = class {
     this._requestHandlerAbortControllers.clear();
     const error41 = McpError2.fromError(ErrorCode2.ConnectionClosed, "Connection closed");
     this._transport = void 0;
-    (_a19 = this.onclose) == null ? void 0 : _a19.call(this);
+    this.onclose?.();
     for (const handler2 of responseHandlers.values()) {
       handler2(error41);
     }
   }
   _onerror(error41) {
-    var _a19;
-    (_a19 = this.onerror) == null ? void 0 : _a19.call(this, error41);
+    this.onerror?.(error41);
   }
   _onnotification(notification) {
-    var _a19;
-    const handler2 = (_a19 = this._notificationHandlers.get(notification.method)) != null ? _a19 : this.fallbackNotificationHandler;
+    const handler2 = this._notificationHandlers.get(notification.method) ?? this.fallbackNotificationHandler;
     if (handler2 === void 0) {
       return;
     }
     Promise.resolve().then(() => handler2(notification)).catch((error41) => this._onerror(new Error(`Uncaught error in notification handler: ${error41}`)));
   }
   _onrequest(request, extra) {
-    var _a19, _b8, _c2, _d2, _e2;
-    const handler2 = (_a19 = this._requestHandlers.get(request.method)) != null ? _a19 : this.fallbackRequestHandler;
+    const handler2 = this._requestHandlers.get(request.method) ?? this.fallbackRequestHandler;
     const capturedTransport = this._transport;
-    const relatedTaskId = (_d2 = (_c2 = (_b8 = request.params) == null ? void 0 : _b8._meta) == null ? void 0 : _c2[RELATED_TASK_META_KEY2]) == null ? void 0 : _d2.taskId;
+    const relatedTaskId = request.params?._meta?.[RELATED_TASK_META_KEY2]?.taskId;
     if (handler2 === void 0) {
       const errorResponse = {
         jsonrpc: "2.0",
@@ -78884,20 +78308,20 @@ var Protocol2 = class {
           type: "error",
           message: errorResponse,
           timestamp: Date.now()
-        }, capturedTransport == null ? void 0 : capturedTransport.sessionId).catch((error41) => this._onerror(new Error(`Failed to enqueue error response: ${error41}`)));
+        }, capturedTransport?.sessionId).catch((error41) => this._onerror(new Error(`Failed to enqueue error response: ${error41}`)));
       } else {
-        capturedTransport == null ? void 0 : capturedTransport.send(errorResponse).catch((error41) => this._onerror(new Error(`Failed to send an error response: ${error41}`)));
+        capturedTransport?.send(errorResponse).catch((error41) => this._onerror(new Error(`Failed to send an error response: ${error41}`)));
       }
       return;
     }
     const abortController = new AbortController();
     this._requestHandlerAbortControllers.set(request.id, abortController);
     const taskCreationParams = isTaskAugmentedRequestParams2(request.params) ? request.params.task : void 0;
-    const taskStore = this._taskStore ? this.requestTaskStore(request, capturedTransport == null ? void 0 : capturedTransport.sessionId) : void 0;
+    const taskStore = this._taskStore ? this.requestTaskStore(request, capturedTransport?.sessionId) : void 0;
     const fullExtra = {
       signal: abortController.signal,
-      sessionId: capturedTransport == null ? void 0 : capturedTransport.sessionId,
-      _meta: (_e2 = request.params) == null ? void 0 : _e2._meta,
+      sessionId: capturedTransport?.sessionId,
+      _meta: request.params?._meta,
       sendNotification: async (notification) => {
         if (abortController.signal.aborted)
           return;
@@ -78908,7 +78332,6 @@ var Protocol2 = class {
         await this.notification(notification, notificationOptions);
       },
       sendRequest: async (r2, resultSchema, options) => {
-        var _a20, _b9;
         if (abortController.signal.aborted) {
           throw new McpError2(ErrorCode2.ConnectionClosed, "Request was cancelled");
         }
@@ -78916,20 +78339,20 @@ var Protocol2 = class {
         if (relatedTaskId && !requestOptions.relatedTask) {
           requestOptions.relatedTask = { taskId: relatedTaskId };
         }
-        const effectiveTaskId = (_b9 = (_a20 = requestOptions.relatedTask) == null ? void 0 : _a20.taskId) != null ? _b9 : relatedTaskId;
+        const effectiveTaskId = requestOptions.relatedTask?.taskId ?? relatedTaskId;
         if (effectiveTaskId && taskStore) {
           await taskStore.updateTaskStatus(effectiveTaskId, "input_required");
         }
         return await this.request(r2, resultSchema, requestOptions);
       },
-      authInfo: extra == null ? void 0 : extra.authInfo,
+      authInfo: extra?.authInfo,
       requestId: request.id,
-      requestInfo: extra == null ? void 0 : extra.requestInfo,
+      requestInfo: extra?.requestInfo,
       taskId: relatedTaskId,
       taskStore,
-      taskRequestedTtl: taskCreationParams == null ? void 0 : taskCreationParams.ttl,
-      closeSSEStream: extra == null ? void 0 : extra.closeSSEStream,
-      closeStandaloneSSEStream: extra == null ? void 0 : extra.closeStandaloneSSEStream
+      taskRequestedTtl: taskCreationParams?.ttl,
+      closeSSEStream: extra?.closeSSEStream,
+      closeStandaloneSSEStream: extra?.closeStandaloneSSEStream
     };
     Promise.resolve().then(() => {
       if (taskCreationParams) {
@@ -78949,12 +78372,11 @@ var Protocol2 = class {
           type: "response",
           message: response,
           timestamp: Date.now()
-        }, capturedTransport == null ? void 0 : capturedTransport.sessionId);
+        }, capturedTransport?.sessionId);
       } else {
-        await (capturedTransport == null ? void 0 : capturedTransport.send(response));
+        await capturedTransport?.send(response);
       }
     }, async (error41) => {
-      var _a20;
       if (abortController.signal.aborted) {
         return;
       }
@@ -78963,7 +78385,7 @@ var Protocol2 = class {
         id: request.id,
         error: {
           code: Number.isSafeInteger(error41["code"]) ? error41["code"] : ErrorCode2.InternalError,
-          message: (_a20 = error41.message) != null ? _a20 : "Internal error",
+          message: error41.message ?? "Internal error",
           ...error41["data"] !== void 0 && { data: error41["data"] }
         }
       };
@@ -78972,9 +78394,9 @@ var Protocol2 = class {
           type: "error",
           message: errorResponse,
           timestamp: Date.now()
-        }, capturedTransport == null ? void 0 : capturedTransport.sessionId);
+        }, capturedTransport?.sessionId);
       } else {
-        await (capturedTransport == null ? void 0 : capturedTransport.send(errorResponse));
+        await capturedTransport?.send(errorResponse);
       }
     }).catch((error41) => this._onerror(new Error(`Failed to send response: ${error41}`))).finally(() => {
       if (this._requestHandlerAbortControllers.get(request.id) === abortController) {
@@ -79053,8 +78475,7 @@ var Protocol2 = class {
    * Closes the connection.
    */
   async close() {
-    var _a19;
-    await ((_a19 = this._transport) == null ? void 0 : _a19.close());
+    await this._transport?.close();
   }
   /**
    * Sends a request and returns an AsyncGenerator that yields response messages.
@@ -79084,8 +78505,7 @@ var Protocol2 = class {
    * @experimental Use `client.experimental.tasks.requestStream()` to access this method.
    */
   async *requestStream(request, resultSchema, options) {
-    var _a19, _b8, _c2, _d2;
-    const { task } = options != null ? options : {};
+    const { task } = options ?? {};
     if (!task) {
       try {
         const result = await this.request(request, resultSchema, options);
@@ -79132,9 +78552,9 @@ var Protocol2 = class {
           yield { type: "result", result };
           return;
         }
-        const pollInterval = (_c2 = (_b8 = task2.pollInterval) != null ? _b8 : (_a19 = this._options) == null ? void 0 : _a19.defaultTaskPollInterval) != null ? _c2 : 1e3;
+        const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
         await new Promise((resolve) => setTimeout(resolve, pollInterval));
-        (_d2 = options == null ? void 0 : options.signal) == null ? void 0 : _d2.throwIfAborted();
+        options?.signal?.throwIfAborted();
       }
     } catch (error41) {
       yield {
@@ -79149,9 +78569,8 @@ var Protocol2 = class {
    * Do not use this method to emit notifications! Use notification() instead.
    */
   request(request, resultSchema, options) {
-    const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options != null ? options : {};
+    const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
     return new Promise((resolve, reject) => {
-      var _a19, _b8, _c2, _d2, _e2, _f2, _g2;
       const earlyReject = (error41) => {
         reject(error41);
       };
@@ -79159,7 +78578,7 @@ var Protocol2 = class {
         earlyReject(new Error("Not connected"));
         return;
       }
-      if (((_a19 = this._options) == null ? void 0 : _a19.enforceStrictCapabilities) === true) {
+      if (this._options?.enforceStrictCapabilities === true) {
         try {
           this.assertCapabilityForMethod(request.method);
           if (task) {
@@ -79170,19 +78589,19 @@ var Protocol2 = class {
           return;
         }
       }
-      (_b8 = options == null ? void 0 : options.signal) == null ? void 0 : _b8.throwIfAborted();
+      options?.signal?.throwIfAborted();
       const messageId = this._requestMessageId++;
       const jsonrpcRequest = {
         ...request,
         jsonrpc: "2.0",
         id: messageId
       };
-      if (options == null ? void 0 : options.onprogress) {
+      if (options?.onprogress) {
         this._progressHandlers.set(messageId, options.onprogress);
         jsonrpcRequest.params = {
           ...request.params,
           _meta: {
-            ...((_c2 = request.params) == null ? void 0 : _c2._meta) || {},
+            ...request.params?._meta || {},
             progressToken: messageId
           }
         };
@@ -79197,17 +78616,16 @@ var Protocol2 = class {
         jsonrpcRequest.params = {
           ...jsonrpcRequest.params,
           _meta: {
-            ...((_d2 = jsonrpcRequest.params) == null ? void 0 : _d2._meta) || {},
+            ...jsonrpcRequest.params?._meta || {},
             [RELATED_TASK_META_KEY2]: relatedTask
           }
         };
       }
       const cancel = (reason) => {
-        var _a20;
         this._responseHandlers.delete(messageId);
         this._progressHandlers.delete(messageId);
         this._cleanupTimeout(messageId);
-        (_a20 = this._transport) == null ? void 0 : _a20.send({
+        this._transport?.send({
           jsonrpc: "2.0",
           method: "notifications/cancelled",
           params: {
@@ -79219,8 +78637,7 @@ var Protocol2 = class {
         reject(error41);
       };
       this._responseHandlers.set(messageId, (response) => {
-        var _a20;
-        if ((_a20 = options == null ? void 0 : options.signal) == null ? void 0 : _a20.aborted) {
+        if (options?.signal?.aborted) {
           return;
         }
         if (response instanceof Error) {
@@ -79237,14 +78654,13 @@ var Protocol2 = class {
           reject(error41);
         }
       });
-      (_e2 = options == null ? void 0 : options.signal) == null ? void 0 : _e2.addEventListener("abort", () => {
-        var _a20;
-        cancel((_a20 = options == null ? void 0 : options.signal) == null ? void 0 : _a20.reason);
+      options?.signal?.addEventListener("abort", () => {
+        cancel(options?.signal?.reason);
       });
-      const timeout = (_f2 = options == null ? void 0 : options.timeout) != null ? _f2 : DEFAULT_REQUEST_TIMEOUT_MSEC;
+      const timeout = options?.timeout ?? DEFAULT_REQUEST_TIMEOUT_MSEC;
       const timeoutHandler = () => cancel(McpError2.fromError(ErrorCode2.RequestTimeout, "Request timed out", { timeout }));
-      this._setupTimeout(messageId, timeout, options == null ? void 0 : options.maxTotalTimeout, timeoutHandler, (_g2 = options == null ? void 0 : options.resetTimeoutOnProgress) != null ? _g2 : false);
-      const relatedTaskId = relatedTask == null ? void 0 : relatedTask.taskId;
+      this._setupTimeout(messageId, timeout, options?.maxTotalTimeout, timeoutHandler, options?.resetTimeoutOnProgress ?? false);
+      const relatedTaskId = relatedTask?.taskId;
       if (relatedTaskId) {
         const responseResolver = (response) => {
           const handler2 = this._responseHandlers.get(messageId);
@@ -79307,12 +78723,11 @@ var Protocol2 = class {
    * Emits a notification, which is a one-way message that does not expect a response.
    */
   async notification(notification, options) {
-    var _a19, _b8, _c2, _d2, _e2;
     if (!this._transport) {
       throw new Error("Not connected");
     }
     this.assertNotificationCapability(notification.method);
-    const relatedTaskId = (_a19 = options == null ? void 0 : options.relatedTask) == null ? void 0 : _a19.taskId;
+    const relatedTaskId = options?.relatedTask?.taskId;
     if (relatedTaskId) {
       const jsonrpcNotification2 = {
         ...notification,
@@ -79320,7 +78735,7 @@ var Protocol2 = class {
         params: {
           ...notification.params,
           _meta: {
-            ...((_b8 = notification.params) == null ? void 0 : _b8._meta) || {},
+            ...notification.params?._meta || {},
             [RELATED_TASK_META_KEY2]: options.relatedTask
           }
         }
@@ -79332,15 +78747,14 @@ var Protocol2 = class {
       });
       return;
     }
-    const debouncedMethods = (_d2 = (_c2 = this._options) == null ? void 0 : _c2.debouncedNotificationMethods) != null ? _d2 : [];
-    const canDebounce = debouncedMethods.includes(notification.method) && !notification.params && !(options == null ? void 0 : options.relatedRequestId) && !(options == null ? void 0 : options.relatedTask);
+    const debouncedMethods = this._options?.debouncedNotificationMethods ?? [];
+    const canDebounce = debouncedMethods.includes(notification.method) && !notification.params && !options?.relatedRequestId && !options?.relatedTask;
     if (canDebounce) {
       if (this._pendingDebouncedNotifications.has(notification.method)) {
         return;
       }
       this._pendingDebouncedNotifications.add(notification.method);
       Promise.resolve().then(() => {
-        var _a20, _b9;
         this._pendingDebouncedNotifications.delete(notification.method);
         if (!this._transport) {
           return;
@@ -79349,19 +78763,19 @@ var Protocol2 = class {
           ...notification,
           jsonrpc: "2.0"
         };
-        if (options == null ? void 0 : options.relatedTask) {
+        if (options?.relatedTask) {
           jsonrpcNotification2 = {
             ...jsonrpcNotification2,
             params: {
               ...jsonrpcNotification2.params,
               _meta: {
-                ...((_a20 = jsonrpcNotification2.params) == null ? void 0 : _a20._meta) || {},
+                ...jsonrpcNotification2.params?._meta || {},
                 [RELATED_TASK_META_KEY2]: options.relatedTask
               }
             }
           };
         }
-        (_b9 = this._transport) == null ? void 0 : _b9.send(jsonrpcNotification2, options).catch((error41) => this._onerror(error41));
+        this._transport?.send(jsonrpcNotification2, options).catch((error41) => this._onerror(error41));
       });
       return;
     }
@@ -79369,13 +78783,13 @@ var Protocol2 = class {
       ...notification,
       jsonrpc: "2.0"
     };
-    if (options == null ? void 0 : options.relatedTask) {
+    if (options?.relatedTask) {
       jsonrpcNotification = {
         ...jsonrpcNotification,
         params: {
           ...jsonrpcNotification.params,
           _meta: {
-            ...((_e2 = jsonrpcNotification.params) == null ? void 0 : _e2._meta) || {},
+            ...jsonrpcNotification.params?._meta || {},
             [RELATED_TASK_META_KEY2]: options.relatedTask
           }
         }
@@ -79451,11 +78865,10 @@ var Protocol2 = class {
    * simply propagates the error.
    */
   async _enqueueTaskMessage(taskId, message2, sessionId) {
-    var _a19;
     if (!this._taskStore || !this._taskMessageQueue) {
       throw new Error("Cannot enqueue task message: taskStore and taskMessageQueue are not configured");
     }
-    const maxQueueSize = (_a19 = this._options) == null ? void 0 : _a19.maxTaskQueueSize;
+    const maxQueueSize = this._options?.maxTaskQueueSize;
     await this._taskMessageQueue.enqueue(taskId, message2, sessionId, maxQueueSize);
   }
   /**
@@ -79488,11 +78901,10 @@ var Protocol2 = class {
    * @returns Promise that resolves when an update occurs or rejects if aborted
    */
   async _waitForTaskUpdate(taskId, signal3) {
-    var _a19, _b8, _c2;
-    let interval = (_b8 = (_a19 = this._options) == null ? void 0 : _a19.defaultTaskPollInterval) != null ? _b8 : 1e3;
+    let interval = this._options?.defaultTaskPollInterval ?? 1e3;
     try {
-      const task = await ((_c2 = this._taskStore) == null ? void 0 : _c2.getTask(taskId));
-      if (task == null ? void 0 : task.pollInterval) {
+      const task = await this._taskStore?.getTask(taskId);
+      if (task?.pollInterval) {
         interval = task.pollInterval;
       }
     } catch {
@@ -79631,7 +79043,7 @@ var AjvJsonSchemaValidator = class {
    * ```
    */
   constructor(ajv) {
-    this._ajv = ajv != null ? ajv : createDefaultAjvInstance();
+    this._ajv = ajv ?? createDefaultAjvInstance();
   }
   /**
    * Create a validator for the given JSON Schema
@@ -79643,8 +79055,7 @@ var AjvJsonSchemaValidator = class {
    * @returns A validator function that validates input data
    */
   getValidator(schema) {
-    var _a19;
-    const ajvValidator = "$id" in schema && typeof schema.$id === "string" ? (_a19 = this._ajv.getSchema(schema.$id)) != null ? _a19 : this._ajv.compile(schema) : this._ajv.compile(schema);
+    const ajvValidator = "$id" in schema && typeof schema.$id === "string" ? this._ajv.getSchema(schema.$id) ?? this._ajv.compile(schema) : this._ajv.compile(schema);
     return (input) => {
       const valid = ajvValidator(input);
       if (valid) {
@@ -79730,9 +79141,8 @@ var ExperimentalServerTasks = class {
    * @experimental
    */
   createMessageStream(params, options) {
-    var _a19;
     const clientCapabilities = this._server.getClientCapabilities();
-    if ((params.tools || params.toolChoice) && !((_a19 = clientCapabilities == null ? void 0 : clientCapabilities.sampling) == null ? void 0 : _a19.tools)) {
+    if ((params.tools || params.toolChoice) && !clientCapabilities?.sampling?.tools) {
       throw new Error("Client does not support sampling tools capability.");
     }
     if (params.messages.length > 0) {
@@ -79806,18 +79216,17 @@ var ExperimentalServerTasks = class {
    * @experimental
    */
   elicitInputStream(params, options) {
-    var _a19, _b8, _c2;
     const clientCapabilities = this._server.getClientCapabilities();
-    const mode = (_a19 = params.mode) != null ? _a19 : "form";
+    const mode = params.mode ?? "form";
     switch (mode) {
       case "url": {
-        if (!((_b8 = clientCapabilities == null ? void 0 : clientCapabilities.elicitation) == null ? void 0 : _b8.url)) {
+        if (!clientCapabilities?.elicitation?.url) {
           throw new Error("Client does not support url elicitation.");
         }
         break;
       }
       case "form": {
-        if (!((_c2 = clientCapabilities == null ? void 0 : clientCapabilities.elicitation) == null ? void 0 : _c2.form)) {
+        if (!clientCapabilities?.elicitation?.form) {
           throw new Error("Client does not support form elicitation.");
         }
         break;
@@ -79881,13 +79290,12 @@ var ExperimentalServerTasks = class {
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/helpers.js
 function assertToolsCallTaskCapability(requests, method, entityName) {
-  var _a19;
   if (!requests) {
     throw new Error(`${entityName} does not support task creation (required for ${method})`);
   }
   switch (method) {
     case "tools/call":
-      if (!((_a19 = requests.tools) == null ? void 0 : _a19.call)) {
+      if (!requests.tools?.call) {
         throw new Error(`${entityName} does not support task creation for tools/call (required for ${method})`);
       }
       break;
@@ -79896,18 +79304,17 @@ function assertToolsCallTaskCapability(requests, method, entityName) {
   }
 }
 function assertClientRequestTaskCapability(requests, method, entityName) {
-  var _a19, _b8;
   if (!requests) {
     throw new Error(`${entityName} does not support task creation (required for ${method})`);
   }
   switch (method) {
     case "sampling/createMessage":
-      if (!((_a19 = requests.sampling) == null ? void 0 : _a19.createMessage)) {
+      if (!requests.sampling?.createMessage) {
         throw new Error(`${entityName} does not support task creation for sampling/createMessage (required for ${method})`);
       }
       break;
     case "elicitation/create":
-      if (!((_b8 = requests.elicitation) == null ? void 0 : _b8.create)) {
+      if (!requests.elicitation?.create) {
         throw new Error(`${entityName} does not support task creation for elicitation/create (required for ${method})`);
       }
       break;
@@ -79922,7 +79329,6 @@ var Server = class extends Protocol2 {
    * Initializes this server with the given name and version information.
    */
   constructor(_serverInfo, options) {
-    var _a19, _b8;
     super(options);
     this._serverInfo = _serverInfo;
     this._loggingLevels = /* @__PURE__ */ new Map();
@@ -79931,18 +79337,14 @@ var Server = class extends Protocol2 {
       const currentLevel = this._loggingLevels.get(sessionId);
       return currentLevel ? this.LOG_LEVEL_SEVERITY.get(level) < this.LOG_LEVEL_SEVERITY.get(currentLevel) : false;
     };
-    this._capabilities = (_a19 = options == null ? void 0 : options.capabilities) != null ? _a19 : {};
-    this._instructions = options == null ? void 0 : options.instructions;
-    this._jsonSchemaValidator = (_b8 = options == null ? void 0 : options.jsonSchemaValidator) != null ? _b8 : new AjvJsonSchemaValidator();
+    this._capabilities = options?.capabilities ?? {};
+    this._instructions = options?.instructions;
+    this._jsonSchemaValidator = options?.jsonSchemaValidator ?? new AjvJsonSchemaValidator();
     this.setRequestHandler(InitializeRequestSchema2, (request) => this._oninitialize(request));
-    this.setNotificationHandler(InitializedNotificationSchema2, () => {
-      var _a20;
-      return (_a20 = this.oninitialized) == null ? void 0 : _a20.call(this);
-    });
+    this.setNotificationHandler(InitializedNotificationSchema2, () => this.oninitialized?.());
     if (this._capabilities.logging) {
       this.setRequestHandler(SetLevelRequestSchema2, async (request, extra) => {
-        var _a20;
-        const transportSessionId = extra.sessionId || ((_a20 = extra.requestInfo) == null ? void 0 : _a20.headers["mcp-session-id"]) || void 0;
+        const transportSessionId = extra.sessionId || extra.requestInfo?.headers["mcp-session-id"] || void 0;
         const { level } = request.params;
         const parseResult = LoggingLevelSchema2.safeParse(level);
         if (parseResult.success) {
@@ -79983,7 +79385,7 @@ var Server = class extends Protocol2 {
    */
   setRequestHandler(requestSchema, handler2) {
     const shape = getObjectShape2(requestSchema);
-    const methodSchema = shape == null ? void 0 : shape.method;
+    const methodSchema = shape?.method;
     if (!methodSchema) {
       throw new Error("Schema is missing a method literal");
     }
@@ -80021,20 +79423,19 @@ var Server = class extends Protocol2 {
     return super.setRequestHandler(requestSchema, handler2);
   }
   assertCapabilityForMethod(method) {
-    var _a19, _b8, _c2;
     switch (method) {
       case "sampling/createMessage":
-        if (!((_a19 = this._clientCapabilities) == null ? void 0 : _a19.sampling)) {
+        if (!this._clientCapabilities?.sampling) {
           throw new Error(`Client does not support sampling (required for ${method})`);
         }
         break;
       case "elicitation/create":
-        if (!((_b8 = this._clientCapabilities) == null ? void 0 : _b8.elicitation)) {
+        if (!this._clientCapabilities?.elicitation) {
           throw new Error(`Client does not support elicitation (required for ${method})`);
         }
         break;
       case "roots/list":
-        if (!((_c2 = this._clientCapabilities) == null ? void 0 : _c2.roots)) {
+        if (!this._clientCapabilities?.roots) {
           throw new Error(`Client does not support listing roots (required for ${method})`);
         }
         break;
@@ -80043,7 +79444,6 @@ var Server = class extends Protocol2 {
     }
   }
   assertNotificationCapability(method) {
-    var _a19, _b8;
     switch (method) {
       case "notifications/message":
         if (!this._capabilities.logging) {
@@ -80067,7 +79467,7 @@ var Server = class extends Protocol2 {
         }
         break;
       case "notifications/elicitation/complete":
-        if (!((_b8 = (_a19 = this._clientCapabilities) == null ? void 0 : _a19.elicitation) == null ? void 0 : _b8.url)) {
+        if (!this._clientCapabilities?.elicitation?.url) {
           throw new Error(`Client does not support URL elicitation (required for ${method})`);
         }
         break;
@@ -80125,15 +79525,13 @@ var Server = class extends Protocol2 {
     }
   }
   assertTaskCapability(method) {
-    var _a19, _b8;
-    assertClientRequestTaskCapability((_b8 = (_a19 = this._clientCapabilities) == null ? void 0 : _a19.tasks) == null ? void 0 : _b8.requests, method, "Client");
+    assertClientRequestTaskCapability(this._clientCapabilities?.tasks?.requests, method, "Client");
   }
   assertTaskHandlerCapability(method) {
-    var _a19;
     if (!this._capabilities) {
       return;
     }
-    assertToolsCallTaskCapability((_a19 = this._capabilities.tasks) == null ? void 0 : _a19.requests, method, "Server");
+    assertToolsCallTaskCapability(this._capabilities.tasks?.requests, method, "Server");
   }
   async _oninitialize(request) {
     const requestedVersion = request.params.protocolVersion;
@@ -80167,9 +79565,8 @@ var Server = class extends Protocol2 {
   }
   // Implementation
   async createMessage(params, options) {
-    var _a19, _b8;
     if (params.tools || params.toolChoice) {
-      if (!((_b8 = (_a19 = this._clientCapabilities) == null ? void 0 : _a19.sampling) == null ? void 0 : _b8.tools)) {
+      if (!this._clientCapabilities?.sampling?.tools) {
         throw new Error("Client does not support sampling tools capability.");
       }
     }
@@ -80209,18 +79606,17 @@ var Server = class extends Protocol2 {
    * @returns The result of the elicitation request.
    */
   async elicitInput(params, options) {
-    var _a19, _b8, _c2, _d2, _e2;
-    const mode = (_a19 = params.mode) != null ? _a19 : "form";
+    const mode = params.mode ?? "form";
     switch (mode) {
       case "url": {
-        if (!((_c2 = (_b8 = this._clientCapabilities) == null ? void 0 : _b8.elicitation) == null ? void 0 : _c2.url)) {
+        if (!this._clientCapabilities?.elicitation?.url) {
           throw new Error("Client does not support url elicitation.");
         }
         const urlParams = params;
         return this.request({ method: "elicitation/create", params: urlParams }, ElicitResultSchema2, options);
       }
       case "form": {
-        if (!((_e2 = (_d2 = this._clientCapabilities) == null ? void 0 : _d2.elicitation) == null ? void 0 : _e2.form)) {
+        if (!this._clientCapabilities?.elicitation?.form) {
           throw new Error("Client does not support form elicitation.");
         }
         const formParams = params.mode === "form" ? params : { ...params, mode: "form" };
@@ -80252,8 +79648,7 @@ var Server = class extends Protocol2 {
    * @returns A function that emits the completion notification when awaited.
    */
   createElicitationCompletionNotifier(elicitationId, options) {
-    var _a19, _b8;
-    if (!((_b8 = (_a19 = this._clientCapabilities) == null ? void 0 : _a19.elicitation) == null ? void 0 : _b8.url)) {
+    if (!this._clientCapabilities?.elicitation?.url) {
       throw new Error("Client does not support URL elicitation (required for notifications/elicitation/complete)");
     }
     return () => this.notification({
@@ -80306,7 +79701,7 @@ function isCompletable(schema) {
 }
 function getCompleter(schema) {
   const meta = schema[COMPLETABLE_SYMBOL];
-  return meta == null ? void 0 : meta.complete;
+  return meta?.complete;
 }
 var McpZodTypeKind;
 (function(McpZodTypeKind2) {
@@ -80469,7 +79864,6 @@ var McpServer = class {
       })
     }));
     this.server.setRequestHandler(CallToolRequestSchema2, async (request, extra) => {
-      var _a19;
       try {
         const tool = this._registeredTools[request.params.name];
         if (!tool) {
@@ -80479,7 +79873,7 @@ var McpServer = class {
           throw new McpError2(ErrorCode2.InvalidParams, `Tool ${request.params.name} disabled`);
         }
         const isTaskRequest = !!request.params.task;
-        const taskSupport = (_a19 = tool.execution) == null ? void 0 : _a19.taskSupport;
+        const taskSupport = tool.execution?.taskSupport;
         const isTaskHandler = "createTask" in tool.handler;
         if ((taskSupport === "required" || taskSupport === "optional") && !isTaskHandler) {
           throw new McpError2(ErrorCode2.InternalError, `Tool ${request.params.name} has taskSupport '${taskSupport}' but was not registered with registerToolTask`);
@@ -80533,7 +79927,7 @@ var McpServer = class {
       return void 0;
     }
     const inputObj = normalizeObjectSchema(tool.inputSchema);
-    const schemaToParse = inputObj != null ? inputObj : tool.inputSchema;
+    const schemaToParse = inputObj ?? tool.inputSchema;
     const parseResult = await safeParseAsync4(schemaToParse, args);
     if (!parseResult.success) {
       const error41 = "error" in parseResult ? parseResult.error : "Unknown error";
@@ -80597,7 +79991,6 @@ var McpServer = class {
    * Handles automatic task polling for tools with taskSupport 'optional'.
    */
   async handleAutomaticTaskPolling(tool, request, extra) {
-    var _a19;
     if (!extra.taskStore) {
       throw new Error("No task store provided for task-capable tool.");
     }
@@ -80610,7 +80003,7 @@ var McpServer = class {
     );
     const taskId = createTaskResult.task.taskId;
     let task = createTaskResult.task;
-    const pollInterval = (_a19 = task.pollInterval) != null ? _a19 : 5e3;
+    const pollInterval = task.pollInterval ?? 5e3;
     while (task.status !== "completed" && task.status !== "failed" && task.status !== "cancelled") {
       await new Promise((resolve) => setTimeout(resolve, pollInterval));
       const updatedTask = await extra.taskStore.getTask(taskId);
@@ -80655,7 +80048,7 @@ var McpServer = class {
       return EMPTY_COMPLETION_RESULT;
     }
     const promptShape = getObjectShape2(prompt.argsSchema);
-    const field = promptShape == null ? void 0 : promptShape[request.params.argument.name];
+    const field = promptShape?.[request.params.argument.name];
     if (!isCompletable(field)) {
       return EMPTY_COMPLETION_RESULT;
     }
@@ -80933,8 +80326,7 @@ var McpServer = class {
     this._registeredPrompts[name] = registeredPrompt;
     if (argsSchema) {
       const hasCompletable = Object.values(argsSchema).some((field) => {
-        var _a19;
-        const inner = field instanceof ZodOptional3 ? (_a19 = field._def) == null ? void 0 : _a19.innerType : field;
+        const inner = field instanceof ZodOptional3 ? field._def?.innerType : field;
         return isCompletable(inner);
       });
       if (hasCompletable) {
@@ -81155,7 +80547,7 @@ function promptArgumentsFromSchema(schema) {
 }
 function getMethodValue(schema) {
   const shape = getObjectShape2(schema);
-  const methodSchema = shape == null ? void 0 : shape.method;
+  const methodSchema = shape?.method;
   if (!methodSchema) {
     throw new Error("Schema is missing a method literal");
   }
@@ -81335,8 +80727,8 @@ function requireBearerAuth({ verifier, requiredScopes = [], resourceMetadataUrl 
 var X_ALREADY_SENT = "x-hono-already-sent";
 
 // node_modules/@hono/node-server/dist/index.mjs
-var import_node_http2 = require("http2");
-var import_node_stream = require("stream");
+var import_node_http2 = require("node:http2");
+var import_node_stream = require("node:stream");
 
 // node_modules/hono/dist/helper/websocket/index.js
 var defineWebSocketHelper = (handler2) => {
@@ -81394,13 +80786,12 @@ var toRequestError = (e2) => {
 var GlobalRequest = global.Request;
 var Request$1 = class extends GlobalRequest {
   constructor(input, options) {
-    var _a19, _b8;
     if (typeof input === "object" && getRequestCache in input) {
       const hasReplacementBody = options !== void 0 && "body" in options && options.body != null;
       if (input[bodyConsumedDirectlyKey] && !hasReplacementBody) throw new TypeError("Cannot construct a Request with a Request object that has already been used.");
       input = input[getRequestCache]();
     }
-    if (typeof ((_a19 = options == null ? void 0 : options.body) == null ? void 0 : _a19.getReader) !== "undefined") (_b8 = options.duplex) != null ? _b8 : options.duplex = "half";
+    if (typeof options?.body?.getReader !== "undefined") options.duplex ??= "half";
     super(input, options);
   }
 };
@@ -81424,13 +80815,12 @@ var byteExactEncodings = /* @__PURE__ */ new Set([
 var isByteExactEncoding = (encoding) => encoding === null || byteExactEncodings.has(encoding);
 var bodyBufferedBeforeDisconnectKey = /* @__PURE__ */ Symbol("bodyBufferedBeforeDisconnect");
 var bodyBufferedLengthBeforeDisconnectKey = /* @__PURE__ */ Symbol("bodyBufferedLengthBeforeDisconnect");
-var toBufferChunk = (chunk, encoding) => Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding != null ? encoding : "utf8");
+var toBufferChunk = (chunk, encoding) => Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding ?? "utf8");
 var isRecoverableDisconnectedIncoming = (incoming) => !(incoming instanceof import_node_http2.Http2ServerRequest) && !!incoming.complete && !!incoming.readableAborted && typeof incoming.read === "function" && isByteExactEncoding(incoming.readableEncoding);
 var recordBodyBufferedBeforeDisconnect = (incoming) => {
-  var _a19;
   if (incoming.readableDidRead || !isRecoverableDisconnectedIncoming(incoming)) return;
   const incomingWithRecovery = incoming;
-  (_a19 = incomingWithRecovery[bodyBufferedLengthBeforeDisconnectKey]) != null ? _a19 : incomingWithRecovery[bodyBufferedLengthBeforeDisconnectKey] = incoming.readableLength;
+  incomingWithRecovery[bodyBufferedLengthBeforeDisconnectKey] ??= incoming.readableLength;
 };
 var readBodyBufferedBeforeDisconnect = (incoming, chunks) => {
   if (incoming.readableDidRead && !chunks || !isRecoverableDisconnectedIncoming(incoming)) return;
@@ -81441,7 +80831,7 @@ var readBodyBufferedBeforeDisconnect = (incoming, chunks) => {
   if (errored && errored.code !== "ECONNRESET") result = errored;
   else if (incomingWithRecovery[bodyBufferedLengthBeforeDisconnectKey] !== void 0 && incoming.readableLength !== incomingWithRecovery[bodyBufferedLengthBeforeDisconnectKey]) result = newBodyUnusableError();
   else {
-    const bodyChunks = chunks != null ? chunks : [];
+    const bodyChunks = chunks ?? [];
     const chunk = incoming.read();
     if (chunk !== null) bodyChunks.push(toBufferChunk(chunk, incoming.readableEncoding));
     const buffer = bodyChunks.length === 1 ? bodyChunks[0] : Buffer.concat(bodyChunks);
@@ -81492,7 +80882,7 @@ var newRequestFromIncoming = (method, url2, headers2, incoming, abortController)
             return;
           }
         }
-        reader || (reader = import_node_stream.Readable.toWeb(incoming).getReader());
+        reader ||= import_node_stream.Readable.toWeb(incoming).getReader();
         const { done, value } = await reader.read();
         if (done) controller.close();
         else controller.enqueue(value);
@@ -81538,7 +80928,7 @@ var toArrayBuffer = (buf2) => {
   return buf2.buffer.slice(buf2.byteOffset, buf2.byteOffset + buf2.byteLength);
 };
 var contentType = (request) => {
-  return (request[headersKey] || (request[headersKey] = newHeadersFromIncoming(request[incomingKey]))).get("content-type") || "";
+  return (request[headersKey] ||= newHeadersFromIncoming(request[incomingKey])).get("content-type") || "";
 };
 var methodTokenRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
 var normalizeIncomingMethod = (method) => {
@@ -81626,13 +81016,12 @@ var readBodyDirect = (request) => {
       callback();
     };
     const recoverCompleteBodyAfterDisconnect = (error41) => {
-      var _a19;
-      const streamError = (_a19 = incoming.errored) != null ? _a19 : error41;
+      const streamError = incoming.errored ?? error41;
       if (!isRecoverableDisconnectedIncoming(incoming) || streamError && streamError.code !== "ECONNRESET") return false;
       finish(() => {
         const recovered = readBodyBufferedBeforeDisconnect(incoming, chunks);
         if (recovered instanceof Error) reject(recovered);
-        else if (recovered === void 0) reject(error41 != null ? error41 : normalizeAbortError(request, incoming));
+        else if (recovered === void 0) reject(error41 ?? normalizeAbortError(request, incoming));
         else {
           request[bodyBufferKey] = recovered;
           resolve(recovered);
@@ -81695,7 +81084,7 @@ var requestPrototype = {
     return this[urlKey];
   },
   get headers() {
-    return this[headersKey] || (this[headersKey] = newHeadersFromIncoming(this[incomingKey]));
+    return this[headersKey] ||= newHeadersFromIncoming(this[incomingKey]);
   },
   [abortRequest](reason) {
     if (this[abortReasonKey] === void 0) this[abortReasonKey] = reason;
@@ -81703,7 +81092,7 @@ var requestPrototype = {
     if (abortController && !abortController.signal.aborted) abortController.abort(reason);
   },
   [getAbortController]() {
-    this[abortControllerKey] || (this[abortControllerKey] = new AbortController());
+    this[abortControllerKey] ||= new AbortController();
     if (this[abortReasonKey] !== void 0 && !this[abortControllerKey].signal.aborted) this[abortControllerKey].abort(this[abortReasonKey]);
     return this[abortControllerKey];
   },
@@ -81834,39 +81223,37 @@ var responseCache = /* @__PURE__ */ Symbol("responseCache");
 var getResponseCache = /* @__PURE__ */ Symbol("getResponseCache");
 var cacheKey = /* @__PURE__ */ Symbol("cache");
 var GlobalResponse = global.Response;
-var _body, _init, _a16;
-var Response$1 = (_a16 = class {
-  constructor(body, init) {
-    __privateAdd(this, _body);
-    __privateAdd(this, _init);
-    let headers2;
-    __privateSet(this, _body, body);
-    if (init instanceof GlobalResponse) {
-      const cachedGlobalResponse = init[responseCache];
-      if (cachedGlobalResponse) {
-        __privateSet(this, _init, cachedGlobalResponse);
-        this[getResponseCache]();
-        return;
-      }
-      __privateSet(this, _init, init instanceof _a16 ? __privateGet(init, _init) : init);
-      headers2 = new Headers(init.headers);
-    } else __privateSet(this, _init, init);
-    if (body == null || typeof body === "string" || typeof (body == null ? void 0 : body.getReader) !== "undefined" || body instanceof Blob || body instanceof Uint8Array) this[cacheKey] = [
-      (init == null ? void 0 : init.status) || 200,
-      body != null ? body : null,
-      headers2 || (init == null ? void 0 : init.headers)
-    ];
-  }
+var Response$1 = class Response$12 {
+  #body;
+  #init;
   [getResponseCache]() {
-    var _a19, _b8;
     const cache2 = this[cacheKey];
     const liveHeaders = cache2 && cache2[2] instanceof Headers ? cache2[2] : void 0;
     delete this[cacheKey];
-    return this[responseCache] || (this[responseCache] = new GlobalResponse(__privateGet(this, _body), liveHeaders ? {
-      status: (_a19 = __privateGet(this, _init)) == null ? void 0 : _a19.status,
-      statusText: (_b8 = __privateGet(this, _init)) == null ? void 0 : _b8.statusText,
+    return this[responseCache] ||= new GlobalResponse(this.#body, liveHeaders ? {
+      status: this.#init?.status,
+      statusText: this.#init?.statusText,
       headers: liveHeaders
-    } : __privateGet(this, _init)));
+    } : this.#init);
+  }
+  constructor(body, init) {
+    let headers2;
+    this.#body = body;
+    if (init instanceof GlobalResponse) {
+      const cachedGlobalResponse = init[responseCache];
+      if (cachedGlobalResponse) {
+        this.#init = cachedGlobalResponse;
+        this[getResponseCache]();
+        return;
+      }
+      this.#init = init instanceof Response$12 ? init.#init : init;
+      headers2 = new Headers(init.headers);
+    } else this.#init = init;
+    if (body == null || typeof body === "string" || typeof body?.getReader !== "undefined" || body instanceof Blob || body instanceof Uint8Array) this[cacheKey] = [
+      init?.status || 200,
+      body ?? null,
+      headers2 || init?.headers
+    ];
   }
   get headers() {
     const cache2 = this[cacheKey];
@@ -81877,14 +81264,13 @@ var Response$1 = (_a16 = class {
     return this[getResponseCache]().headers;
   }
   get status() {
-    var _a19, _b8;
-    return (_b8 = (_a19 = this[cacheKey]) == null ? void 0 : _a19[0]) != null ? _b8 : this[getResponseCache]().status;
+    return this[cacheKey]?.[0] ?? this[getResponseCache]().status;
   }
   get ok() {
     const status = this.status;
     return status >= 200 && status < 300;
   }
-}, _body = new WeakMap(), _init = new WeakMap(), _a16);
+};
 [
   "body",
   "bodyUsed",
@@ -81949,18 +81335,17 @@ Object.defineProperty(Response$1, "redirect", {
 });
 Object.defineProperty(Response$1, "json", {
   value: function json2(data, init) {
-    var _a19;
     const body = JSON.stringify(data);
     if (body === void 0) throw new TypeError("The data is not JSON serializable");
-    const initHeaders = init == null ? void 0 : init.headers;
+    const initHeaders = init?.headers;
     let headers2;
     if (initHeaders) {
       headers2 = new Headers(initHeaders);
       if (!headers2.has("content-type")) headers2.set("content-type", "application/json");
     } else headers2 = { "content-type": "application/json" };
     return new Response$1(body, {
-      status: (_a19 = init == null ? void 0 : init.status) != null ? _a19 : 200,
-      statusText: init == null ? void 0 : init.statusText,
+      status: init?.status ?? 200,
+      statusText: init?.statusText,
       headers: headers2
     });
   },
@@ -81977,7 +81362,7 @@ function writeFromReadableStreamDefaultReader(reader, writable, currentReadPromi
   };
   writable.on("close", cancel);
   writable.on("error", cancel);
-  (currentReadPromise != null ? currentReadPromise : reader.read()).then(flow, handleStreamError);
+  (currentReadPromise ?? reader.read()).then(flow, handleStreamError);
   return reader.closed.finally(() => {
     writable.off("close", cancel);
     writable.off("error", cancel);
@@ -82004,16 +81389,15 @@ function writeFromReadableStream(stream, writable) {
   return writeFromReadableStreamDefaultReader(stream.getReader(), writable);
 }
 var buildOutgoingHttpHeaders = (headers2, defaultContentType2) => {
-  var _a19;
   const res = {};
-  if (!(headers2 instanceof Headers)) headers2 = new Headers(headers2 != null ? headers2 : void 0);
+  if (!(headers2 instanceof Headers)) headers2 = new Headers(headers2 ?? void 0);
   if (headers2.has("set-cookie")) {
     const cookies = [];
     for (const [k3, v3] of headers2) if (k3 === "set-cookie") cookies.push(v3);
     else res[k3] = v3;
     if (cookies.length > 0) res["set-cookie"] = cookies;
   } else for (const [k3, v3] of headers2) res[k3] = v3;
-  if (defaultContentType2) (_a19 = res["content-type"]) != null ? _a19 : res["content-type"] = defaultContentType2;
+  if (defaultContentType2) res["content-type"] ??= defaultContentType2;
   return res;
 };
 var outgoingEnded = /* @__PURE__ */ Symbol("outgoingEnded");
@@ -82021,13 +81405,12 @@ var incomingDraining = /* @__PURE__ */ Symbol("incomingDraining");
 var DRAIN_TIMEOUT_MS = 500;
 var MAX_DRAIN_BYTES = 64 * 1024 * 1024;
 var drainIncoming = (incoming) => {
-  var _a19, _b8, _c2;
   const incomingWithDrainState = incoming;
   if (incoming.destroyed || incomingWithDrainState[incomingDraining]) return;
   incomingWithDrainState[incomingDraining] = true;
   if (incoming instanceof import_node_http2.Http2ServerRequest) {
     try {
-      (_b8 = (_a19 = incoming.stream) == null ? void 0 : _a19.close) == null ? void 0 : _b8.call(_a19, import_node_http2.constants.NGHTTP2_NO_ERROR);
+      incoming.stream?.close?.(import_node_http2.constants.NGHTTP2_NO_ERROR);
     } catch {
     }
     return;
@@ -82048,7 +81431,7 @@ var drainIncoming = (incoming) => {
     }
   };
   const timer = setTimeout(forceClose, DRAIN_TIMEOUT_MS);
-  (_c2 = timer.unref) == null ? void 0 : _c2.call(timer);
+  timer.unref?.();
   const onData = (chunk) => {
     bytesRead += chunk.length;
     if (bytesRead > MAX_DRAIN_BYTES) forceClose();
@@ -82093,7 +81476,6 @@ var flushHeaders = (outgoing) => {
   if ("flushHeaders" in outgoing && outgoing.writable) outgoing.flushHeaders();
 };
 var responseViaCache = async (res, outgoing) => {
-  var _a19, _b8, _c2, _d2;
   let [status, body, header] = res[cacheKey];
   if (!header) {
     if (body === null) {
@@ -82120,9 +81502,9 @@ var responseViaCache = async (res, outgoing) => {
     } else {
       outgoing.writeHead(status, { "Content-Type": defaultContentType });
       flushHeaders(outgoing);
-      await ((_a19 = writeFromReadableStream(body, outgoing)) == null ? void 0 : _a19.catch((e2) => handleResponseError(e2, outgoing)));
+      await writeFromReadableStream(body, outgoing)?.catch((e2) => handleResponseError(e2, outgoing));
     }
-    (_b8 = outgoing[outgoingEnded]) == null ? void 0 : _b8.call(outgoing);
+    outgoing[outgoingEnded]?.();
     return;
   }
   let hasContentLength = false;
@@ -82148,13 +81530,12 @@ var responseViaCache = async (res, outgoing) => {
   else if (body instanceof Blob) outgoing.end(new Uint8Array(await body.arrayBuffer()));
   else {
     flushHeaders(outgoing);
-    await ((_c2 = writeFromReadableStream(body, outgoing)) == null ? void 0 : _c2.catch((e2) => handleResponseError(e2, outgoing)));
+    await writeFromReadableStream(body, outgoing)?.catch((e2) => handleResponseError(e2, outgoing));
   }
-  (_d2 = outgoing[outgoingEnded]) == null ? void 0 : _d2.call(outgoing);
+  outgoing[outgoingEnded]?.();
 };
 var isPromise = (res) => typeof res.then === "function";
 var responseViaResponseObject = async (res, outgoing, options = {}) => {
-  var _a19;
   if (isPromise(res)) if (options.errorHandler) try {
     res = await res;
   } catch (err) {
@@ -82173,7 +81554,7 @@ var responseViaResponseObject = async (res, outgoing, options = {}) => {
     if (resHeaderRecord["transfer-encoding"] !== "chunked") {
       let maxReadCount = 2;
       for (let i = 0; i < maxReadCount; i++) {
-        currentReadPromise || (currentReadPromise = reader.read());
+        currentReadPromise ||= reader.read();
         const chunk = await readWithoutBlocking(currentReadPromise).catch((e2) => {
           console.error(e2);
           done = true;
@@ -82209,11 +81590,10 @@ var responseViaResponseObject = async (res, outgoing, options = {}) => {
     outgoing.writeHead(res.status, resHeaderRecord);
     outgoing.end();
   }
-  (_a19 = outgoing[outgoingEnded]) == null ? void 0 : _a19.call(outgoing);
+  outgoing[outgoingEnded]?.();
 };
 var getRequestListener = (fetchCallback, options = {}) => {
-  var _a19;
-  const autoCleanupIncoming = (_a19 = options.autoCleanupIncoming) != null ? _a19 : true;
+  const autoCleanupIncoming = options.autoCleanupIncoming ?? true;
   if (options.overrideGlobalObjects !== false && global.Request !== Request$1) {
     Object.defineProperty(global, "Request", { value: Request$1 });
     Object.defineProperty(global, "Response", { value: Response$1 });
@@ -82268,67 +81648,55 @@ var getRequestListener = (fetchCallback, options = {}) => {
     }
   };
 };
-var _eventInitDict, _a17, _b6;
-var CloseEvent = (_b6 = globalThis.CloseEvent) != null ? _b6 : (_a17 = class extends Event {
+var CloseEvent = globalThis.CloseEvent ?? class extends Event {
+  #eventInitDict;
   constructor(type, eventInitDict = {}) {
     super(type, eventInitDict);
-    __privateAdd(this, _eventInitDict);
-    __privateSet(this, _eventInitDict, eventInitDict);
+    this.#eventInitDict = eventInitDict;
   }
   get wasClean() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict).wasClean) != null ? _a19 : false;
+    return this.#eventInitDict.wasClean ?? false;
   }
   get code() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict).code) != null ? _a19 : 0;
+    return this.#eventInitDict.code ?? 0;
   }
   get reason() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict).reason) != null ? _a19 : "";
+    return this.#eventInitDict.reason ?? "";
   }
-}, _eventInitDict = new WeakMap(), _a17);
-var _eventInitDict2, _a18, _b7;
-var ErrorEvent = (_b7 = globalThis.ErrorEvent) != null ? _b7 : (_a18 = class extends Event {
+};
+var ErrorEvent = globalThis.ErrorEvent ?? class extends Event {
+  #eventInitDict;
   constructor(type, eventInitDict = {}) {
     super(type, eventInitDict);
-    __privateAdd(this, _eventInitDict2);
-    __privateSet(this, _eventInitDict2, eventInitDict);
+    this.#eventInitDict = eventInitDict;
   }
   get message() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict2).message) != null ? _a19 : "";
+    return this.#eventInitDict.message ?? "";
   }
   get filename() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict2).filename) != null ? _a19 : "";
+    return this.#eventInitDict.filename ?? "";
   }
   get lineno() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict2).lineno) != null ? _a19 : 0;
+    return this.#eventInitDict.lineno ?? 0;
   }
   get colno() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict2).colno) != null ? _a19 : 0;
+    return this.#eventInitDict.colno ?? 0;
   }
   get error() {
-    var _a19;
-    return (_a19 = __privateGet(this, _eventInitDict2).error) != null ? _a19 : null;
+    return this.#eventInitDict.error ?? null;
   }
-}, _eventInitDict2 = new WeakMap(), _a18);
+};
 var generateConnectionSymbol = () => /* @__PURE__ */ Symbol("connection");
 var CONNECTION_SYMBOL_KEY = /* @__PURE__ */ Symbol("CONNECTION_SYMBOL_KEY");
 var WAIT_FOR_WEBSOCKET_SYMBOL = /* @__PURE__ */ Symbol("WAIT_FOR_WEBSOCKET_SYMBOL");
 var upgradeWebSocket = defineWebSocketHelper(async (c2, events, options) => {
-  var _a19;
-  if (((_a19 = c2.req.header("upgrade")) == null ? void 0 : _a19.toLowerCase()) !== "websocket") return;
+  if (c2.req.header("upgrade")?.toLowerCase() !== "websocket") return;
   const env = c2.env;
   const waitForWebSocket = env[WAIT_FOR_WEBSOCKET_SYMBOL];
   if (!waitForWebSocket || !env.incoming) return new Response(null, { status: 500 });
   const connectionSymbol = generateConnectionSymbol();
   env[CONNECTION_SYMBOL_KEY] = connectionSymbol;
   (async () => {
-    var _a20, _b8;
     let ws2;
     try {
       ws2 = await waitForWebSocket(env.incoming, connectionSymbol);
@@ -82351,22 +81719,21 @@ var upgradeWebSocket = defineWebSocketHelper(async (c2, events, options) => {
         return ws2.readyState;
       },
       send(source, opts) {
-        ws2.send(source, { compress: opts == null ? void 0 : opts.compress });
+        ws2.send(source, { compress: opts?.compress });
       },
       url: new URL(c2.req.url)
     };
     try {
-      (_a20 = events == null ? void 0 : events.onOpen) == null ? void 0 : _a20.call(events, new Event("open"), ctx);
+      events?.onOpen?.(new Event("open"), ctx);
     } catch (e2) {
-      ((_b8 = options == null ? void 0 : options.onError) != null ? _b8 : console.error)(e2);
+      (options?.onError ?? console.error)(e2);
     }
     const handleMessage = (data, isBinary) => {
-      var _a21, _b9;
       const datas = Array.isArray(data) ? data : [data];
       for (const data2 of datas) try {
-        (_a21 = events == null ? void 0 : events.onMessage) == null ? void 0 : _a21.call(events, new MessageEvent("message", { data: isBinary ? data2 instanceof ArrayBuffer ? data2 : data2.buffer.slice(data2.byteOffset, data2.byteOffset + data2.byteLength) : typeof data2 === "string" ? data2 : Buffer.from(data2).toString("utf-8") }), ctx);
+        events?.onMessage?.(new MessageEvent("message", { data: isBinary ? data2 instanceof ArrayBuffer ? data2 : data2.buffer.slice(data2.byteOffset, data2.byteOffset + data2.byteLength) : typeof data2 === "string" ? data2 : Buffer.from(data2).toString("utf-8") }), ctx);
       } catch (e2) {
-        ((_b9 = options == null ? void 0 : options.onError) != null ? _b9 : console.error)(e2);
+        (options?.onError ?? console.error)(e2);
       }
     };
     ws2.off("message", bufferMessage);
@@ -82375,22 +81742,20 @@ var upgradeWebSocket = defineWebSocketHelper(async (c2, events, options) => {
       handleMessage(data, isBinary);
     });
     ws2.on("close", (code, reason) => {
-      var _a21, _b9;
       try {
-        (_a21 = events == null ? void 0 : events.onClose) == null ? void 0 : _a21.call(events, new CloseEvent("close", {
+        events?.onClose?.(new CloseEvent("close", {
           code,
           reason: reason.toString()
         }), ctx);
       } catch (e2) {
-        ((_b9 = options == null ? void 0 : options.onError) != null ? _b9 : console.error)(e2);
+        (options?.onError ?? console.error)(e2);
       }
     });
     ws2.on("error", (error41) => {
-      var _a21, _b9;
       try {
-        (_a21 = events == null ? void 0 : events.onError) == null ? void 0 : _a21.call(events, new ErrorEvent("error", { error: error41 }), ctx);
+        events?.onError?.(new ErrorEvent("error", { error: error41 }), ctx);
       } catch (e2) {
-        ((_b9 = options == null ? void 0 : options.onError) != null ? _b9 : console.error)(e2);
+        (options?.onError ?? console.error)(e2);
       }
     });
   })();
@@ -82400,14 +81765,13 @@ var upgradeWebSocket = defineWebSocketHelper(async (c2, events, options) => {
 // node_modules/@modelcontextprotocol/sdk/dist/esm/shared/mediaType.js
 var import_content_type = __toESM(require_content_type(), 1);
 function mediaTypeEssence(header) {
-  var _a19;
   if (!header) {
     return void 0;
   }
   try {
     return import_content_type.default.parse(header).type;
   } catch {
-    const essence = ((_a19 = header.split(";", 1)[0]) != null ? _a19 : "").trim().toLowerCase();
+    const essence = (header.split(";", 1)[0] ?? "").trim().toLowerCase();
     if (essence === "" || header.slice(essence.length).includes(",")) {
       return void 0;
     }
@@ -82425,19 +81789,17 @@ function isJsonContentType(header) {
 var DEFAULT_SSE_KEEP_ALIVE_MS = 15e3;
 var MAX_TIMER_DELAY_MS = 2 ** 31 - 1;
 function armSseKeepAlive(intervalMs, onTick) {
-  var _a19;
   if (!Number.isFinite(intervalMs) || intervalMs < 1) {
     return void 0;
   }
   const timer = setInterval(onTick, Math.min(intervalMs, MAX_TIMER_DELAY_MS));
-  (_a19 = timer.unref) == null ? void 0 : _a19.call(timer);
+  timer.unref?.();
   return timer;
 }
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/server/webStandardStreamableHttp.js
 var WebStandardStreamableHTTPServerTransport = class {
   constructor(options = {}) {
-    var _a19, _b8, _c2;
     this._started = false;
     this._hasHandledRequest = false;
     this._streamMapping = /* @__PURE__ */ new Map();
@@ -82449,15 +81811,15 @@ var WebStandardStreamableHTTPServerTransport = class {
     this._standaloneSseStreamId = "_GET_stream";
     this._closed = false;
     this.sessionIdGenerator = options.sessionIdGenerator;
-    this._enableJsonResponse = (_a19 = options.enableJsonResponse) != null ? _a19 : false;
+    this._enableJsonResponse = options.enableJsonResponse ?? false;
     this._eventStore = options.eventStore;
     this._onsessioninitialized = options.onsessioninitialized;
     this._onsessionclosed = options.onsessionclosed;
     this._allowedHosts = options.allowedHosts;
     this._allowedOrigins = options.allowedOrigins;
-    this._enableDnsRebindingProtection = (_b8 = options.enableDnsRebindingProtection) != null ? _b8 : false;
+    this._enableDnsRebindingProtection = options.enableDnsRebindingProtection ?? false;
     this._retryInterval = options.retryInterval;
-    this._keepAliveMs = (_c2 = options.keepAliveMs) != null ? _c2 : DEFAULT_SSE_KEEP_ALIVE_MS;
+    this._keepAliveMs = options.keepAliveMs ?? DEFAULT_SSE_KEEP_ALIVE_MS;
   }
   /**
    * Arms a keep-alive interval for an SSE stream that periodically writes an SSE
@@ -82494,7 +81856,7 @@ var WebStandardStreamableHTTPServerTransport = class {
    */
   createJsonErrorResponse(status, code, message2, options) {
     const error41 = { code, message: message2 };
-    if ((options == null ? void 0 : options.data) !== void 0) {
+    if (options?.data !== void 0) {
       error41.data = options.data;
     }
     return new Response(JSON.stringify({
@@ -82505,7 +81867,7 @@ var WebStandardStreamableHTTPServerTransport = class {
       status,
       headers: {
         "Content-Type": "application/json",
-        ...options == null ? void 0 : options.headers
+        ...options?.headers
       }
     });
   }
@@ -82514,7 +81876,6 @@ var WebStandardStreamableHTTPServerTransport = class {
    * @returns Error response if validation fails, undefined if validation passes.
    */
   validateRequestHeaders(req) {
-    var _a19, _b8;
     if (!this._enableDnsRebindingProtection) {
       return void 0;
     }
@@ -82522,7 +81883,7 @@ var WebStandardStreamableHTTPServerTransport = class {
       const hostHeader = req.headers.get("host");
       if (!hostHeader || !this._allowedHosts.includes(hostHeader)) {
         const error41 = `Invalid Host header: ${hostHeader}`;
-        (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error(error41));
+        this.onerror?.(new Error(error41));
         return this.createJsonErrorResponse(403, -32e3, error41);
       }
     }
@@ -82530,7 +81891,7 @@ var WebStandardStreamableHTTPServerTransport = class {
       const originHeader = req.headers.get("origin");
       if (originHeader && !this._allowedOrigins.includes(originHeader)) {
         const error41 = `Invalid Origin header: ${originHeader}`;
-        (_b8 = this.onerror) == null ? void 0 : _b8.call(this, new Error(error41));
+        this.onerror?.(new Error(error41));
         return this.createJsonErrorResponse(403, -32e3, error41);
       }
     }
@@ -82594,10 +81955,9 @@ data:
    * Handles GET requests for SSE stream
    */
   async handleGetRequest(req) {
-    var _a19, _b8;
     const acceptHeader = req.headers.get("accept");
-    if (!(acceptHeader == null ? void 0 : acceptHeader.includes("text/event-stream"))) {
-      (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error("Not Acceptable: Client must accept text/event-stream"));
+    if (!acceptHeader?.includes("text/event-stream")) {
+      this.onerror?.(new Error("Not Acceptable: Client must accept text/event-stream"));
       return this.createJsonErrorResponse(406, -32e3, "Not Acceptable: Client must accept text/event-stream");
     }
     const sessionError = this.validateSession(req);
@@ -82615,7 +81975,7 @@ data:
       }
     }
     if (this._streamMapping.get(this._standaloneSseStreamId) !== void 0) {
-      (_b8 = this.onerror) == null ? void 0 : _b8.call(this, new Error("Conflict: Only one SSE stream is allowed per session"));
+      this.onerror?.(new Error("Conflict: Only one SSE stream is allowed per session"));
       return this.createJsonErrorResponse(409, -32e3, "Conflict: Only one SSE stream is allowed per session");
     }
     const encoder3 = new TextEncoder();
@@ -82626,11 +81986,10 @@ data:
         streamController = controller;
       },
       cancel: () => {
-        var _a20;
         if (keepAliveTimer !== void 0) {
           clearInterval(keepAliveTimer);
         }
-        if (((_a20 = this._streamMapping.get(this._standaloneSseStreamId)) == null ? void 0 : _a20.controller) === streamController) {
+        if (this._streamMapping.get(this._standaloneSseStreamId)?.controller === streamController) {
           this._streamMapping.delete(this._standaloneSseStreamId);
         }
       }
@@ -82666,9 +82025,8 @@ data:
    * Only used when resumability is enabled
    */
   async replayEvents(lastEventId) {
-    var _a19, _b8, _c2, _d2, _e2;
     if (!this._eventStore) {
-      (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error("Event store not configured"));
+      this.onerror?.(new Error("Event store not configured"));
       return this.createJsonErrorResponse(400, -32e3, "Event store not configured");
     }
     try {
@@ -82676,11 +82034,11 @@ data:
       if (this._eventStore.getStreamIdForEventId) {
         streamId = await this._eventStore.getStreamIdForEventId(lastEventId);
         if (!streamId) {
-          (_b8 = this.onerror) == null ? void 0 : _b8.call(this, new Error("Invalid event ID format"));
+          this.onerror?.(new Error("Invalid event ID format"));
           return this.createJsonErrorResponse(400, -32e3, "Invalid event ID format");
         }
         if (this._streamMapping.get(streamId) !== void 0) {
-          (_c2 = this.onerror) == null ? void 0 : _c2.call(this, new Error("Conflict: Stream already has an active connection"));
+          this.onerror?.(new Error("Conflict: Stream already has an active connection"));
           return this.createJsonErrorResponse(409, -32e3, "Conflict: Stream already has an active connection");
         }
       }
@@ -82703,12 +82061,11 @@ data:
           streamController = controller;
         },
         cancel: () => {
-          var _a20;
           cancelled = true;
           if (keepAliveTimer !== void 0) {
             clearInterval(keepAliveTimer);
           }
-          if (replayedStreamId !== void 0 && ((_a20 = this._streamMapping.get(replayedStreamId)) == null ? void 0 : _a20.controller) === streamController) {
+          if (replayedStreamId !== void 0 && this._streamMapping.get(replayedStreamId)?.controller === streamController) {
             this._streamMapping.delete(replayedStreamId);
           }
         }
@@ -82716,10 +82073,9 @@ data:
       const replayedEventIds = /* @__PURE__ */ new Set();
       replayedStreamId = await this._eventStore.replayEventsAfter(lastEventId, {
         send: async (eventId, message2) => {
-          var _a20;
           const success2 = this.writeSSEEvent(streamController, encoder3, message2, eventId);
           if (!success2) {
-            (_a20 = this.onerror) == null ? void 0 : _a20.call(this, new Error("Failed replay events"));
+            this.onerror?.(new Error("Failed replay events"));
             try {
               streamController.close();
             } catch {
@@ -82736,7 +82092,7 @@ data:
         }
         return this.createJsonErrorResponse(404, -32001, "Session not found");
       }
-      (_d2 = this._streamMapping.get(replayedStreamId)) == null ? void 0 : _d2.cleanup();
+      this._streamMapping.get(replayedStreamId)?.cleanup();
       this._streamMapping.set(replayedStreamId, {
         controller: streamController,
         encoder: encoder3,
@@ -82756,7 +82112,7 @@ data:
       keepAliveTimer = this.startKeepAlive(streamController, encoder3);
       return new Response(readable, { headers: headers2 });
     } catch (error41) {
-      (_e2 = this.onerror) == null ? void 0 : _e2.call(this, error41);
+      this.onerror?.(error41);
       return this.createJsonErrorResponse(500, -32e3, "Error replaying events");
     }
   }
@@ -82764,7 +82120,6 @@ data:
    * Writes an event to an SSE stream via controller with proper formatting
    */
   writeSSEEvent(controller, encoder3, message2, eventId) {
-    var _a19;
     try {
       let eventData = `event: message
 `;
@@ -82778,7 +82133,7 @@ data:
       controller.enqueue(encoder3.encode(eventData));
       return true;
     } catch (error41) {
-      (_a19 = this.onerror) == null ? void 0 : _a19.call(this, error41);
+      this.onerror?.(error41);
       return false;
     }
   }
@@ -82786,8 +82141,7 @@ data:
    * Handles unsupported requests (PUT, PATCH, etc.)
    */
   handleUnsupportedRequest() {
-    var _a19;
-    (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error("Method not allowed."));
+    this.onerror?.(new Error("Method not allowed."));
     return new Response(JSON.stringify({
       jsonrpc: "2.0",
       error: {
@@ -82807,16 +82161,15 @@ data:
    * Handles POST requests containing JSON-RPC messages
    */
   async handlePostRequest(req, options) {
-    var _a19, _b8, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j, _k2, _l2, _m2;
     try {
       const acceptHeader = req.headers.get("accept");
-      if (!(acceptHeader == null ? void 0 : acceptHeader.includes("application/json")) || !acceptHeader.includes("text/event-stream")) {
-        (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error("Not Acceptable: Client must accept both application/json and text/event-stream"));
+      if (!acceptHeader?.includes("application/json") || !acceptHeader.includes("text/event-stream")) {
+        this.onerror?.(new Error("Not Acceptable: Client must accept both application/json and text/event-stream"));
         return this.createJsonErrorResponse(406, -32e3, "Not Acceptable: Client must accept both application/json and text/event-stream");
       }
       const ct2 = req.headers.get("content-type");
       if (!isJsonContentType(ct2)) {
-        (_b8 = this.onerror) == null ? void 0 : _b8.call(this, new Error("Unsupported Media Type: Content-Type must be application/json"));
+        this.onerror?.(new Error("Unsupported Media Type: Content-Type must be application/json"));
         return this.createJsonErrorResponse(415, -32e3, "Unsupported Media Type: Content-Type must be application/json");
       }
       const requestInfo = {
@@ -82824,13 +82177,13 @@ data:
         url: new URL(req.url)
       };
       let rawMessage;
-      if ((options == null ? void 0 : options.parsedBody) !== void 0) {
+      if (options?.parsedBody !== void 0) {
         rawMessage = options.parsedBody;
       } else {
         try {
           rawMessage = await req.json();
         } catch {
-          (_c2 = this.onerror) == null ? void 0 : _c2.call(this, new Error("Parse error: Invalid JSON"));
+          this.onerror?.(new Error("Parse error: Invalid JSON"));
           return this.createJsonErrorResponse(400, -32700, "Parse error: Invalid JSON");
         }
       }
@@ -82842,7 +82195,7 @@ data:
           messages = [JSONRPCMessageSchema2.parse(rawMessage)];
         }
       } catch {
-        (_d2 = this.onerror) == null ? void 0 : _d2.call(this, new Error("Parse error: Invalid JSON-RPC message"));
+        this.onerror?.(new Error("Parse error: Invalid JSON-RPC message"));
         return this.createJsonErrorResponse(400, -32700, "Parse error: Invalid JSON-RPC message");
       }
       if (this._closed) {
@@ -82851,14 +82204,14 @@ data:
       const isInitializationRequest = messages.some(isInitializeRequest);
       if (isInitializationRequest) {
         if (this._initialized && this.sessionId !== void 0) {
-          (_e2 = this.onerror) == null ? void 0 : _e2.call(this, new Error("Invalid Request: Server already initialized"));
+          this.onerror?.(new Error("Invalid Request: Server already initialized"));
           return this.createJsonErrorResponse(400, -32600, "Invalid Request: Server already initialized");
         }
         if (messages.length > 1) {
-          (_f2 = this.onerror) == null ? void 0 : _f2.call(this, new Error("Invalid Request: Only one initialization request is allowed"));
+          this.onerror?.(new Error("Invalid Request: Only one initialization request is allowed"));
           return this.createJsonErrorResponse(400, -32600, "Invalid Request: Only one initialization request is allowed");
         }
-        this.sessionId = (_g2 = this.sessionIdGenerator) == null ? void 0 : _g2.call(this);
+        this.sessionId = this.sessionIdGenerator?.();
         this._initialized = true;
         if (this.sessionId && this._onsessioninitialized) {
           await Promise.resolve(this._onsessioninitialized(this.sessionId));
@@ -82880,16 +82233,15 @@ data:
       const hasRequests = messages.some(isJSONRPCRequest2);
       if (!hasRequests) {
         for (const message2 of messages) {
-          (_h2 = this.onmessage) == null ? void 0 : _h2.call(this, message2, { authInfo: options == null ? void 0 : options.authInfo, requestInfo });
+          this.onmessage?.(message2, { authInfo: options?.authInfo, requestInfo });
         }
         return new Response(null, { status: 202 });
       }
       const streamId = crypto.randomUUID();
       const initRequest = messages.find((m3) => isInitializeRequest(m3));
-      const clientProtocolVersion = initRequest ? initRequest.params.protocolVersion : (_i2 = req.headers.get("mcp-protocol-version")) != null ? _i2 : DEFAULT_NEGOTIATED_PROTOCOL_VERSION;
+      const clientProtocolVersion = initRequest ? initRequest.params.protocolVersion : req.headers.get("mcp-protocol-version") ?? DEFAULT_NEGOTIATED_PROTOCOL_VERSION;
       if (this._enableJsonResponse) {
         return new Promise((resolve) => {
-          var _a20;
           this._streamMapping.set(streamId, {
             resolveJson: resolve,
             cleanup: () => {
@@ -82902,7 +82254,7 @@ data:
             }
           }
           for (const message2 of messages) {
-            (_a20 = this.onmessage) == null ? void 0 : _a20.call(this, message2, { authInfo: options == null ? void 0 : options.authInfo, requestInfo });
+            this.onmessage?.(message2, { authInfo: options?.authInfo, requestInfo });
           }
         });
       }
@@ -82914,11 +82266,10 @@ data:
           streamController = controller;
         },
         cancel: () => {
-          var _a20;
           if (keepAliveTimer !== void 0) {
             clearInterval(keepAliveTimer);
           }
-          if (((_a20 = this._streamMapping.get(streamId)) == null ? void 0 : _a20.controller) === streamController) {
+          if (this._streamMapping.get(streamId)?.controller === streamController) {
             this._streamMapping.delete(streamId);
           }
         }
@@ -82964,10 +82315,10 @@ data:
               this.closeStandaloneSSEStream();
             };
           }
-          (_j = this.onmessage) == null ? void 0 : _j.call(this, message2, { authInfo: options == null ? void 0 : options.authInfo, requestInfo, closeSSEStream, closeStandaloneSSEStream });
+          this.onmessage?.(message2, { authInfo: options?.authInfo, requestInfo, closeSSEStream, closeStandaloneSSEStream });
         }
       } catch (error41) {
-        (_k2 = this._streamMapping.get(streamId)) == null ? void 0 : _k2.cleanup();
+        this._streamMapping.get(streamId)?.cleanup();
         this._resumableStreams.delete(streamId);
         for (const message2 of messages) {
           if (isJSONRPCRequest2(message2)) {
@@ -82976,12 +82327,12 @@ data:
         }
         throw error41;
       }
-      if (((_l2 = this._streamMapping.get(streamId)) == null ? void 0 : _l2.controller) === streamController) {
+      if (this._streamMapping.get(streamId)?.controller === streamController) {
         keepAliveTimer = this.startKeepAlive(streamController, encoder3);
       }
       return new Response(readable, { status: 200, headers: headers2 });
     } catch (error41) {
-      (_m2 = this.onerror) == null ? void 0 : _m2.call(this, error41);
+      this.onerror?.(error41);
       return this.createJsonErrorResponse(400, -32700, "Parse error", { data: String(error41) });
     }
   }
@@ -82989,7 +82340,6 @@ data:
    * Handles DELETE requests to terminate sessions
    */
   async handleDeleteRequest(req) {
-    var _a19;
     const sessionError = this.validateSession(req);
     if (sessionError) {
       return sessionError;
@@ -82999,7 +82349,7 @@ data:
       return protocolError;
     }
     try {
-      await Promise.resolve((_a19 = this._onsessionclosed) == null ? void 0 : _a19.call(this, this.sessionId));
+      await Promise.resolve(this._onsessionclosed?.(this.sessionId));
       return new Response(null, { status: 200 });
     } finally {
       await this.close();
@@ -83010,21 +82360,20 @@ data:
    * Returns Response error if invalid, undefined otherwise
    */
   validateSession(req) {
-    var _a19, _b8, _c2;
     if (this.sessionIdGenerator === void 0) {
       return void 0;
     }
     if (!this._initialized) {
-      (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error("Bad Request: Server not initialized"));
+      this.onerror?.(new Error("Bad Request: Server not initialized"));
       return this.createJsonErrorResponse(400, -32e3, "Bad Request: Server not initialized");
     }
     const sessionId = req.headers.get("mcp-session-id");
     if (!sessionId) {
-      (_b8 = this.onerror) == null ? void 0 : _b8.call(this, new Error("Bad Request: Mcp-Session-Id header is required"));
+      this.onerror?.(new Error("Bad Request: Mcp-Session-Id header is required"));
       return this.createJsonErrorResponse(400, -32e3, "Bad Request: Mcp-Session-Id header is required");
     }
     if (sessionId !== this.sessionId) {
-      (_c2 = this.onerror) == null ? void 0 : _c2.call(this, new Error("Session not found"));
+      this.onerror?.(new Error("Session not found"));
       return this.createJsonErrorResponse(404, -32001, "Session not found");
     }
     return void 0;
@@ -83043,16 +82392,14 @@ data:
    * - Accept and default to the version negotiated at initialization
    */
   validateProtocolVersion(req) {
-    var _a19;
     const protocolVersion = req.headers.get("mcp-protocol-version");
     if (protocolVersion !== null && !SUPPORTED_PROTOCOL_VERSIONS.includes(protocolVersion)) {
-      (_a19 = this.onerror) == null ? void 0 : _a19.call(this, new Error(`Bad Request: Unsupported protocol version: ${protocolVersion} (supported versions: ${SUPPORTED_PROTOCOL_VERSIONS.join(", ")})`));
+      this.onerror?.(new Error(`Bad Request: Unsupported protocol version: ${protocolVersion} (supported versions: ${SUPPORTED_PROTOCOL_VERSIONS.join(", ")})`));
       return this.createJsonErrorResponse(400, -32e3, `Bad Request: Unsupported protocol version: ${protocolVersion} (supported versions: ${SUPPORTED_PROTOCOL_VERSIONS.join(", ")})`);
     }
     return void 0;
   }
   async close() {
-    var _a19;
     if (this._closed) {
       return;
     }
@@ -83063,7 +82410,7 @@ data:
     this._streamMapping.clear();
     this._requestResponseMap.clear();
     this._resumableStreams.clear();
-    (_a19 = this.onclose) == null ? void 0 : _a19.call(this);
+    this.onclose?.();
   }
   /**
    * Close an SSE stream for a specific request, triggering client reconnection.
@@ -83090,8 +82437,7 @@ data:
     }
   }
   async send(message2, options) {
-    var _a19, _b8;
-    let requestId = options == null ? void 0 : options.relatedRequestId;
+    let requestId = options?.relatedRequestId;
     if (isJSONRPCResultResponse2(message2) || isJSONRPCErrorResponse2(message2)) {
       requestId = message2.id;
     }
@@ -83107,7 +82453,7 @@ data:
       if (standaloneSse === void 0) {
         return;
       }
-      if (standaloneSse.controller && standaloneSse.encoder && (eventId === void 0 || !((_a19 = standaloneSse.replayedEventIds) == null ? void 0 : _a19.has(eventId)))) {
+      if (standaloneSse.controller && standaloneSse.encoder && (eventId === void 0 || !standaloneSse.replayedEventIds?.has(eventId))) {
         this.writeSSEEvent(standaloneSse.controller, standaloneSse.encoder, message2, eventId);
       }
       return;
@@ -83123,7 +82469,7 @@ data:
         eventId = await this._eventStore.storeEvent(streamId, message2);
         stream = this._streamMapping.get(streamId);
       }
-      if ((stream == null ? void 0 : stream.controller) && (stream == null ? void 0 : stream.encoder) && (eventId === void 0 || !((_b8 = stream.replayedEventIds) == null ? void 0 : _b8.has(eventId)))) {
+      if (stream?.controller && stream?.encoder && (eventId === void 0 || !stream.replayedEventIds?.has(eventId))) {
         const written = this.writeSSEEvent(stream.controller, stream.encoder, message2, eventId);
         if (written && eventId !== void 0) {
           this._resumableStreams.add(streamId);
@@ -83191,8 +82537,8 @@ var StreamableHTTPServerTransport = class {
     this._requestListener = getRequestListener(async (webRequest) => {
       const context = this._requestContext.get(webRequest);
       return this._webStandardTransport.handleRequest(webRequest, {
-        authInfo: context == null ? void 0 : context.authInfo,
-        parsedBody: context == null ? void 0 : context.parsedBody
+        authInfo: context?.authInfo,
+        parsedBody: context?.parsedBody
       });
     }, { overrideGlobalObjects: false });
   }
@@ -83287,13 +82633,11 @@ var StreamableHTTPServerTransport = class {
 
 // src/app.ts
 function readConfig(config3, key) {
-  var _a19;
-  const value = (_a19 = config3(key)) != null ? _a19 : process.env[key];
-  const trimmed = value == null ? void 0 : value.trim();
+  const value = config3(key) ?? process.env[key];
+  const trimmed = value?.trim();
   return trimmed || void 0;
 }
 function getExtensionConfig(config3) {
-  var _a19, _b8;
   const tenantOrigin = readConfig(config3, "AUTH0_TENANT_ORIGIN");
   const formId = readConfig(config3, "FORM_ID");
   if (!tenantOrigin || tenantOrigin.includes("YOUR_TENANT")) {
@@ -83304,10 +82648,10 @@ function getExtensionConfig(config3) {
   }
   return {
     audience: readConfig(config3, "AUTH0_AUDIENCE"),
-    formDescription: (_a19 = readConfig(config3, "FORM_DESCRIPTION")) != null ? _a19 : "Open this form when the user needs to complete the configured Auth0 Form.",
+    formDescription: readConfig(config3, "FORM_DESCRIPTION") ?? "Open this form when the user needs to complete the configured Auth0 Form.",
     formId,
     formName: readConfig(config3, "FORM_NAME"),
-    formsOrigin: (_b8 = readConfig(config3, "FORMS_ORIGIN")) != null ? _b8 : tenantOrigin,
+    formsOrigin: readConfig(config3, "FORMS_ORIGIN") ?? tenantOrigin,
     mcpAuthEnabled: readConfig(config3, "MCP_AUTH") !== "off",
     sessionField: readConfig(config3, "FORM_SESSION_FIELD"),
     tenantOrigin,
@@ -83315,11 +82659,10 @@ function getExtensionConfig(config3) {
   };
 }
 function extensionBaseUrl(config3, req) {
-  var _a19, _b8, _c2;
-  const configuredUrl = (_a19 = readConfig(config3, "PUBLIC_WT_URL")) != null ? _a19 : readConfig(config3, "PUBLIC_BASE_URL");
+  const configuredUrl = readConfig(config3, "PUBLIC_WT_URL") ?? readConfig(config3, "PUBLIC_BASE_URL");
   if (configuredUrl) return configuredUrl.replace(/\/$/, "");
-  const protocol = (_b8 = req.header("x-forwarded-proto")) != null ? _b8 : req.protocol;
-  const host = (_c2 = req.header("x-forwarded-host")) != null ? _c2 : req.get("host");
+  const protocol = req.header("x-forwarded-proto") ?? req.protocol;
+  const host = req.header("x-forwarded-host") ?? req.get("host");
   if (!host) throw new Error("Unable to determine the public extension URL.");
   const pathname = req.originalUrl.split("?", 1)[0];
   const routeSuffix = ["/mcp", "/health", "/.well-known/oauth-protected-resource"].find(
@@ -83376,13 +82719,12 @@ async function createMcpServer(config3) {
   return server;
 }
 function bearerAuth(configReader, config3, req) {
-  var _a19;
   if (!config3.mcpAuthEnabled) return void 0;
   const issuer = config3.tenantOrigin.endsWith("/") ? config3.tenantOrigin : `${config3.tenantOrigin}/`;
   const endpoint = mcpUrl(configReader, req);
   const verifier = createAuth0Verifier({
     domain: config3.tenantOrigin,
-    audience: (_a19 = config3.audience) != null ? _a19 : endpoint
+    audience: config3.audience ?? endpoint
   });
   return requireBearerAuth({
     verifier,
@@ -83460,7 +82802,7 @@ function createExtensionApp(configReader) {
 function readContextValue(context, key) {
   const sources = [context.data, context.secrets, context];
   for (const source of sources) {
-    const value = source == null ? void 0 : source[key];
+    const value = source?.[key];
     if (typeof value === "string") return value;
   }
   return void 0;

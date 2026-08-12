@@ -12,7 +12,7 @@
   "author": "mustafadeel",
   "repository": "https://github.com/mustafadeel/auth0-poc-mcp",
   "engines": {
-    "node": ">=22"
+    "node": ">22.13"
   },
   "license": "MIT",
   "auth0-extension": {
@@ -21,7 +21,6 @@
     "type": "application",
     "category": "end_user",
     "initialUrlPath": "/",
-    "nodeTarget": "10",
     "auth0": {
       "createClient": false
     },
