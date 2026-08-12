@@ -93,7 +93,7 @@ async function createMcpServer(config: ExtensionConfig): Promise<McpServer> {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
 
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.4" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.1.5" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config.formsOrigin,
     assumeUiSupport: true,
@@ -163,34 +163,24 @@ function escapeHtml(value: string): string {
   });
 }
 
-function stripExtensionPathPrefix(req: Request, _res: Response, next: () => void): void {
-  const routeSuffixes = ["/.well-known/oauth-protected-resource", "/health", "/mcp"];
-  const suffix = routeSuffixes.find((candidate) => req.path.endsWith(candidate));
-  const prefix = suffix
-    ? req.path.slice(0, -suffix.length)
-    : /^\/[^/]+\/?$/.test(req.path)
-      ? req.path.replace(/\/$/, "")
-      : "";
-
-  if (/^\/[^/]+$/.test(prefix)) req.url = req.url.slice(prefix.length) || "/";
-  next();
+function extensionRoutes(path: string): string[] {
+  return [path, `/:extensionName${path}`];
 }
 
 export function createExtensionApp(configReader: ConfigReader) {
   const app = express();
-  app.use(stripExtensionPathPrefix);
   app.use(express.json());
 
-  app.get("/", (req, res) => {
+  app.get(extensionRoutes("/"), (req, res) => {
     const endpoint = mcpUrl(configReader, req);
     res.type("html").send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Auth0 Forms MCP</title></head><body><main><h1>Auth0 Forms MCP</h1><p>This Custom Extension exposes an MCP endpoint.</p><p><code>${escapeHtml(endpoint)}</code></p><p>Connect an MCP client to this URL. The endpoint uses Auth0 Bearer authentication unless MCP_AUTH is set to off.</p></main></body></html>`);
   });
 
-  app.get("/health", (_req, res) => {
+  app.get(extensionRoutes("/health"), (_req, res) => {
     res.status(200).json({ status: "ok" });
   });
 
-  app.get("/.well-known/oauth-protected-resource", (req, res, next) => {
+  app.get(extensionRoutes("/.well-known/oauth-protected-resource"), (req, res, next) => {
     try {
       const config = getExtensionConfig(configReader);
       if (!config.mcpAuthEnabled) return res.status(404).end();
@@ -205,7 +195,7 @@ export function createExtensionApp(configReader: ConfigReader) {
     }
   });
 
-  app.all("/mcp", async (req, res, next) => {
+  app.all(extensionRoutes("/mcp"), async (req, res, next) => {
     try {
       const config = getExtensionConfig(configReader);
       const authentication = bearerAuth(configReader, config, req);
