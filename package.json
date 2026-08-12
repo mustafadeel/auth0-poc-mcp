@@ -28,6 +28,7 @@
     "type": "application",
     "category": "end_user",
     "initialUrlPath": "/",
+    "nodeTarget": "22",
     "auth0": {
       "createClient": false
     },
