@@ -1,6 +1,6 @@
 {
   "name": "auth0-forms-mcp-extension",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "scripts": {
     "clean": "rimraf dist .extension-build build/bundle.js",
     "validate": "node scripts/validate-manifest.mjs",
-    "build:extension": "esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js",
+    "build:extension": "esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node12 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js",
     "package": "node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
-    "build": "rimraf dist .extension-build build/bundle.js && node scripts/validate-manifest.mjs && esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js && node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
+    "build": "rimraf dist .extension-build build/bundle.js && node scripts/validate-manifest.mjs && esbuild src/webtask.ts --bundle --platform=node --format=cjs --target=node12 --outfile=dist/extension.js --alias:@auth0/agent-components=../auth0-agent-components/packages/agent-components/dist/index.js --alias:@auth0/agent-components/auth=../auth0-agent-components/packages/agent-components/dist/auth.js && mkdir -p build && cp dist/extension.js build/bundle.js && node scripts/create-extension-package.mjs && zip -j -q dist/package.zip dist/extension.js dist/package.json",
     "dev": "tsx watch src/local.ts",
     "start": "tsx src/local.ts",
     "typecheck": "tsc --noEmit"
@@ -28,7 +28,6 @@
     "type": "application",
     "category": "end_user",
     "initialUrlPath": "/",
-    "nodeTarget": "22",
     "auth0": {
       "createClient": false
     },
@@ -91,6 +90,7 @@
     "@modelcontextprotocol/sdk": "^1.30.0",
     "express": "^4.21.0",
     "jose": "^6.0.0",
+    "node-fetch": "^2.7.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
