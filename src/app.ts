@@ -1,10 +1,12 @@
 import type { Request, RequestHandler, Response } from "express";
 import express from "express";
-import { ProtectedResourceMetadataBuilder } from "@auth0/auth0-api-js";
+import { ApiClient, ProtectedResourceMetadataBuilder } from "@auth0/auth0-api-js";
 import { createAgentComponents, type Auth0FormConfig } from "@auth0/agent-components";
-import { createAuth0Verifier, subFromExtra } from "@auth0/agent-components/auth";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { InvalidTokenError } from "@modelcontextprotocol/sdk/server/auth/errors.js";
 import { requireBearerAuth } from "@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js";
+import type { OAuthTokenVerifier } from "@modelcontextprotocol/sdk/server/auth/provider.js";
+import type { AuthInfo } from "@modelcontextprotocol/sdk/server/auth/types.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 
 export type ConfigReader = (key: string) => string | undefined;
@@ -129,15 +131,62 @@ async function createMcpServer(config: ExtensionConfig): Promise<McpServer> {
   return server;
 }
 
+function toAuth0Domain(value: string): string {
+  try {
+    return new URL(value).host;
+  } catch {
+    return value.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  }
+}
+
+function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifier {
+  const client = new ApiClient({ domain: toAuth0Domain(domain), audience });
+
+  return {
+    async verifyAccessToken(token: string): Promise<AuthInfo> {
+      let claims;
+      try {
+        claims = await client.verifyAccessToken({ accessToken: token });
+      } catch (error) {
+        console.error("[auth0-forms-mcp] access token verification failed", error);
+        throw new InvalidTokenError("invalid access token");
+      }
+
+      const sub = typeof claims.sub === "string" ? claims.sub : undefined;
+      if (!sub) throw new InvalidTokenError("access token has no sub claim");
+
+      const clientId =
+        typeof claims.azp === "string"
+          ? claims.azp
+          : typeof claims.aud === "string"
+            ? claims.aud
+            : Array.isArray(claims.aud)
+              ? claims.aud.find((audience): audience is string => typeof audience === "string") ?? ""
+              : "";
+
+      return {
+        token,
+        clientId,
+        scopes: typeof claims.scope === "string" ? claims.scope.split(" ").filter(Boolean) : [],
+        expiresAt: typeof claims.exp === "number" ? claims.exp : undefined,
+        extra: { sub, ...(claims.act ? { act: claims.act } : {}) },
+      };
+    },
+  };
+}
+
+function subFromExtra(extra: unknown): string | undefined {
+  const authInfo = (extra as { authInfo?: AuthInfo } | undefined)?.authInfo;
+  const sub = authInfo?.extra?.sub;
+  return typeof sub === "string" ? sub : undefined;
+}
+
 function bearerAuth(configReader: ConfigReader, config: ExtensionConfig, req: Request): RequestHandler | undefined {
   if (!config.mcpAuthEnabled) return undefined;
 
   const issuer = config.tenantOrigin.endsWith("/") ? config.tenantOrigin : `${config.tenantOrigin}/`;
   const endpoint = mcpUrl(configReader, req);
-  const verifier = createAuth0Verifier({
-    domain: config.tenantOrigin,
-    audience: config.audience ?? endpoint,
-  });
+  const verifier = createAuth0Verifier(config.tenantOrigin, config.audience ?? endpoint);
 
   return requireBearerAuth({
     verifier,
