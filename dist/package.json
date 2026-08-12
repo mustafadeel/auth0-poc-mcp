@@ -2,20 +2,28 @@
   "name": "auth0-forms-mcp-extension",
   "version": "0.1.0",
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
+  "main": "index.js",
+  "keywords": [
+    "auth0",
+    "extension",
+    "mcp",
+    "forms"
+  ],
+  "author": "mustafadeel",
+  "repository": "https://github.com/mustafadeel/auth0-poc-mcp",
   "engines": {
     "node": ">=22"
   },
   "license": "MIT",
   "auth0-extension": {
     "title": "Auth0 Forms MCP",
-    "name": "auth0-forms-mcp",
-    "version": "0.1.0",
-    "author": "Auth0",
     "useHashName": false,
-    "description": "Expose an Auth0 Form as an MCP App over Streamable HTTP.",
     "type": "application",
     "category": "end_user",
     "initialUrlPath": "/",
+    "auth0": {
+      "createClient": false
+    },
     "secrets": {
       "AUTH0_TENANT_ORIGIN": {
         "description": "Canonical Auth0 tenant origin that issues MCP access tokens, for example https://tenant.us.auth0.com.",
