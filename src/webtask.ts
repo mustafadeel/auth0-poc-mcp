@@ -44,12 +44,25 @@ function installWebApiGlobals(): void {
     if (nodeCrypto.webcrypto) globals.crypto = nodeCrypto.webcrypto;
   }
 
-  if (!globals.AbortController) {
+  if (!globals.AbortController || !globals.AbortSignal) {
     const abortController = require("abort-controller") as {
       AbortController: unknown;
       AbortSignal: unknown;
     };
     Object.assign(globals, abortController);
+  }
+
+  const AbortControllerConstructor = globals.AbortController as
+    | (new () => { abort: () => void; signal: unknown })
+    | undefined;
+  const AbortSignalConstructor = globals.AbortSignal as { timeout?: (milliseconds: number) => unknown } | undefined;
+  if (AbortControllerConstructor && AbortSignalConstructor && !AbortSignalConstructor.timeout) {
+    AbortSignalConstructor.timeout = (milliseconds) => {
+      const controller = new AbortControllerConstructor();
+      const timer = setTimeout(() => controller.abort(), milliseconds);
+      if (typeof timer === "object" && "unref" in timer) timer.unref();
+      return controller.signal;
+    };
   }
 
   if (globals.fetch) return;

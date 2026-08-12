@@ -89336,9 +89336,19 @@ function installWebApiGlobals() {
     const nodeCrypto = require("crypto");
     if (nodeCrypto.webcrypto) globals.crypto = nodeCrypto.webcrypto;
   }
-  if (!globals.AbortController) {
+  if (!globals.AbortController || !globals.AbortSignal) {
     const abortController = require_abort_controller();
     Object.assign(globals, abortController);
+  }
+  const AbortControllerConstructor = globals.AbortController;
+  const AbortSignalConstructor = globals.AbortSignal;
+  if (AbortControllerConstructor && AbortSignalConstructor && !AbortSignalConstructor.timeout) {
+    AbortSignalConstructor.timeout = (milliseconds) => {
+      const controller = new AbortControllerConstructor();
+      const timer = setTimeout(() => controller.abort(), milliseconds);
+      if (typeof timer === "object" && "unref" in timer) timer.unref();
+      return controller.signal;
+    };
   }
   if (globals.fetch) return;
   const nodeFetch = require_lib2();
