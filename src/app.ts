@@ -1,4 +1,5 @@
 import type { Request, RequestHandler, Response } from "express";
+import { createHash } from "node:crypto";
 import express from "express";
 import { ApiClient, ProtectedResourceMetadataBuilder } from "@auth0/auth0-api-js";
 import { createAgentComponents, type Auth0FormConfig } from "@auth0/agent-components";
@@ -66,9 +67,12 @@ function extensionBaseUrl(config: ConfigReader, req: Request): string {
   if (!host) throw new Error("Unable to determine the public extension URL.");
 
   const pathname = req.originalUrl.split("?", 1)[0];
-  const routeSuffix = ["/mcp", "/health", "/.well-known/oauth-protected-resource"].find((suffix) =>
-    pathname.endsWith(suffix),
-  );
+  const routeSuffix = [
+    "/.well-known/oauth-protected-resource/mcp",
+    "/mcp",
+    "/health",
+    "/.well-known/oauth-protected-resource",
+  ].find((suffix) => pathname.endsWith(suffix));
   const basePath = routeSuffix ? pathname.slice(0, -routeSuffix.length) : pathname === "/" ? "" : pathname;
   return `${protocol}://${host}${basePath}`;
 }
@@ -148,6 +152,11 @@ function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifi
       try {
         claims = await client.verifyAccessToken({ accessToken: token });
       } catch (error) {
+        console.error("[auth0-forms-mcp] rejected access token", {
+          fingerprint: createHash("sha256").update(token).digest("hex").slice(0, 12),
+          length: token.length,
+          segments: token.split(".").length,
+        });
         console.error("[auth0-forms-mcp] access token verification failed", error);
         throw new InvalidTokenError("invalid access token");
       }
@@ -236,7 +245,12 @@ export function createExtensionApp(configReader: ConfigReader) {
     res.status(200).json({ status: "ok" });
   });
 
-  app.get(extensionRoutes(protectedResourceMetadataPath), (req, res, next) => {
+  app.get(
+    [
+      ...extensionRoutes(protectedResourceMetadataPath),
+      ...extensionRoutes(`${protectedResourceMetadataPath}/mcp`),
+    ],
+    (req, res, next) => {
     try {
       const config = getExtensionConfig(configReader);
       if (!config.mcpAuthEnabled) return res.status(404).end();
@@ -249,7 +263,8 @@ export function createExtensionApp(configReader: ConfigReader) {
     } catch (error) {
       return next(error);
     }
-  });
+    },
+  );
 
   app.all(extensionRoutes("/mcp"), async (req, res, next) => {
     try {

@@ -89082,9 +89082,12 @@ function extensionBaseUrl(config3, req) {
   const host = (_c2 = req.header("x-forwarded-host")) != null ? _c2 : req.get("host");
   if (!host) throw new Error("Unable to determine the public extension URL.");
   const pathname = req.originalUrl.split("?", 1)[0];
-  const routeSuffix = ["/mcp", "/health", "/.well-known/oauth-protected-resource"].find(
-    (suffix) => pathname.endsWith(suffix)
-  );
+  const routeSuffix = [
+    "/.well-known/oauth-protected-resource/mcp",
+    "/mcp",
+    "/health",
+    "/.well-known/oauth-protected-resource"
+  ].find((suffix) => pathname.endsWith(suffix));
   const basePath = routeSuffix ? pathname.slice(0, -routeSuffix.length) : pathname === "/" ? "" : pathname;
   return `${protocol}://${host}${basePath}`;
 }
@@ -89155,6 +89158,11 @@ function createAuth0Verifier(domain2, audience) {
       try {
         claims = await client.verifyAccessToken({ accessToken: token });
       } catch (error41) {
+        console.error("[auth0-forms-mcp] rejected access token", {
+          fingerprint: (0, import_node_crypto.createHash)("sha256").update(token).digest("hex").slice(0, 12),
+          length: token.length,
+          segments: token.split(".").length
+        });
         console.error("[auth0-forms-mcp] access token verification failed", error41);
         throw new InvalidTokenError("invalid access token");
       }
@@ -89223,17 +89231,23 @@ function createExtensionApp(configReader) {
   app.get(extensionRoutes("/health"), (_req, res) => {
     res.status(200).json({ status: "ok" });
   });
-  app.get(extensionRoutes(protectedResourceMetadataPath), (req, res, next) => {
-    try {
-      const config3 = getExtensionConfig(configReader);
-      if (!config3.mcpAuthEnabled) return res.status(404).end();
-      const issuer = config3.tenantOrigin.endsWith("/") ? config3.tenantOrigin : `${config3.tenantOrigin}/`;
-      const metadata = new ProtectedResourceMetadataBuilder(mcpUrl(configReader, req), [issuer]).withResourceName("Auth0 Forms MCP").build();
-      return res.json(metadata);
-    } catch (error41) {
-      return next(error41);
+  app.get(
+    [
+      ...extensionRoutes(protectedResourceMetadataPath),
+      ...extensionRoutes(`${protectedResourceMetadataPath}/mcp`)
+    ],
+    (req, res, next) => {
+      try {
+        const config3 = getExtensionConfig(configReader);
+        if (!config3.mcpAuthEnabled) return res.status(404).end();
+        const issuer = config3.tenantOrigin.endsWith("/") ? config3.tenantOrigin : `${config3.tenantOrigin}/`;
+        const metadata = new ProtectedResourceMetadataBuilder(mcpUrl(configReader, req), [issuer]).withResourceName("Auth0 Forms MCP").build();
+        return res.json(metadata);
+      } catch (error41) {
+        return next(error41);
+      }
     }
-  });
+  );
   app.all(extensionRoutes("/mcp"), async (req, res, next) => {
     try {
       const config3 = getExtensionConfig(configReader);
@@ -89257,10 +89271,11 @@ function createExtensionApp(configReader) {
   });
   return app;
 }
-var import_express, protectedResourceMetadataPath;
+var import_node_crypto, import_express, protectedResourceMetadataPath;
 var init_app = __esm({
   "src/app.ts"() {
     "use strict";
+    import_node_crypto = require("crypto");
     import_express = __toESM(require_express2());
     init_dist2();
     init_dist4();
