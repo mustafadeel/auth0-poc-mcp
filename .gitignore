@@ -1,0 +1,4 @@
+node_modules/
+.extension-build/
+.env.local
+npm-debug.log*
