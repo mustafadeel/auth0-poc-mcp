@@ -30,6 +30,20 @@ function installWebApiGlobals(): void {
 
   if (!globals.Event) globals.Event = WebtaskEvent;
 
+  if (!globals.atob) {
+    globals.atob = (value: string) => Buffer.from(value, "base64").toString("latin1");
+  }
+
+  if (!globals.btoa) {
+    globals.btoa = (value: string) => Buffer.from(value, "latin1").toString("base64");
+  }
+
+  const currentCrypto = globals.crypto as { subtle?: unknown } | undefined;
+  if (!currentCrypto?.subtle) {
+    const nodeCrypto = require("crypto") as { webcrypto?: unknown };
+    if (nodeCrypto.webcrypto) globals.crypto = nodeCrypto.webcrypto;
+  }
+
   if (!globals.AbortController) {
     const abortController = require("abort-controller") as {
       AbortController: unknown;

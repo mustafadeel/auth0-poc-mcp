@@ -89325,6 +89325,17 @@ function installWebApiGlobals() {
   var _a18;
   const globals = globalThis;
   if (!globals.Event) globals.Event = WebtaskEvent;
+  if (!globals.atob) {
+    globals.atob = (value) => Buffer.from(value, "base64").toString("latin1");
+  }
+  if (!globals.btoa) {
+    globals.btoa = (value) => Buffer.from(value, "latin1").toString("base64");
+  }
+  const currentCrypto = globals.crypto;
+  if (!(currentCrypto == null ? void 0 : currentCrypto.subtle)) {
+    const nodeCrypto = require("crypto");
+    if (nodeCrypto.webcrypto) globals.crypto = nodeCrypto.webcrypto;
+  }
   if (!globals.AbortController) {
     const abortController = require_abort_controller();
     Object.assign(globals, abortController);
