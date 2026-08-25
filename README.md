@@ -17,14 +17,11 @@ During import, set these settings:
 
 | Setting | Required | Purpose |
 | --- | --- | --- |
-| `AUTH0_TENANT_ORIGIN` | No | Optional canonical tenant issuer override; defaults to the tenant supplied by the extension runtime. |
 | `FORM_ID` | Yes | The Auth0 Form ID to expose. |
 | `AUTH0_FORMS_TRUST_SECRET` | Session forms | Shared secret for the Forms session JWT. |
 | `FORM_SESSION_FIELD` | Session forms | Hidden Form field receiving the session JWT, normally `session_token`. |
-| `AUTH0_AUDIENCE` | External endpoint only | Optional audience override for an OAuth proxy or custom endpoint. |
-| `PUBLIC_BASE_URL` | OAuth proxy | Public proxy origin, without a trailing slash. |
-| `FORMS_ORIGIN` | No | Custom domain that hosts the Forms bundle. |
-| `MCP_AUTH` | No | Leave on in production. Set off only for no-session local development. |
+| `PUBLIC_BASE_URL` | External endpoint only | Optional external public MCP origin, without a trailing slash. |
+| `FORMS_ORIGIN` | No | Absolute custom origin that hosts the Forms bundle. |
 
 `FORM_DESCRIPTION` and `FORM_NAME` control the model-facing tool description and tool name.
 
@@ -32,7 +29,7 @@ During import, set these settings:
 
 The extension requests an extension-owned Management API client with only `read:resource_servers` and `create:resource_servers`. It reads the tenant domain from the runtime and creates or reuses an Auth0 API whose identifier is the exact installed MCP URL.
 
-1. Perform a full Custom Extension update or reinstall after importing version `0.3.0` so Auth0 creates the managed client and grants its declared scopes.
+1. Perform a full Custom Extension update or reinstall after importing version `0.4.0` so Auth0 creates the managed client and grants its declared scopes.
 2. Open the extension landing page and select **Sign in and provision**.
 3. Complete the tenant-admin login. The landing page creates or reuses the required API audience, then shows its status.
 4. Connect the MCP client to the displayed MCP endpoint.
@@ -77,7 +74,7 @@ Webtask routes are scoped under the extension name, so the platform cannot serve
 2. Set `MCP_RESOURCE_URL` to the displayed MCP URL, `AUTH0_TENANT_ORIGIN` to the canonical tenant issuer, and optionally set `RESOURCE_NAME`.
 3. Connect the client to the MCP URL from this extension, never the companion extension URL.
 
-For an intentionally external proxy or custom domain, set `PUBLIC_BASE_URL` and `AUTH0_AUDIENCE` to the proxy's exact `/mcp` URL before provisioning.
+For an intentionally external proxy or custom domain, set `PUBLIC_BASE_URL` to the proxy origin before provisioning. The extension derives the API audience as `${PUBLIC_BASE_URL}/mcp`.
 
 ## Local development
 

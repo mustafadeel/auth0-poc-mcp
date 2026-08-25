@@ -1,6 +1,6 @@
 {
   "name": "auth0-forms-mcp-extension",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "An Auth0 Custom Extension that exposes Auth0 Forms through an MCP endpoint.",
   "main": "index.js",
@@ -33,10 +33,6 @@
       "scopes": "read:resource_servers create:resource_servers"
     },
     "secrets": {
-      "AUTH0_TENANT_ORIGIN": {
-        "description": "Optional canonical Auth0 tenant origin override. Defaults to the tenant domain supplied to this extension.",
-        "required": false
-      },
       "FORM_ID": {
         "description": "Auth0 Form identifier exposed by this MCP server, for example ap_abc123.",
         "required": true
@@ -45,16 +41,12 @@
         "description": "Shared secret used to mint trusted session tokens for a session-aware Form.",
         "required": false
       },
-      "AUTH0_AUDIENCE": {
-        "description": "Optional external MCP audience override. By default the extension provisions and uses its installed MCP endpoint URL.",
-        "required": false
-      },
       "PUBLIC_BASE_URL": {
-        "description": "Optional public OAuth proxy origin, for example https://forms-mcp.example.com. Do not include a trailing slash.",
+        "description": "Optional external public MCP origin override, for example https://forms-mcp.example.com. Leave empty for the installed Webtask URL.",
         "required": false
       },
       "FORMS_ORIGIN": {
-        "description": "Optional custom domain that serves the Auth0 Forms bundle. Defaults to AUTH0_TENANT_ORIGIN.",
+        "description": "Optional absolute custom origin that serves the Auth0 Forms bundle. Defaults to this extension's Auth0 tenant origin.",
         "required": false
       },
       "FORM_NAME": {
@@ -71,21 +63,6 @@
         "description": "Hidden Form field that receives a trusted session token. Leave empty for a no-session Form.",
         "example": "session_token",
         "required": false
-      },
-      "MCP_AUTH": {
-        "description": "Set to off only for a no-session development Form. Auth0 Bearer authentication is enabled by default.",
-        "type": "select",
-        "allowMultiple": false,
-        "options": [
-          {
-            "value": "on",
-            "text": "On"
-          },
-          {
-            "value": "off",
-            "text": "Off"
-          }
-        ]
       }
     }
   },
@@ -94,10 +71,8 @@
     "@auth0/auth0-api-js": "^1.6.1",
     "auth0-extension-express-tools": "2.1.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "abort-controller": "^3.0.0",
     "express": "^4.21.0",
     "jose": "^6.0.0",
-    "node-fetch": "^2.7.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {

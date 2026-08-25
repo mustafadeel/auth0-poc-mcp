@@ -54,19 +54,17 @@ class ManagementApiError extends Error {
 }
 
 interface ExtensionConfig {
-  audience?: string;
   formDescription: string;
   formId: string;
   formName?: string;
   formsOrigin: string;
-  mcpAuthEnabled: boolean;
   sessionField?: string;
   tenantOrigin: string;
   trustSecret?: string;
 }
 
 function readConfig(config: ConfigReader, key: string): string | undefined {
-  const value = config(key) ?? process.env[key];
+  const value = config(key);
   const trimmed = value?.trim();
   return trimmed || undefined;
 }
@@ -75,22 +73,17 @@ function getExtensionConfig(config: ConfigReader): ExtensionConfig {
   const tenantOrigin = tenantOriginFromConfig(config);
   const formId = readConfig(config, "FORM_ID");
 
-  if (tenantOrigin.includes("YOUR_TENANT")) {
-    throw new Error("AUTH0_TENANT_ORIGIN must be configured with the canonical Auth0 tenant origin.");
-  }
   if (!formId || formId === "ap_YOUR_FORM_ID") {
     throw new Error("FORM_ID must be configured with an Auth0 Form identifier.");
   }
 
   return {
-    audience: readConfig(config, "AUTH0_AUDIENCE"),
     formDescription:
       readConfig(config, "FORM_DESCRIPTION") ??
       "Open this form when the user needs to complete the configured Auth0 Form.",
     formId,
     formName: readConfig(config, "FORM_NAME"),
     formsOrigin: readConfig(config, "FORMS_ORIGIN") ?? tenantOrigin,
-    mcpAuthEnabled: readConfig(config, "MCP_AUTH") !== "off",
     sessionField: readConfig(config, "FORM_SESSION_FIELD"),
     tenantOrigin,
     trustSecret: readConfig(config, "AUTH0_FORMS_TRUST_SECRET"),
@@ -98,9 +91,6 @@ function getExtensionConfig(config: ConfigReader): ExtensionConfig {
 }
 
 function tenantOriginFromConfig(config: ConfigReader): string {
-  const configuredOrigin = readConfig(config, "AUTH0_TENANT_ORIGIN");
-  if (configuredOrigin) return configuredOrigin.replace(/\/$/, "");
-
   const domain = readConfig(config, "AUTH0_DOMAIN");
   if (!domain) {
     throw new Error("AUTH0 tenant settings are unavailable. Update or reinstall the extension with its managed Auth0 client enabled.");
@@ -316,7 +306,7 @@ async function createMcpServer(config: ExtensionConfig): Promise<McpServer> {
     throw new Error("AUTH0_FORMS_TRUST_SECRET is required when FORM_SESSION_FIELD is configured.");
   }
 
-  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.3.0" });
+  const server = new McpServer({ name: "auth0-forms-mcp-extension", version: "0.4.0" });
   const agentComponents = createAgentComponents({
     tenantOrigin: config.formsOrigin,
     assumeUiSupport: true,
@@ -379,7 +369,7 @@ function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifi
       let claims;
       try {
         claims = await client.verifyAccessToken({ accessToken: token });
-      } catch (error) {
+      } catch {
         console.error("[auth0-forms-mcp] rejected access token", {
           fingerprint: createHash("sha256").update(token).digest("hex").slice(0, 12),
           length: token.length,
@@ -387,7 +377,6 @@ function createAuth0Verifier(domain: string, audience: string): OAuthTokenVerifi
           protectedHeader: inspectProtectedHeader(token),
           containsWhitespace: /\s/.test(token),
         });
-        console.error("[auth0-forms-mcp] access token verification failed", error);
         throw new InvalidTokenError("invalid access token");
       }
 
@@ -420,12 +409,9 @@ function subFromExtra(extra: unknown): string | undefined {
   return typeof sub === "string" ? sub : undefined;
 }
 
-function bearerAuth(configReader: ConfigReader, config: ExtensionConfig, req: Request): RequestHandler | undefined {
-  if (!config.mcpAuthEnabled) return undefined;
-
-  const issuer = config.tenantOrigin.endsWith("/") ? config.tenantOrigin : `${config.tenantOrigin}/`;
+function bearerAuth(configReader: ConfigReader, config: ExtensionConfig, req: Request): RequestHandler {
   const endpoint = mcpUrl(configReader, req);
-  const verifier = createAuth0Verifier(config.tenantOrigin, config.audience ?? endpoint);
+  const verifier = createAuth0Verifier(config.tenantOrigin, endpoint);
 
   return requireBearerAuth({
     verifier,
@@ -476,15 +462,6 @@ export function createExtensionApp(configReader: ConfigReader, initialRequest?: 
     app.use("/:extensionName", setupAuth.routes);
   }
 
-  app.get(extensionRoutes("/"), (req, res) => {
-    const endpoint = mcpUrl(configReader, req);
-    const setupBaseUrl = installedExtensionBaseUrl(configReader, req);
-    const setup = setupAuth
-      ? `<section><h2>Tenant setup</h2><p id="setup-status">Sign in as a tenant administrator to provision this endpoint's Auth0 API audience.</p><p><a id="setup-login" href="${escapeHtml(`${setupBaseUrl}${setupAdminPath}/login`)}">Sign in and provision</a></p><script>const setup=${escapeInlineJson({ endpoint: `${setupBaseUrl}/setup/provision`, storageKey: setupSessionStorageKey })};const token=sessionStorage.getItem(setup.storageKey);if(token){const status=document.getElementById("setup-status");status.textContent="Provisioning the Auth0 API audience…";fetch(setup.endpoint,{method:"POST",headers:{Authorization:"Bearer "+token}}).then(async response=>({ok:response.ok,body:await response.json()})).then(result=>{if(!result.ok)throw new Error(result.body.message||"Setup failed.");status.textContent="Auth0 API audience "+result.body.status+": "+result.body.audience;document.getElementById("setup-login").remove();}).catch(error=>{status.textContent="Setup failed: "+error.message;});}</script></section>`
-      : "<section><h2>Tenant setup unavailable</h2><p>Update or reinstall this extension so Auth0 can provision its managed setup client.</p></section>";
-    res.type("html").send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Auth0 Forms MCP</title></head><body><main><h1>Auth0 Forms MCP</h1><p>This Custom Extension exposes an MCP endpoint.</p><p><code>${escapeHtml(endpoint)}</code></p><p>Connect an MCP client to this URL. The endpoint uses Auth0 Bearer authentication unless MCP_AUTH is set to off.</p>${setup}</main></body></html>`);
-  });
-
   app.get(extensionRoutes("/health"), (_req, res) => {
     res.status(200).json({ status: "ok", runtime: process.version });
   });
@@ -497,8 +474,6 @@ export function createExtensionApp(configReader: ConfigReader, initialRequest?: 
     (req, res, next) => {
     try {
       const config = getExtensionConfig(configReader);
-      if (!config.mcpAuthEnabled) return res.status(404).end();
-
       const issuer = config.tenantOrigin.endsWith("/") ? config.tenantOrigin : `${config.tenantOrigin}/`;
       const metadata = new ProtectedResourceMetadataBuilder(mcpUrl(configReader, req), [issuer])
         .withResourceName("Auth0 Forms MCP")
@@ -513,8 +488,7 @@ export function createExtensionApp(configReader: ConfigReader, initialRequest?: 
   if (setupAuth) {
     app.post(extensionRoutes("/setup/provision"), setupAuth.authenticate, async (req, res, next) => {
       try {
-        const configuredAudience = readConfig(configReader, "AUTH0_AUDIENCE");
-        const provisioned = await ensureResourceServer(configReader, configuredAudience ?? mcpUrl(configReader, req));
+        const provisioned = await ensureResourceServer(configReader, mcpUrl(configReader, req));
         return res.status(200).json({
           audience: provisioned.audience,
           issuer: tenantOriginFromConfig(configReader),
@@ -531,18 +505,21 @@ export function createExtensionApp(configReader: ConfigReader, initialRequest?: 
     try {
       const config = getExtensionConfig(configReader);
       const authentication = bearerAuth(configReader, config, req);
-      const runMcp = () => {
+      authentication(req, res, () => {
         void handleMcpRequest(config, req, res).catch(next);
-      };
-
-      if (authentication) {
-        authentication(req, res, runMcp);
-      } else {
-        runMcp();
-      }
+      });
     } catch (error) {
       next(error);
     }
+  });
+
+  app.get(extensionRoutes("/"), (req, res) => {
+    const endpoint = mcpUrl(configReader, req);
+    const setupBaseUrl = installedExtensionBaseUrl(configReader, req);
+    const setup = setupAuth
+      ? `<section><h2>Tenant setup</h2><p id="setup-status">Sign in as a tenant administrator to provision this endpoint's Auth0 API audience.</p><p><a id="setup-login" href="${escapeHtml(`${setupBaseUrl}${setupAdminPath}/login`)}">Sign in and provision</a></p><script>const setup=${escapeInlineJson({ endpoint: `${setupBaseUrl}/setup/provision`, storageKey: setupSessionStorageKey })};const token=sessionStorage.getItem(setup.storageKey);if(token){const status=document.getElementById("setup-status");status.textContent="Provisioning the Auth0 API audience…";fetch(setup.endpoint,{method:"POST",headers:{Authorization:"Bearer "+token}}).then(async response=>({ok:response.ok,body:await response.json()})).then(result=>{if(!result.ok)throw new Error(result.body.message||"Setup failed.");status.textContent="Auth0 API audience "+result.body.status+": "+result.body.audience;document.getElementById("setup-login").remove();}).catch(error=>{status.textContent="Setup failed: "+error.message;});}</script></section>`
+      : "<section><h2>Tenant setup unavailable</h2><p>Update or reinstall this extension so Auth0 can provision its managed setup client.</p></section>";
+    res.type("html").send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Auth0 Forms MCP</title></head><body><main><h1>Auth0 Forms MCP</h1><p>This Custom Extension exposes an authenticated MCP endpoint.</p><p><code>${escapeHtml(endpoint)}</code></p><p>Connect an OAuth-capable MCP client to this URL after tenant setup succeeds.</p>${setup}</main></body></html>`);
   });
 
   app.use((error: unknown, _req: Request, res: Response, _next: unknown) => {
